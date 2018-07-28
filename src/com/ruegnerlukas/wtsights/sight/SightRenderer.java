@@ -390,6 +390,7 @@ public class SightRenderer {
 				double xCentral = canvas.getWidth()/2;
 				
 				// y position
+				
 				double yCentral = canvas.getHeight()/2 + rangePixel;
 				
 				// length
