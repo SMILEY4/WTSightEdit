@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public interface NetworkInterface {
+public abstract class NetworkInterface {
 
-	static NetworkInterface netInterface = new DefaultNetworkInterface();
+	public static NetworkInterface netInterface = new DefaultNetworkInterface();
 	
 	public static NetworkInterface get() {
 		return netInterface;
@@ -16,13 +16,13 @@ public interface NetworkInterface {
 	
 	
 	
-	public boolean checkNetworkStatus();
+	public abstract boolean checkNetworkStatus();
 	
 	
-	public List<String> getFileContent(String strUrl) throws IOException;
+	public abstract List<String> getFileContent(String strUrl) throws IOException;
 	
 	
-	public boolean downloadFile(String fileName, File outFile) throws IOException;
+	public abstract boolean downloadFile(String fileName, File outFile) throws IOException;
 
 	
 	

@@ -11,6 +11,9 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtupdater.network.DefaultNetworkInterface;
+import com.ruegnerlukas.wtupdater.network.LocalNetworkInterface;
+import com.ruegnerlukas.wtupdater.network.NetworkInterface;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -34,6 +37,10 @@ public class WTSightsStart extends Application {
 	
 	
 	public static void main(String[] args) {
+		
+		
+		NetworkInterface.netInterface = new LocalNetworkInterface();
+		((LocalNetworkInterface)NetworkInterface.netInterface).setDirectory(new File("D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate"));
 		
 		Config.load(new File(JarLocation.getJarLocation(WTSightsStart.class) + "/data/config.txt"));
 		

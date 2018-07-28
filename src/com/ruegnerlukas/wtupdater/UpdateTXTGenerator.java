@@ -19,12 +19,13 @@ import com.ruegnerlukas.wtutils.Checksum;
 
 public class UpdateTXTGenerator {
 
-	static final String PATH_DATA = "C:\\Users\\LukasRuegner\\Desktop\\WTSightEdit\\data";
-	static final String FILE_OUT = "C:\\Users\\LukasRuegner\\Desktop\\WTSightEdit\\data\\update.txt";
+	static final String PATH_DATA = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate";
+	static final String FILE_OUT = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate\\update.txt";
 
 	
+	
 	public static void main(String[] args) {
-		generateUpdateTxt("Update to version 0.7 (Current version: " + "\\{version_current\\}" + "). Download latest installer at https://github.com/SMILEY4/WTSightEdit/releases", null, "0.7");
+		generateUpdateTxt("Update to version 0.7 (Current version: " + "{version_current}" + ").", null, "0.7");
 	}
 	
 	

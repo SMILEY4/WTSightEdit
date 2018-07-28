@@ -16,7 +16,7 @@ import java.util.Map;
 
 import com.ruegnerlukas.wtutils.Config;
 
-public class DefaultNetworkInterface implements NetworkInterface {
+public class DefaultNetworkInterface extends NetworkInterface {
 
 	@Override
 	public boolean checkNetworkStatus() {

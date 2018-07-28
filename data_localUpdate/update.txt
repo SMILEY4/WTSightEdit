@@ -1,0 +1,13 @@
+; version
+build_version = 0.7
+
+; flags
+
+; messages
+update_message = Update to version 0.7 (Current version: {version_current}).
+
+; files
+file = config.txt:118c857dd2a4166d6b3b44e476735111
+file = LICENCE_3RD_PARTY.txt:fc5e0a173c4829141b354b9ed44badaf
+file = vehicle_data.xml:19280cff44f5e4fe67db0b994ca0ea33
+file = wtedit_application.jar:fe2c476be1d839ca480e3ba46ac6c6a0

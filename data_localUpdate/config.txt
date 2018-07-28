@@ -1,3 +1,7 @@
+; build
+build_version = 0.7
+build_date = 2018-07-22
+
 ; updater
 auto_update = true
 update_path = https://raw.githubusercontent.com/SMILEY4/WTSightEdit/master/data
