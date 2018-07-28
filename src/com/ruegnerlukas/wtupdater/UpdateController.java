@@ -147,7 +147,7 @@ public class UpdateController {
 
 	
 	public void startApplication() {
-		Logger.get().info("Starting Application ...");
+		Logger.get().info("Starting Application (" + Config.getValue("build_version") + ") ... " );
 		Logger.get().info("=========================================");
 		Logger.get().close();
 		

@@ -1,0 +1,32 @@
+( Info) 22:15:47.520 @com.ruegnerlukas.wtsights.WTSights.main():81: Starting Application (D:\LukasRuegner\Programmieren\Java\Workspace\WarThunderSightEditor) DEV_MODE=false PATH=D:\LukasRuegner\Programmieren\Java\Workspace\WarThunderSightEditor  i=true
+(ERROR) 22:15:47.594 @com.ruegnerlukas.wtsights.data.Database.create():54: java.io.FileNotFoundException: D:\LukasRuegner\Programmieren\Java\Workspace\WarThunderSightEditor\data\vehicle_data.xml (Das System kann die angegebene Datei nicht finden)
+java.io.FileInputStream.open0(Native Method)
+java.io.FileInputStream.open(Unknown Source)
+java.io.FileInputStream.<init>(Unknown Source)
+java.io.FileInputStream.<init>(Unknown Source)
+sun.net.www.protocol.file.FileURLConnection.connect(Unknown Source)
+sun.net.www.protocol.file.FileURLConnection.getInputStream(Unknown Source)
+com.sun.org.apache.xerces.internal.impl.XMLEntityManager.setupCurrentEntity(Unknown Source)
+com.sun.org.apache.xerces.internal.impl.XMLVersionDetector.determineDocVersion(Unknown Source)
+com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+com.ruegnerlukas.wtsights.data.DataLoader.loadVehicleDataFile(DataLoader.java:88)
+com.ruegnerlukas.wtsights.data.Database.create(Database.java:47)
+com.ruegnerlukas.wtsights.WTSights.start(WTSights.java:95)
+com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$161(LauncherImpl.java:863)
+com.sun.javafx.application.PlatformImpl.lambda$runAndWait$174(PlatformImpl.java:326)
+com.sun.javafx.application.PlatformImpl.lambda$null$172(PlatformImpl.java:295)
+java.security.AccessController.doPrivileged(Native Method)
+com.sun.javafx.application.PlatformImpl.lambda$runLater$173(PlatformImpl.java:294)
+com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+com.sun.glass.ui.win.WinApplication.lambda$null$147(WinApplication.java:177)
+java.lang.Thread.run(Unknown Source)
+
+( Info) 22:15:47.594 @com.ruegnerlukas.wtsights.ui.main.UIMainMenu.openNew():48: Open new UIMainMenu
+( Info) 22:15:47.594 @com.ruegnerlukas.wtsights.ui.main.UIMainMenu.openNew():49:     path=[]
+( Info) 22:15:50.265 @com.ruegnerlukas.wtsights.WTSights$1.run():56: =========================================
