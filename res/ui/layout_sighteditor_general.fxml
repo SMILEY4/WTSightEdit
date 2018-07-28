@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.UIGeneral">
+   <children>
+      <ScrollPane fitToWidth="true" layoutX="46.0" layoutY="32.0" prefHeight="300.0" prefWidth="260.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <content>
+          <AnchorPane>
+               <children>
+                  <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label prefWidth="100000.0" text="Thousandth:" />
+                        <ComboBox fx:id="thousands" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="The standart for coordinates given in mils." />
+                           </tooltip></ComboBox>
+                        <Separator prefWidth="100000.0">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </Separator>
+                        <Label prefWidth="100000.0" text="Font Size Scale:" />
+                        <Spinner fx:id="fontScale" editable="true" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="Scales not only fonts but the whole sighting reticle." />
+                           </tooltip></Spinner>
+                        <Label prefWidth="100000.0" text="Line Size Scale:" />
+                        <Spinner fx:id="lineScale" editable="true" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="Scale factor for the thickness of straight lines." />
+                           </tooltip></Spinner>
+                        <Separator prefWidth="100000.0">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </Separator>
+                        <CheckBox fx:id="cbCentralVert" mnemonicParsing="false" onAction="#onDrawCentralVert" prefWidth="100000.0" text="Draw Central Vert. Line">
+                           <tooltip>
+                              <Tooltip text="Whether or not to draw the central vertical line." />
+                           </tooltip></CheckBox>
+                        <CheckBox fx:id="cbCentralHorz" mnemonicParsing="false" onAction="#onDrawCentralHorz" prefWidth="100000.0" text="Draw Central Horz. Line">
+                           <tooltip>
+                              <Tooltip text="Whether or not to draw the central horizontal line." />
+                           </tooltip></CheckBox>
+                        <Separator prefWidth="100000.0">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </Separator>
+                        <CheckBox fx:id="cbApplyCorrection" mnemonicParsing="false" onAction="#onApplyCorrection" prefWidth="100000.0" text="Apply Correction to Gun">
+                           <tooltip>
+                              <Tooltip text="Whether or not to apply the range correction to the gun." />
+                           </tooltip></CheckBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

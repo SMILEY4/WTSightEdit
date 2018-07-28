@@ -1,0 +1,585 @@
+thousandth:t = "real"
+fontSizeMult:r = 0.6000000238418579
+lineSizeMult:r = 1.7999999523162842
+drawCentralLineVert:b = no
+drawCentralLineHorz:b = no
+
+// rangefinder
+rangefinderHorizontalOffset:r = 5.0
+rangefinderVerticalOffset:r = 15.0
+rangefinderProgressBarColor1:c = 0,255,0,0
+rangefinderProgressBarColor2:c = 255,255,255,0
+rangefinderTextScale:r = 0.699999988079071
+rangefinderUseThousandth:b = yes
+
+// horizontal range indicators
+crosshairHorVertSize:p2 = 3.0,2.0
+crosshair_hor_ranges {
+}
+
+// ballistic range indicators
+drawUpward:b = no
+distancePos:p2 = 0.15,0.0
+move:b = yes
+radial:b = no
+circleMode:b = no
+crosshairDistHorSizeMain:p2 = 0.029999999329447746,0.019999999552965164
+textPos:p2 = 0.0,0.0
+textAlign:i = 1
+textShift:r = 0.2
+drawAdditionalLines:b = yes
+crosshairDistHorSizeAdditional:p2 = 0.004999999888241291,0.003000000026077032
+radialStretch:r = 1.0
+radialAngle:r = 0.0
+radialRadius:p2 = 20.0,1
+drawDistanceCorrection:b = yes
+distanceCorrectionPos:p2 = -0.2,-0.05
+
+crosshair_distances {
+}
+
+// shell ballistics blocks
+ballistics {
+  // block_1 (ammo_75mm_pzgr_39)
+  bullet {
+    bulletType:t = "apcbc_tank"
+    speed:r = 740
+    triggerGroup:t = "PRIMARY"
+    drawUpward:b = yes
+    distancePos:p2 = 0.0,0.0
+    move:b = yes
+    radial:b = yes
+    circleMode:b = yes
+    crosshairDistHorSizeMain:p2 = 0.003000000026077032,0.0035000001080334187
+    textPos:p2 = 0.014000000432133675,0.0
+    textAlign:i = 0
+    textShift:r = 0.2
+    radialStretch:r = 1.5
+    radialAngle:r = 181.0500030517578
+    radialRadius:p2 = 75.0,1
+    crosshair_distances {
+    distance { distance:p3=100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=200,2,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=400,4,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=500,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=600,6,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=700,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=800,8,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=900,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1000,10,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1200,12,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1400,14,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1500,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1600,16,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1700,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1800,18,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1900,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2000,20,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2200,22,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2400,24,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2500,0,0.0; textPos:p2=0.0,0.0; }
+    }
+  }
+  // block_2 (ammo_75mm_sprgr_34)
+  bullet {
+    bulletType:t = "he_frag_tank"
+    speed:r = 550
+    triggerGroup:t = "PRIMARY"
+    drawUpward:b = yes
+    distancePos:p2 = 0.0,0.0
+    move:b = yes
+    radial:b = yes
+    circleMode:b = yes
+    crosshairDistHorSizeMain:p2 = 0.003000000026077032,0.0035000001080334187
+    textPos:p2 = -0.014000000432133675,0.0
+    textAlign:i = 0
+    textShift:r = 0.2
+    radialStretch:r = 3.5
+    radialAngle:r = 50.0
+    radialRadius:p2 = 75.0,1
+    crosshair_distances {
+    distance { distance:p3=100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=200,2,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=400,4,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=500,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=600,6,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=700,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=800,8,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=900,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1000,10,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1200,12,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1400,14,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1500,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1600,16,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1700,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1800,18,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1900,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2000,20,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2200,22,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2400,24,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2500,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2600,26,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2700,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2800,28,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=2900,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=3000,30,0.0; textPos:p2=0.0,0.0; }
+    }
+  }
+  // block_3 (ammo_75mm_pzgr_40w)
+  bullet {
+    bulletType:t = "apcr_tank"
+    speed:r = 930
+    triggerGroup:t = "PRIMARY"
+    drawUpward:b = yes
+    distancePos:p2 = 0.0,0.0
+    move:b = yes
+    radial:b = yes
+    circleMode:b = no
+    crosshairDistHorSizeMain:p2 = 0.019999999552965164,0.019999999552965164
+    textPos:p2 = -0.02800000086426735,0.0
+    textAlign:i = 0
+    textShift:r = 0.2
+    radialStretch:r = 3.318000078201294
+    radialAngle:r = 180.8000030517578
+    radialRadius:p2 = 71.0,1
+    crosshair_distances {
+    distance { distance:p3=200,2,0.5; textPos:p2=0.0,0.0; }
+    distance { distance:p3=400,4,0.5; textPos:p2=0.0,0.0; }
+    distance { distance:p3=600,6,0.5; textPos:p2=0.0,0.0; }
+    distance { distance:p3=800,8,0.5; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1000,10,0.5; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1200,12,0.5; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1400,14,0.5; textPos:p2=0.0,0.0; }
+    }
+  }
+  // block_4 (ammo_75mm_pzgr_40w)
+  bullet {
+    bulletType:t = "apcr_tank"
+    speed:r = 930
+    triggerGroup:t = "PRIMARY"
+    drawUpward:b = yes
+    distancePos:p2 = 0.0,0.0
+    move:b = yes
+    radial:b = yes
+    circleMode:b = no
+    crosshairDistHorSizeMain:p2 = 0.009999999776482582,0.009999999776482582
+    textPos:p2 = -0.017999999225139618,0.0
+    textAlign:i = 0
+    textShift:r = 0.2
+    radialStretch:r = 3.359999895095825
+    radialAngle:r = 180.8000030517578
+    radialRadius:p2 = 71.9000015258789,1
+    crosshair_distances {
+    distance { distance:p3=100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=500,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=700,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=900,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1100,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1300,0,0.0; textPos:p2=0.0,0.0; }
+    distance { distance:p3=1500,0,0.0; textPos:p2=0.0,0.0; }
+    }
+  }
+}
+
+// lines
+drawLines {
+  // line_11
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 48.70000076293945
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 0.0
+    line:p4 = 0.0,65.0, 0.0,85.0
+  }
+  // line_10
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 43.099998474121094
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.5
+    line:p4 = 0.0,70.0, 0.0,80.0
+  }
+  // line_32
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -13.0,2.0, -11.0,2.0
+  }
+  // line_31
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -12.0,0.0, -13.0,2.0
+  }
+  // line_30
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -12.0,0.0, -11.0,2.0
+  }
+  // line_15
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 4.0,0.0, 3.0,2.0
+  }
+  // line_14
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 2.0,4.0, -2.0,4.0
+  }
+  // line_13
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 0.0,0.0, -2.0,4.0
+  }
+  // line_12
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 0.0,0.0, 2.0,4.0
+  }
+  // line_19
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 8.0,0.0, 7.0,2.0
+  }
+  // line_18
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 8.0,0.0, 9.0,2.0
+  }
+  // line_17
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 3.0,2.0, 5.0,2.0
+  }
+  // line_16
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 4.0,0.0, 5.0,2.0
+  }
+  // line_22
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 12.0,0.0, 13.0,2.0
+  }
+  // line_21
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 12.0,0.0, 11.0,2.0
+  }
+  // line_20
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 7.0,2.0, 9.0,2.0
+  }
+  // line_26
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -3.0,2.0, -5.0,2.0
+  }
+  // line_25
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -4.0,0.0, -5.0,2.0
+  }
+  // line_24
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -4.0,0.0, -3.0,2.0
+  }
+  // line_23
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = 13.0,2.0, 11.0,2.0
+  }
+  // line_29
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -7.0,2.0, -9.0,2.0
+  }
+  // line_28
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -8.0,0.0, -7.0,2.0
+  }
+  // line_27
+  line {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 1.0
+    line:p4 = -8.0,0.0, -9.0,2.0
+  }
+}
+// text
+drawTexts {
+  // text_3
+  text {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 189.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.319999933242798
+    text:t = Pzgr 40
+    pos:p2 = -0.0,71.0
+    align:i = 0
+    size:r = 1.0
+  }
+  // text_2
+  text {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = -215.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 4.0
+    text:t = Pzgr 39
+    pos:p2 = 0.0,85.0
+    align:i = 0
+    size:r = 1.0
+  }
+  // text_5
+  text {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 235.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.630000114440918
+    text:t = 0
+    pos:p2 = 0.0,-78.0
+    align:i = 0
+    size:r = 1.0
+  }
+  // text_4
+  text {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 9.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.630000114440918
+    text:t = 0
+    pos:p2 = 0.0,-78.0
+    align:i = 0
+    size:r = 1.0
+  }
+  // text_6
+  text {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 223.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.0399999618530273
+    text:t = MG
+    pos:p2 = 0.0,-65.0
+    align:i = 0
+    size:r = 1.0
+  }
+  // text_1
+  text {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = -40.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 4.0
+    text:t = Gr 34
+    pos:p2 = -0.0,85.0
+    align:i = 0
+    size:r = 1.0
+  }
+}
+// circles
+drawCircles {
+  // circle_8
+  circle {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = 55.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.5
+    segment:p2 = 0.0,360.0
+    pos:p2 = 0.0,75.0
+    diameter:r = 1.7000000476837158
+    size:r = 2.5
+  }
+  // circle_9
+  circle {
+    thousandth:b = yes
+    move:b = yes
+    moveRadial:b = yes
+    radialAngle:r = -171.3000030517578
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,0.0
+    radialMoveSpeed:r = 3.5
+    segment:p2 = 0.0,360.0
+    pos:p2 = 0.0,75.0
+    diameter:r = 1.7000000476837158
+    size:r = 2.5
+  }
+}
+// quads
+drawQuads {
+  // quad_7
+  quad {
+    thousandth:b = yes
+    move:b = no
+    moveRadial:b = no
+    radialAngle:r = 0.0
+    radialCenter:p2 = 0.0,0.0
+    center:p2 = 0.0,-90.0
+    radialMoveSpeed:r = 1.0
+    tl:p2 = -20.0,-250.0
+    tr:p2 = 20.0,-250.0
+    br:p2 = 0.0,-74.0
+    bl:p2 = 0.0,-74.0
+  }
+}

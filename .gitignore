@@ -1,0 +1,11 @@
+.DS_STORE
+.project
+.classpath
+.settings
+/bin
+toDo.txt
+*.jar
+*.psd
+*.zip
+/libs
+/docs

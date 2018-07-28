@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="923.0" prefWidth="259.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.UIObjects">
+   <children>
+      <ScrollPane fitToWidth="true" prefHeight="923.0" prefWidth="259.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <content>
+          <AnchorPane>
+               <children>
+                  <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <HBox>
+                           <children>
+                              <ComboBox fx:id="comboType" prefWidth="10000.0">
+                                 <tooltip>
+                                    <Tooltip text="The type of the new object" />
+                                 </tooltip></ComboBox>
+                              <Button maxWidth="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#onNewObj" prefWidth="50.0" text="New">
+                                 <tooltip>
+                                    <Tooltip text="Create a new object" />
+                                 </tooltip></Button>
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <HBox>
+                           <children>
+                              <ComboBox fx:id="comboObjects" prefWidth="10000.0">
+                                 <tooltip>
+                                    <Tooltip text="Select an object." />
+                                 </tooltip></ComboBox>
+                              <Button maxWidth="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#onRemoveObj" prefWidth="50.0" text="X">
+                                 <tooltip>
+                                    <Tooltip text="Delete the selected object." />
+                                 </tooltip></Button>
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <TextField fx:id="objName" prefWidth="10000.0">
+                           <tooltip>
+                              <Tooltip text="The name of the selected object. The name can be changed here." />
+                           </tooltip></TextField>
+                        <Label prefWidth="10000.0" text="Common Settings:">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <CheckBox fx:id="cmnThousandth" mnemonicParsing="false" onAction="#onUseThousandth" text="Use Thousandth">
+                           <tooltip>
+                              <Tooltip text="Change the coordinates for the selected object from screen space to mils." />
+                           </tooltip></CheckBox>
+                        <ComboBox fx:id="cmnMovement" prefWidth="10000.0">
+                           <tooltip>
+                              <Tooltip text="Whether the selected object can move when correcting for range and the type of the movement.." />
+                           </tooltip></ComboBox>
+                        <Label prefWidth="10000.0" text="Angle:" />
+                        <Spinner fx:id="cmnAngle" editable="true" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="The initial angular displacement of the selected element (in degrees)" />
+                           </tooltip></Spinner>
+                        <Label prefWidth="10000.0" text="Center:" wrapText="true" />
+                        <CheckBox fx:id="cmnAutoCenter" mnemonicParsing="false" onAction="#onCmnAutoCenter" prefWidth="100000.0" text="Use Auto-Center">
+                           <tooltip>
+                              <Tooltip text="Whether to calculate the center of weight of the selected automatically." />
+                           </tooltip></CheckBox>
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="cmnCenterX" editable="true" prefWidth="100000.0">
+                                 <tooltip>
+                                    <Tooltip text="The x position of the center of weight of the selected element." />
+                                 </tooltip></Spinner>
+                              <Spinner fx:id="cmnCenterY" editable="true" prefWidth="100000.0">
+                                 <tooltip>
+                                    <Tooltip text="The y position of the center of weight of the selected element." />
+                                 </tooltip></Spinner>
+                           </children>
+                        </HBox>
+                        <Label prefWidth="10000.0" text="Origin:" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="cmnRadCenterX" editable="true" prefWidth="100000.0">
+                                 <tooltip>
+                                    <Tooltip text="The x position of the point relative to which the rotation occurs." />
+                                 </tooltip></Spinner>
+                              <Spinner fx:id="cmnRadCenterY" editable="true" prefWidth="100000.0">
+                                 <tooltip>
+                                    <Tooltip text="The y position of the point relative to which the rotation occurs." />
+                                 </tooltip></Spinner>
+                           </children>
+                        </HBox>
+                        <Label prefWidth="10000.0" text="Move Speed:" />
+                        <Spinner fx:id="cmnSpeed" editable="true" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="The multiplier for the angular displacement when a range is entered." />
+                           </tooltip></Spinner>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox fx:id="boxLine" layoutX="65.0" layoutY="-14.0" prefHeight="200.0" prefWidth="247.0" spacing="5.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label prefWidth="10000.0" text="Line Settings:">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefWidth="10000.0" text="Position Start:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="lineStartX" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of start point." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="lineStartY" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of start point." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Position End:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="lineEndX" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of end point." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="lineEndY" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of end point." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="boxText" layoutX="75.0" layoutY="-4.0" spacing="5.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label prefWidth="10000.0" text="Text Settings:">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefWidth="10000.0" text="Text:" />
+                                    <TextField fx:id="txtText">
+                                       <tooltip>
+                                          <Tooltip text="The displayed text." />
+                                       </tooltip></TextField>
+                                    <Label prefWidth="10000.0" text="Position:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="txtPosX" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of the text." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="txtPosY" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of the text." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Size:" />
+                                    <Spinner fx:id="txtSize" editable="true" prefWidth="100000.0">
+                                       <tooltip>
+                                          <Tooltip text="An additional scale for the size of this text." />
+                                       </tooltip></Spinner>
+                                    <Label prefWidth="10000.0" text="Alignment:" />
+                                    <ComboBox fx:id="txtAlign" prefWidth="10000.0">
+                                       <tooltip>
+                                          <Tooltip text="The alignment of this text relative to its position." />
+                                       </tooltip></ComboBox>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="boxCircle" layoutX="75.0" layoutY="-4.0" prefHeight="269.0" prefWidth="322.0" spacing="5.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label prefWidth="10000.0" text="Circle Settings:">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefWidth="10000.0" text="Position:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="circlePosX" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of the center of this circle." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="circlePosY" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of the center of this circle." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Diameter:" />
+                                    <Spinner fx:id="circleDiameter" editable="true" prefWidth="100000.0">
+                                       <tooltip>
+                                          <Tooltip text="The diameter of this circle." />
+                                       </tooltip></Spinner>
+                                    <Label prefWidth="10000.0" text="Segment:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="circleSeg1" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The start angle of the segment of this circle (in degrees)" />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="circleSeg2" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The end angle of the segment of this circle (in degrees)" />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Size" />
+                                    <Spinner fx:id="circleSize" editable="true" prefWidth="100000.0">
+                                       <tooltip>
+                                          <Tooltip text="The thickness of the outline of this circle." />
+                                       </tooltip></Spinner>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="boxQuad" layoutX="85.0" layoutY="6.0" prefHeight="275.0" prefWidth="407.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label prefWidth="10000.0" text="Quad Settings:">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefWidth="10000.0" text="Position 1:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="quadPos1x" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of the first corner." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="quadPos1y" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of the first corner." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Position 2:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="quadPos2x" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of the second corner." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="quadPos2y" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of the second corner." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Position 3:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="quadPos3x" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of the third corner." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="quadPos3y" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of the third corner." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                    <Label prefWidth="10000.0" text="Position 4:" />
+                                    <HBox>
+                                       <children>
+                                          <Spinner fx:id="quadPos4x" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The x position of the fourth corner." />
+                                             </tooltip></Spinner>
+                                          <Spinner fx:id="quadPos4y" editable="true" prefWidth="100000.0">
+                                             <tooltip>
+                                                <Tooltip text="The y position of the fourth corner." />
+                                             </tooltip></Spinner>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

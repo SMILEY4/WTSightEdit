@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.main.UIMainMenu">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="150.0" layoutY="121.0" prefHeight="584.0" prefWidth="500.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <Label alignment="CENTER" prefWidth="100000.0" text="WT Sight Editor" underline="true">
+               <font>
+                  <Font name="System Bold" size="35.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelVersion" alignment="CENTER" prefWidth="100000.0" text="Version err.or">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </Separator>
+            <Button mnemonicParsing="false" onAction="#onNewCalibration" prefWidth="300.0" text="Create New Calibration">
+               <tooltip>
+                  <Tooltip text="Create a new Calibration file. A Calibration file is used to calculate the correct bullet trajectories." wrapText="true" />
+               </tooltip></Button>
+            <Button mnemonicParsing="false" onAction="#onLoadCalibration" prefWidth="300.0" text="Load Calibration">
+               <tooltip>
+                  <Tooltip text="Load and edit an existing calibration file." />
+               </tooltip></Button>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </Separator>
+            <Button mnemonicParsing="false" onAction="#onNewSight" prefWidth="300.0" text="Create New Sight">
+               <tooltip>
+                  <Tooltip text="Create a new custom sight." />
+               </tooltip></Button>
+            <Button mnemonicParsing="false" onAction="#onLoadSight" prefWidth="300.0" text="Load Sight">
+               <tooltip>
+                  <Tooltip text="Load and edit an existing sight." />
+               </tooltip></Button>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </Separator>
+            <Button disable="true" mnemonicParsing="false" onAction="#onSettings" prefWidth="300.0" text="Settings">
+               <tooltip>
+                  <Tooltip text="WTWidhtEditor settings." />
+               </tooltip></Button>
+            <Button mnemonicParsing="false" onAction="#onAbout" prefWidth="300.0" text="About">
+               <tooltip>
+                  <Tooltip text="About WTSightEdit" />
+               </tooltip></Button>
+            <Button disable="true" mnemonicParsing="false" onAction="#onHelp" prefWidth="300.0" text="Help">
+               <tooltip>
+                  <Tooltip text="Help" />
+               </tooltip></Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
