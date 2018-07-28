@@ -396,12 +396,8 @@ public class SightRenderer {
 				// length
 				double lengthCentral = Conversion.get().screenspace2pixel(isMajor?block.bSizeCentered.x:block.bSizeCentered.y, canvas.getHeight(), dataSight.envZoomedIn) * dataSight.gnrFontScale;
 				lengthCentral = Math.max(lengthCentral, 0);
-asd
-
-adsf
-ad
-
-// draw
+				
+				// draw
 				if(!MathUtils.isNearlyEqual(lengthCentral, 0)) {
 					g.setFill(dataSight.envSightColor);
 					g.fillRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
