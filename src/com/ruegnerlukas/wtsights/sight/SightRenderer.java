@@ -390,7 +390,6 @@ public class SightRenderer {
 				double xCentral = canvas.getWidth()/2;
 				
 				// y position
-				
 				double yCentral = canvas.getHeight()/2 + rangePixel;
 				
 				// length
@@ -636,28 +635,15 @@ public class SightRenderer {
 			// length
 			double length = Conversion.get().screenspace2pixel(block.bSizeMain.x, canvas.getHeight(), dataSight.envZoomedIn);
 			length = length * dataSight.gnrFontScale;
-
+			
 			// line position
 			Vector2d posStart = dir.copy().setLength(dir.length()-length/2);
 			Vector2d posEnd = dir.copy().setLength(dir.length()+length/2);
 
 			
 			// draw line
-			g.setStroke(dataSight.envSightColor);
-			g.setLineWidth(lineSize);
-			g.strokeLine(
-					canvas.getWidth()/2 - originX + posStart.x,
-					canvas.getHeight()/2 - originY + posStart.y,
-					canvas.getWidth()/2 - originX + posEnd.x,
-					canvas.getHeight()/2 - originY + posEnd.y
-					);
-			g.setLineWidth(1);
-
-			
-			if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-					|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-				g.setStroke(COLOR_SELECTION);
-				g.setLineDashes(3, 3);
+			if(!MathUtils.isNearlyEqual(length, 0)) {
+				g.setStroke(dataSight.envSightColor);
 				g.setLineWidth(lineSize);
 				g.strokeLine(
 						canvas.getWidth()/2 - originX + posStart.x,
@@ -665,9 +651,27 @@ public class SightRenderer {
 						canvas.getWidth()/2 - originX + posEnd.x,
 						canvas.getHeight()/2 - originY + posEnd.y
 						);
-				g.setLineDashes(null);
 				g.setLineWidth(1);
+
+				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
+						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
+					g.setStroke(COLOR_SELECTION);
+					g.setLineDashes(3, 3);
+					g.setLineWidth(lineSize);
+					g.strokeLine(
+							canvas.getWidth()/2 - originX + posStart.x,
+							canvas.getHeight()/2 - originY + posStart.y,
+							canvas.getWidth()/2 - originX + posEnd.x,
+							canvas.getHeight()/2 - originY + posEnd.y
+							);
+					g.setLineDashes(null);
+					g.setLineWidth(1);
+				}
+				
 			}
+			
+
+			
 			
 			
 			// draw labels

@@ -57,13 +57,13 @@ public class UIHorzRange {
 	
 	public void create() {
 
-		FXUtils.initSpinner(sizeMajor, dataSight.hrSizeMajor, -1000, 1000, 1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeMajor, dataSight.hrSizeMajor, 0, 1000, 1, 1, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeMajor(newValue);
 			}
 		});
 		
-		FXUtils.initSpinner(sizeMinor, dataSight.hrSizeMinor, -1000, 1000, 1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeMinor, dataSight.hrSizeMinor, 0, 1000, 1, 1, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeMinor(newValue);
 			}

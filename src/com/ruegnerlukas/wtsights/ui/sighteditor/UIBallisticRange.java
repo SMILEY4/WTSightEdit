@@ -12,6 +12,7 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.SightData.ScaleMode;
 import com.ruegnerlukas.wtsights.data.sight.SightData.TextAlign;
+import com.ruegnerlukas.wtsights.sight.Conversion;
 import com.ruegnerlukas.wtsights.ui.sighteditor.utils.BallisticIndicatorElement;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -123,6 +124,11 @@ public class UIBallisticRange {
 				onCircleMode(newValue.equalsIgnoreCase("Circles"));
 			}
 		});
+		if(dataSight.brIndicators.bCircleMode) {
+			circleRadius.setDisable(false);
+		} else {
+			circleRadius.setDisable(true);
+		}
 		
 		
 		scaleMode.getItems().addAll(ScaleMode.VERTICAL.toString(), ScaleMode.RADIAL.toString());
@@ -148,7 +154,7 @@ public class UIBallisticRange {
 		
 		cbRadiusUseMils.setSelected(dataSight.brIndicators.bRadiusUseMils);
 		
-		FXUtils.initSpinner(radialRadius, dataSight.brIndicators.bRadialRadius, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(radialRadius, dataSight.brIndicators.bRadialRadius, -1000, 1000, (dataSight.brIndicators.bRadiusUseMils ? 0.5 : 0.001), (dataSight.brIndicators.bRadiusUseMils ? 1 : 3), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onRadialRadius(newValue.doubleValue());
 			}
@@ -332,7 +338,6 @@ public class UIBallisticRange {
 			boxRadial.setVisible(true);
 		}
 		
-		
 		editor.repaintCanvas();
 	}
 	
@@ -368,9 +373,9 @@ public class UIBallisticRange {
 		dataSight.brIndicators.bRadiusUseMils = cbRadiusUseMils.isSelected();
 		
 		if(dataSight.brIndicators.bRadiusUseMils) {
-			FXUtils.initSpinner(radialRadius, dataSight.brIndicators.bRadialRadius, -1000, 1000, 0.5, 1, null);
+			FXUtils.initSpinner(radialRadius, Conversion.get().screenspace2mil(dataSight.brIndicators.bRadialRadius, dataSight.envZoomedIn), -1000, 1000, 0.5, 1, null);
 		} else {
-			FXUtils.initSpinner(radialRadius, dataSight.brIndicators.bRadialRadius, -1000, 1000, 0.01, 2, null);
+			FXUtils.initSpinner(radialRadius, Conversion.get().mil2screenspace(dataSight.brIndicators.bRadialRadius, dataSight.envZoomedIn), -1000, 1000, 0.001, 3, null);
 		}
 		
 		editor.repaintCanvas();

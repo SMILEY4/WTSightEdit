@@ -222,7 +222,7 @@ public class UIObjects {
 		});
 		
 		// speed
-		FXUtils.initSpinner(cmnSpeed, 1, -1000, 1000, 0.05, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(cmnSpeed, 1, 0, 1000, 0.05, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				SightObject obj = dataSight.objects.get(comboObjects.getValue());
 				if(obj == null) {
@@ -338,7 +338,7 @@ public class UIObjects {
 			}
 		});
 		
-		FXUtils.initSpinner(txtSize, 1, -1000, 1000, 0.05, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(txtSize, 1, 0, 1000, 0.05, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				SightObject obj = dataSight.objects.get(comboObjects.getValue());
 				if(obj == null) {
@@ -402,7 +402,7 @@ public class UIObjects {
 		});
 		
 		
-		FXUtils.initSpinner(circleDiameter, 0, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(circleDiameter, 0, 0, 1000, 0.01, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				SightObject obj = dataSight.objects.get(comboObjects.getValue());
 				if(obj == null) {
@@ -445,7 +445,7 @@ public class UIObjects {
 			}
 		});
 		
-		FXUtils.initSpinner(circleSize, 0, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(circleSize, 0, 0, 1000, 0.01, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				SightObject obj = dataSight.objects.get(comboObjects.getValue());
 				if(obj == null) {
@@ -830,7 +830,7 @@ public class UIObjects {
 
 			FXUtils.initSpinner(circlePosX, Conversion.get().screenspace2mil(circlePosX.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
 			FXUtils.initSpinner(circlePosY, Conversion.get().screenspace2mil(circlePosY.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-			FXUtils.initSpinner(circleDiameter, Conversion.get().screenspace2mil(circleDiameter.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+			FXUtils.initSpinner(circleDiameter, Conversion.get().screenspace2mil(circleDiameter.getValue(), dataSight.envZoomedIn), 00, Integer.MAX_VALUE, 0.5, 1, null);
 		
 			FXUtils.initSpinner(quadPos1x, Conversion.get().screenspace2mil(quadPos1x.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
 			FXUtils.initSpinner(quadPos1y, Conversion.get().screenspace2mil(quadPos1y.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
@@ -852,7 +852,7 @@ public class UIObjects {
 
 			FXUtils.initSpinner(circlePosX, Conversion.get().mil2screenspace(circlePosX.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 			FXUtils.initSpinner(circlePosY, Conversion.get().mil2screenspace(circlePosY.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-			FXUtils.initSpinner(circleDiameter, Conversion.get().mil2screenspace(circleDiameter.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+			FXUtils.initSpinner(circleDiameter, Conversion.get().mil2screenspace(circleDiameter.getValue(), dataSight.envZoomedIn), 0, Integer.MAX_VALUE, 0.01, 2, null);
 
 			FXUtils.initSpinner(quadPos1x, Conversion.get().mil2screenspace(quadPos1x.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 			FXUtils.initSpinner(quadPos1y, Conversion.get().mil2screenspace(quadPos1y.getValue(), dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
