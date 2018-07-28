@@ -198,7 +198,7 @@ public class UIShellBlocks {
 		
 		cbRadiusUseMils.setSelected(dataSight.brIndicators.bRadiusUseMils);
 		
-		FXUtils.initSpinner(radialRadius, dataSight.brIndicators.bRadialStretch, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(radialRadius, dataSight.brIndicators.bRadialRadius, 0, 1000, (dataSight.brIndicators.bRadiusUseMils ? 0.5 : 0.001), (dataSight.brIndicators.bRadiusUseMils ? 1 : 3), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onRadialRadius(newValue.doubleValue());
 			}
@@ -279,13 +279,13 @@ public class UIShellBlocks {
 		
 		
 		
-		FXUtils.initSpinner(sizeMajorVert, dataSight.brIndicators.bSizeMain.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeMajorVert, dataSight.brIndicators.bSizeMain.x, 0, 1000, 0.01, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeMajorChanged(newValue.doubleValue());
 			}
 		});
 		
-		FXUtils.initSpinner(sizeMinor, dataSight.brIndicators.bSizeMain.y, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeMinor, dataSight.brIndicators.bSizeMain.y, 0, 1000, 0.01, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeMinorChanged(newValue.doubleValue());
 			}
@@ -293,13 +293,13 @@ public class UIShellBlocks {
 		
 		cbDrawAdd.setSelected(dataSight.brIndicators.bDrawCenteredLines);
 		
-		FXUtils.initSpinner(sizeAddMinor, dataSight.brIndicators.bSizeCentered.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeAddMinor, dataSight.brIndicators.bSizeCentered.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onAddSizeChanged(sizeAddMajor.getValue().doubleValue(), newValue.doubleValue());
 			}
 		});
 		
-		FXUtils.initSpinner(sizeAddMajor, dataSight.brIndicators.bSizeCentered.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeAddMajor, dataSight.brIndicators.bSizeCentered.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onAddSizeChanged(newValue.doubleValue(), sizeAddMinor.getValue().doubleValue());
 			}
@@ -307,19 +307,19 @@ public class UIShellBlocks {
 		
 		
 		
-		FXUtils.initSpinner(sizeLine, dataSight.brIndicators.bSizeMain.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(sizeLine, dataSight.brIndicators.bSizeMain.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeLineChanged(newValue.doubleValue());
 			}
 		});
 		
-		FXUtils.initSpinner(circleWidth, dataSight.brIndicators.bSizeMain.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(circleWidth, dataSight.brIndicators.bSizeMain.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeCircleWidth(newValue.doubleValue());
 			}
 		});
 		
-		FXUtils.initSpinner(circleRadius, dataSight.brIndicators.bSizeMain.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(circleRadius, dataSight.brIndicators.bSizeMain.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				onSizeCircleRadius(newValue.doubleValue());
 			}
@@ -647,9 +647,9 @@ public class UIShellBlocks {
 		selectedBlock.bRadiusUseMils = cbRadiusUseMils.isSelected();
 		
 		if(selectedBlock.bRadiusUseMils) {
-			FXUtils.initSpinner(radialRadius, Conversion.get().screenspace2mil(selectedBlock.bRadialRadius, dataSight.envZoomedIn), -1000, 1000, 0.5, 1, null);
+			FXUtils.initSpinner(radialRadius, Conversion.get().screenspace2mil(selectedBlock.bRadialRadius, dataSight.envZoomedIn), 0, 1000, 0.5, 1, null);
 		} else {
-			FXUtils.initSpinner(radialRadius, Conversion.get().mil2screenspace(selectedBlock.bRadialRadius, dataSight.envZoomedIn), -1000, 1000, 0.005, 3, null);
+			FXUtils.initSpinner(radialRadius, Conversion.get().mil2screenspace(selectedBlock.bRadialRadius, dataSight.envZoomedIn), 0, 1000, 0.001, 3, null);
 		}
 		
 		editor.repaintCanvas();

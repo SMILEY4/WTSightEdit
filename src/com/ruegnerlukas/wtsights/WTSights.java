@@ -34,6 +34,9 @@ public class WTSights extends Application {
 	
 	public static void main(String[] args) {
 
+		
+		System.out.println("Test");
+		
 		for(String arg : args) {
 			if(arg.equalsIgnoreCase("dev")) {
 				DEV_MODE = true;

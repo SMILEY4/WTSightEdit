@@ -394,17 +394,20 @@ public class SightRenderer {
 				
 				// length
 				double lengthCentral = Conversion.get().screenspace2pixel(isMajor?block.bSizeCentered.x:block.bSizeCentered.y, canvas.getHeight(), dataSight.envZoomedIn) * dataSight.gnrFontScale;
+				lengthCentral = Math.max(lengthCentral, 0);
 				
 				// draw
-				g.setFill(dataSight.envSightColor);
-				g.fillRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
+				if(!MathUtils.isNearlyEqual(lengthCentral, 0)) {
+					g.setFill(dataSight.envSightColor);
+					g.fillRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
 				
-				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-					g.setStroke(COLOR_SELECTION);
-					g.setLineDashes(3, 3);
-					g.strokeRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
-					g.setLineDashes(null);
+					if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
+							|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
+						g.setStroke(COLOR_SELECTION);
+						g.setLineDashes(3, 3);
+						g.strokeRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
+						g.setLineDashes(null);
+					}
 				}
 			}
 			
@@ -424,7 +427,7 @@ public class SightRenderer {
 			mainLength = mainLength + Math.abs(block.bExtensions.get(i));
 			mainLength = mainLength * dataSight.gnrFontScale;
 			mainLength = Conversion.get().screenspace2pixel(mainLength, canvas.getHeight(), dataSight.envZoomedIn);
-			mainLength = Math.max(lineSize, mainLength);
+			mainLength = Math.max(0, mainLength);
 			
 			
 			// x position
@@ -450,16 +453,17 @@ public class SightRenderer {
 			mainY = Conversion.get().screenspace2pixel(mainY, canvas.getHeight(), dataSight.envZoomedIn);
 			mainY = canvas.getHeight()/2+rangePixel + mainY;
 			
-			
-			g.setFill(dataSight.envSightColor);
-			g.fillRect(mainX, mainY, mainLength, lineSize);
-			
-			if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-					|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-				g.setStroke(COLOR_SELECTION);
-				g.setLineDashes(3, 3);
-				g.strokeRect(mainX, mainY, mainLength, lineSize);
-				g.setLineDashes(null);
+			if(!MathUtils.isNearlyEqual(mainLength, 0)) {
+				g.setFill(dataSight.envSightColor);
+				g.fillRect(mainX, mainY, mainLength, lineSize);
+				
+				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
+						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
+					g.setStroke(COLOR_SELECTION);
+					g.setLineDashes(3, 3);
+					g.strokeRect(mainX, mainY, mainLength, lineSize);
+					g.setLineDashes(null);
+				}
 			}
 			
 			// main labels
@@ -631,28 +635,15 @@ public class SightRenderer {
 			// length
 			double length = Conversion.get().screenspace2pixel(block.bSizeMain.x, canvas.getHeight(), dataSight.envZoomedIn);
 			length = length * dataSight.gnrFontScale;
-
+			
 			// line position
 			Vector2d posStart = dir.copy().setLength(dir.length()-length/2);
 			Vector2d posEnd = dir.copy().setLength(dir.length()+length/2);
 
 			
 			// draw line
-			g.setStroke(dataSight.envSightColor);
-			g.setLineWidth(lineSize);
-			g.strokeLine(
-					canvas.getWidth()/2 - originX + posStart.x,
-					canvas.getHeight()/2 - originY + posStart.y,
-					canvas.getWidth()/2 - originX + posEnd.x,
-					canvas.getHeight()/2 - originY + posEnd.y
-					);
-			g.setLineWidth(1);
-
-			
-			if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-					|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-				g.setStroke(COLOR_SELECTION);
-				g.setLineDashes(3, 3);
+			if(!MathUtils.isNearlyEqual(length, 0)) {
+				g.setStroke(dataSight.envSightColor);
 				g.setLineWidth(lineSize);
 				g.strokeLine(
 						canvas.getWidth()/2 - originX + posStart.x,
@@ -660,9 +651,27 @@ public class SightRenderer {
 						canvas.getWidth()/2 - originX + posEnd.x,
 						canvas.getHeight()/2 - originY + posEnd.y
 						);
-				g.setLineDashes(null);
 				g.setLineWidth(1);
+
+				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
+						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
+					g.setStroke(COLOR_SELECTION);
+					g.setLineDashes(3, 3);
+					g.setLineWidth(lineSize);
+					g.strokeLine(
+							canvas.getWidth()/2 - originX + posStart.x,
+							canvas.getHeight()/2 - originY + posStart.y,
+							canvas.getWidth()/2 - originX + posEnd.x,
+							canvas.getHeight()/2 - originY + posEnd.y
+							);
+					g.setLineDashes(null);
+					g.setLineWidth(1);
+				}
+				
 			}
+			
+
+			
 			
 			
 			// draw labels
