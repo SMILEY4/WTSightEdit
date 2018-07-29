@@ -1,6 +1,6 @@
 ; build
-build_version = 0.6
-build_date = 2018-07-22
+build_version = 0.7
+build_date = 2018-07-29
 
 ; updater
 auto_update = true
