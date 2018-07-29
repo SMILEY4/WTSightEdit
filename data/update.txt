@@ -7,7 +7,7 @@ build_version = 0.7.1
 update_message = New version available (0.7.1).
 
 ; files
-file = config.txt:6a8bd72aa110967e35d4e622cc6220c6
-file = LICENCE_3RD_PARTY.txt:fc5e0a173c4829141b354b9ed44badaf
-file = vehicle_data.xml:4789a357f9b9c3629209f19ec4af875f
+file = config.txt:ffe59626d40bcb3cb52661c8d080fd54
+file = LICENCE_3RD_PARTY.txt:bcab0b2bf610e4ff1a46e118cb18c932
+file = vehicle_data.xml:bd87ee88e0adfefdc0c627d06144987a
 file = wtedit_application.jar:174bd90c3feeaef6325c75ba6223f378
