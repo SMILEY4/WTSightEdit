@@ -1,0 +1,13 @@
+; version
+build_version = 0.6
+
+; flags
+
+; messages
+update_message = test update message
+
+; files
+file = config.txt:ebb50534334655e9b91428ba50d2768e
+file = LICENCE_3RD_PARTY.txt:fc5e0a173c4829141b354b9ed44badaf
+file = vehicle_data.xml:19280cff44f5e4fe67db0b994ca0ea33
+file = wtedit_application.jar:cfb4ed15a98d3554f6333b7d80092d8a
