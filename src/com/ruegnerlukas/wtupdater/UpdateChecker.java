@@ -1,13 +1,7 @@
 package com.ruegnerlukas.wtupdater;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +9,7 @@ import java.util.Map;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtupdater.network.NetworkInterface;
 import com.ruegnerlukas.wtutils.Checksum;
 import com.ruegnerlukas.wtutils.Config;
 
@@ -35,7 +30,7 @@ public class UpdateChecker {
 			public void run() {
 				
 				// check network connection
-				boolean hasNet = checkNetworkConnection();
+				boolean hasNet = NetworkInterface.get().checkNetworkStatus();
 				if(!hasNet) {
 					controller.onUpdateCheckDone(null, null, UpdateState.NO_UPDATE);
 					return;
@@ -75,67 +70,44 @@ public class UpdateChecker {
 	
 	
 	
-	private boolean checkNetworkConnection() {
-		try {
-			Logger.get().debug("Searching for connection...");
-			final URL url = new URL("https://github.com");
-			final URLConnection conn = url.openConnection();
-			conn.connect();
-			conn.getInputStream().close();
-			Logger.get().debug("...Connection found");
-			return true;
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	
-	
-	
 	
 	private List<String> getUpdateFileContent() throws IOException {
 		
 		Logger.get().debug("Download update.txt...");
 		
-		List<String> lines = new ArrayList<String>();
-		
-		// check update
 		String link = Config.getValue("update_path") + "/update.txt";
+		List<String> lines = NetworkInterface.get().getFileContent(link);
 		
-		URL url = new URL(link);
-		HttpURLConnection http = (HttpURLConnection) url.openConnection();
-		
-		Map<String, List<String>> header = http.getHeaderFields();
-		while (isRedirected(header)) {
-			
-			link = header.get("Location").get(0);
-			url = new URL(link);
-			http = (HttpURLConnection) url.openConnection();
-			header = http.getHeaderFields();
-		}
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
-		String inputLine;
-		while( (inputLine=in.readLine()) != null) {
-			Logger.get().debug("Read ", inputLine);
-			lines.add(inputLine);
-		}
-		
-		in.close();
-		http.disconnect();
-		
+//		List<String> lines = new ArrayList<String>();
+//		
+//		// check update
+//		String link = Config.getValue("update_path") + "/update.txt";
+//		
+//		URL url = new URL(link);
+//		
+//		HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//		
+//		Map<String, List<String>> header = http.getHeaderFields();
+//		while (isRedirected(header)) {
+//			
+//			link = header.get("Location").get(0);
+//			url = new URL(link);
+//			http = (HttpURLConnection) url.openConnection();
+//			header = http.getHeaderFields();
+//		}
+//
+//		BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
+//		String inputLine;
+//		while( (inputLine=in.readLine()) != null) {
+//			Logger.get().debug("Read ", inputLine);
+//			lines.add(inputLine);
+//		}
+//		
+//		in.close();
+//		http.disconnect();
+//		
 		Logger.get().debug("... Download done");
 		return lines;
-	}
-	
-	
-	private boolean isRedirected(Map<String, List<String>> header) {
-		for (String hv : header.get(null)) {
-			if (hv.contains(" 301 ") || hv.contains(" 302 "))
-				return true;
-		}
-		return false;
 	}
 	
 	

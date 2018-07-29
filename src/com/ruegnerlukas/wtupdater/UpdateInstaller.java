@@ -2,10 +2,6 @@ package com.ruegnerlukas.wtupdater;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -15,8 +11,8 @@ import java.util.Map;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtupdater.network.NetworkInterface;
 import com.ruegnerlukas.wtutils.Checksum;
-import com.ruegnerlukas.wtutils.Config;
 
 public class UpdateInstaller {
 
@@ -28,7 +24,7 @@ public class UpdateInstaller {
 			public void run() {
 				
 				// check network connection
-				boolean hasNet = checkNetworkConnection();
+				boolean hasNet = NetworkInterface.get().checkNetworkStatus();
 				if(!hasNet) {
 					controller.onUpdateInstallDone(0);
 					return;
@@ -79,23 +75,6 @@ public class UpdateInstaller {
 	
 	
 	
-	private boolean checkNetworkConnection() {
-		try {
-			final URL url = new URL("https://github.com");
-			final URLConnection conn = url.openConnection();
-			conn.connect();
-			conn.getInputStream().close();
-			return true;
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	
-	
-	
-	
 	private boolean downloadFiles(List<String[]> filesToDownload, File dirTmp) throws IOException {
 		
 		for(int i=0; i<filesToDownload.size(); i++) {
@@ -105,20 +84,23 @@ public class UpdateInstaller {
 
 			Logger.get().debug("Start download ", fileName, ":", fileChecksum, "...");
 			
-			String link = Config.getValue("update_path") + "/" + fileName;
-			URL url = new URL(link);
-			HttpURLConnection http = (HttpURLConnection) url.openConnection();
-			Map<String, List<String>> header = http.getHeaderFields();
-			while (isRedirected(header)) {
-				link = header.get("Location").get(0);
-				url = new URL(link);
-				http = (HttpURLConnection) url.openConnection();
-				header = http.getHeaderFields();
-			}
-			
 			File outFile = new File(dirTmp.getAbsolutePath() + "/" + fileName);
-			Files.copy(http.getInputStream(), outFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			Logger.get().debug("Downloaded", fileName);
+			NetworkInterface.get().downloadFile(fileName, outFile);
+			
+//			String link = Config.getValue("update_path") + "/" + fileName;
+//			URL url = new URL(link);
+//			HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//			Map<String, List<String>> header = http.getHeaderFields();
+//			while (isRedirected(header)) {
+//				link = header.get("Location").get(0);
+//				url = new URL(link);
+//				http = (HttpURLConnection) url.openConnection();
+//				header = http.getHeaderFields();
+//			}
+//			File outFile = new File(dirTmp.getAbsolutePath() + "/" + fileName);
+//			Files.copy(http.getInputStream(), outFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			
+			Logger.get().info("Downloaded ", fileName);
 			
 			String checksumOut = Checksum.generate(outFile);
 			if(!fileChecksum.equals(checksumOut)) {
@@ -133,18 +115,9 @@ public class UpdateInstaller {
 	}
 	
 	
-	private boolean isRedirected(Map<String, List<String>> header) {
-		for (String hv : header.get(null)) {
-			if (hv.contains(" 301 ") || hv.contains(" 302 "))
-				return true;
-		}
-		return false;
-	}
-	
-	
-	
 	
 	private void replaceFiles(File dirTmp, File dirDst) throws IOException {
+		Logger.get().info("Move new files: " + dirTmp.getPath() + " ->  " + dirDst.getPath());
 		for(File file : dirTmp.listFiles()) {
 			Files.move(file.toPath(), Paths.get(dirDst.getAbsolutePath()+"/"+file.getName()), StandardCopyOption.REPLACE_EXISTING);
 		}

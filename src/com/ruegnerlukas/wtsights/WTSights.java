@@ -34,9 +34,6 @@ public class WTSights extends Application {
 	
 	public static void main(String[] args) {
 
-		
-		System.out.println("Test");
-		
 		for(String arg : args) {
 			if(arg.equalsIgnoreCase("dev")) {
 				DEV_MODE = true;
@@ -87,9 +84,6 @@ public class WTSights extends Application {
 			Logger.get().setLogTarget(new LogFileTarget(logFile, true));
 		}
 		
-		Logger.get().blankLine();
-		Logger.get().blankLine();
-		Logger.get().blankLine();
 		Logger.get().blankLine();
 		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(WTSightsStart.class) + ") DEV_MODE=" + DEV_MODE + " PATH=" + JarLocation.getJarLocation(WTSightsStart.class) + "  inside=" + wasStartedInsideData);
 		
