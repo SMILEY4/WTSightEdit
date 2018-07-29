@@ -147,12 +147,13 @@ public class UpdateController {
 
 	
 	public void startApplication() {
-		Logger.get().info("Starting Application (" + Config.getValue("build_version") + ") ... " );
+		
+		String jarLoc = JarLocation.getJarLocation(WTSightsStart.class) + "/data/wtedit_application.jar";
+		
+		Logger.get().info("Starting Application " + jarLoc + " (" + Config.getValue("build_version") + ") ... " );
 		Logger.get().info("=========================================");
 		Logger.get().close();
 		
-		String jarLoc = JarLocation.getJarLocation(WTSightsStart.class) + "/data/wtedit_application.jar";
-
 		try {
 			Desktop.getDesktop().open(new File(jarLoc));
 		} catch (IOException e) {

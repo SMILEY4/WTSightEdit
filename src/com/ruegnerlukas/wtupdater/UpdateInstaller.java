@@ -100,7 +100,7 @@ public class UpdateInstaller {
 //			File outFile = new File(dirTmp.getAbsolutePath() + "/" + fileName);
 //			Files.copy(http.getInputStream(), outFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			
-			Logger.get().debug("Downloaded ", fileName);
+			Logger.get().info("Downloaded ", fileName);
 			
 			String checksumOut = Checksum.generate(outFile);
 			if(!fileChecksum.equals(checksumOut)) {

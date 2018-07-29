@@ -38,9 +38,8 @@ public class WTSightsStart extends Application {
 	
 	public static void main(String[] args) {
 		
-		
-		NetworkInterface.netInterface = new LocalNetworkInterface();
-		((LocalNetworkInterface)NetworkInterface.netInterface).setDirectory(new File("D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate"));
+//		NetworkInterface.netInterface = new LocalNetworkInterface();
+//		((LocalNetworkInterface)NetworkInterface.netInterface).setDirectory(new File("D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate"));
 		
 		Config.load(new File(JarLocation.getJarLocation(WTSightsStart.class) + "/data/config.txt"));
 		

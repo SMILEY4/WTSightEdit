@@ -282,7 +282,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_cn_type_59d>
@@ -382,7 +384,9 @@
           </ammo>
         </weapon_73mm_2A28_user_cannon>
         <weapon_125mm_9M113_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_125mm_9M113 mass="14.5" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_125mm_9M113_rocket_launcher>
       </weapons>
     </vehicle_cn_type_86>
@@ -496,7 +500,9 @@
           </ammo>
         </weapon_75mm_SA_50_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_13_75>
@@ -510,10 +516,14 @@
           </ammo>
         </weapon_75mm_SA_50_user_cannon>
         <weapon_164mm_nord_s11_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_164mm_nord_ss11 mass="30.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_164mm_nord_s11_rocket_launcher>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_13_75_ss11>
@@ -527,7 +537,9 @@
           </ammo>
         </weapon_90mm_CN_90_F3_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_13_90>
@@ -551,7 +563,9 @@
           </ammo>
         </weapon_75mm_SA_49_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_13_fl_11>
@@ -565,10 +579,14 @@
           </ammo>
         </weapon_75mm_SA_50_user_cannon>
         <weapon_136mm_HOT_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_136mm_k3s_hot mass="26.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_136mm_HOT_rocket_launcher>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_13_hot>
@@ -586,7 +604,9 @@
           <ammo/>
         </weapon_7_62mm_AAN_F1_user_machinegun>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_30>
@@ -604,7 +624,9 @@
           <ammo/>
         </weapon_7_62mm_AAN_F1_user_machinegun>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_30_1972>
@@ -622,7 +644,9 @@
           <ammo/>
         </weapon_7_62mm_AAN_F1_user_machinegun>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_30_b2>
@@ -640,7 +664,9 @@
           <ammo/>
         </weapon_7_62mm_AAN_F1_user_machinegun>
         <weapon_80mm_galix_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_80mm_galix_smoke_grenade mass="4.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_80mm_galix_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_30_b2_brenus>
@@ -655,7 +681,9 @@
           </ammo>
         </weapon_30mm_HSS_831A_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_30_dca>
@@ -711,7 +739,9 @@
           </ammo>
         </weapon_120mm_SA_46_Surbaisse_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_amx_50_surbaisse>
@@ -934,7 +964,9 @@
           </ammo>
         </weapon_75mm_SA_50_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_fr_m4a1_sherman_fl_10>
@@ -1053,10 +1085,14 @@
           </ammo>
         </weapon_57mm_Bofors_L70_Mk_1_user_cannon>
         <weapon_127mm_bgm_71b_tow_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_127_bgm_71_TOW mass="18.8" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_127mm_bgm_71b_tow_rocket_launcher>
         <weapon_127mm_bgm_71c_itow_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_127_bgm_71_itow mass="19.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_127mm_bgm_71c_itow_rocket_launcher>
       </weapons>
     </vehicle_germ_begleitpanzer_57>
@@ -1136,7 +1172,9 @@
           </ammo>
         </weapon_35mm_Oerlikon_KDA_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_flakpz_i_gepard>
@@ -1152,7 +1190,9 @@
           </ammo>
         </weapon_57mm_6pdr_QQF_Mk_5_L50_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_infanterie_kampfpanzer_churchill>
@@ -1186,7 +1226,9 @@
           </ammo>
         </weapon_75mm_PaK39_L48_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_jgdpz_iv_l48>
@@ -1211,6 +1253,7 @@
           <ammo>
             <ammo_152mm_m409a1 mass="18.9" speed="682" type="heat_tank"/>
             <ammo_152mm_m409a1 mass="18.9" speed="754" type="heat_tank"/>
+            <ammo_152mm_mgm_61c mass="27.8" speed="0" type="atgm_tank"/>
             <ammo_152mm_xm410e1 mass="18.9" speed="754" type="smoke_tank"/>
             <ammo_152mm_xm578e1 mass="3.7" speed="1500" type="apds_fs_tungsten_l10_l15_tank"/>
           </ammo>
@@ -1225,7 +1268,9 @@
           <ammo/>
         </weapon_7_92mm_MG3_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_kpz_70>
@@ -1282,7 +1327,9 @@
           <ammo/>
         </weapon_7_92mm_MG3_user_machinegun>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_leopard_2a4>
@@ -1302,7 +1349,9 @@
           </ammo>
         </weapon_20mm_Rh_202_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_leopard_2k>
@@ -1402,7 +1451,9 @@
           </ammo>
         </weapon_88mm_Kwk43_for_panther_II_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_panther_ii>
@@ -1443,7 +1494,9 @@
           </ammo>
         </weapon_88mm_PaK43_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_panzerbefelhswagen_jagdpanther>
@@ -1497,7 +1550,9 @@
           </ammo>
         </weapon_88mm_PaK43_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_panzerjager_panther>
@@ -1511,7 +1566,9 @@
           </ammo>
         </weapon_128mm_PaK44_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_panzerjager_tiger>
@@ -1607,6 +1664,7 @@
         <weapon_158mm_NB_Wf_41_gun_rocket_launcher triggerGroup="primary">
           <ammo>
             <ammo_128mm_sprgr mass="28.0" speed="750" type="he_frag_tank"/>
+            <ammo_152mm_wgr_41 mass="39.06" speed="0" type="rocket_tank"/>
           </ammo>
         </weapon_158mm_NB_Wf_41_gun_rocket_launcher>
         <weapon_7_92mm_MG42_user_machinegun triggerGroup="machinegun">
@@ -1719,7 +1777,9 @@
           </ammo>
         </weapon_75mm_KwK44_L36_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_e_100>
@@ -1839,7 +1899,9 @@
           </ammo>
         </weapon_50mm_KwK39_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_iii_ausf_m>
@@ -1855,7 +1917,9 @@
           </ammo>
         </weapon_75mm_KwK37_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_iii_ausf_n>
@@ -1982,7 +2046,9 @@
           </ammo>
         </weapon_75mm_KwK40_L43_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_iv_ausf_g>
@@ -2032,7 +2098,9 @@
           </ammo>
         </weapon_75mm_KwK44_L36_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_maus>
@@ -2047,7 +2115,9 @@
           </ammo>
         </weapon_88mm_Kwk43_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_b_tiger_iih>
@@ -2062,7 +2132,9 @@
           </ammo>
         </weapon_105mm_Kwk46_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_b_tiger_iih_kwk46>
@@ -2080,7 +2152,9 @@
           <ammo/>
         </weapon_7_92mm_MG34_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_b_tiger_iih_sla>
@@ -2111,7 +2185,9 @@
           <ammo/>
         </weapon_7_92mm_MG34_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_e_tiger>
@@ -2127,7 +2203,9 @@
           </ammo>
         </weapon_88mm_Kwk36_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_h1_tiger>
@@ -2143,7 +2221,9 @@
           </ammo>
         </weapon_88mm_Kwk36_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_h1_tiger_animal_version>
@@ -2159,7 +2239,9 @@
           </ammo>
         </weapon_88mm_Kwk36_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_vi_ausf_h1_tiger_tutorial>
@@ -2186,7 +2268,9 @@
           </ammo>
         </weapon_75mm_Kwk42_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_v_ausf_a_panther>
@@ -2200,7 +2284,9 @@
           </ammo>
         </weapon_75mm_Kwk42_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_v_ausf_d_panther>
@@ -2214,7 +2300,9 @@
           </ammo>
         </weapon_75mm_Kwk42_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_v_ausf_d_panther_tutorial>
@@ -2228,7 +2316,9 @@
           </ammo>
         </weapon_75mm_Kwk44_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_v_ausf_f_panther>
@@ -2242,7 +2332,9 @@
           </ammo>
         </weapon_75mm_Kwk42_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pzkpfw_v_ausf_g_panther>
@@ -2289,7 +2381,9 @@
           </ammo>
         </weapon_75mm_PaK42_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pz_iv_l70>
@@ -2303,7 +2397,9 @@
           </ammo>
         </weapon_75mm_PaK42_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_germ_pz_iv_l70_a>
@@ -2313,7 +2409,9 @@
           <ammo/>
         </weapon_7_92mm_MG3_user_machinegun>
         <weapon_164mm_lfk_ss11_rocket_launcher triggerGroup="primary">
-          <ammo/>
+          <ammo>
+            <ammo_164mm_lfk_ss_11 mass="30.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_164mm_lfk_ss11_rocket_launcher>
       </weapons>
     </vehicle_germ_raketenjagdpanzer_2>
@@ -2323,7 +2421,9 @@
           <ammo/>
         </weapon_7_92mm_MG3_user_machinegun>
         <weapon_136mm_k3s_hot_rocket_launcher triggerGroup="primary">
-          <ammo/>
+          <ammo>
+            <ammo_136mm_k3s_hot mass="26.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_136mm_k3s_hot_rocket_launcher>
       </weapons>
     </vehicle_germ_raketenjagdpanzer_2_hot>
@@ -2361,7 +2461,9 @@
           </ammo>
         </weapon_50mm_KwK39_1_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_germ_sdkfz_234_2>
@@ -2619,7 +2721,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_jp_m24_chaffee>
@@ -2929,7 +3033,9 @@
           <ammo/>
         </weapon_7_62mm_M1919A4_user_machinegun>
         <weapon_120mm_Type_64_MAT_rocket_launcher triggerGroup="primary">
-          <ammo/>
+          <ammo>
+            <ammo_120mm_type64 mass="15.7" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_120mm_Type_64_MAT_rocket_launcher>
         <weapon_12_7mm_M2_HB_user_machinegun triggerGroup="machinegun">
           <ammo>
@@ -2976,7 +3082,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_jp_type_61>
@@ -3067,7 +3175,9 @@
           </ammo>
         </weapon_37mm_type_94_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_jp_type_95_ha_go_commander>
@@ -3192,7 +3302,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_a17_mk_1_tetrarch>
@@ -3232,7 +3344,9 @@
           </ammo>
         </weapon_57mm_6pdr_QQF_Mk_3_L43_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a27m_cromwell_1>
@@ -3247,7 +3361,9 @@
           </ammo>
         </weapon_75mm_QQF_MkV_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a27m_cromwell_5>
@@ -3262,10 +3378,14 @@
           </ammo>
         </weapon_75mm_QQF_MkV_user_cannon>
         <weapon_152mm_RP3_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_152mm_rp_3 mass="43.0" speed="0" type="rocket_tank"/>
+          </ammo>
         </weapon_152mm_RP3_rocket_launcher>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a27m_cromwell_5_rp3>
@@ -3282,7 +3402,9 @@
           </ammo>
         </weapon_76mm_17pdr_QF_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a30_challenger>
@@ -3312,7 +3434,9 @@
           <ammo/>
         </weapon_7_92mm_BESA_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_a39_tortoise>
@@ -3376,7 +3500,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_at_gun_qf17pounder>
@@ -3392,7 +3518,9 @@
           </ammo>
         </weapon_57mm_6pdr_QQF_Mk_3_L43_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_at_gun_qf6pounder>
@@ -3419,7 +3547,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_a_13_mk1>
@@ -3434,7 +3564,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_a_13_mk1_3rd_rtr>
@@ -3449,7 +3581,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_a_13_mk2>
@@ -3464,7 +3598,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_a_13_mk2_1939>
@@ -3480,7 +3616,9 @@
           </ammo>
         </weapon_57mm_6pdr_QQF_Mk_5_L50_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_22b_mk_3_churchill_1942>
@@ -3495,7 +3633,9 @@
           </ammo>
         </weapon_75mm_QQF_MkV_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_22f_mk_7_churchill_1944>
@@ -3516,7 +3656,9 @@
           </ammo>
         </weapon_76mm_3inch_howitzer_MkI_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_22_mk_1_churchill_1941>
@@ -3534,7 +3676,9 @@
           <ammo/>
         </weapon_7_92mm_BESA_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_33_excelsior>
@@ -3550,7 +3694,9 @@
           </ammo>
         </weapon_77mm_QQF_Mk_II_L50_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_34_comet>
@@ -3566,7 +3712,9 @@
           </ammo>
         </weapon_77mm_QQF_Mk_II_L50_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_34_comet_iron_duke>
@@ -3583,7 +3731,9 @@
           </ammo>
         </weapon_76mm_17pdr_QF_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_a_43_black_prince>
@@ -3622,7 +3772,9 @@
           </ammo>
         </weapon_76mm_17pdr_QF_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_centurion_mk_1>
@@ -3635,7 +3787,9 @@
           </ammo>
         </weapon_105mm_L7_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_centurion_mk_10>
@@ -3650,7 +3804,9 @@
           </ammo>
         </weapon_84mm_QQF_20pdr_Mk_I_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_centurion_mk_3>
@@ -3665,10 +3821,14 @@
           </ammo>
         </weapon_84mm_QQF_20pdr_Mk_I_user_cannon>
         <weapon_164mm_s11_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_164mm_robot_52 mass="30.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_164mm_s11_rocket_launcher>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_centurion_mk_3_ss11>
@@ -3683,7 +3843,9 @@
           <ammo/>
         </weapon_7_62mm_L3A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_centurion_mk_5_avre_era>
@@ -3702,7 +3864,9 @@
           <ammo/>
         </weapon_7_62mm_L37A2_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_challenger_1>
@@ -3717,7 +3881,9 @@
           </ammo>
         </weapon_84mm_QQF_20pdr_Mk_I_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_charioteer_mk_7>
@@ -3731,7 +3897,9 @@
           </ammo>
         </weapon_35mm_Oerlikon_KDA_marksman_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_chieftain_marksman>
@@ -3749,7 +3917,9 @@
           <ammo/>
         </weapon_7_62mm_L37A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_chieftain_mk_10>
@@ -3767,7 +3937,9 @@
           <ammo/>
         </weapon_12_7mm_L21A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_chieftain_mk_3>
@@ -3788,7 +3960,9 @@
           <ammo/>
         </weapon_7_62mm_L37A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_chieftain_mk_5>
@@ -3804,7 +3978,9 @@
           <ammo/>
         </weapon_7_62mm_L3A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_conqueror_mk_2>
@@ -3844,7 +4020,9 @@
           <ammo/>
         </weapon_7_92mm_BESA_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_crusader_mk_2>
@@ -3860,7 +4038,9 @@
           </ammo>
         </weapon_57mm_6pdr_QQF_Mk_3_L43_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_crusader_mk_3>
@@ -3875,7 +4055,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_daimler_mk_2>
@@ -3899,13 +4081,16 @@
         <weapon_170mm_BAe_Swingfire_launcher_user_cannon triggerGroup="primary">
           <ammo>
             <ammo_120mm_l37a7 mass="17.1" speed="670" type="hesh_tank"/>
+            <ammo_170mm_swingfire mass="37.0" speed="0" type="atgm_tank"/>
           </ammo>
         </weapon_170mm_BAe_Swingfire_launcher_user_cannon>
         <weapon_7_62mm_L37A1_user_machinegun triggerGroup="machinegun">
           <ammo/>
         </weapon_7_62mm_L37A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_fv102_striker>
@@ -3920,7 +4105,9 @@
           </ammo>
         </weapon_84mm_QQF_20pdr_Mk_I_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_fv221_caernarvon>
@@ -3933,7 +4120,9 @@
           </ammo>
         </weapon_120mm_QQF_Tk_L1A1_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_fv4004_conway>
@@ -3957,7 +4146,9 @@
           </ammo>
         </weapon_84mm_QQF_20pdr_Mk_I_user_cannon>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_fv4202>
@@ -3967,10 +4158,14 @@
           <ammo/>
         </weapon_7_62mm_M1919A4_user_machinegun>
         <weapon_170mm_bae_swingfire_rocket_launcher triggerGroup="primary">
-          <ammo/>
+          <ammo>
+            <ammo_170mm_bae_swingfire mass="37.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_170mm_bae_swingfire_rocket_launcher>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_fv438_swingfire>
@@ -4014,7 +4209,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_sherman_ic_firefly>
@@ -4060,7 +4257,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_sherman_vc_firefly>
@@ -4113,7 +4312,9 @@
           </ammo>
         </weapon_40mm_QF_2pdr_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_uk_valentine_mk_1>
@@ -4142,7 +4343,9 @@
           </ammo>
         </weapon_75mm_QQF_MkV_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_valentine_mk_11>
@@ -4158,7 +4361,9 @@
           </ammo>
         </weapon_57mm_6pdr_QQF_Mk_3_L43_user_cannon>
         <weapon_76mm_nato_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_76mm_nato_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_valentine_mk_9>
@@ -4174,7 +4379,9 @@
           <ammo/>
         </weapon_7_62mm_L3A1_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_uk_vickers_mbt_mk_1>
@@ -4207,7 +4414,9 @@
           </ammo>
         </weapon_85mm_D70_user_cannon>
         <weapon_asu_85_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_asu_85_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_asu_85>
@@ -4248,14 +4457,18 @@
           </ammo>
         </weapon_73mm_2A28_user_cannon>
         <weapon_125mm_9M113_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_125mm_9M113 mass="14.5" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_125mm_9M113_rocket_launcher>
       </weapons>
     </vehicle_ussr_bmp_1>
     <vehicle_ussr_bm_8_24 fovIn="21.0" fovOut="40.0">
       <weapons>
         <weapon_82mm_M8_rocket_launcher triggerGroup="primary">
-          <ammo/>
+          <ammo>
+            <ammo_82mm_m_8 mass="7.84" speed="0" type="rocket_tank"/>
+          </ammo>
         </weapon_82mm_M8_rocket_launcher>
       </weapons>
     </vehicle_ussr_bm_8_24>
@@ -4512,7 +4725,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_is_3_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_is_3_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_is_3>
@@ -4536,7 +4751,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_is_4m_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_is_4m_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_is_4m>
@@ -4585,7 +4802,9 @@
     <vehicle_ussr_it_1 fovIn="9.0" fovOut="13.0">
       <weapons>
         <weapon_180mm_2k4_rocket_launcher triggerGroup="primary">
-          <ammo/>
+          <ammo>
+            <ammo_180mm_3m7 mass="54.0" speed="0" type="atgm_tank"/>
+          </ammo>
         </weapon_180mm_2k4_rocket_launcher>
       </weapons>
     </vehicle_ussr_it_1>
@@ -4824,7 +5043,9 @@
           </ammo>
         </weapon_14_5mm_KPVT_user_machinegun>
         <weapon_object_268_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_object_268_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_object_268>
@@ -4885,7 +5106,9 @@
           </ammo>
         </weapon_45mm_20K_user_cannon>
         <weapon_250kg_TT_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_250kg_tt mass="250.0" speed="0" type="rocket_tank"/>
+          </ammo>
         </weapon_250kg_TT_rocket_launcher>
       </weapons>
     </vehicle_ussr_rbt_5>
@@ -5059,7 +5282,9 @@
           </ammo>
         </weapon_14_5mm_KPVT_user_machinegun>
         <weapon_su_122_54_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_su_122_54_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_su_122_54>
@@ -5229,7 +5454,9 @@
           </ammo>
         </weapon_14_5mm_KPVT_user_machinegun>
         <weapon_t_10m_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_t_10m_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_t_10m>
@@ -5376,7 +5603,9 @@
           </ammo>
         </weapon_100mm_LB1_user_cannon>
         <weapon_t_34_100_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_t_34_100_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_t_34_100>
@@ -5597,7 +5826,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_t_44_100_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_t_44_100_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_t_44_100>
@@ -5665,7 +5896,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_t54_1947_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_t54_1947_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_t_54_1947>
@@ -5691,7 +5924,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_t54_1951_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_t54_1951_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_t_54_1949>
@@ -5717,7 +5952,9 @@
           </ammo>
         </weapon_12_7mm_DShK_user_machinegun>
         <weapon_t54_1951_smoke_barrel_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_t54_1951_smoke_barrel_launcher>
       </weapons>
     </vehicle_ussr_t_54_1951>
@@ -5769,6 +6006,7 @@
             <ammo_115mm_3of_27 mass="17.82" speed="800" type="he_frag_fs_tank"/>
             <ammo_115mm_3bm28 mass="4.88" speed="1620" type="apds_fs_tungsten_small_core_tank"/>
             <ammo_115mm_3bk_15m mass="12.2" speed="800" type="heat_fs_tank"/>
+            <ammo_115mm_9m_117 mass="18.8" speed="0" type="atgm_tank"/>
           </ammo>
         </weapon_115mm_U5TS_T-62M1_user_cannon>
         <weapon_12_7mm_NSV_user_cannon triggerGroup="machinegun">
@@ -5803,6 +6041,7 @@
             <ammo_125mm_3bm22 mass="4.83" speed="1760" type="apds_fs_tungsten_small_core_tank"/>
             <ammo_125mm_3bk_12m mass="19.0" speed="905" type="heat_fs_tank"/>
             <ammo_125mm_3bk_18m mass="19.0" speed="905" type="heat_fs_tank"/>
+            <ammo_125mm_9m_112 mass="17.2" speed="0" type="atgm_tank"/>
           </ammo>
         </weapon_125mm_2A46_2_user_cannon>
         <weapon_12_7mm_NSV_user_cannon triggerGroup="machinegun">
@@ -6190,7 +6429,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_us_m1_abrams>
@@ -6236,7 +6477,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_us_m24_chaffee>
@@ -6260,7 +6503,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_us_m24_chaffee_tl>
@@ -6317,7 +6562,9 @@
           </ammo>
         </weapon_90mm_M3_user_cannon>
         <weapon_110mm_M8_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_114mm_m8 mass="19.8" speed="0" type="rocket_tank"/>
+          </ammo>
         </weapon_110mm_M8_rocket_launcher>
         <weapon_12_7mm_M2_HB_user_machinegun triggerGroup="machinegun">
           <ammo>
@@ -6720,7 +6967,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_us_m4a2_1944>
@@ -6744,7 +6993,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_us_m4a2_1944_germ>
@@ -6892,7 +7143,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_us_m4a3_105_sherman>
@@ -6945,7 +7198,9 @@
           </ammo>
         </weapon_75mm_m3_user_cannon>
         <weapon_110mm_M8_rocket_launcher triggerGroup="special">
-          <ammo/>
+          <ammo>
+            <ammo_114mm_m8 mass="19.8" speed="0" type="rocket_tank"/>
+          </ammo>
         </weapon_110mm_M8_rocket_launcher>
       </weapons>
     </vehicle_us_m4_sherman_calliope>
@@ -6993,6 +7248,7 @@
           <ammo>
             <ammo_152mm_m409a1 mass="18.9" speed="682" type="heat_tank"/>
             <ammo_152mm_m657a2 mass="22.0" speed="682" type="he_frag_tank"/>
+            <ammo_152mm_mgm_61b mass="27.8" speed="0" type="atgm_tank"/>
           </ammo>
         </weapon_152mm_M81_user_cannon>
         <weapon_12_7mm_M2_HB_user_machinegun triggerGroup="machinegun">
@@ -7004,7 +7260,9 @@
           </ammo>
         </weapon_12_7mm_M2_HB_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_us_m551>
@@ -7126,7 +7384,9 @@
           </ammo>
         </weapon_12_7mm_M85_user_machinegun>
         <weapon_66mm_smoke_grenade_launcher_m60a2 triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_smoke_grenade_launcher_m60a2>
       </weapons>
     </vehicle_us_m60a1_rise_passive_era>
@@ -7136,6 +7396,7 @@
           <ammo>
             <ammo_152mm_m409a1 mass="18.9" speed="682" type="heat_tank"/>
             <ammo_152mm_m657a2 mass="22.0" speed="682" type="he_frag_tank"/>
+            <ammo_152mm_mgm_61b mass="27.8" speed="0" type="atgm_tank"/>
           </ammo>
         </weapon_152mm_M162_user_cannon>
         <weapon_12_7mm_M85_user_machinegun triggerGroup="machinegun">
@@ -7147,7 +7408,9 @@
           </ammo>
         </weapon_12_7mm_M85_user_machinegun>
         <weapon_66mm_smoke_grenade_launcher_m60a2 triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_smoke_grenade_launcher_m60a2>
       </weapons>
     </vehicle_us_m60a2>
@@ -7258,6 +7521,7 @@
           <ammo>
             <ammo_152mm_m409a1 mass="18.9" speed="682" type="heat_tank"/>
             <ammo_152mm_m409a1 mass="18.9" speed="754" type="heat_tank"/>
+            <ammo_152mm_mgm_61c mass="27.8" speed="0" type="atgm_tank"/>
             <ammo_152mm_xm410e1 mass="18.9" speed="754" type="smoke_tank"/>
             <ammo_152mm_xm578e1 mass="3.7" speed="1500" type="apds_fs_tungsten_l10_l15_tank"/>
           </ammo>
@@ -7272,7 +7536,9 @@
           <ammo/>
         </weapon_7_62mm_M73_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_us_mbt_70>
@@ -7335,7 +7601,9 @@
           </ammo>
         </weapon_57mm_M1_user_cannon>
         <weapon_66mm_germ_smoke_mortar_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_germ_smoke_mortar_launcher>
       </weapons>
     </vehicle_us_t18_e2>
@@ -7619,6 +7887,7 @@
           <ammo>
             <ammo_152mm_m409a1 mass="18.9" speed="682" type="heat_tank"/>
             <ammo_152mm_m409a1 mass="18.9" speed="754" type="heat_tank"/>
+            <ammo_152mm_mgm_61c mass="27.8" speed="0" type="atgm_tank"/>
             <ammo_152mm_xm410e1 mass="18.9" speed="754" type="smoke_tank"/>
             <ammo_152mm_xm578e1 mass="3.7" speed="1500" type="apds_fs_tungsten_l10_l15_tank"/>
           </ammo>
@@ -7635,7 +7904,9 @@
           <ammo/>
         </weapon_7_62mm_M73_user_machinegun>
         <weapon_66mm_uk_smoke_grenade_launcher triggerGroup="smoke">
-          <ammo/>
+          <ammo>
+            <ammo_76mm_smoke_grenade mass="2.5" speed="0" type="smoke_grenade_tank"/>
+          </ammo>
         </weapon_66mm_uk_smoke_grenade_launcher>
       </weapons>
     </vehicle_us_xm_803>
