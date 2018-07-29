@@ -25,7 +25,7 @@ public class UpdateTXTGenerator {
 	
 	
 	public static void main(String[] args) {
-		generateUpdateTxt("New version available (0.7).", null, "0.7");
+		generateUpdateTxt("New version available (0.7.1).", null, "0.7.1");
 	}
 	
 	
