@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
+import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -85,6 +86,8 @@ public class WTSELauncher extends Application {
 	
 		Logger.get().info("=============== LAUNCHER ===============");
 		Logger.get().info("BaseDir: " + BASE_DIR);
+		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() +" "+ SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
+
 		
 		Config2.load(new File(BASE_DIR + "\\data\\config.json"));
 		
