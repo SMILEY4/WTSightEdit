@@ -8,6 +8,7 @@ import com.ruegnerlukas.wtlauncher.Updater.InstallStatus;
 import com.ruegnerlukas.wtlauncher.Updater.SearchStatus;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,6 +19,8 @@ import javafx.scene.layout.AnchorPane;
 public class LauncherController {
 
 
+	LauncherController thisController;
+	
 	@FXML private AnchorPane paneSearch;
 	@FXML private AnchorPane paneSelect;
 	@FXML private AnchorPane paneUpdate;
@@ -30,12 +33,16 @@ public class LauncherController {
 	
 	
 	public void start() {
-		paneSearch.setVisible(true);
-		paneSelect.setVisible(false);
-		paneUpdate.setVisible(false);
+		thisController = this;
 		paneSearch.setDisable(false);
 		paneSelect.setDisable(true);
 		paneUpdate.setDisable(true);
+
+		paneSearch.setOpacity(1.0);
+		paneSelect.setOpacity(0.0);
+		paneUpdate.setOpacity(0.0);
+
+		
 		Updater.searchUpdate(this);
 	}
 	
@@ -45,12 +52,14 @@ public class LauncherController {
 	public void onUpdateSearchDone(SearchStatus status, String localVersion, String latestVersion) {
 		Platform.runLater( () -> {
 				if(status == SearchStatus.FOUND_UPDATE) {
-					paneSearch.setVisible(false);
-					paneSelect.setVisible(true);
-					paneUpdate.setVisible(false);
 					paneSearch.setDisable(true);
 					paneSelect.setDisable(false);
 					paneUpdate.setDisable(true);
+					
+					paneSearch.setOpacity(0.0);
+					paneSelect.setOpacity(1.0);
+					paneSearch.setOpacity(0.0);
+					
 					this.latestVersion = latestVersion;
 					labelUpdateInfo.setText("New version found: " + latestVersion + ". Current version: " + localVersion + ".");
 				} else {
@@ -82,14 +91,17 @@ public class LauncherController {
 
 	@FXML
 	void onUpdate(ActionEvent event) {
-		paneSearch.setVisible(false);
-		paneSelect.setVisible(false);
-		paneUpdate.setVisible(true);
-		paneSearch.setDisable(true);
-		paneSelect.setDisable(true);
-		paneUpdate.setDisable(false);
-		labelUpdateStatus.setText("Updating to version " + latestVersion + ".");
-		Updater.installUpdate(this);
+			
+			paneSearch.setDisable(true);
+			paneSelect.setDisable(true);
+			paneUpdate.setDisable(false);
+		
+			paneSearch.setOpacity(0.0);
+			paneSelect.setOpacity(0.0);
+			paneUpdate.setOpacity(1.0);
+			
+			labelUpdateStatus.setText("Updating to version " + latestVersion + ".");
+			Updater.installUpdate(thisController);
 	}	
 
 

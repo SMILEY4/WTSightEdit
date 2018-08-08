@@ -9,8 +9,7 @@ import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
-import com.ruegnerlukas.wtupdater.UpdateController;
-import com.ruegnerlukas.wtupdater.WTSightsStart;
+import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.application.Application;
@@ -24,7 +23,7 @@ import javafx.stage.WindowEvent;
 public class WTSELauncher extends Application {
 
 	
-	public static String BASE_DIR = "C:\\Users\\LukasRuegner\\Desktop\\WTSightEdit_06";
+	public static String BASE_DIR = "";
 	public static boolean DEV_MODE = false;
 
 	
@@ -86,6 +85,8 @@ public class WTSELauncher extends Application {
 	
 		Logger.get().info("=============== LAUNCHER ===============");
 		Logger.get().info("BaseDir: " + BASE_DIR);
+		
+		Config2.load(new File(BASE_DIR + "\\data\\config.json"));
 		
 		FXUtils.addIcons(primaryStage);
 

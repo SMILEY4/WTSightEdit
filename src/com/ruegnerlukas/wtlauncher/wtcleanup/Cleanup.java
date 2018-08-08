@@ -93,6 +93,8 @@ public class Cleanup {
 			Logger.get().info("Delete " + pathUpdateDir);
 			delete(new File(pathUpdateDir));
 			
+			Thread.sleep(1000);
+			
 			// RUN NEW LAUNCHER
 			Logger.get().info("Run new launcher: " + fileLauncherDest.getAbsolutePath());
 			ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileLauncherDest.getAbsolutePath());
@@ -103,7 +105,9 @@ public class Cleanup {
 			}
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.get().error(e);
+		} catch (InterruptedException e1) {
+			Logger.get().warn(e1);
 		}
 		
 	}
