@@ -62,7 +62,7 @@ public class UIMainMenu {
 //				scene = new Scene(decorator, 500, 510+30);
 //				scene.getStylesheets().add("ui/decoration.css");
 			} else {
-				scene = new Scene(root, 500, 510, true, SceneAntialiasing.DISABLED);
+				scene = new Scene(root, 500, 600, true, SceneAntialiasing.DISABLED);
 			}
 			
 			

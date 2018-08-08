@@ -20,14 +20,17 @@ import com.ruegnerlukas.wtutils.Checksum;
 public class UpdateTXTGenerator {
 
 //	static final String PATH_DATA = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate";
-//	static final String FILE_OUT = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate\\update.txt";
+	static final String FILE_OUT = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\WarThunderSightEditor\\data_localUpdate\\update.txt";
 
-	static final String PATH_DATA = "C:\\Users\\LukasRuegner\\Desktop\\data_rep";
-	static final String FILE_OUT = "C:\\Users\\LukasRuegner\\Desktop\\data_rep\\update.txt";
+	static final String PATH_DATA = "C:\\Users\\LukasRuegner\\Desktop\\WTSightEditPushUpdates\\data";
+//	static final String FILE_OUT = "C:\\Users\\LukasRuegner\\Desktop\\WTSightEditPushUpdates\\data\\data_localUpdate\\update.txt";
+	
+//	static final String PATH_DATA = "C:\\Users\\LukasRuegner\\Desktop\\data_rep";
+//	static final String FILE_OUT = "C:\\Users\\LukasRuegner\\Desktop\\data_rep\\update.txt";
 
 	
 	public static void main(String[] args) {
-		generateUpdateTxt("New version available (0.7.1).", null, "0.7.1");
+		generateUpdateTxt("New version available (0.7.2).", null, "0.7.2");
 	}
 	
 	

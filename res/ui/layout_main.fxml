@@ -4,14 +4,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.main.UIMainMenu">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="607.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.main.UIMainMenu">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="150.0" layoutY="121.0" prefHeight="584.0" prefWidth="500.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="150.0" layoutY="121.0" prefHeight="585.0" prefWidth="500.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
@@ -26,6 +27,18 @@
                   <Font size="12.0" />
                </font>
             </Label>
+            <Label fx:id="labelVersion1" alignment="CENTER" prefWidth="10000.0" text="This version can no longer be updated. To receive further update, please download the latest version manually." textFill="RED" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets left="4.0" />
+               </padding>
+            </Label>
+            <TextField editable="false" promptText="https://github.com/SMILEY4/WTSightEdit/releases" text="https://github.com/SMILEY4/WTSightEdit/releases" />
             <Separator prefWidth="200.0">
                <padding>
                   <Insets bottom="20.0" top="20.0" />
