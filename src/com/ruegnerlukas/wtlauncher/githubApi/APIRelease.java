@@ -1,4 +1,4 @@
-package com.ruegnerlukas.githubApi;
+package com.ruegnerlukas.wtlauncher.githubApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +125,7 @@ public class APIRelease {
 	
 	
 	
-	private static Release jsonToRelease(JsonObject jsonRelease) {
+	public static Release jsonToRelease(JsonObject jsonRelease) {
 		
 		Release release = new Release();
 		jsonInitPrimitives(jsonRelease, release);

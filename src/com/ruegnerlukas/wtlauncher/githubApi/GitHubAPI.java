@@ -1,4 +1,4 @@
-package com.ruegnerlukas.githubApi;
+package com.ruegnerlukas.wtlauncher.githubApi;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,12 +10,12 @@ public class GitHubAPI {
 
 	
 	protected static final String USER_AGENT = "Mozilla/5.0";
-	protected static final String API_URL = "https://api.github.com";
+	public static final String API_URL = "https://api.github.com";
 	
 	
 	
 	
-	protected static String getRequest(String strURL) throws Exception {
+	public static String getRequest(String strURL) throws Exception {
 		
 		URL url = new URL(strURL); 
 		HttpURLConnection con = (HttpURLConnection)url.openConnection();

@@ -1,4 +1,4 @@
-package com.ruegnerlukas.githubApi;
+package com.ruegnerlukas.wtlauncher.githubApi;
 
 
 public class Asset {

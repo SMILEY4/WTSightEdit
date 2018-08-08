@@ -1,4 +1,4 @@
-package com.ruegnerlukas.githubApi;
+package com.ruegnerlukas.wtlauncher.githubApi;
 
 import java.lang.reflect.Field;
 
