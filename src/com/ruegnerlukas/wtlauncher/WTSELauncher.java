@@ -1,74 +1,64 @@
-package com.ruegnerlukas.wtsights;
+package com.ruegnerlukas.wtlauncher;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
-import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
-import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class WTSights extends Application {
+public class WTSELauncher extends Application {
 
 	
-	private static Stage primaryStage;
-	
+	public static String BASE_DIR = "";
 	public static boolean DEV_MODE = false;
-	public static final boolean DARK_MODE = false;
-	
-	public static boolean wasStartedInsideData;
 
+	
 	
 	
 	public static void main(String[] args) {
-
+		
+		// dev mode
 		for(String arg : args) {
 			if(arg.equalsIgnoreCase("dev")) {
 				DEV_MODE = true;
 			}
 		}
 		
-		wasStartedInsideData = false;
-		if(JarLocation.getJarLocation(WTSights.class).endsWith("\\data")) {
-			wasStartedInsideData = true;
-		}
-		if(DEV_MODE) {
-			wasStartedInsideData = false;
-		}
+		// base dir
+		BASE_DIR = new File(JarLocation.getJarFile(WTSELauncher.class)).getParentFile().getAbsolutePath();
+		BASE_DIR = BASE_DIR.replaceAll("%20", " ");
 		
 		
-		
+		// logger
 		Logger.get().redirectStdOutput(LogLevel.DEBUG, LogLevel.ERROR);
-		((DefaultMessageBuilder)Logger.get().getMessageBuilder()).setSourceNameSizeMin(23);
 	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 	        public void run() {
 	    		Logger.get().info("=========================================");
 	    		Logger.get().blankLine();
-	    		Logger.get().blankLine();
-	    		Logger.get().blankLine();
-	    		Logger.get().blankLine();
 	    		Logger.get().close();
 	        }
 	    }, "Shutdown-thread"));
-		
-	    
+
 		if(DEV_MODE) {
 			Logger.get().getFilterManager().addFilter(FilterLevel.only(LogLevel.values()));
 			
 		} else {
 			Logger.get().getFilterManager().addFilter(FilterLevel.not(LogLevel.DEBUG));
-			File logFile = new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/log.txt");
+			File logFile = new File(BASE_DIR + "\\data\\log.txt");
 			if(!logFile.exists()) {
 				try {
 					if(!logFile.getParentFile().exists()) {
@@ -83,10 +73,6 @@ public class WTSights extends Application {
 			Logger.get().setLogTarget(new LogFileTarget(logFile, true));
 		}
 		
-		Logger.get().blankLine();
-		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(WTSights.class) + ") DEV_MODE=" + DEV_MODE + " PATH=" + JarLocation.getJarLocation(WTSights.class) + "  inside=" + wasStartedInsideData);
-		
-		Config2.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
 		
 		launch(args);
 	}
@@ -96,14 +82,22 @@ public class WTSights extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+	
+		Logger.get().info("=============== LAUNCHER ===============");
+		Logger.get().info("BaseDir: " + BASE_DIR);
 		
-		WTSights.primaryStage = primaryStage;
+		Config2.load(new File(BASE_DIR + "\\data\\config.json"));
 		
 		FXUtils.addIcons(primaryStage);
+
+		FXMLLoader loader = new FXMLLoader(UIMainMenu.class.getResource("/ui/layout_launcher.fxml"));
+		Parent root = (Parent) loader.load();
+		LauncherController controller = (LauncherController)loader.getController();
+		Scene scene = new Scene(root, 470, 135, true);
+		primaryStage.setTitle("WT Sight Editor");
+		primaryStage.setScene(scene);
 		
-		Database.loadVehicles(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/vehicle_data.xml"));
-		
-		UIMainMenu.openNew(primaryStage);
+		controller.start();
 		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
@@ -113,14 +107,9 @@ public class WTSights extends Application {
 		});
 		
 		primaryStage.show();
+		
 	}
-
 	
-	
-	
-	public static Stage getPrimaryStage() {
-		return primaryStage;
-	}
 	
 	
 	
