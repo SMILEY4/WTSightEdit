@@ -11,8 +11,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
-import com.ruegnerlukas.wtupdater.WTSightsStart;
-import com.ruegnerlukas.wtutils.Config;
+import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.application.Application;
@@ -41,7 +40,7 @@ public class WTSights extends Application {
 		}
 		
 		wasStartedInsideData = false;
-		if(JarLocation.getJarLocation(WTSightsStart.class).endsWith("\\data")) {
+		if(JarLocation.getJarLocation(WTSights.class).endsWith("\\data")) {
 			wasStartedInsideData = true;
 		}
 		if(DEV_MODE) {
@@ -69,7 +68,7 @@ public class WTSights extends Application {
 			
 		} else {
 			Logger.get().getFilterManager().addFilter(FilterLevel.not(LogLevel.DEBUG));
-			File logFile = new File(JarLocation.getJarLocation(WTSightsStart.class) + (wasStartedInsideData ? "" : "/data") + "/log.txt");
+			File logFile = new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/log.txt");
 			if(!logFile.exists()) {
 				try {
 					if(!logFile.getParentFile().exists()) {
@@ -85,10 +84,10 @@ public class WTSights extends Application {
 		}
 		
 		Logger.get().blankLine();
-		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(WTSightsStart.class) + ") DEV_MODE=" + DEV_MODE + " PATH=" + JarLocation.getJarLocation(WTSightsStart.class) + "  inside=" + wasStartedInsideData);
+		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(WTSights.class) + ") DEV_MODE=" + DEV_MODE + " PATH=" + JarLocation.getJarLocation(WTSights.class) + "  inside=" + wasStartedInsideData);
 		
-		Config.load(new File(JarLocation.getJarLocation(WTSightsStart.class) + (wasStartedInsideData ? "" : "/data") + "/config.txt"));
-
+		Config2.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
+		
 		launch(args);
 	}
 	
@@ -102,7 +101,7 @@ public class WTSights extends Application {
 		
 		FXUtils.addIcons(primaryStage);
 		
-		Database.loadVehicles(new File(JarLocation.getJarLocation(WTSightsStart.class) + (wasStartedInsideData ? "" : "/data") + "/vehicle_data.xml"));
+		Database.loadVehicles(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/vehicle_data.xml"));
 		
 		UIMainMenu.openNew(primaryStage);
 		

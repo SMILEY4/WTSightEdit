@@ -40,8 +40,8 @@ import com.ruegnerlukas.wtsights.data.sight.objects.LineObject;
 import com.ruegnerlukas.wtsights.data.sight.objects.QuadObject;
 import com.ruegnerlukas.wtsights.data.sight.objects.SightObject;
 import com.ruegnerlukas.wtsights.data.sight.objects.SightObject.Movement;
-import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtsights.data.sight.objects.TextObject;
+import com.ruegnerlukas.wtutils.Config2;
 
 public class DataWriter {
 
@@ -164,7 +164,7 @@ public class DataWriter {
 		List<String> lines = new ArrayList<String>();
 			
 		// metadata
-		lines.add("// created with WTSightEdit " + Config.getValue("build_version"));
+		lines.add("// created with WTSightEdit " + Config2.build_date);
 		lines.add("// vehicle = " + (dataCalib == null ? "unknown" : dataCalib.vehicle.name));
 		lines.add("");
 		

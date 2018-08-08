@@ -25,7 +25,7 @@ import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
-import com.ruegnerlukas.wtutils.Config;
+import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils;
 import com.ruegnerlukas.wtutils.ZoomableScrollPane;
@@ -121,13 +121,8 @@ public class UICalibrationEditor {
 
 			UICalibrationEditor controller = (UICalibrationEditor) loader.getController();
 
-			int width = 1280;
-			int height = 720;
-			String[] valuesScreenSize = Config.getValues("window_size");
-			if(valuesScreenSize != null && valuesScreenSize.length == 2) {
-				width = Integer.parseInt(valuesScreenSize[0]);
-				height = Integer.parseInt(valuesScreenSize[1]);
-			}
+			int width = Config2.app_window_size.x;
+			int height = Config2.app_window_size.y;
 			
 			Scene scene = new Scene(root, width, height, true, SceneAntialiasing.DISABLED);
 //			if(WTSights.DARK_MODE) {
@@ -170,13 +165,8 @@ public class UICalibrationEditor {
 
 			UICalibrationEditor controller = (UICalibrationEditor) loader.getController();
 			
-			int width = 1280;
-			int height = 720;
-			String[] valuesScreenSize = Config.getValues("window_size");
-			if(valuesScreenSize != null && valuesScreenSize.length == 2) {
-				width = Integer.parseInt(valuesScreenSize[0]);
-				height = Integer.parseInt(valuesScreenSize[1]);
-			}
+			int width = Config2.app_window_size.x;
+			int height = Config2.app_window_size.y;
 			
 			Scene scene = new Scene(root, width, height, true, SceneAntialiasing.DISABLED);
 //			if(WTSights.DARK_MODE) {

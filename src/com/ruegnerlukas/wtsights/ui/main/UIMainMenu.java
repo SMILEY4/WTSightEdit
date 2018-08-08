@@ -13,7 +13,7 @@ import com.ruegnerlukas.wtsights.ui.about.UIAbout;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
-import com.ruegnerlukas.wtutils.Config;
+import com.ruegnerlukas.wtutils.Config2;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -62,7 +62,7 @@ public class UIMainMenu {
 //				scene = new Scene(decorator, 500, 510+30);
 //				scene.getStylesheets().add("ui/decoration.css");
 			} else {
-				scene = new Scene(root, 500, 600, true, SceneAntialiasing.DISABLED);
+				scene = new Scene(root, 500, 550, true, SceneAntialiasing.DISABLED);
 			}
 			
 			
@@ -85,7 +85,7 @@ public class UIMainMenu {
 	
 	
 	private void create(Stage stage) {
-		labelVersion.setText("Version " + Config.getValue("build_version"));
+		labelVersion.setText("Version " + Config2.build_version);
 	}
 	
 	
