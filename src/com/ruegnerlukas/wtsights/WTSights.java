@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
+import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
@@ -85,6 +86,8 @@ public class WTSights extends Application {
 		
 		Logger.get().blankLine();
 		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(WTSights.class) + ") DEV_MODE=" + DEV_MODE + " PATH=" + JarLocation.getJarLocation(WTSights.class) + "  inside=" + wasStartedInsideData);
+		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() +" "+ SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
+		
 		
 		Config2.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
 		

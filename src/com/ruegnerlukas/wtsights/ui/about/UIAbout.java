@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
@@ -68,12 +69,14 @@ public class UIAbout {
 		
 		textArea.setText(""+
 				"Product Version\r\n" + 
-				"WT Sight Editor v" + Config2.build_version + "\r\n" + 
+				"    " + "WT Sight Editor v" + Config2.build_version + "\r\n" + 
 				"\r\n" + 
 				"Build Information\r\n" + 
-				"Version "  + Config2.build_version + "\r\n" + 
-				"Date: " + Config2.build_date + "\r\n" + 
-				"Java Version: 1.8.0_171, Oracle Corporation" +
+				"    " + "Version "  + Config2.build_version + "\r\n" + 
+				"    " + "Date: " + Config2.build_date + "\r\n" + 
+				"\r\n" + 
+				"Java version (Installed): " + "\r\n" + 
+				"    " + SystemUtils.getJavaRuntimeName() + " "+ SystemUtils.getJavaRuntimeVersion() + "\r\n" + 
 				"\r\n" + 
 				"\r\n" + 
 				"\r\n" +
