@@ -1,14 +1,21 @@
-package com.ruegnerlukas.wtcleanup;
+package com.ruegnerlukas.wtlauncher.wtcleanup;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
+import com.ruegnerlukas.simpleutils.JarLocation;
+import com.ruegnerlukas.simpleutils.logging.LogLevel;
+import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 
 
 public class Cleanup {
 
+	public static boolean DEV_MODE = false;
+	
 	public static void main(String[] args) {
 		
 		try {
@@ -17,10 +24,52 @@ public class Cleanup {
 			e.printStackTrace();
 		}
 		
-		if(args.length != 3) {
+		if(args.length < 3) {
 			Logger.get().info("Invalid arguments");
 			System.exit(0);
 		}
+		
+		// dev mode
+		if(args.length > 3 && "dev".equals(args[3])) {
+			DEV_MODE = true;
+		}
+		
+		// base dir
+		String BASE_DIR = new File(JarLocation.getJarFile(Cleanup.class)).getParentFile().getAbsolutePath();
+		BASE_DIR = BASE_DIR.replaceAll("%20", " ");
+		
+		// logger
+		Logger.get().redirectStdOutput(LogLevel.DEBUG, LogLevel.ERROR);
+	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+	        public void run() {
+	    		Logger.get().info("=========================================");
+	    		Logger.get().blankLine();
+	    		Logger.get().close();
+	        }
+	    }, "Shutdown-thread"));
+
+		if(DEV_MODE) {
+			Logger.get().getFilterManager().addFilter(FilterLevel.only(LogLevel.values()));
+			
+		} else {
+			Logger.get().getFilterManager().addFilter(FilterLevel.not(LogLevel.DEBUG));
+			File logFile = new File(BASE_DIR + "\\log.txt");
+			if(!logFile.exists()) {
+				try {
+					if(!logFile.getParentFile().exists()) {
+						logFile.getParentFile().mkdir();
+					}
+					logFile.createNewFile();
+				} catch (IOException e) {
+					Logger.get().error(e);
+				}
+			}
+			
+			Logger.get().setLogTarget(new LogFileTarget(logFile, true));
+		}
+		
+		
+		Logger.get().info("=============== CLEANUP ===============");
 		
 		String pathLauncherOld = args[0];
 		String pathLauncherNew = args[1];
@@ -66,34 +115,24 @@ public class Cleanup {
 
 		if (file.isDirectory()) {
 
-			// directory is empty, then delete it
 			if (file.list().length == 0) {
-
 				file.delete();
 
 			} else {
-
-				// list all the directory contents
 				String files[] = file.list();
-
 				for (String temp : files) {
-					// construct the file structure
 					File fileDelete = new File(file, temp);
-
-					// recursive delete
 					delete(fileDelete);
 				}
-
-				// check the directory again, if empty then delete it
 				if (file.list().length == 0) {
 					file.delete();
 				}
 			}
 
 		} else {
-			// if file, then delete it
 			file.delete();
 		}
 	}
+	
 	
 }

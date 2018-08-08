@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtlauncher.LauncherController">
+   <children>
+      <AnchorPane fx:id="paneSearch" prefHeight="158.0" prefWidth="470.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" layoutX="174.0" layoutY="-76.0" prefHeight="158.0" prefWidth="470.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  <Label text="Searching for updates ..." />
+                  <ProgressBar prefWidth="100000.0" />
+                  <HBox alignment="TOP_RIGHT" />
+                  <HBox alignment="TOP_RIGHT">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onSkipSearch" prefWidth="100.0" text="Skip" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="paneSelect" prefHeight="158.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" layoutY="-80.0" prefHeight="134.0" prefWidth="469.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  <Label fx:id="labelUpdateInfo" text="New version found: 0.8.2. Current version: 0.7.1" wrapText="true" />
+                  <HBox alignment="TOP_RIGHT" spacing="5.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onSkipUpdate" prefWidth="100.0" text="Skip" />
+                        <Button mnemonicParsing="false" onAction="#onUpdate" prefWidth="100.0" text="Update" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="paneUpdate" layoutX="10.0" layoutY="10.0" prefHeight="158.0" prefWidth="470.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-18.0" prefHeight="134.0" prefWidth="469.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  <Label fx:id="labelUpdateStatus" text="Updating to version 0.8.1 ..." />
+                  <ProgressBar prefWidth="10000.0" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

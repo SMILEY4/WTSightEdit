@@ -117,6 +117,7 @@ public class FXUtils {
 	
 	
 	
+	
 	public static void addIcons(Stage stage) {
 		stage.getIcons().add(new Image("/icons/wtseIcon256.png"));
 		stage.getIcons().add(new Image("/icons/wtseIcon128.png"));
