@@ -16,8 +16,6 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.WTSights;
-import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.DataWriter;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
@@ -36,10 +34,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -59,7 +53,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class UICalibrationEditor {
@@ -99,94 +92,34 @@ public class UICalibrationEditor {
 	
 	
 	
-	public static void openNew(Stage stage, Vehicle vehicle, List<String> ammoNames, List<File> imgFiles, File fileSight) {
+	
+	public static void openNew(Vehicle vehicle, List<String> ammoNames, List<File> imgFiles, File fileSight) {
 
-		Logger.get().info("Opening CalibrationEditor (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoNames + "; sight=" + fileSight);
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoNames + "; sight=" + fileSight);
 
+		int width = Config2.app_window_size.x;
+		int height = Config2.app_window_size.y;
 		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader;
-//			if(WTSights.DARK_MODE) {
-//				loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_calibration_dark.fxml"));
-//			} else {
-//				loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_calibration.fxml"));
-//			}
-			loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_calibration.fxml"));
-			Parent root = (Parent) loader.load();
-
-			UICalibrationEditor controller = (UICalibrationEditor) loader.getController();
-
-			int width = Config2.app_window_size.x;
-			int height = Config2.app_window_size.y;
-			
-			Scene scene = new Scene(root, width, height, true, SceneAntialiasing.DISABLED);
-//			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-//			}
-			window.setTitle("Calibrate Sight");
-			window.setScene(scene);
-
-			controller.create(window, vehicle, ammoNames, imgFiles, fileSight);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-
+		Stage stage = null;
+		UICalibrationEditor controller = (UICalibrationEditor)FXUtils.openFXScene(stage, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		controller.create(stage, vehicle, ammoNames, imgFiles, fileSight);
 	}
 	
 	
 	
 	
-	public static void openNew(Stage stage, CalibrationData data, File fileSight) {
+	public static void openNew(CalibrationData data, File fileSight) {
 		
-		Logger.get().info("Opening CalibrationEditor (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (data==null ? "null" : data.vehicle.name) + "; sight=" + fileSight);
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (data==null ? "null" : data.vehicle.name) + "; sight=" + fileSight);
 
+		int width = Config2.app_window_size.x;
+		int height = Config2.app_window_size.y;
 		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader;
-//			if(WTSights.DARK_MODE) {
-//				loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_calibration_dark.fxml"));
-//			} else {
-//				loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_calibration.fxml"));
-//			}
-			loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_calibration.fxml"));
-			Parent root = (Parent) loader.load();
-
-			UICalibrationEditor controller = (UICalibrationEditor) loader.getController();
-			
-			int width = Config2.app_window_size.x;
-			int height = Config2.app_window_size.y;
-			
-			Scene scene = new Scene(root, width, height, true, SceneAntialiasing.DISABLED);
-//			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-//			}
-			window.setTitle("Calibrate Sight");
-			window.setScene(scene);
-
-			controller.create(window, data, fileSight);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-		
+		Stage stage = null;
+		UICalibrationEditor controller = (UICalibrationEditor)FXUtils.openFXScene(stage, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		controller.create(stage, data, fileSight);
 	}
 
-	
-	
-	
 	
 	
 	
@@ -255,6 +188,7 @@ public class UICalibrationEditor {
 
 
 	
+	
 	private void create() {
 
 		// AMMO CHOICE
@@ -319,7 +253,6 @@ public class UICalibrationEditor {
 	
 	
 	
-	
 	private void updateRangeList() {
 		
 		Logger.get().debug("Updating Range List " + currentAmmoData.markerRanges);
@@ -347,8 +280,6 @@ public class UICalibrationEditor {
 		}
 		
 	}
-	
-	
 	
 	
 	
@@ -675,10 +606,10 @@ public class UICalibrationEditor {
 		if(this.fileSight == null) {
 			this.stage.close();
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			UISightEditor.openNew(stage, data);
+			UISightEditor.openNew(data);
 		} else {
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			UISightEditor.openNew(stage, data, this.fileSight);
+			UISightEditor.openNew(data, this.fileSight);
 		}
 	}
 	

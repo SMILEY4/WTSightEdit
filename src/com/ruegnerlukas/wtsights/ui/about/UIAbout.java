@@ -1,25 +1,15 @@
 package com.ruegnerlukas.wtsights.ui.about;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.WTSights;
-import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
-import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.TextArea;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class UIAbout {
 
@@ -29,43 +19,16 @@ public class UIAbout {
 	@FXML private TextArea textArea;
 	
 	
-	public static void openNew(Stage stage) {
-		
-		Logger.get().info("Opening UIAbout");
-		
-		try {
-
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader = new FXMLLoader(UICalibrationEditor.class.getResource("/ui/layout_about.fxml"));
-			Parent root = (Parent) loader.load();
-			UIAbout controller = (UIAbout) loader.getController();
-			
-			Scene scene = new Scene(root, 600, 700, true, SceneAntialiasing.DISABLED);
-			
-			window.setTitle("WT Sight Editor");
-			if(WTSights.DARK_MODE) {
-				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setScene(scene);
-			window.show();
-			
-			controller.create(window);
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-		
-		
+	public static void openNew() {
+		Logger.get().info("Navigate to 'UIAbout'");
+		UIAbout controller = (UIAbout)FXUtils.openFXScene(null, "/ui/layout_about.fxml", 600, 700, "About WT Sight Editor");
+		controller.create();
 	}
 	
 	
 	
 	
-	private void create(Stage stage) {
+	private void create() {
 		
 		textArea.setText(""+
 				"Product Version\r\n" + 

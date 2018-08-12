@@ -1,12 +1,10 @@
 package com.ruegnerlukas.wtsights.ui.calibrationselect;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
@@ -16,17 +14,12 @@ import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
-import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -36,7 +29,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class UICalibrationSelect {
@@ -62,99 +54,33 @@ public class UICalibrationSelect {
 	
 	
 	
-	public static void openNew(Stage stage) {
-		
-		Logger.get().info("Opening CalibrationSelect (" + Workflow.toString(Workflow.steps) + ")");
-
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader = new FXMLLoader(UICalibrationSelect.class.getResource("/ui/layout_calibrationselect.fxml"));
-			Parent root = (Parent) loader.load();
-			UICalibrationSelect controller = (UICalibrationSelect) loader.getController();
-
-			Scene scene = new Scene(root, 600, 230, true, SceneAntialiasing.DISABLED);
-			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setTitle("Select Calibration");
-			window.setScene(scene);
-
-			controller.create(window);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-		
+	
+	
+	public static void openNew() {
+		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + ")");
+		Stage stage = null;
+		UICalibrationSelect controller = (UICalibrationSelect)FXUtils.openFXScene(stage, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		controller.create(stage);
 	}
 	
 
 	
 	
-	public static void openNew(Stage stage, File fileSight) {
-
-		Logger.get().info("Opening UICalibrationSelect (" + Workflow.toString(Workflow.steps) + ") file=" + fileSight);
-		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader = new FXMLLoader(UICalibrationSelect.class.getResource("/ui/layout_calibrationselect.fxml"));
-			Parent root = (Parent) loader.load();
-			UICalibrationSelect controller = (UICalibrationSelect) loader.getController();
-
-			Scene scene = new Scene(root, 600, 230, true, SceneAntialiasing.DISABLED);
-			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setTitle("Select Calibration");
-			window.setScene(scene);
-
-			controller.create(window, fileSight);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-
+	public static void openNew(File fileSight) {
+		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + "), file="+fileSight);
+		Stage stage = null;
+		UICalibrationSelect controller = (UICalibrationSelect)FXUtils.openFXScene(stage, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		controller.create(stage, fileSight);
 	}
 
 	
 
-	public static void openNew(Stage stage, Vehicle vehicle) {
-
-		Logger.get().info("Opening UICalibrationSelect (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle == null ? "null" : vehicle.name) );
-		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader = new FXMLLoader(UICalibrationSelect.class.getResource("/ui/layout_calibrationselect.fxml"));
-			Parent root = (Parent) loader.load();
-			UICalibrationSelect controller = (UICalibrationSelect) loader.getController();
-
-			Scene scene = new Scene(root, 600, 230, true, SceneAntialiasing.DISABLED);
-			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setTitle("Select Calibration");
-			window.setScene(scene);
-
-			controller.create(window, vehicle);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-
+	
+	public static void openNew(Vehicle vehicle) {
+		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle == null ? "null" : vehicle.name) );
+		Stage stage = null;
+		UICalibrationSelect controller = (UICalibrationSelect)FXUtils.openFXScene(stage, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		controller.create(stage, vehicle);
 	}
 	
 
@@ -169,54 +95,29 @@ public class UICalibrationSelect {
 		assert vboxSelectCalibration != null : "fx:id=\"vboxSelectCalibration\" was not injected: check your FXML file 'layout_calibrationselect.fxml'.";
 	}
 
+	
 
 
-	
-	
-	
-	private void create(Stage stage) {
-		
-		this.fileSight = null;
-		this.stage = stage;
-		this.vehicle = null;
-		
-		comboInternalCalibration.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onSelectedInternalCalibrationData(newValue);
-			}
-		});
-		
-		cbCreateNew.setSelected(false);
-		cbCreateNew.setDisable(true);
-		
-	}
-	
-	
 	private void create(Stage stage, File fileSight) {
-		
+		create(stage);
 		this.fileSight = fileSight;
-		this.stage = stage;
-		this.vehicle = null;
-		
-		comboInternalCalibration.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onSelectedInternalCalibrationData(newValue);
-			}
-		});
-		
-		cbCreateNew.setSelected(false);
-		cbCreateNew.setDisable(true);
-		
 	}
+	
 	
 	
 	
 	private void create(Stage stage, Vehicle vehicle) {
-		
-		this.stage = stage;
+		create(stage);
 		this.vehicle = vehicle;
+	}
+	
+	
+	
+	
+	private void create(Stage stage) {
+		this.stage = stage;
+		this.fileSight = null;
+		this.vehicle = null;
 		
 		comboInternalCalibration.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -225,6 +126,8 @@ public class UICalibrationSelect {
 			}
 		});
 		
+		cbCreateNew.setSelected(false);
+		cbCreateNew.setDisable(true);
 	}
 
 
@@ -290,7 +193,7 @@ public class UICalibrationSelect {
 			if(this.cbCreateNew.isSelected()) {
 				this.stage.close();
 				Workflow.steps.add(Step.SELECT_CALIBRATION);
-				UIScreenshotUpload.openNew(stage, this.vehicle);
+				UIScreenshotUpload.openNew(this.vehicle);
 				
 			} else {
 				
@@ -308,7 +211,7 @@ public class UICalibrationSelect {
 				data.vehicle = vehicle;
 				this.stage.close();
 				Workflow.steps.add(Step.SELECT_CALIBRATION);
-				UISightEditor.openNew(stage, data);
+				UISightEditor.openNew(data);
 				
 			}
 			
@@ -329,7 +232,7 @@ public class UICalibrationSelect {
 			data.vehicle = Database.getVehicleByName(data.vehicleName);
 			this.stage.close();
 			Workflow.steps.add(Step.SELECT_CALIBRATION);
-			UISightEditor.openNew(stage, data, this.fileSight);
+			UISightEditor.openNew(data, this.fileSight);
 			
 			
 		} else if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.LOAD_CALIBRATION) {
@@ -349,16 +252,11 @@ public class UICalibrationSelect {
 			this.stage.close();
 			Workflow.steps.add(Step.SELECT_CALIBRATION);
 				
-			UICalibrationEditor.openNew(stage, data, null);
+			UICalibrationEditor.openNew(data, null);
 			
 		}
 		
 	}
-
-
-
-
-	
 	
 
 }

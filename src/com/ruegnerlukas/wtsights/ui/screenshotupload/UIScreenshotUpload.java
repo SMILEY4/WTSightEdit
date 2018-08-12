@@ -18,6 +18,7 @@ import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
+import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.collections.FXCollections;
@@ -65,34 +66,13 @@ public class UIScreenshotUpload {
 	
 	
 	
-	public static void openNew(Stage stage, Vehicle vehicle) {
-
-		Logger.get().info("Opening ScreenshotUpload (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (vehicle == null ? "null" : vehicle.name) );
-		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader = new FXMLLoader(UIScreenshotUpload.class.getResource("/ui/layout_screenshotupload.fxml"));
-			Parent root = (Parent) loader.load();
-			UIScreenshotUpload controller = (UIScreenshotUpload) loader.getController();
-
-			Scene scene = new Scene(root, 600, 400, true, SceneAntialiasing.DISABLED);
-			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setTitle("Upload Screenshots");
-			window.setScene(scene);
-
-			controller.create(window, vehicle);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-
+	
+	
+	public static void openNew(Vehicle vehicle) {
+		Logger.get().info("Navigate to 'ScreenshotUpload' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (vehicle == null ? "null" : vehicle.name) );
+		Stage stage = null;
+		UIScreenshotUpload controller = (UIScreenshotUpload)FXUtils.openFXScene(stage, "/ui/layout_screenshotupload.fxml", 600, 400, "Upload Screenshots");
+		controller.create(stage, vehicle);
 	}
 	
 	
@@ -103,8 +83,6 @@ public class UIScreenshotUpload {
 		assert labelTankName != null : "fx:id=\"labelTankName\" was not injected: check your FXML file 'layout_screenshotupload.fxml'.";
 		assert listView != null : "fx:id=\"listView\" was not injected: check your FXML file 'layout_screenshotupload.fxml'.";
 	}
-
-
 
 
 
@@ -196,7 +174,7 @@ public class UIScreenshotUpload {
 		
 		this.stage.close();
 		Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
-		UICalibrationEditor.openNew(stage, vehicle, ammoNames, imgFiles, null);
+		UICalibrationEditor.openNew(vehicle, ammoNames, imgFiles, null);
 		
 	}
 
