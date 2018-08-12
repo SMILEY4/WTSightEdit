@@ -131,7 +131,7 @@ public class UIShellBlocks {
 	public void create() {
 		
 		for(CalibrationAmmoData data : dataCalib.ammoData) {
-			selectAmmo.getItems().add(data.ammoName);
+			selectAmmo.getItems().add(data.ammo.name);
 		}
 		selectAmmo.getSelectionModel().select(0);
 		selectAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {

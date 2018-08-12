@@ -13,12 +13,7 @@ import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 public class CalibrationData {
 
 	
-	public String vehicleName;
 	public Vehicle vehicle;
-	
-	public float fovOut = -1;
-	public float fovIn = -1;
-
 	public List<CalibrationAmmoData> ammoData = new ArrayList<CalibrationAmmoData>();
 	public Map<String, BufferedImage> images = new HashMap<String,BufferedImage>();
 	
@@ -29,10 +24,7 @@ public class CalibrationData {
 		
 		Logger.get().debug("==== CALIBRATION DATA ====");
 		
-		Logger.get().debug("vehicle = " + vehicleName);
-		Logger.get().debug("fovOut = " + fovOut);
-		Logger.get().debug("fovIn = " + fovIn);
-
+		Logger.get().debug("vehicle = " + vehicle.name);
 		
 		for(CalibrationAmmoData data : ammoData) {
 			Logger.get().debug("Ammo Data:");

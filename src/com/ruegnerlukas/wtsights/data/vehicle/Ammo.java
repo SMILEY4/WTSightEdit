@@ -7,7 +7,6 @@ public class Ammo {
 	public String type;
 	public String name;
 	public int speed;
-	public double mass;
 	
 	
 	public void print(int level) {
@@ -15,7 +14,6 @@ public class Ammo {
 		Logger.get().debug(indent+"name=" + name);
 		Logger.get().debug(indent+"  type=" + type);
 		Logger.get().debug(indent+"  speed=" + speed);
-		Logger.get().debug(indent+"  mass=" + mass);
 	}
 	
 	

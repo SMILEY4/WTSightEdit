@@ -115,8 +115,6 @@ public class WTSights extends Application {
 		
 		UIMainMenu.openNew(primaryStage);
 
-//		primaryStage.show();
-		
 	}
 
 	

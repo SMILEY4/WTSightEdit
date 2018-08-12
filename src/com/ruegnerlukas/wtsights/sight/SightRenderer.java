@@ -44,7 +44,7 @@ public class SightRenderer {
 	
 	public static void draw(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.fovOut, dataCalib.fovIn, dataSight.gnrThousandth);
+		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, dataSight.gnrThousandth);
 		
 		drawBackground(canvas, g, dataSight, dataCalib, currentAmmoData);
 		
@@ -61,7 +61,7 @@ public class SightRenderer {
 		for(Entry<String,BallisticsBlock> entry : dataSight.shellBlocks.entrySet()) {
 			CalibrationAmmoData ammoData = null;
 			for(CalibrationAmmoData data : dataCalib.ammoData) {
-				if(data.ammoName.equals(entry.getValue().bBulletName)) {
+				if(data.ammo.name.equals(entry.getValue().bBulletName)) {
 					ammoData = data;
 					break;
 				}
@@ -603,7 +603,7 @@ public class SightRenderer {
 		
 		
 		Conversion conversionUSSR = new Conversion();
-		conversionUSSR.initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.fovOut, dataCalib.fovIn, Thousandth.USSR);
+		conversionUSSR.initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, Thousandth.USSR);
 		
 		
 		// draw indicators
@@ -779,7 +779,7 @@ public class SightRenderer {
 		
 		
 		Conversion conversionUSSR = new Conversion();
-		conversionUSSR.initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.fovOut, dataCalib.fovIn, Thousandth.USSR);
+		conversionUSSR.initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, Thousandth.USSR);
 		
 		// draw indicators
 		for(int i=0; i<block.bDists.size(); i++) {

@@ -69,9 +69,9 @@ public class DataWriter {
 		Element rootElement = doc.createElement("calibrationdata");
 		doc.appendChild(rootElement);
 		
-		Element elementVehicle = doc.createElement(data.vehicleName);
-		elementVehicle.setAttribute("fovOut", ""+data.fovOut);
-		elementVehicle.setAttribute("fovIn", ""+data.fovIn);
+		Element elementVehicle = doc.createElement(data.vehicle.name);
+		elementVehicle.setAttribute("fovOut", ""+data.vehicle.fovOut);
+		elementVehicle.setAttribute("fovIn", ""+data.vehicle.fovIn);
 		rootElement.appendChild(elementVehicle);
 				
 		Element elementAmmoGroup = doc.createElement("ammo");
@@ -80,7 +80,7 @@ public class DataWriter {
 		// ammo data
 		for(CalibrationAmmoData ammoData : data.ammoData) {
 			
-			String ammoName =  ammoData.ammoName;
+			String ammoName =  ammoData.ammo.name;
 			
 			Element elementAmmo = doc.createElement(ammoName);
 			elementAmmoGroup.appendChild(elementAmmo);

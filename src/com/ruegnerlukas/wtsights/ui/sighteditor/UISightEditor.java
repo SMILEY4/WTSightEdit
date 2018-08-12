@@ -14,6 +14,7 @@ import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.SightData.SelectedElement;
 import com.ruegnerlukas.wtsights.sight.SightRenderer;
 import com.ruegnerlukas.wtsights.ui.Workflow;
+import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.ZoomableScrollPane;
@@ -90,31 +91,34 @@ public class UISightEditor {
 	
 	
 	
-	public static void openNew(CalibrationData data) {
+	public static void openNew(CalibrationData dataCalib) {
 		
-		Logger.get().info("Navigate to 'SightEditor' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (data == null ? "null" : data.vehicle.name) );
+		Logger.get().info("Navigate to 'SightEditor' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataCalib == null ? "null" : dataCalib.vehicle.name) );
 
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Stage stage = null;
-		UISightEditor controller = (UISightEditor)FXUtils.openFXScene(stage, "/ui/layout_sighteditor_light.fxml", width, height, "Edit Sight");
-		controller.create(stage, data);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_sighteditor_light.fxml", width, height, "Edit Sight");
+		UISightEditor controller = (UISightEditor)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, dataCalib);
 	}
 
 
 
-
-	public static void openNew(CalibrationData data, File fileSight) {
+	public static void openNew(CalibrationData dataCalib, SightData dataSight) {
 		
-		Logger.get().info("Navigate to 'SightEditor' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (data == null ? "null" : data.vehicle.name) + "; sight="+fileSight);
+		Logger.get().info("Navigate to 'SightEditor' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataCalib == null ? "null" : dataCalib.vehicle.name) + "; sightData="+dataSight);
 
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Stage stage = null;
-		UISightEditor controller = (UISightEditor)FXUtils.openFXScene(stage, "/ui/layout_sighteditor_light.fxml", width, height, "Edit Sight");
-		controller.create(stage, data);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_sighteditor_light.fxml", width, height, "Edit Sight");
+		UISightEditor controller = (UISightEditor)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, dataCalib, dataSight);
 	}
 
 
@@ -157,11 +161,11 @@ public class UISightEditor {
 	private void create() {
 		
 		// VEHICLE NAME
-		labelVehicleName.setText(dataCalib.vehicleName);
+		labelVehicleName.setText(dataCalib.vehicle.name);
 		
 		// AMMO
 		for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
-			comboAmmo.getItems().add(ammoData.ammoName);
+			comboAmmo.getItems().add(ammoData.ammo.name);
 		}
 		comboAmmo.getSelectionModel().select(0);
 		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -363,12 +367,12 @@ public class UISightEditor {
 		currentAmmoData = null;
 		for(int i=0; i<dataCalib.ammoData.size(); i++) {
 			CalibrationAmmoData ammoData = dataCalib.ammoData.get(i);
-			if(ammoData.ammoName.equalsIgnoreCase(ammoName)) {
+			if(ammoData.ammo.name.equalsIgnoreCase(ammoName)) {
 				currentAmmoData = ammoData;
 				break;
 			}
 		}
-		Logger.get().debug("Selected ammo: " + (currentAmmoData == null ? "null" : currentAmmoData.ammoName) );
+		Logger.get().debug("Selected ammo: " + (currentAmmoData == null ? "null" : currentAmmoData.ammo.name) );
 		repaintCanvas();
 	}
 	

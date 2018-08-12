@@ -16,12 +16,16 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.DataWriter;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
+import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -74,11 +78,9 @@ public class UICalibrationEditor {
 	private ZoomableScrollPane paneCanvasControl;
 	private Canvas canvas;
 
-	private Vehicle vehicle;
 	private File fileSight;
 	
-	
-	private CalibrationData data;
+	private CalibrationData dataCalib;
 	private CalibrationAmmoData currentAmmoData;
 	
 	private boolean cursorVisible = false;
@@ -93,33 +95,53 @@ public class UICalibrationEditor {
 	
 	
 	
-	public static void openNew(Vehicle vehicle, List<String> ammoNames, List<File> imgFiles, File fileSight) {
+	public static void openNew(Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap, File fileSight) {
 
-		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoNames + "; sight=" + fileSight);
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoList + "; sight=" + fileSight.getAbsolutePath());
 
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Stage stage = null;
-		UICalibrationEditor controller = (UICalibrationEditor)FXUtils.openFXScene(stage, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
-		controller.create(stage, vehicle, ammoNames, imgFiles, fileSight);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, vehicle, ammoList, imageMap, fileSight);
 	}
 	
 	
 	
 	
-	public static void openNew(CalibrationData data, File fileSight) {
-		
-		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (data==null ? "null" : data.vehicle.name) + "; sight=" + fileSight);
+	public static void openNew(Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap) {
+
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoList);
 
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Stage stage = null;
-		UICalibrationEditor controller = (UICalibrationEditor)FXUtils.openFXScene(stage, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
-		controller.create(stage, data, fileSight);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, vehicle, ammoList, imageMap);
 	}
+	
+	
+	
+	public static void openNew(CalibrationData dataCalib) {
 
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  data=" + dataCalib + "; vehicle="+dataCalib.vehicle.name);
+
+		int width = Config2.app_window_size.x;
+		int height = Config2.app_window_size.y;
+		
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, dataCalib);
+	}
+	
 	
 	
 	
@@ -133,55 +155,48 @@ public class UICalibrationEditor {
 
 	
 	
-	public void create(Stage stage, CalibrationData data, File fileSight) {
-		this.stage = stage;
-		this.data = data;
-		this.fileSight = fileSight;
-		this.vehicle = new Vehicle();
-		this.vehicle.name = data.vehicleName;
-		this.vehicle.fovOut = data.fovOut;
-		this.vehicle.fovIn = data.fovIn;
-		create();
+	
+	
+	public void create(Stage stage, Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap) {
+		create(stage, vehicle, ammoList, imageMap, null);
 	}
 	
 	
 	
 	
-	public void create(Stage stage, Vehicle vehicle, List<String> ammoNames, List<File> imgFiles, File fileSight) {
-		
+	public void create(Stage stage, Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap, File fileSight) {
 		this.stage = stage;
 		this.fileSight = fileSight;
-		this.vehicle = vehicle;
 		
-		// CREATE NEW CALIBRATION DATA
-		data = new CalibrationData();
-		data.vehicleName = this.vehicle.name;
-		data.vehicle = vehicle;
-		data.fovOut = vehicle.fovOut;
-		data.fovIn = vehicle.fovIn;
+		dataCalib = new CalibrationData();
+		dataCalib.vehicle = vehicle;
 		
 		try {
-			
-			for(int i=0; i<ammoNames.size(); i++) {
-				String name = ammoNames.get(i);
+			for(int i=0; i<ammoList.size(); i++) {
+				Ammo ammo  = ammoList.get(i);
 				
-				String imgName = "image_"+name;
-				File file = imgFiles.get(i);
+				String imgName = "image_"+ammo.name;
+				File file = imageMap.get(ammo);
 				BufferedImage img = ImageIO.read(file);
-				data.images.put(imgName, img);
+				dataCalib.images.put(imgName, img);
 				
 				CalibrationAmmoData ammoData = new CalibrationAmmoData();
-				ammoData.ammoName = name;
+				ammoData.ammo = ammo;
 				ammoData.imgName = imgName;
 				ammoData.markerCenter.set(img.getHeight()/2, 0);
-				data.ammoData.add(ammoData);
-				
+				dataCalib.ammoData.add(ammoData);
 			}
-		
 		} catch (IOException e) {
 			Logger.get().error(e);
 		}
-		
+	}
+	
+	
+	
+	
+	public void create(Stage stage, CalibrationData dataCalib) {
+		this.stage = stage;
+		this.dataCalib = dataCalib;
 		create();
 		
 	}
@@ -192,8 +207,8 @@ public class UICalibrationEditor {
 	private void create() {
 
 		// AMMO CHOICE
-		for(CalibrationAmmoData ammoData : data.ammoData) {
-			choiceAmmo.getItems().add(ammoData.ammoName);
+		for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
+			choiceAmmo.getItems().add(ammoData.ammo.name);
 		}
 		choiceAmmo.getSelectionModel().select(0);
 		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -226,21 +241,21 @@ public class UICalibrationEditor {
 				currentImage = imageCache.get("image_"+ammoName);
 				Logger.get().debug("Image retrieved from cache");
 			} else {
-				BufferedImage bufImg = data.images.get("image_"+ammoName);
+				BufferedImage bufImg = dataCalib.images.get("image_"+ammoName);
 				currentImage = SwingFXUtils.toFXImage(bufImg, null);
 				imageCache.put("image_"+ammoName, currentImage);
 			}
 			
 			currentAmmoData = null;
-			for(int i=0; i<data.ammoData.size(); i++) {
-				CalibrationAmmoData ammoData = data.ammoData.get(i);
-				if((ammoData.ammoName).equalsIgnoreCase(ammoName)) {
+			for(int i=0; i<dataCalib.ammoData.size(); i++) {
+				CalibrationAmmoData ammoData = dataCalib.ammoData.get(i);
+				if((ammoData.ammo.name).equalsIgnoreCase(ammoName)) {
 					currentAmmoData = ammoData;
 					break;
 				}
 			}
 			
-			Logger.get().debug("AmmoData selected: " + currentAmmoData.ammoName);
+			Logger.get().debug("AmmoData selected: " + currentAmmoData.ammo.name);
 			
 			cbZoomedIn.setDisable(false);
 			cbZoomedIn.setSelected(currentAmmoData.zoomedIn);
@@ -530,8 +545,8 @@ public class UICalibrationEditor {
 		String ammoName = choiceAmmo.getSelectionModel().getSelectedItem();
 		
 		CalibrationAmmoData ammoData = null;
-		for(CalibrationAmmoData d : data.ammoData) {
-			if(d.ammoName.equalsIgnoreCase(ammoName)) {
+		for(CalibrationAmmoData d : dataCalib.ammoData) {
+			if(d.ammo.name.equalsIgnoreCase(ammoName)) {
 				ammoData = d;
 				break;
 			}
@@ -572,7 +587,7 @@ public class UICalibrationEditor {
 		
 		
 		try {
-			if(!DataWriter.saveExternalCalibFile(this.data, file)) {
+			if(!DataWriter.saveExternalCalibFile(this.dataCalib, file)) {
 				Logger.get().warn("(Alert) Calibration could not be saved.");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
@@ -606,11 +621,14 @@ public class UICalibrationEditor {
 		if(this.fileSight == null) {
 			this.stage.close();
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			UISightEditor.openNew(data);
+			UISightEditor.openNew(dataCalib);
+			
 		} else {
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			UISightEditor.openNew(data, this.fileSight);
+			SightData dataSight = DataLoader.loadSight(fileSight, dataCalib);
+			UISightEditor.openNew(dataCalib, dataSight);
 		}
+		
 	}
 	
 	
@@ -618,7 +636,7 @@ public class UICalibrationEditor {
 	
 	private boolean isValidMarkers() {
 		
-		for(CalibrationAmmoData ammoData : this.data.ammoData) {
+		for(CalibrationAmmoData ammoData : this.dataCalib.ammoData) {
 
 			if(ammoData.markerRanges.size() == 0) {
 				return false;

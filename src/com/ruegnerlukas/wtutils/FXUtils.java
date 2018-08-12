@@ -135,7 +135,7 @@ public class FXUtils {
 	
 	
 	
-	public static Object openFXScene(Stage stage, String pathFXML, double width, double height, String title) {
+	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title) {
 		
 		if(stage == null) {
 			stage = new Stage();
@@ -159,7 +159,7 @@ public class FXUtils {
 		stage.setScene(scene);
 		stage.show();
 		
-		return loader.getController();
+		return new Object[]{loader.getController(), stage};
 	}
 	
 }

@@ -8,12 +8,14 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -44,12 +46,10 @@ public class UICalibrationSelect {
 	@FXML private VBox vboxSelectCalibration;
 	@FXML private HBox hboxExternal;
 
-	private boolean useExternalCalibration = true;
 	private Vehicle vehicle;
 	private File fileSight = null;
 
 	private File fileCalibExternal = null;
-	private String nameCalibInternal = "";
 	
 	
 	
@@ -58,8 +58,11 @@ public class UICalibrationSelect {
 	
 	public static void openNew() {
 		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + ")");
-		Stage stage = null;
-		UICalibrationSelect controller = (UICalibrationSelect)FXUtils.openFXScene(stage, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		UICalibrationSelect controller = (UICalibrationSelect)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
 		controller.create(stage);
 	}
 	
@@ -68,22 +71,15 @@ public class UICalibrationSelect {
 	
 	public static void openNew(File fileSight) {
 		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + "), file="+fileSight);
-		Stage stage = null;
-		UICalibrationSelect controller = (UICalibrationSelect)FXUtils.openFXScene(stage, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		UICalibrationSelect controller = (UICalibrationSelect)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
 		controller.create(stage, fileSight);
 	}
-
 	
-
 	
-	public static void openNew(Vehicle vehicle) {
-		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle == null ? "null" : vehicle.name) );
-		Stage stage = null;
-		UICalibrationSelect controller = (UICalibrationSelect)FXUtils.openFXScene(stage, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
-		controller.create(stage, vehicle);
-	}
-	
-
 
 
 	@FXML
@@ -106,26 +102,10 @@ public class UICalibrationSelect {
 	
 	
 	
-	private void create(Stage stage, Vehicle vehicle) {
-		create(stage);
-		this.vehicle = vehicle;
-	}
-	
-	
-	
-	
 	private void create(Stage stage) {
 		this.stage = stage;
 		this.fileSight = null;
 		this.vehicle = null;
-		
-		comboInternalCalibration.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onSelectedInternalCalibrationData(newValue);
-			}
-		});
-		
 		cbCreateNew.setSelected(false);
 		cbCreateNew.setDisable(true);
 	}
@@ -137,24 +117,6 @@ public class UICalibrationSelect {
 	void onCreateNew(ActionEvent event) {
 		CheckBox cb = (CheckBox) event.getSource();
 		vboxSelectCalibration.setDisable(cb.isSelected());
-	}
-	
-	
-	
-	
-	@FXML
-	void onUseExternal(ActionEvent event) {
-		CheckBox cb = (CheckBox) event.getSource();
-		hboxExternal.setDisable(!cb.isSelected());
-		comboInternalCalibration.setDisable(cb.isSelected());
-		useExternalCalibration = cb.isSelected();
-	}
-	
-	
-	
-	
-	void onSelectedInternalCalibrationData(String calibDataName) {
-		this.nameCalibInternal = calibDataName;
 	}
 	
 	
@@ -188,72 +150,44 @@ public class UICalibrationSelect {
 	@FXML
 	void onNext(ActionEvent event) {
 		
-		if(Workflow.steps.size() == 2 && Workflow.steps.get(0) == Step.CREATE_SIGHT && Workflow.steps.get(1) == Step.SELECT_VEHICLE) {
+		if(this.fileCalibExternal == null) {
+			Logger.get().warn("(Alert) No calibration selected. Select calibration to continue.");
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("No calibration selected. Select calibration to continue.");
+			alert.showAndWait();
+			return;
+		}
+		
+		
+		if(Workflow.is(Step.CREATE_SIGHT)) {
+			
+			Workflow.steps.add(Step.SELECT_CALIBRATION);
 			
 			if(this.cbCreateNew.isSelected()) {
 				this.stage.close();
-				Workflow.steps.add(Step.SELECT_CALIBRATION);
-				UIScreenshotUpload.openNew(this.vehicle);
-				
+				UIVehicleSelect.openNew();
 			} else {
-				
-				if(this.fileCalibExternal == null) {
-					Logger.get().warn("(Alert) No calibration selected. Select calibration to continue.");
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText(null);
-					alert.setContentText("No calibration selected. Select calibration to continue.");
-					alert.showAndWait();
-					return;
-				}
-				
-				CalibrationData data = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
-				data.vehicle = vehicle;
+				CalibrationData dataCalib = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
 				this.stage.close();
-				Workflow.steps.add(Step.SELECT_CALIBRATION);
-				UISightEditor.openNew(data);
-				
+				UISightEditor.openNew(dataCalib);
 			}
+		}
+		
+		if(Workflow.is(Step.LOAD_SIGHT)) {
 			
-			
-		} else if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.LOAD_SIGHT) {
-
-			if(this.fileCalibExternal == null) {
-				Logger.get().warn("(Alert) No calibration selected. Select calibration to continue.");
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Error");
-				alert.setHeaderText(null);
-				alert.setContentText("No calibration selected. Select calibration to continue.");
-				alert.showAndWait();
-				return;
-			}
-			
-			CalibrationData data = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
-			data.vehicle = Database.getVehicleByName(data.vehicleName);
-			this.stage.close();
 			Workflow.steps.add(Step.SELECT_CALIBRATION);
-			UISightEditor.openNew(data, this.fileSight);
 			
-			
-		} else if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.LOAD_CALIBRATION) {
-			
-			if(this.fileCalibExternal == null) {
-				Logger.get().warn("(Alert) No calibration selected. Select calibration to continue.");
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Error");
-				alert.setHeaderText(null);
-				alert.setContentText("No calibration selected. Select calibration to continue.");
-				alert.showAndWait();
-				return;
+			if(this.cbCreateNew.isSelected()) {
+				this.stage.close();
+				UIVehicleSelect.openNew(fileSight);
+			} else {
+				CalibrationData dataCalib = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
+				SightData dataSight = DataLoader.loadSight(fileSight, dataCalib);
+				this.stage.close();
+				UISightEditor.openNew(dataCalib, dataSight);
 			}
-			
-			CalibrationData data = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
-			data.vehicle = Database.getVehicleByName(data.vehicleName);
-			this.stage.close();
-			Workflow.steps.add(Step.SELECT_CALIBRATION);
-				
-			UICalibrationEditor.openNew(data, null);
-			
 		}
 		
 	}

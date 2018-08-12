@@ -5,11 +5,13 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 public class UIAbout {
 
@@ -21,7 +23,11 @@ public class UIAbout {
 	
 	public static void openNew() {
 		Logger.get().info("Navigate to 'UIAbout'");
-		UIAbout controller = (UIAbout)FXUtils.openFXScene(null, "/ui/layout_about.fxml", 600, 700, "About WT Sight Editor");
+		
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_about.fxml", 600, 700, "About WT Sight Editor");
+		UIAbout controller = (UIAbout)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
 		controller.create();
 	}
 	

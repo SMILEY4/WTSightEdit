@@ -1,11 +1,13 @@
 package com.ruegnerlukas.wtsights.ui.vehicleselection;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.Database;
+import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
@@ -13,6 +15,7 @@ import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
 import com.ruegnerlukas.wtutils.FXUtils;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +36,7 @@ public class UIVehicleSelect {
 	@FXML private TextField textfieldFilter;
 	@FXML private ComboBox<String> comboVehicles;
 
+	private File fileSight = null;
 	
 	
 	
@@ -40,10 +44,22 @@ public class UIVehicleSelect {
 	
 	public static void openNew() {
 		Logger.get().info("Navigate to 'VehicleSelect' (" + Workflow.toString(Workflow.steps) + ")");
-		Stage stage = null;
-		UIVehicleSelect controller = (UIVehicleSelect)FXUtils.openFXScene(stage, "/ui/layout_vehicleselection.fxml", 600, 200, "Select Vehicle");
-		controller.create(stage);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_vehicleselection.fxml", 600, 200, "Select Vehicle");
+		UIVehicleSelect controller = (UIVehicleSelect)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		controller.create(stage, null);
 	}
+	
+	
+	public static void openNew(File fileSight) {
+		Logger.get().info("Navigate to 'VehicleSelect' (" + Workflow.toString(Workflow.steps) + "), fileSight=" + fileSight.getAbsolutePath());
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_vehicleselection.fxml", 600, 200, "Select Vehicle");
+		UIVehicleSelect controller = (UIVehicleSelect)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		controller.create(stage, fileSight);
+	}
+	
+	
 	
 	
 	
@@ -56,8 +72,9 @@ public class UIVehicleSelect {
 
 	
 	
-	private void create(Stage stage) {
+	private void create(Stage stage, File fileSight) {
 		this.stage = stage;
+		this.fileSight = fileSight;
 		onFilter(null);
 	}
 
@@ -114,17 +131,27 @@ public class UIVehicleSelect {
 		
 		Logger.get().debug("Selected vehicle: " + vehicle.name);
 		
-		if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.CREATE_CALIBRATION) {
+		Logger.get().debug(Workflow.steps + "  " + stage);
+		
+		
+		if(Workflow.is(Step.CREATE_CALIBRATION)) {
 			this.stage.close();
 			Workflow.steps.add(Step.SELECT_VEHICLE);
 			UIScreenshotUpload.openNew(vehicle);
-			
-		} else if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.CREATE_SIGHT) {
+		}
+		
+		if(Workflow.is(Step.CREATE_SIGHT, Step.SELECT_CALIBRATION)) {
 			this.stage.close();
 			Workflow.steps.add(Step.SELECT_VEHICLE);
-			UICalibrationSelect.openNew(vehicle);
-		
+			UIScreenshotUpload.openNew(vehicle);
 		}
+		
+		if(Workflow.is(Step.LOAD_SIGHT, Step.SELECT_CALIBRATION)) {
+			this.stage.close();
+			Workflow.steps.add(Step.SELECT_VEHICLE);
+			UIScreenshotUpload.openNew(fileSight, vehicle);
+		}
+		
 	}
 
 	

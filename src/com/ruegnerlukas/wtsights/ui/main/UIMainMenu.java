@@ -6,10 +6,14 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
+import com.ruegnerlukas.wtsights.data.DataLoader;
+import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.about.UIAbout;
+import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
+import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -36,7 +40,8 @@ public class UIMainMenu {
 	
 	public static void openNew(Stage stage) {
 		Logger.get().info("Navigate to 'MainMenu'");
-		UIMainMenu controller = (UIMainMenu) FXUtils.openFXScene(stage, "/ui/layout_main.fxml", 500, 550, "WT Sight Editor");
+		Object[] sceneObjects = FXUtils.openFXScene(stage, "/ui/layout_main.fxml", 500, 550, "WT Sight Editor");
+		UIMainMenu controller = (UIMainMenu)sceneObjects[0];
 		controller.create(stage);
 	}
 
@@ -64,7 +69,17 @@ public class UIMainMenu {
 	void onLoadCalibration(ActionEvent event) {
 		Workflow.steps.clear();
 		Workflow.steps.add(Step.LOAD_CALIBRATION);
-		UICalibrationSelect.openNew();
+
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Open Calibration");
+		fc.getExtensionFilters().add(new ExtensionFilter("Calibration (*.xml)", "*.xml"));
+
+		File fileCalib = fc.showOpenDialog(WTSights.getPrimaryStage());
+		if (fileCalib != null) {
+			CalibrationData data = DataLoader.loadExternalCalibFile(fileCalib);
+			UICalibrationEditor.openNew(data);
+		}
+		
 	}
 
 
@@ -74,7 +89,7 @@ public class UIMainMenu {
 	void onNewSight(ActionEvent event) {
 		Workflow.steps.clear();
 		Workflow.steps.add(Step.CREATE_SIGHT);
-		UIVehicleSelect.openNew();
+		UICalibrationSelect.openNew();
 	}
 
 
