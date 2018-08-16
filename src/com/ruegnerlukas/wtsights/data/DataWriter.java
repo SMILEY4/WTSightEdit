@@ -182,7 +182,6 @@ public class DataWriter {
 		lines.add("// rangefinder");
 		lines.add("rangefinderHorizontalOffset:r = " + data.rfOffset.x);
 		lines.add("rangefinderVerticalOffset:r = " + data.rfOffset.y);
-		Logger.get().debug("COLOR_1: " + data.rfColor1 + " " + data.rfColor1.getRed() + " " + data.rfColor1.getGreen() + " " + data.rfColor1.getBlue() + " " + data.rfColor1.getOpacity());
 		lines.add("rangefinderProgressBarColor1:c = " + (int)(data.rfColor1.getRed()*255) + "," + (int)(data.rfColor1.getGreen()*255) + "," + (int)(data.rfColor1.getBlue()*255) + "," + (int)(data.rfColor1.getOpacity()*255));
 		lines.add("rangefinderProgressBarColor2:c = " + (int)(data.rfColor2.getRed()*255) + "," + (int)(data.rfColor2.getGreen()*255) + "," + (int)(data.rfColor2.getBlue()*255) + "," + (int)(data.rfColor2.getOpacity()*255));
 		lines.add("rangefinderTextScale:r = " + data.rfTextScale);
@@ -195,7 +194,7 @@ public class DataWriter {
 		lines.add("crosshair_hor_ranges {");
 		for(int i=0; i<data.hrMils.size(); i++) {
 			int mil = data.hrMils.get(i);
-			int label = data.hrMajors.get(i) ? mil : 0;
+			int label = data.hrMajors.get(i) ? Math.abs(mil) : 0;
 			lines.add("  range:p2 = " + mil + "," + label);	
 		}
 		lines.add("}");
@@ -236,7 +235,7 @@ public class DataWriter {
 		for(int i=0; i<data.brIndicators.bDists.size(); i++) {
 			int dist = data.brIndicators.bDists.get(i);
 			boolean major = data.brIndicators.bMajors.get(i);
-			int label = major ? dist/100 : 0;
+			int label = major ? Math.abs(dist/100) : 0;
 			double extend = data.brIndicators.bExtensions.get(i);
 			Vector2d textOff = data.brIndicators.bTextOffsets.get(i);
 			lines.add("distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
@@ -284,7 +283,7 @@ public class DataWriter {
 				for(int i=0; i<block.bDists.size(); i++) {
 					int dist = block.bDists.get(i);
 					boolean major = block.bMajors.get(i);
-					int label = major ? dist/100 : 0;
+					int label = major ? Math.abs(dist/100) : 0;
 					double extend = block.bExtensions.get(i);
 					Vector2d textOff = block.bTextOffsets.get(i);
 					lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
