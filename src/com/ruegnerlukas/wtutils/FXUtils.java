@@ -1,13 +1,22 @@
 package com.ruegnerlukas.wtutils;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.WTSights;
+import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -124,4 +133,51 @@ public class FXUtils {
 		stage.getIcons().add(new Image("/icons/wtseIcon48.png"));
 	}
 	
+	
+	
+	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title) {
+		
+		if(stage == null) {
+			stage = new Stage();
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(WTSights.getPrimaryStage());
+			FXUtils.addIcons(stage);
+		}
+
+		FXMLLoader loader = new FXMLLoader(UIMainMenu.class.getResource(pathFXML));
+		Parent root = null;
+		try {
+			root = (Parent) loader.load();
+		} catch (IOException e) {
+			Logger.get().error("Error loading fxmlScene: " + pathFXML, e);
+			return null;
+		}
+
+		
+		Scene scene = new Scene(root, width, height, true, SceneAntialiasing.BALANCED);
+		stage.setTitle(title);
+		stage.setScene(scene);
+		stage.show();
+		
+		return new Object[]{loader.getController(), stage};
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

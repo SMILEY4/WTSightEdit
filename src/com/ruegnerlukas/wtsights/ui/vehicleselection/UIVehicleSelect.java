@@ -1,13 +1,13 @@
 package com.ruegnerlukas.wtsights.ui.vehicleselection;
 
-import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.Database;
+import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
@@ -15,18 +15,14 @@ import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
 import com.ruegnerlukas.wtutils.FXUtils;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class UIVehicleSelect {
@@ -40,37 +36,27 @@ public class UIVehicleSelect {
 	@FXML private TextField textfieldFilter;
 	@FXML private ComboBox<String> comboVehicles;
 
+	private File fileSight = null;
 	
 	
 	
-	public static void openNew(Stage stage) {
-		
-		Logger.get().info("Opening VehicleSelect (" + Workflow.toString(Workflow.steps) + ")");
-		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-			
-			FXMLLoader loader = new FXMLLoader(UIVehicleSelect.class.getResource("/ui/layout_vehicleselection.fxml"));
-			Parent root = (Parent) loader.load();
-			UIVehicleSelect controller = (UIVehicleSelect) loader.getController();
-
-			Scene scene = new Scene(root, 600, 200, true, SceneAntialiasing.DISABLED);
-			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setTitle("Select Vehicle");
-			window.setScene(scene);
-
-			controller.create(window);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-		
+	
+	
+	public static void openNew() {
+		Logger.get().info("Navigate to 'VehicleSelect' (" + Workflow.toString(Workflow.steps) + ")");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_vehicleselection.fxml", 600, 200, "Select Vehicle");
+		UIVehicleSelect controller = (UIVehicleSelect)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		controller.create(stage, null);
+	}
+	
+	
+	public static void openNew(File fileSight) {
+		Logger.get().info("Navigate to 'VehicleSelect' (" + Workflow.toString(Workflow.steps) + "), fileSight=" + fileSight.getAbsolutePath());
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_vehicleselection.fxml", 600, 200, "Select Vehicle");
+		UIVehicleSelect controller = (UIVehicleSelect)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		controller.create(stage, fileSight);
 	}
 	
 	
@@ -86,9 +72,9 @@ public class UIVehicleSelect {
 
 	
 	
-
-	private void create(Stage stage) {
+	private void create(Stage stage, File fileSight) {
 		this.stage = stage;
+		this.fileSight = fileSight;
 		onFilter(null);
 	}
 
@@ -120,8 +106,6 @@ public class UIVehicleSelect {
 
 
 
-
-
 	@FXML
 	void onCancel(ActionEvent event) {
 		stage.close();
@@ -147,25 +131,28 @@ public class UIVehicleSelect {
 		
 		Logger.get().debug("Selected vehicle: " + vehicle.name);
 		
-		if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.CREATE_CALIBRATION) {
-			this.stage.close();
-			Workflow.steps.add(Step.SELECT_VEHICLE);
-			UIScreenshotUpload.openNew(stage, vehicle);
-			
-		} else if(Workflow.steps.size() == 1 && Workflow.steps.get(0) == Step.CREATE_SIGHT) {
-			this.stage.close();
-			Workflow.steps.add(Step.SELECT_VEHICLE);
-			UICalibrationSelect.openNew(stage, vehicle);
+		Logger.get().debug(Workflow.steps + "  " + stage);
 		
+		
+		if(Workflow.is(Step.CREATE_CALIBRATION)) {
+			this.stage.close();
+			Workflow.steps.add(Step.SELECT_VEHICLE);
+			UIScreenshotUpload.openNew(vehicle);
 		}
+		
+		if(Workflow.is(Step.CREATE_SIGHT, Step.SELECT_CALIBRATION)) {
+			this.stage.close();
+			Workflow.steps.add(Step.SELECT_VEHICLE);
+			UIScreenshotUpload.openNew(vehicle);
+		}
+		
+		if(Workflow.is(Step.LOAD_SIGHT, Step.SELECT_CALIBRATION)) {
+			this.stage.close();
+			Workflow.steps.add(Step.SELECT_VEHICLE);
+			UIScreenshotUpload.openNew(fileSight, vehicle);
+		}
+		
 	}
 
+	
 }
-
-
-
-
-
-
-
-

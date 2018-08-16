@@ -199,6 +199,7 @@ public class DataLoader {
 		}
 		
 		CalibrationData data = new CalibrationData();
+		String vehicleName = "-";
 		
 		try {
 		
@@ -212,22 +213,17 @@ public class DataLoader {
 			}
 			
 			Element elementVehicle = XMLUtils.getChildren(root).get(0);
-			data.vehicleName = elementVehicle.getTagName();
-			data.fovOut = Float.parseFloat(elementVehicle.getAttribute("fovOut"));
-			data.fovIn = Float.parseFloat(elementVehicle.getAttribute("fovIn"));
+			vehicleName = elementVehicle.getTagName();
 
 			// ammo
 			Element elementAmmoGroup = XMLUtils.getElementByTagName(elementVehicle, "ammo");
 			
 			for(Element elementAmmo : XMLUtils.getChildren(elementAmmoGroup)) {
 
+				// load from file
 				CalibrationAmmoData ammoData = new CalibrationAmmoData();
-				
-				ammoData.ammoName = elementAmmo.getTagName();
 				ammoData.imgName = elementAmmo.getAttribute("imageName");
 				ammoData.zoomedIn = elementAmmo.getAttribute("zoomedIn").equalsIgnoreCase("true");
-
-				
 				
 				String[] strMarkerCenter = elementAmmo.getAttribute("markerCenter").split(",");
 				ammoData.markerCenter.set(Integer.parseInt(strMarkerCenter[0].trim()), Integer.parseInt(strMarkerCenter[1].trim()));
@@ -239,6 +235,17 @@ public class DataLoader {
 					ammoData.markerRanges.add(new Vector2i(Integer.parseInt(strMarker[0].trim()), Integer.parseInt(strMarker[1].trim())));
 				}
 
+				// load ammo from vehicle db
+				Vehicle vehicle = Database.getVehicleByName(vehicleName);
+				for(Weapon w : vehicle.weaponsList) {
+					for(Ammo a : w.ammo) {
+						if(a.name.equals(elementAmmo.getTagName())) {
+							ammoData.ammo = a;
+							break;
+						}
+					}
+				}
+				
 				data.ammoData.add(ammoData);
 				
 			}
@@ -252,6 +259,9 @@ public class DataLoader {
 				data.images.put(imgName, img);
 			}
 			
+			
+			// vehicle
+			data.vehicle = Database.getVehicleByName(vehicleName);
 				
 		} catch (ParserConfigurationException e) {
 			Logger.get().error(e);
@@ -672,10 +682,10 @@ public class DataLoader {
 
 								}
 
-								List<Ammo> ammoCanidates = Database.getAmmo(dataCalib.vehicleName, ballistics.bBulletType, ballistics.bBulletSpeed);
+								List<Ammo> ammoCanidates = Database.getAmmo(dataCalib.vehicle.name, ballistics.bBulletType, ballistics.bBulletSpeed);
 								select: for(Ammo ammo : ammoCanidates) {
 									for(CalibrationAmmoData dataAmmo : dataCalib.ammoData) {
-										if(dataAmmo.ammoName.equalsIgnoreCase(ammo.name)) {
+										if(dataAmmo.ammo.name.equalsIgnoreCase(ammo.name)) {
 											ballistics.bBulletName = ammo.name;
 											break select;
 										}

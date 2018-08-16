@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -17,7 +19,9 @@ import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
+import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.collections.FXCollections;
@@ -57,6 +61,7 @@ public class UIScreenshotUpload {
 	@FXML private Label labelTankName;
 	@FXML private ListView<String> listView;
 
+	private File fileSight = null;
 	private Vehicle vehicle;
 	private List<Cell> cells = new ArrayList<Cell>();
 	
@@ -65,36 +70,27 @@ public class UIScreenshotUpload {
 	
 	
 	
-	public static void openNew(Stage stage, Vehicle vehicle) {
-
-		Logger.get().info("Opening ScreenshotUpload (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (vehicle == null ? "null" : vehicle.name) );
+	
+	public static void openNew(Vehicle vehicle) {
+		Logger.get().info("Navigate to 'ScreenshotUpload' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (vehicle == null ? "null" : vehicle.name) );
 		
-		try {
-			final Stage window = new Stage();
-			window.initModality(Modality.WINDOW_MODAL);
-			window.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(window);
-
-			FXMLLoader loader = new FXMLLoader(UIScreenshotUpload.class.getResource("/ui/layout_screenshotupload.fxml"));
-			Parent root = (Parent) loader.load();
-			UIScreenshotUpload controller = (UIScreenshotUpload) loader.getController();
-
-			Scene scene = new Scene(root, 600, 400, true, SceneAntialiasing.DISABLED);
-			if(WTSights.DARK_MODE) {
-//				scene.getStylesheets().add("/ui/modena_dark.css");
-			}
-			window.setTitle("Upload Screenshots");
-			window.setScene(scene);
-
-			controller.create(window, vehicle);
-			window.show();
-
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_screenshotupload.fxml", 600, 400, "Upload Screenshots");
+		UIScreenshotUpload controller = (UIScreenshotUpload)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, null, vehicle);
 	}
 	
+	
+	public static void openNew(File fileSight, Vehicle vehicle) {
+		Logger.get().info("Navigate to 'ScreenshotUpload' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (vehicle == null ? "null" : vehicle.name) + " fileSight=" + fileSight.getAbsolutePath() );
+		
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_screenshotupload.fxml", 600, 400, "Upload Screenshots");
+		UIScreenshotUpload controller = (UIScreenshotUpload)sceneObjects[0];
+		Stage stage = (Stage)sceneObjects[1];
+		
+		controller.create(stage, fileSight, vehicle);
+	}
 	
 
 
@@ -106,12 +102,11 @@ public class UIScreenshotUpload {
 
 
 
-
-
 	
-	private void create(Stage stage, Vehicle vehicle) {
+	private void create(Stage stage, File fileSight, Vehicle vehicle) {
 		
 		this.stage = stage;
+		this.fileSight = fileSight;
 		this.vehicle = vehicle;
 		
 		// VEHICLE NAME
@@ -194,9 +189,45 @@ public class UIScreenshotUpload {
 			return;
 		}
 		
-		this.stage.close();
-		Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
-		UICalibrationEditor.openNew(stage, vehicle, ammoNames, imgFiles, null);
+		
+		
+		List<Ammo> ammoList = new ArrayList<Ammo>();
+		Map<Ammo, File> imageMap = new HashMap<Ammo,File>();
+		
+		for(int i=0; i<ammoNames.size(); i++) {
+			String ammoName = ammoNames.get(i);
+			File imgFile = imgFiles.get(i);
+			
+			for(Weapon w : vehicle.weaponsList) {
+				for(Ammo a : w.ammo) {
+					if(a.name.equals(ammoName)) {
+						ammoList.add(a);
+						imageMap.put(a, imgFile);
+					}
+				}
+			}
+			
+		}
+		
+		
+		if(Workflow.is(Step.CREATE_CALIBRATION, Step.SELECT_VEHICLE)) {
+			this.stage.close();
+			Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
+			UICalibrationEditor.openNew(vehicle, ammoList, imageMap);
+		}
+		
+		if(Workflow.is(Step.CREATE_SIGHT, Step.SELECT_CALIBRATION, Step.SELECT_VEHICLE)) {
+			this.stage.close();
+			Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
+			UICalibrationEditor.openNew(vehicle, ammoList, imageMap);
+		}
+		
+		if(Workflow.is(Step.EDIT_SIGHT, Step.SELECT_CALIBRATION, Step.SELECT_VEHICLE)) {
+			this.stage.close();
+			Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
+			UICalibrationEditor.openNew(vehicle, ammoList, imageMap, fileSight);
+		}
+		
 		
 	}
 

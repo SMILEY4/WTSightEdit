@@ -5,13 +5,11 @@ import java.util.List;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 
 public class CalibrationAmmoData {
 
-	
-	public static int[] DEFAULT_MARKED_RANGES = new int[]{2400, 200, 1600, 2600};
-	
-	public String ammoName;
+	public Ammo ammo;
 	
 	public String imgName;
 
@@ -31,7 +29,7 @@ public class CalibrationAmmoData {
 		
 		String strIndent = indent ? "    " : "";
 		
-		Logger.get().debug(strIndent + "ammoName = " + ammoName);
+		Logger.get().debug(strIndent + "ammoName = " + ammo.name);
 		Logger.get().debug(strIndent + "imageName = " + imgName);
 		Logger.get().debug(strIndent + "markerCenter = " + markerCenter.x + "," + markerCenter.y);
 

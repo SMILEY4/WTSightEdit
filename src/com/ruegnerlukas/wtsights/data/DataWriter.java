@@ -69,9 +69,9 @@ public class DataWriter {
 		Element rootElement = doc.createElement("calibrationdata");
 		doc.appendChild(rootElement);
 		
-		Element elementVehicle = doc.createElement(data.vehicleName);
-		elementVehicle.setAttribute("fovOut", ""+data.fovOut);
-		elementVehicle.setAttribute("fovIn", ""+data.fovIn);
+		Element elementVehicle = doc.createElement(data.vehicle.name);
+		elementVehicle.setAttribute("fovOut", ""+data.vehicle.fovOut);
+		elementVehicle.setAttribute("fovIn", ""+data.vehicle.fovIn);
 		rootElement.appendChild(elementVehicle);
 				
 		Element elementAmmoGroup = doc.createElement("ammo");
@@ -80,7 +80,7 @@ public class DataWriter {
 		// ammo data
 		for(CalibrationAmmoData ammoData : data.ammoData) {
 			
-			String ammoName =  ammoData.ammoName;
+			String ammoName =  ammoData.ammo.name;
 			
 			Element elementAmmo = doc.createElement(ammoName);
 			elementAmmoGroup.appendChild(elementAmmo);
@@ -182,8 +182,8 @@ public class DataWriter {
 		lines.add("// rangefinder");
 		lines.add("rangefinderHorizontalOffset:r = " + data.rfOffset.x);
 		lines.add("rangefinderVerticalOffset:r = " + data.rfOffset.y);
-		lines.add("rangefinderProgressBarColor1:c = " + (int)(data.rfColor1.getRed()*255) + "," + (int)(data.rfColor1.getGreen()*255) + "," + (int)(data.rfColor1.getBlue()*255) + "," + (int)(data.rfColor1.getOpacity()/255));
-		lines.add("rangefinderProgressBarColor2:c = " + (int)(data.rfColor2.getRed()*255) + "," + (int)(data.rfColor2.getGreen()*255) + "," + (int)(data.rfColor2.getBlue()*255) + "," + (int)(data.rfColor2.getOpacity()/255));
+		lines.add("rangefinderProgressBarColor1:c = " + (int)(data.rfColor1.getRed()*255) + "," + (int)(data.rfColor1.getGreen()*255) + "," + (int)(data.rfColor1.getBlue()*255) + "," + (int)(data.rfColor1.getOpacity()*255));
+		lines.add("rangefinderProgressBarColor2:c = " + (int)(data.rfColor2.getRed()*255) + "," + (int)(data.rfColor2.getGreen()*255) + "," + (int)(data.rfColor2.getBlue()*255) + "," + (int)(data.rfColor2.getOpacity()*255));
 		lines.add("rangefinderTextScale:r = " + data.rfTextScale);
 		lines.add("rangefinderUseThousandth:b = " + (data.rfUseThousandth ? "yes" : "no") );
 		lines.add("");
@@ -194,7 +194,7 @@ public class DataWriter {
 		lines.add("crosshair_hor_ranges {");
 		for(int i=0; i<data.hrMils.size(); i++) {
 			int mil = data.hrMils.get(i);
-			int label = data.hrMajors.get(i) ? mil : 0;
+			int label = data.hrMajors.get(i) ? Math.abs(mil) : 0;
 			lines.add("  range:p2 = " + mil + "," + label);	
 		}
 		lines.add("}");
@@ -235,14 +235,17 @@ public class DataWriter {
 		for(int i=0; i<data.brIndicators.bDists.size(); i++) {
 			int dist = data.brIndicators.bDists.get(i);
 			boolean major = data.brIndicators.bMajors.get(i);
-			int label = major ? dist/100 : 0;
+			int label = major ? Math.abs(dist/100) : 0;
 			double extend = data.brIndicators.bExtensions.get(i);
 			Vector2d textOff = data.brIndicators.bTextOffsets.get(i);
-			lines.add("distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+			lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
 		}
 		lines.add("}");
 		lines.add("");
 		
+		
+		
+		// shell ballistics blocks
 		if(!data.shellBlocks.isEmpty()) {
 			lines.add("// shell ballistics blocks");
 			lines.add("ballistics {");
@@ -257,11 +260,10 @@ public class DataWriter {
 				lines.add("    bulletType:t = \"" + block.bBulletType + "\"");
 				lines.add("    speed:r = " + block.bBulletSpeed);
 				lines.add("    triggerGroup:t = \"" + block.bTriggerGroup + "\"");
+				lines.add("    thousandth:b = " + "no");
 				lines.add("    drawUpward:b = " + (block.bDrawUpward ? "yes" : "no") );
 				lines.add("    distancePos:p2 = " + block.bMainPos.x + "," + block.bMainPos.y);
-				if(block.bMove) {
-					lines.add("    move:b = " + (block.bMove ? "yes" : "no") );
-				}
+				lines.add("    move:b = " + (block.bMove ? "yes" : "no") );
 				if(block.bScaleMode == ScaleMode.RADIAL) {
 					lines.add("    radial:b = " + (block.bScaleMode == ScaleMode.RADIAL ? "yes" : "no") );
 				}
@@ -272,8 +274,10 @@ public class DataWriter {
 				lines.add("    textPos:p2 = " + block.bTextOffset.x + "," + block.bTextOffset.y);
 				lines.add("    textAlign:i = " + block.bTextAlign.id);
 				lines.add("    textShift:r = " + block.bTextShift);
-				//lines.add("    drawAdditionalLines:b = " + (block.bDrawCenteredLines ? "yes" : "no") );
-				//lines.add("    crosshairDistHorSizeAdditional:p2 = " + block.bSizeCentered.x + "," + block.bSizeCentered.y);
+				
+				lines.add("    drawAdditionalLines:b = " + (block.bDrawCenteredLines ? "yes" : "no") );
+				lines.add("    crosshairDistHorSizeAdditional:p2 = " + block.bSizeCentered.x + "," + block.bSizeCentered.y);
+				
 				if(block.bScaleMode == ScaleMode.RADIAL) {
 					lines.add("    radialStretch:r = " + block.bRadialStretch);
 					lines.add("    radialAngle:r = " + block.bRadialAngle);
@@ -283,10 +287,10 @@ public class DataWriter {
 				for(int i=0; i<block.bDists.size(); i++) {
 					int dist = block.bDists.get(i);
 					boolean major = block.bMajors.get(i);
-					int label = major ? dist/100 : 0;
+					int label = major ? Math.abs(dist/100) : 0;
 					double extend = block.bExtensions.get(i);
 					Vector2d textOff = block.bTextOffsets.get(i);
-					lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+					lines.add("        distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
 				}
 				lines.add("    }");
 				lines.add("  }");

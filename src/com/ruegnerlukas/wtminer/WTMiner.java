@@ -576,7 +576,7 @@ public class WTMiner {
 						if(elementMass.isJsonPrimitive()) {
 							JsonPrimitive primSpeed = (JsonPrimitive)elementMass;
 							if(primSpeed.isNumber()) {
-								ammo.mass = primSpeed.getAsDouble();
+//								ammo.mass = primSpeed.getAsDouble();
 							}
 						}
 						
@@ -714,7 +714,7 @@ public class WTMiner {
 					elementBullet.setAttributeNode(attrSpeed);
 					
 					Attr attrMass = doc.createAttribute("mass");
-					attrMass.setNodeValue(""+(double)bullet.mass);
+//					attrMass.setNodeValue(""+(double)bullet.mass);
 					elementBullet.setAttributeNode(attrMass);
 					
 					Attr attrType = doc.createAttribute("type");

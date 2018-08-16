@@ -106,8 +106,6 @@ public class WTSights extends Application {
 		
 		Database.loadVehicles(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/vehicle_data.xml"));
 		
-		UIMainMenu.openNew(primaryStage);
-		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
@@ -115,7 +113,8 @@ public class WTSights extends Application {
 			} 
 		});
 		
-		primaryStage.show();
+		UIMainMenu.openNew(primaryStage);
+
 	}
 
 	

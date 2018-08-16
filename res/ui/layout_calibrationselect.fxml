@@ -24,7 +24,7 @@
                </tooltip></CheckBox>
             <VBox fx:id="vboxSelectCalibration" spacing="5.0">
                <children>
-                  <CheckBox disable="true" mnemonicParsing="false" onAction="#onUseExternal" prefWidth="10000.0" selected="true" text="External Calibration" visible="false" />
+                  <CheckBox disable="true" mnemonicParsing="false" prefWidth="10000.0" selected="true" text="External Calibration" visible="false" />
                   <ComboBox fx:id="comboInternalCalibration" disable="true" prefWidth="10000.0" visible="false" />
                   <HBox fx:id="hboxExternal" prefWidth="10000.0">
                      <children>
