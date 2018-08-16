@@ -56,7 +56,9 @@ public class SightRenderer {
 		
 		drawHorzRangeIndicators(canvas, g, dataSight, dataCalib, currentAmmoData);
 		
-		drawBallisticsBlock(canvas, g, dataSight, dataCalib, currentAmmoData, dataSight.brIndicators);
+		if(dataSight.shellBlocks.isEmpty()) {
+			drawBallisticsBlock(canvas, g, dataSight, dataCalib, currentAmmoData, dataSight.brIndicators);
+		}
 		
 		for(Entry<String,BallisticsBlock> entry : dataSight.shellBlocks.entrySet()) {
 			CalibrationAmmoData ammoData = null;
