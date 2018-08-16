@@ -220,6 +220,7 @@ public class DataLoader {
 			
 			for(Element elementAmmo : XMLUtils.getChildren(elementAmmoGroup)) {
 
+				// load from file
 				CalibrationAmmoData ammoData = new CalibrationAmmoData();
 				ammoData.imgName = elementAmmo.getAttribute("imageName");
 				ammoData.zoomedIn = elementAmmo.getAttribute("zoomedIn").equalsIgnoreCase("true");
@@ -234,6 +235,17 @@ public class DataLoader {
 					ammoData.markerRanges.add(new Vector2i(Integer.parseInt(strMarker[0].trim()), Integer.parseInt(strMarker[1].trim())));
 				}
 
+				// load ammo from vehicle db
+				Vehicle vehicle = Database.getVehicleByName(vehicleName);
+				for(Weapon w : vehicle.weaponsList) {
+					for(Ammo a : w.ammo) {
+						if(a.name.equals(elementAmmo.getTagName())) {
+							ammoData.ammo = a;
+							break;
+						}
+					}
+				}
+				
 				data.ammoData.add(ammoData);
 				
 			}
