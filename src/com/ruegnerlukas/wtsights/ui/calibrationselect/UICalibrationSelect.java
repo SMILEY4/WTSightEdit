@@ -46,7 +46,6 @@ public class UICalibrationSelect {
 	@FXML private VBox vboxSelectCalibration;
 	@FXML private HBox hboxExternal;
 
-	private Vehicle vehicle;
 	private File fileSight = null;
 
 	private File fileCalibExternal = null;
@@ -105,9 +104,7 @@ public class UICalibrationSelect {
 	private void create(Stage stage) {
 		this.stage = stage;
 		this.fileSight = null;
-		this.vehicle = null;
 		cbCreateNew.setSelected(false);
-		cbCreateNew.setDisable(true);
 	}
 
 
@@ -150,7 +147,7 @@ public class UICalibrationSelect {
 	@FXML
 	void onNext(ActionEvent event) {
 		
-		if(this.fileCalibExternal == null) {
+		if(!cbCreateNew.isSelected() && this.fileCalibExternal == null) {
 			Logger.get().warn("(Alert) No calibration selected. Select calibration to continue.");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");

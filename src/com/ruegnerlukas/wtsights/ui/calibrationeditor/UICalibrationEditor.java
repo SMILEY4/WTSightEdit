@@ -186,9 +186,12 @@ public class UICalibrationEditor {
 				ammoData.markerCenter.set(img.getHeight()/2, 0);
 				dataCalib.ammoData.add(ammoData);
 			}
+			
 		} catch (IOException e) {
 			Logger.get().error(e);
 		}
+		
+		create(stage, dataCalib);
 	}
 	
 	
