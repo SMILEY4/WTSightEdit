@@ -238,11 +238,14 @@ public class DataWriter {
 			int label = major ? Math.abs(dist/100) : 0;
 			double extend = data.brIndicators.bExtensions.get(i);
 			Vector2d textOff = data.brIndicators.bTextOffsets.get(i);
-			lines.add("distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+			lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
 		}
 		lines.add("}");
 		lines.add("");
 		
+		
+		
+		// shell ballistics blocks
 		if(!data.shellBlocks.isEmpty()) {
 			lines.add("// shell ballistics blocks");
 			lines.add("ballistics {");
@@ -257,11 +260,10 @@ public class DataWriter {
 				lines.add("    bulletType:t = \"" + block.bBulletType + "\"");
 				lines.add("    speed:r = " + block.bBulletSpeed);
 				lines.add("    triggerGroup:t = \"" + block.bTriggerGroup + "\"");
+				lines.add("    thousandth:b = " + "no");
 				lines.add("    drawUpward:b = " + (block.bDrawUpward ? "yes" : "no") );
 				lines.add("    distancePos:p2 = " + block.bMainPos.x + "," + block.bMainPos.y);
-				if(block.bMove) {
-					lines.add("    move:b = " + (block.bMove ? "yes" : "no") );
-				}
+				lines.add("    move:b = " + (block.bMove ? "yes" : "no") );
 				if(block.bScaleMode == ScaleMode.RADIAL) {
 					lines.add("    radial:b = " + (block.bScaleMode == ScaleMode.RADIAL ? "yes" : "no") );
 				}
@@ -272,8 +274,10 @@ public class DataWriter {
 				lines.add("    textPos:p2 = " + block.bTextOffset.x + "," + block.bTextOffset.y);
 				lines.add("    textAlign:i = " + block.bTextAlign.id);
 				lines.add("    textShift:r = " + block.bTextShift);
-				//lines.add("    drawAdditionalLines:b = " + (block.bDrawCenteredLines ? "yes" : "no") );
-				//lines.add("    crosshairDistHorSizeAdditional:p2 = " + block.bSizeCentered.x + "," + block.bSizeCentered.y);
+				
+				lines.add("    drawAdditionalLines:b = " + (block.bDrawCenteredLines ? "yes" : "no") );
+				lines.add("    crosshairDistHorSizeAdditional:p2 = " + block.bSizeCentered.x + "," + block.bSizeCentered.y);
+				
 				if(block.bScaleMode == ScaleMode.RADIAL) {
 					lines.add("    radialStretch:r = " + block.bRadialStretch);
 					lines.add("    radialAngle:r = " + block.bRadialAngle);
@@ -286,7 +290,7 @@ public class DataWriter {
 					int label = major ? Math.abs(dist/100) : 0;
 					double extend = block.bExtensions.get(i);
 					Vector2d textOff = block.bTextOffsets.get(i);
-					lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+					lines.add("        distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
 				}
 				lines.add("    }");
 				lines.add("  }");
