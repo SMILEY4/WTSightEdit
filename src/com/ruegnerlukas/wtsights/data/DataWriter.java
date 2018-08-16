@@ -182,8 +182,9 @@ public class DataWriter {
 		lines.add("// rangefinder");
 		lines.add("rangefinderHorizontalOffset:r = " + data.rfOffset.x);
 		lines.add("rangefinderVerticalOffset:r = " + data.rfOffset.y);
-		lines.add("rangefinderProgressBarColor1:c = " + (int)(data.rfColor1.getRed()*255) + "," + (int)(data.rfColor1.getGreen()*255) + "," + (int)(data.rfColor1.getBlue()*255) + "," + (int)(data.rfColor1.getOpacity()/255));
-		lines.add("rangefinderProgressBarColor2:c = " + (int)(data.rfColor2.getRed()*255) + "," + (int)(data.rfColor2.getGreen()*255) + "," + (int)(data.rfColor2.getBlue()*255) + "," + (int)(data.rfColor2.getOpacity()/255));
+		Logger.get().debug("COLOR_1: " + data.rfColor1 + " " + data.rfColor1.getRed() + " " + data.rfColor1.getGreen() + " " + data.rfColor1.getBlue() + " " + data.rfColor1.getOpacity());
+		lines.add("rangefinderProgressBarColor1:c = " + (int)(data.rfColor1.getRed()*255) + "," + (int)(data.rfColor1.getGreen()*255) + "," + (int)(data.rfColor1.getBlue()*255) + "," + (int)(data.rfColor1.getOpacity()*255));
+		lines.add("rangefinderProgressBarColor2:c = " + (int)(data.rfColor2.getRed()*255) + "," + (int)(data.rfColor2.getGreen()*255) + "," + (int)(data.rfColor2.getBlue()*255) + "," + (int)(data.rfColor2.getOpacity()*255));
 		lines.add("rangefinderTextScale:r = " + data.rfTextScale);
 		lines.add("rangefinderUseThousandth:b = " + (data.rfUseThousandth ? "yes" : "no") );
 		lines.add("");
