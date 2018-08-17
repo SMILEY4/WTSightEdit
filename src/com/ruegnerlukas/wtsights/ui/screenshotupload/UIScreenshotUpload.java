@@ -15,6 +15,7 @@ import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
@@ -26,6 +27,7 @@ import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -42,6 +44,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -93,6 +97,7 @@ public class UIScreenshotUpload {
 	}
 	
 
+	
 
 	@FXML
 	void initialize() {
@@ -116,6 +121,9 @@ public class UIScreenshotUpload {
 		ObservableList<String> fxListAmmo = FXCollections.observableArrayList();
 		for(int i=0; i<vehicle.weaponsList.size(); i++) {
 			Weapon weapon = vehicle.weaponsList.get(i);
+			if(weapon.triggerGroup.equals("torpedoes") || weapon.triggerGroup.equals("depth_charge") || weapon.triggerGroup.equals("mine") || weapon.triggerGroup.equals("smoke")) {
+				continue;
+			}
 			for(int j=0; j<weapon.ammo.size(); j++) {
 				Ammo ammo = weapon.ammo.get(j);
 				fxListAmmo.add(ammo.name + ";" + ammo.type);
@@ -253,7 +261,7 @@ public class UIScreenshotUpload {
 			super();
 
 			hbox.getChildren().addAll(label, textField, browse, reset);
-			hbox.setPrefHeight(31);
+			hbox.setPrefHeight(40+2);
 			hbox.setAlignment(Pos.CENTER_LEFT);
 			
 			HBox.setHgrow(textField, Priority.ALWAYS);
@@ -316,6 +324,11 @@ public class UIScreenshotUpload {
 				String type = item != null ? item.split(";")[1] : "<null>";
 				label.setText(name);
 				label.setTooltip(new Tooltip("Type = " + type));
+				ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+				imgView.setSmooth(true);
+				imgView.setPreserveRatio(true);
+				imgView.setFitHeight(40);
+				label.setGraphic(imgView);
 				setGraphic(hbox);
 				if(type.contains("rocket") || type.contains("atgm")) {
 					setDisable(true);
