@@ -11,6 +11,7 @@ import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.data.Database;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -103,6 +104,12 @@ public class WTSights extends Application {
 		WTSights.primaryStage = primaryStage;
 		
 		FXUtils.addIcons(primaryStage);
+		
+		if(DEV_MODE) {
+			AmmoIcons.load("res/assets/ammo_icons.png", false);
+		} else {
+			AmmoIcons.load("/assets/ammo_icons.png", true);
+		}
 		
 		Database.loadVehicles(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/vehicle_data.xml"));
 		

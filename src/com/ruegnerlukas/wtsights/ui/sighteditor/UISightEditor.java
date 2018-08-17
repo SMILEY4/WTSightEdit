@@ -13,6 +13,7 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.SightData.SelectedElement;
 import com.ruegnerlukas.wtsights.sight.SightRenderer;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.Config2;
@@ -21,6 +22,7 @@ import com.ruegnerlukas.wtutils.ZoomableScrollPane;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -32,13 +34,17 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class UISightEditor {
 
@@ -164,17 +170,59 @@ public class UISightEditor {
 		labelVehicleName.setText(dataCalib.vehicle.name);
 		
 		// AMMO
+		comboAmmo.setButtonCell(new ListCell<String>() {
+			@Override protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(item);
+				if (item == null || empty) {
+					setGraphic(null);
+				} else {
+					String name = item != null ? item.split(";")[0] : "<null>";
+					String type = item != null ? item.split(";")[1] : "<null>";
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					setText(name);
+				}
+			}
+		});
+		
+		comboAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override public ListCell<String> call(ListView<String> p) {
+				return new ListCell<String>() {
+					@Override protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(item);
+						if (item == null || empty) {
+							setGraphic(null);
+						} else {
+							String name = item != null ? item.split(";")[0] : "<null>";
+							String type = item != null ? item.split(";")[1] : "<null>";
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							setText(name);
+						}
+					}
+				};
+			}
+		});
+		
 		for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
-			comboAmmo.getItems().add(ammoData.ammo.name);
+			comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
 		}
 		comboAmmo.getSelectionModel().select(0);
 		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue);
+				onAmmoSelected(newValue.split(";")[0]);
 			}
 		});
-		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
+		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
 		
 		
 		// ZOOM MODE
@@ -422,12 +470,17 @@ public class UISightEditor {
 	
 	
 	public void rebuildCanvas() {
+		rebuildCanvas(1920, 1080);
+	}
+	
+	
+	public void rebuildCanvas(int width, int height) {
 		
 		
 		if(dataSight.envBackground != null) {
 			canvas = new Canvas(dataSight.envBackground.getWidth(), dataSight.envBackground.getHeight());
 		} else {
-			canvas = new Canvas(1920, 1080);
+			canvas = new Canvas(width, height);
 		}
 		
 		canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {

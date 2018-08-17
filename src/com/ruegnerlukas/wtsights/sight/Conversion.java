@@ -1,5 +1,7 @@
 package com.ruegnerlukas.wtsights.sight;
 
+
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.sight.SightData.Thousandth;
 
 public class Conversion {

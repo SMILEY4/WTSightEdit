@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -32,6 +33,7 @@ public class UIEnvironment {
 	private SightData dataSight;
 
 	@FXML private TextField pathBackground;
+	@FXML private ChoiceBox<String> choiceResolution;
 	@FXML private ColorPicker colorSight;
 	@FXML private CheckBox cbShowRangefinder;
 	@FXML private Slider rangefinderProgress;
@@ -55,6 +57,30 @@ public class UIEnvironment {
 	
 	
 	public void create() {
+		
+		choiceResolution.getItems().add("1024 x 768");
+		choiceResolution.getItems().add("1152 x 864");
+		choiceResolution.getItems().add("1280 x 720");
+		choiceResolution.getItems().add("1280 x 768");
+		choiceResolution.getItems().add("1280 x 800");
+		choiceResolution.getItems().add("1280 x 960");
+		choiceResolution.getItems().add("1280 x 1024");
+		choiceResolution.getItems().add("1360 x 768");
+		choiceResolution.getItems().add("1366 x 768");
+		choiceResolution.getItems().add("1400 x 1050");
+		choiceResolution.getItems().add("1440 x 900");
+		choiceResolution.getItems().add("1600 x 900");
+		choiceResolution.getItems().add("1680 x 1050");
+		choiceResolution.getItems().add("1920 x 1080");
+		choiceResolution.getSelectionModel().select("1280 x 720");
+		choiceResolution.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				int width = Integer.parseInt(newValue.split(" x ")[0]);
+				int height = Integer.parseInt(newValue.split(" x ")[1]);
+				onSelectResolution(width, height);
+			}
+		});
 		
 		// sight color
 		colorSight.setValue(dataSight.envSightColor);
@@ -112,8 +138,15 @@ public class UIEnvironment {
 		editor.rebuildCanvas();
 	}
 
+	
+	
 
+	void onSelectResolution(int width, int height) {
+		editor.rebuildCanvas(width, height);
+	}
+	
 
+	
 	
 	@FXML
 	void onColorSight(ActionEvent event) {
