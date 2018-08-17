@@ -31,11 +31,11 @@
                   <Insets bottom="20.0" top="20.0" />
                </padding>
             </Separator>
-            <Button mnemonicParsing="false" onAction="#onNewCalibration" prefWidth="300.0" text="Create New Calibration">
+            <Button mnemonicParsing="false" onAction="#onNewCalibration" prefWidth="300.0" text="Create Ballistic Data">
                <tooltip>
                   <Tooltip text="Create a new Calibration file. A Calibration file is used to calculate the correct bullet trajectories." wrapText="true" />
                </tooltip></Button>
-            <Button mnemonicParsing="false" onAction="#onLoadCalibration" prefWidth="300.0" text="Load Calibration">
+            <Button mnemonicParsing="false" onAction="#onLoadCalibration" prefWidth="300.0" text="Load Ballistic Data">
                <tooltip>
                   <Tooltip text="Load and edit an existing calibration file." />
                </tooltip></Button>

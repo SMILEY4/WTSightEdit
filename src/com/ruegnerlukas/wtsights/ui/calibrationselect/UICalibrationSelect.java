@@ -58,7 +58,7 @@ public class UICalibrationSelect {
 	public static void openNew() {
 		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + ")");
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Ballistic Data");
 		UICalibrationSelect controller = (UICalibrationSelect)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -71,7 +71,7 @@ public class UICalibrationSelect {
 	public static void openNew(File fileSight) {
 		Logger.get().info("Navigate to 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + "), file="+fileSight);
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Calibration");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibrationselect.fxml", 600, 230, "Select Ballistic Data");
 		UICalibrationSelect controller = (UICalibrationSelect)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -148,11 +148,11 @@ public class UICalibrationSelect {
 	void onNext(ActionEvent event) {
 		
 		if(!cbCreateNew.isSelected() && this.fileCalibExternal == null) {
-			Logger.get().warn("(Alert) No calibration selected. Select calibration to continue.");
+			Logger.get().warn("(Alert) No Ballistic Data selected. Select Ballistic Data to continue.");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setHeaderText(null);
-			alert.setContentText("No calibration selected. Select calibration to continue.");
+			alert.setContentText("No Ballistic Data selected. Select Ballistic Data to continue.");
 			alert.showAndWait();
 			return;
 		}

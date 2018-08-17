@@ -108,7 +108,7 @@ public class UICalibrationEditor {
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -125,7 +125,7 @@ public class UICalibrationEditor {
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -141,7 +141,7 @@ public class UICalibrationEditor {
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -628,7 +628,7 @@ public class UICalibrationEditor {
 		}
 		
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Save Calibration Data");
+		fc.setTitle("Save Ballistic Data");
 		
 		File fileSelected = fc.showSaveDialog(stage);
 		if(fileSelected == null) {
@@ -640,14 +640,14 @@ public class UICalibrationEditor {
 		
 		try {
 			if(!DataWriter.saveExternalCalibFile(this.dataCalib, file)) {
-				Logger.get().warn("(Alert) Calibration could not be saved.");
+				Logger.get().warn("(Alert) Ballistic Data could not be saved.");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
 				alert.setHeaderText(null);
-				alert.setContentText("Calibration could not be saved.");
+				alert.setContentText("Ballistic Data could not be saved.");
 				alert.showAndWait();
 			} else {
-				Logger.get().info("Saved Calibration to " + file);
+				Logger.get().info("Saved Ballistic Data to " + file);
 			}
 		} catch (Exception e) {
 			Logger.get().error(e);

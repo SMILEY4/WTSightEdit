@@ -45,7 +45,7 @@ import com.ruegnerlukas.wtutils.Config2;
 
 public class DataWriter {
 
-
+	
 	public static boolean saveExternalCalibFile(CalibrationData data, File outputFile) throws Exception {
 
 		if(data == null) {
@@ -66,7 +66,7 @@ public class DataWriter {
 
 		Document doc = docBuilder.newDocument();
 		
-		Element rootElement = doc.createElement("calibrationdata");
+		Element rootElement = doc.createElement("ballisticData");
 		doc.appendChild(rootElement);
 		
 		Element elementVehicle = doc.createElement(data.vehicle.name);
