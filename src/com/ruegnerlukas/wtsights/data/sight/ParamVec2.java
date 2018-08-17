@@ -8,13 +8,13 @@ public class ParamVec2 extends Parameter {
 	public Vector2f value;
 	
 	
-	public ParamVec2(String name, float x, float y) {
-		this(name, new Vector2f(x, y));
+	public ParamVec2(String name, String metadata, float x, float y) {
+		this(name, metadata, new Vector2f(x, y));
 	}
 	
 	
-	public ParamVec2(String name, Vector2f value) {
-		super(name, ParameterType.VEC2);
+	public ParamVec2(String name, String metadata, Vector2f value) {
+		super(name, metadata, ParameterType.VEC2);
 		this.value = value;
 	}
 	
@@ -29,7 +29,7 @@ public class ParamVec2 extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = " + value.toString();
+		str += this.type + ": " + this.name + " = " + value.toString() + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -44,6 +44,6 @@ public class ParamVec2 extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":p2=" + this.value.x + ", " + this.value.y);
+		Logger.get().debug(str + this.name + ":p2=" + this.value.x + ", " + this.value.y + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 }

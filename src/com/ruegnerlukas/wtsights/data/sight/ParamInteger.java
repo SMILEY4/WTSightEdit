@@ -7,8 +7,8 @@ public class ParamInteger extends Parameter {
 	public int value;
 	
 	
-	public ParamInteger(String name, int value) {
-		super(name, ParameterType.INTEGER);
+	public ParamInteger(String name, String metadata, int value) {
+		super(name, metadata, ParameterType.INTEGER);
 		this.value = value;
 	}
 	
@@ -23,7 +23,7 @@ public class ParamInteger extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = " + value;
+		str += this.type + ": " + this.name + " = " + value + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -37,7 +37,7 @@ public class ParamInteger extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":i=" + this.value);
+		Logger.get().debug(str + this.name + ":i=" + this.value + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 	
 }

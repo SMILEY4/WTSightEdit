@@ -254,7 +254,7 @@ public class DataWriter {
 
 				BallisticsBlock block = entry.getValue();
 				
-				lines.add("  // " + block.name + " (" + block.bBulletName + ")");
+				lines.add("  //-- " + block.name + " (" + block.bBulletName + ")");
 				lines.add("  bullet {");
 				
 				lines.add("    bulletType:t = \"" + block.bBulletType + "\"");
@@ -334,7 +334,7 @@ public class DataWriter {
 			lines.add("// lines");
 			lines.add("drawLines {");
 			for(LineObject lineObj : objLines) {
-				lines.add("  // " + lineObj.name);
+				lines.add("  //-- " + lineObj.name);
 				lines.add("  line {");
 				lines.add("    thousandth:b = " + (lineObj.cmnUseThousandth ? "yes" : "no") );
 				if(lineObj.cmnMovement == Movement.MOVE) {
@@ -360,7 +360,7 @@ public class DataWriter {
 			lines.add("// text");
 			lines.add("drawTexts {");
 			for(TextObject textObj : objTexts) {
-				lines.add("  // " +  textObj.name);
+				lines.add("  //-- " +  textObj.name);
 				lines.add("  text {");
 				lines.add("    text:t = " + "\""+textObj.text + "\"");
 				lines.add("    thousandth:b = " + (textObj.cmnUseThousandth ? "yes" : "no") );
@@ -389,7 +389,7 @@ public class DataWriter {
 			lines.add("// circles");
 			lines.add("drawCircles {");
 			for(CircleObject circleObj : objCicles) {
-				lines.add("  // " + circleObj.name);
+				lines.add("  //-- " + circleObj.name);
 				lines.add("  circle {");
 				lines.add("    thousandth:b = " + (circleObj.cmnUseThousandth ? "yes" : "no") );
 				if(circleObj.cmnMovement == Movement.MOVE) {
@@ -419,7 +419,7 @@ public class DataWriter {
 			lines.add("// quads");
 			lines.add("drawQuads {");
 			for(QuadObject quadObj : objQuads) {
-				lines.add("  // " + quadObj.name);
+				lines.add("  //-- " + quadObj.name);
 				lines.add("  quad {");
 				lines.add("    thousandth:b = " + (quadObj.cmnUseThousandth ? "yes" : "no") );
 				if(quadObj.cmnMovement == Movement.MOVE) {

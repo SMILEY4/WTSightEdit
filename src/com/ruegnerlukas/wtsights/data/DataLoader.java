@@ -531,12 +531,16 @@ public class DataLoader {
 						switch(eBullets.name) {
 							case "bullet" : {
 
-								BallisticsBlock ballistics = new BallisticsBlock(false, "block_"+(dataSight.shellBlocks.size()+1));
+								String name = null;
+								if(eBullets.metadata != null) {
+									name = eBullets.metadata.substring(0, eBullets.metadata.lastIndexOf('('));
+								}
+								BallisticsBlock ballistics = new BallisticsBlock(false, name == null ? "block_"+(dataSight.shellBlocks.size()+1) : name);
 								ballistics.bDists.clear();
 								ballistics.bMajors.clear();
 								ballistics.bExtensions.clear();
 								ballistics.bTextOffsets.clear();
-								
+
 								
 								for(BlockElement eBullet : ((Block)eBullets).elements) {
 									
@@ -705,8 +709,13 @@ public class DataLoader {
 					for(BlockElement eLines : ((Block)e).elements) {
 						switch(eLines.name) {
 							case "line": {
+								
 								LineObject objLine = new LineObject();
 								objLine.name = "line_" + (dataSight.objects.size()+1);
+								if(eLines.metadata != null) {
+									objLine.name = eLines.metadata;
+								}
+								
 								for(BlockElement eLine : ((Block)eLines).elements) {
 									switch(eLine.name) {
 										case "thousandth": {
@@ -760,8 +769,13 @@ public class DataLoader {
 					for(BlockElement eTexts : ((Block)e).elements) {
 						switch(eTexts.name) {
 							case "text": {
+								
 								TextObject objText = new TextObject();
 								objText.name = "text_" + (dataSight.objects.size()+1);
+								if(eTexts.metadata != null) {
+									objText.name = eTexts.metadata;
+								}
+								
 								for(BlockElement eText : ((Block)eTexts).elements) {
 									switch(eText.name) {
 										case "thousandth": {
@@ -836,8 +850,13 @@ public class DataLoader {
 					for(BlockElement eCircles : ((Block)e).elements) {
 						switch(eCircles.name) {
 							case "circle": {
+							
 								CircleObject objCircle = new CircleObject();
 								objCircle.name = "circle_" + (dataSight.objects.size()+1);
+								if(eCircles.metadata != null) {
+									objCircle.name = eCircles.metadata;
+								}
+								
 								for(BlockElement eCircle : ((Block)eCircles).elements) {
 									switch(eCircle.name) {
 										case "thousandth": {
@@ -903,8 +922,13 @@ public class DataLoader {
 					for(BlockElement eQuads : ((Block)e).elements) {
 						switch(eQuads.name) {
 							case "quad": {
+								
 								QuadObject objQuad = new QuadObject();
 								objQuad.name = "quad_" + (dataSight.objects.size()+1);
+								if(eQuads.metadata != null) {
+									objQuad.name = eQuads.metadata;
+								}
+								
 								for(BlockElement eQuad : ((Block)eQuads).elements) {
 									switch(eQuad.name) {
 										case "thousandth": {

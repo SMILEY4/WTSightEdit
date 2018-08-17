@@ -7,8 +7,8 @@ public class ParamText extends Parameter {
 	public String text;
 	
 	
-	public ParamText(String name, String text) {
-		super(name, ParameterType.TEXT);
+	public ParamText(String name, String metadata,  String text) {
+		super(name, metadata, ParameterType.TEXT);
 		this.text = text.replace("\"", "");
 	}
 	
@@ -23,7 +23,7 @@ public class ParamText extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = \"" + text + "\"";
+		str += this.type + ": " + this.name + " = \"" + text + "\"" + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -37,7 +37,7 @@ public class ParamText extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":t=" + "\""+ this.text + "\"");
+		Logger.get().debug(str + this.name + ":t=" + "\""+ this.text + "\"" + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 	
 }

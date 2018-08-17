@@ -23,8 +23,8 @@ public abstract class Parameter extends BlockElement {
 	public final ParameterType type;
 	
 	
-	public Parameter(String name, ParameterType type) {
-		super(name);
+	public Parameter(String name, String metadata, ParameterType type) {
+		super(name, metadata);
 		this.type = type;
 	}
 	
@@ -38,7 +38,7 @@ public abstract class Parameter extends BlockElement {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name;
+		str += this.type + ": " + this.name + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 		

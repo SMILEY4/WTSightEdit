@@ -12,8 +12,8 @@ public class Block extends BlockElement {
 	
 	
 	
-	public Block(String name) {
-		super(name);
+	public Block(String name, String metadata) {
+		super(name, metadata);
 	}
 	
 	
@@ -91,7 +91,7 @@ public class Block extends BlockElement {
 			str += "  ";
 		}
 		
-		str += "BLOCK: " + this.name;
+		str += "BLOCK: " + this.name + (metadata == null ? "" : "  (" + metadata + ")");
 		
 		Logger.get().debug(str);
 		
@@ -112,7 +112,7 @@ public class Block extends BlockElement {
 		}
 		
 		
-		Logger.get().debug(str + this.name + "{");
+		Logger.get().debug(str + this.name + "{" + (metadata == null ? "" : "  (" + metadata + ")"));
 		
 		for(BlockElement e : elements) {
 			e.resourcePrint(level+1);
