@@ -16,14 +16,16 @@ public class Vehicle {
 	
 	public float fovOut = -1;
 	public float fovIn = -1;
+	public float fovSight = -1;
 
 	
 	
 	public void print(int level) {
 		String indent = ""; for(int i=0; i<level; i++) { indent+="   ";};
 		Logger.get().debug(indent+"vehicle = " + name);
-		Logger.get().debug(indent+"zoomOutFOV = " + fovOut);
-		Logger.get().debug(indent+"zoomInFOV = " + fovIn);
+		Logger.get().debug(indent+"fovOut = " + fovOut);
+		Logger.get().debug(indent+"fovIn = " + fovIn);
+		Logger.get().debug(indent+"fovSight = " + fovIn);
 		for(Weapon w : weaponsList) {
 			w.print(level+1);
 		}

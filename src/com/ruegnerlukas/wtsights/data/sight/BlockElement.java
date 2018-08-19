@@ -5,9 +5,11 @@ package com.ruegnerlukas.wtsights.data.sight;
 public abstract class BlockElement {
 
 	public final String name;
+	public final String metadata;
 	
-	public BlockElement(String name) {
+	public BlockElement(String name, String metadata) {
 		this.name = name;
+		this.metadata = metadata;
 	}
 	
 	

@@ -18,7 +18,7 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <CheckBox fx:id="cbCreateNew" mnemonicParsing="false" onAction="#onCreateNew" text="Create new Calibration">
+            <CheckBox fx:id="cbCreateNew" mnemonicParsing="false" onAction="#onCreateNew" text="Create new Ballistic Data">
                <tooltip>
                   <Tooltip text="Create a new Calibration instead of using an existing file" />
                </tooltip></CheckBox>

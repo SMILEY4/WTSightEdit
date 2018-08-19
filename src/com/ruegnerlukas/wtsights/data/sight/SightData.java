@@ -132,6 +132,7 @@ public class SightData {
 	public boolean 	envShowRangeFinder 	= true;
 	public double 	envProgress 		= 30;
 	public int		envRangeCorrection 	= 0;
+	public boolean 	envShowVignette 	= true;
 	
 	
 	// general

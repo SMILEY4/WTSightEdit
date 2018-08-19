@@ -8,13 +8,13 @@ public class ParamVec3 extends Parameter {
 	public Vector3f value;
 	
 	
-	public ParamVec3(String name, float x, float y, float z) {
-		this(name, new Vector3f(x, y, z));
+	public ParamVec3(String name, String metadata, float x, float y, float z) {
+		this(name, metadata, new Vector3f(x, y, z));
 	}
 	
 	
-	public ParamVec3(String name, Vector3f value) {
-		super(name, ParameterType.VEC3);
+	public ParamVec3(String name, String metadata, Vector3f value) {
+		super(name, metadata, ParameterType.VEC3);
 		this.value = value;
 	}
 	
@@ -29,7 +29,7 @@ public class ParamVec3 extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = " + value.toString();
+		str += this.type + ": " + this.name + " = " + value.toString() + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -44,7 +44,7 @@ public class ParamVec3 extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":p3=" + this.value.x + ", " + this.value.y + ", " + this.value.z);
+		Logger.get().debug(str + this.name + ":p3=" + this.value.x + ", " + this.value.y + ", " + this.value.z + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 
 }

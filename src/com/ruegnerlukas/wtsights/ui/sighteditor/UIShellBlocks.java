@@ -19,6 +19,7 @@ import com.ruegnerlukas.wtsights.data.sight.SightData.TriggerGroup;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
 import com.ruegnerlukas.wtsights.sight.Conversion;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.sighteditor.utils.BallisticIndicatorElement;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -26,6 +27,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -34,10 +36,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class UIShellBlocks {
 
@@ -130,14 +136,56 @@ public class UIShellBlocks {
 	
 	public void create() {
 		
+		selectAmmo.setButtonCell(new ListCell<String>() {
+			@Override protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(item);
+				if (item == null || empty) {
+					setGraphic(null);
+				} else {
+					String name = item != null ? item.split(";")[0] : "<null>";
+					String type = item != null ? item.split(";")[1] : "<null>";
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					setText(name);
+				}
+			}
+		});
+		
+		selectAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override public ListCell<String> call(ListView<String> p) {
+				return new ListCell<String>() {
+					@Override protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(item);
+						if (item == null || empty) {
+							setGraphic(null);
+						} else {
+							String name = item != null ? item.split(";")[0] : "<null>";
+							String type = item != null ? item.split(";")[1] : "<null>";
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							setText(name);
+						}
+					}
+				};
+			}
+		});
+		
 		for(CalibrationAmmoData data : dataCalib.ammoData) {
-			selectAmmo.getItems().add(data.ammo.name);
+			selectAmmo.getItems().add(data.ammo.name +";"+ data.ammo.type);
 		}
 		selectAmmo.getSelectionModel().select(0);
 		selectAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue);
+				onAmmoSelected(newValue.split(";")[0]);
 			}
 		});
 		
@@ -357,7 +405,7 @@ public class UIShellBlocks {
 	@FXML
 	void onAddBlock(ActionEvent event) {
 		
-		String ammoName = selectAmmo.getValue();
+		String ammoName = selectAmmo.getValue().split(";")[0];
 		String blockName = nameBlock.getText().trim();
 		nameBlock.setText("");
 		
@@ -492,7 +540,7 @@ public class UIShellBlocks {
 		
 		cbCanMove.setSelected(selectedBlock.bMove);
 				
-		selectAmmo.setValue(selectedBlock.bBulletName);
+		selectAmmo.setValue(selectedBlock.bBulletName + ";" + selectedBlock.bBulletType);
 		
 		scaleMode.setValue(selectedBlock.bScaleMode.toString());
 		

@@ -22,6 +22,7 @@ public class BLKSightParser {
 		String ppContent = BLKSightParser.prepare(rawContent);
 		List<String> strElements = BLKSightParser.split(ppContent);
 		Block root = BLKSightParser.parseElements(strElements);
+		root.prettyPrint(0);
 		return root;
 	}
 	
@@ -59,10 +60,11 @@ public class BLKSightParser {
 	
 	public static String prepare(String rawFileContent) {
 		final String regexWS = "\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)"; // find all whitespace outside of quotes
-		final String regexBC = "(\\/\\*([^*]|[\\r\\n]|(\\*+([^*\\/]|[\\r\\n])))*\\*+\\/)|(\\/\\/.*)"; // find all (block-)comments
+//		final String regexBC = "(\\/\\*([^*]|[\\r\\n]|(\\*+([^*\\/]|[\\r\\n])))*\\*+\\/)|(\\/\\/.*)"; // find all (block-)comments
+		final String regexBC = "(\\/\\*([^*]|[\\r\\n]|(\\*+([^*\\/]|[\\r\\n])))*\\*+\\/)|(\\/\\/(?!--).*)"; // find all (block-)comments, exept starting with "//--"
 		final String regexTB = "\\t"; // find all tabs
 		
-		return rawFileContent
+		rawFileContent = rawFileContent
 				.replaceAll(regexTB, "")
 				.replaceAll(regexBC, "")
 				.replaceAll(System.lineSeparator(), ";")
@@ -70,6 +72,8 @@ public class BLKSightParser {
 				.replaceAll("\r\n", ";")
 				.replaceAll("\r", ";")
 				.replaceAll(regexWS, "");
+		
+		return rawFileContent;
 	}
 	
 	
@@ -92,6 +96,11 @@ public class BLKSightParser {
 			
 			if(current.isEmpty()) {
 				continue; 
+			}
+			
+			if(current.startsWith("//--")) {
+				listElements.add(current);
+				continue;
 			}
 			
 			if(current.contains("{") && !current.endsWith("{")) {
@@ -131,18 +140,25 @@ public class BLKSightParser {
 	
 	public static Block parseElements(List<String> listElements) {
 		
-		Block root = new Block("ROOT");
+		Block root = new Block("ROOT", "ROOT");
 		
 		Stack<Block> stack = new Stack<Block>();
 		stack.push(root);
 		
 		
+		String lastMetaData = null;
+		
 		for(int i=0; i<listElements.size(); i++) {
 			String current = listElements.get(i);
 			
+			if(current.startsWith("//--")) {
+				lastMetaData = current.substring(4, current.length());
+				continue;
+			}
+			
 			// BLOCK START
 			if(current.contains("{")) {
-				Block block = new Block(current.replaceAll("\\{", ""));
+				Block block = new Block(current.replaceAll("\\{", ""), lastMetaData);
 				Block currentBlock = stack.peek();
 				currentBlock.elements.add(block);
 				stack.push(block);
@@ -153,9 +169,11 @@ public class BLKSightParser {
 				
 			// PARAMETER	
 			} else {
-				stack.peek().elements.add(parseParameter(current));
+				stack.peek().elements.add(parseParameter(current, lastMetaData));
 			}
 			
+			lastMetaData = null;
+
 		}
 		
 		return root;
@@ -164,7 +182,7 @@ public class BLKSightParser {
 	
 	
 	
-	private static Parameter parseParameter(String strParameter) {
+	private static Parameter parseParameter(String strParameter, String metadata) {
 		
 		String paramName = strParameter.substring(0, strParameter.indexOf(":"));
 		String paramBody = strParameter.substring(strParameter.indexOf(":")+1, strParameter.length());
@@ -174,7 +192,7 @@ public class BLKSightParser {
 		
 		
 		if(strType.equalsIgnoreCase(Parameter.ParameterType.TEXT.token)) {
-			return new ParamText(paramName, strValue);
+			return new ParamText(paramName, metadata, strValue);
 		}
 		
 		if(strType.equalsIgnoreCase(Parameter.ParameterType.BOOL.token)) {
@@ -188,12 +206,12 @@ public class BLKSightParser {
 			} else if(strValue.equalsIgnoreCase("yes")) {
 				strValue = "true";
 			}
-			return new ParamBool(paramName, Boolean.parseBoolean(strValue));
+			return new ParamBool(paramName, metadata, Boolean.parseBoolean(strValue));
 		}
 		
 		if(strType.equalsIgnoreCase(Parameter.ParameterType.FLOAT.token)) {
 			try {
-				return new ParamFloat(paramName, Float.parseFloat(strValue));
+				return new ParamFloat(paramName, metadata, Float.parseFloat(strValue));
 			} catch(NumberFormatException e) {
 				Logger.get().error("NumberFormatException: '" + strParameter + "' is not a float.");
 			}
@@ -202,7 +220,7 @@ public class BLKSightParser {
 		
 		if(strType.equalsIgnoreCase(Parameter.ParameterType.INTEGER.token)) {
 			try {
-				return new ParamInteger(paramName, Integer.parseInt(strValue));
+				return new ParamInteger(paramName, metadata, Integer.parseInt(strValue));
 			} catch(NumberFormatException e) {
 				Logger.get().error("NumberFormatException: '" + strParameter + "' is not a integer.");
 			}
@@ -216,7 +234,7 @@ public class BLKSightParser {
 				return null;
 			}
 			try {
-				return new ParamVec2(paramName, Float.parseFloat(values[0]), Float.parseFloat(values[1]));
+				return new ParamVec2(paramName, metadata, Float.parseFloat(values[0]), Float.parseFloat(values[1]));
 			} catch(NumberFormatException e) {
 				Logger.get().error("NumberFormatException: '" + values[0] + " or " + values[1] + "' is not a float.");
 			}
@@ -230,7 +248,7 @@ public class BLKSightParser {
 				return null;
 			}
 			try {
-				return new ParamVec3(paramName, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
+				return new ParamVec3(paramName, metadata, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
 			} catch(NumberFormatException e) {
 				Logger.get().error("NumberFormatException: '" + values[0] + " or " + values[1] + " or " + values[2] + "' is not a float.");
 			}
@@ -244,7 +262,7 @@ public class BLKSightParser {
 				return null;
 			}
 			try {
-				return new ParamVec4(paramName, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
+				return new ParamVec4(paramName, metadata, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 			} catch(NumberFormatException e) {
 				Logger.get().error("NumberFormatException: '" + values[0] + " or " + values[1] + " or " + values[2] + " or " + values[3] + "' is not a float.");
 			}
@@ -254,9 +272,9 @@ public class BLKSightParser {
 			String[] values = strValue.split(",");
 			try {
 				if(values.length == 3) {
-					return new ParamColor(paramName, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
+					return new ParamColor(paramName, metadata, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
 				} else if(values.length == 4) {
-					return new ParamColor(paramName, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
+					return new ParamColor(paramName, metadata, Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 				} else {
 					Logger.get().error("Error parsing parameter " + strParameter + ": invalid length");
 					return null;

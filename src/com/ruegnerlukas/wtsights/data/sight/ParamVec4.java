@@ -8,13 +8,13 @@ public class ParamVec4 extends Parameter {
 	public Vector4f value;
 	
 	
-	public ParamVec4(String name, float x, float y, float z, float w) {
-		this(name, new Vector4f(x, y, z, w));
+	public ParamVec4(String name, String metadata, float x, float y, float z, float w) {
+		this(name, metadata, new Vector4f(x, y, z, w));
 	}
 	
 	
-	public ParamVec4(String name, Vector4f value) {
-		super(name, ParameterType.VEC4);
+	public ParamVec4(String name, String metadata, Vector4f value) {
+		super(name, metadata, ParameterType.VEC4);
 		this.value = value;
 	}
 
@@ -29,7 +29,7 @@ public class ParamVec4 extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = " + value.toString();
+		str += this.type + ": " + this.name + " = " + value.toString() + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -44,6 +44,6 @@ public class ParamVec4 extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":p4=" + this.value.x + ", " + this.value.y + ", " + this.value.z + ", " + this.value.w);
+		Logger.get().debug(str + this.name + ":p4=" + this.value.x + ", " + this.value.y + ", " + this.value.z + ", " + this.value.w + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 }

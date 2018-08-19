@@ -7,8 +7,8 @@ public class ParamFloat extends Parameter {
 	public float value;
 	
 	
-	public ParamFloat(String name, float value) {
-		super(name, ParameterType.FLOAT);
+	public ParamFloat(String name, String metadata,  float value) {
+		super(name, metadata, ParameterType.FLOAT);
 		this.value = value;
 	}
 	
@@ -23,7 +23,7 @@ public class ParamFloat extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = " + value;
+		str += this.type + ": " + this.name + " = " + value + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -38,7 +38,7 @@ public class ParamFloat extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":r=" + this.value);
+		Logger.get().debug(str + this.name + ":r=" + this.value + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 	
 }

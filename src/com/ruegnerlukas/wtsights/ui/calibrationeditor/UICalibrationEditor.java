@@ -23,6 +23,7 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
@@ -43,10 +44,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -58,6 +63,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class UICalibrationEditor {
 
@@ -66,7 +72,7 @@ public class UICalibrationEditor {
 	@FXML private ResourceBundle resources;
 	@FXML private URL location;
 
-	@FXML private ChoiceBox<String> choiceAmmo;
+	@FXML private ComboBox<String> choiceAmmo;
 	
 	@FXML private CheckBox cbZoomedIn;
 	
@@ -102,7 +108,7 @@ public class UICalibrationEditor {
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -119,7 +125,7 @@ public class UICalibrationEditor {
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -135,7 +141,7 @@ public class UICalibrationEditor {
 		int width = Config2.app_window_size.x;
 		int height = Config2.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Calibrate Sight");
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -210,17 +216,59 @@ public class UICalibrationEditor {
 	private void create() {
 
 		// AMMO CHOICE
+		choiceAmmo.setButtonCell(new ListCell<String>() {
+			@Override protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(item);
+				if (item == null || empty) {
+					setGraphic(null);
+				} else {
+					String name = item != null ? item.split(";")[0] : "<null>";
+					String type = item != null ? item.split(";")[1] : "<null>";
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					setText(name);
+				}
+			}
+		});
+		
+		choiceAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override public ListCell<String> call(ListView<String> p) {
+				return new ListCell<String>() {
+					@Override protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(item);
+						if (item == null || empty) {
+							setGraphic(null);
+						} else {
+							String name = item != null ? item.split(";")[0] : "<null>";
+							String type = item != null ? item.split(";")[1] : "<null>";
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							setText(name);
+						}
+					}
+				};
+			}
+		});
+
 		for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
-			choiceAmmo.getItems().add(ammoData.ammo.name);
+			choiceAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
 		}
 		choiceAmmo.getSelectionModel().select(0);
 		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue);
+				onAmmoSelected(newValue.split(";")[0]);
 			}
 		});
-		onAmmoSelected(choiceAmmo.getSelectionModel().getSelectedItem());
+		onAmmoSelected(choiceAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
 		
 	}
 	
@@ -228,6 +276,7 @@ public class UICalibrationEditor {
 	
 	
 	void onAmmoSelected(String ammoName) {
+		
 		
 		Logger.get().debug("Select ammo '" + ammoName + "'");
 		
@@ -579,7 +628,7 @@ public class UICalibrationEditor {
 		}
 		
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Save Calibration Data");
+		fc.setTitle("Save Ballistic Data");
 		
 		File fileSelected = fc.showSaveDialog(stage);
 		if(fileSelected == null) {
@@ -591,14 +640,14 @@ public class UICalibrationEditor {
 		
 		try {
 			if(!DataWriter.saveExternalCalibFile(this.dataCalib, file)) {
-				Logger.get().warn("(Alert) Calibration could not be saved.");
+				Logger.get().warn("(Alert) Ballistic Data could not be saved.");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
 				alert.setHeaderText(null);
-				alert.setContentText("Calibration could not be saved.");
+				alert.setContentText("Ballistic Data could not be saved.");
 				alert.showAndWait();
 			} else {
-				Logger.get().info("Saved Calibration to " + file);
+				Logger.get().info("Saved Ballistic Data to " + file);
 			}
 		} catch (Exception e) {
 			Logger.get().error(e);

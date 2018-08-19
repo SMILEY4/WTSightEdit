@@ -6,8 +6,8 @@ public class ParamBool extends Parameter {
 
 	public boolean value;
 	
-	public ParamBool(String name, boolean value) {
-		super(name, ParameterType.BOOL);
+	public ParamBool(String name, String metadata, boolean value) {
+		super(name, metadata, ParameterType.BOOL);
 		this.value = value;
 	}
 	
@@ -22,7 +22,7 @@ public class ParamBool extends Parameter {
 			str += "  ";
 		}
 		
-		str += this.type + ": " + this.name + " = " + value;
+		str += this.type + ": " + this.name + " = " + value + (metadata == null ? "" : "  (" + metadata + ")");
 
 		Logger.get().debug(str);
 	}
@@ -37,6 +37,6 @@ public class ParamBool extends Parameter {
 			str += "  ";
 		}
 		
-		Logger.get().debug(str + this.name + ":b=" + this.value);
+		Logger.get().debug(str + this.name + ":b=" + this.value + (metadata == null ? "" : "  (" + metadata + ")"));
 	}
 }

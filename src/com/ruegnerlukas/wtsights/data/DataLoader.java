@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,9 @@ import org.xml.sax.SAXException;
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
+import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.Block;
@@ -64,6 +68,7 @@ import com.ruegnerlukas.wtsights.data.sight.BallisticsBlock;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
+import com.ruegnerlukas.wtsights.sight.Conversion;
 import com.ruegnerlukas.wtutils.XMLUtils;
 
 import javafx.scene.control.Alert;
@@ -73,8 +78,6 @@ import javafx.scene.paint.Color;
 
 public class DataLoader {
 
-	
-	
 	
 	/**
 	 * loads the files with merged data (vehicles+ammoData)
@@ -126,6 +129,7 @@ public class DataLoader {
 			vehicle.name = elementVehicle.getTagName();
 			vehicle.fovOut = Float.parseFloat(elementVehicle.getAttribute("fovOut"));
 			vehicle.fovIn = Float.parseFloat(elementVehicle.getAttribute("fovIn"));
+			vehicle.fovSight = Float.parseFloat(elementVehicle.getAttribute("fovSight"));
 
 			Element elementWeaponsRoot = null;
 			for(int j=0; j<elementVehicle.getElementsByTagName("weapons").getLength(); j++) {
@@ -531,12 +535,16 @@ public class DataLoader {
 						switch(eBullets.name) {
 							case "bullet" : {
 
-								BallisticsBlock ballistics = new BallisticsBlock(false, "block_"+(dataSight.shellBlocks.size()+1));
+								String name = null;
+								if(eBullets.metadata != null) {
+									name = eBullets.metadata.substring(0, eBullets.metadata.lastIndexOf('('));
+								}
+								BallisticsBlock ballistics = new BallisticsBlock(false, name == null ? "block_"+(dataSight.shellBlocks.size()+1) : name);
 								ballistics.bDists.clear();
 								ballistics.bMajors.clear();
 								ballistics.bExtensions.clear();
 								ballistics.bTextOffsets.clear();
-								
+
 								
 								for(BlockElement eBullet : ((Block)eBullets).elements) {
 									
@@ -705,8 +713,13 @@ public class DataLoader {
 					for(BlockElement eLines : ((Block)e).elements) {
 						switch(eLines.name) {
 							case "line": {
+								
 								LineObject objLine = new LineObject();
 								objLine.name = "line_" + (dataSight.objects.size()+1);
+								if(eLines.metadata != null) {
+									objLine.name = eLines.metadata;
+								}
+								
 								for(BlockElement eLine : ((Block)eLines).elements) {
 									switch(eLine.name) {
 										case "thousandth": {
@@ -760,8 +773,13 @@ public class DataLoader {
 					for(BlockElement eTexts : ((Block)e).elements) {
 						switch(eTexts.name) {
 							case "text": {
+								
 								TextObject objText = new TextObject();
 								objText.name = "text_" + (dataSight.objects.size()+1);
+								if(eTexts.metadata != null) {
+									objText.name = eTexts.metadata;
+								}
+								
 								for(BlockElement eText : ((Block)eTexts).elements) {
 									switch(eText.name) {
 										case "thousandth": {
@@ -836,8 +854,13 @@ public class DataLoader {
 					for(BlockElement eCircles : ((Block)e).elements) {
 						switch(eCircles.name) {
 							case "circle": {
+							
 								CircleObject objCircle = new CircleObject();
 								objCircle.name = "circle_" + (dataSight.objects.size()+1);
+								if(eCircles.metadata != null) {
+									objCircle.name = eCircles.metadata;
+								}
+								
 								for(BlockElement eCircle : ((Block)eCircles).elements) {
 									switch(eCircle.name) {
 										case "thousandth": {
@@ -903,8 +926,13 @@ public class DataLoader {
 					for(BlockElement eQuads : ((Block)e).elements) {
 						switch(eQuads.name) {
 							case "quad": {
+								
 								QuadObject objQuad = new QuadObject();
 								objQuad.name = "quad_" + (dataSight.objects.size()+1);
+								if(eQuads.metadata != null) {
+									objQuad.name = eQuads.metadata;
+								}
+								
 								for(BlockElement eQuad : ((Block)eQuads).elements) {
 									switch(eQuad.name) {
 										case "thousandth": {

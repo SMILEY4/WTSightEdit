@@ -1,5 +1,6 @@
 package com.ruegnerlukas.wtsights.sight;
 
+
 import com.ruegnerlukas.wtsights.data.sight.SightData.Thousandth;
 
 public class Conversion {
@@ -72,6 +73,9 @@ public class Conversion {
 	public double pixel2mil(double pxUnits, double pxScreenHeight, boolean zoomedIn) {
 		return (pxUnits / (conversionMilPx * pxScreenHeight)) * (zoomedIn ? zoomInMul : 1);
 	}
+	
+	
+	
 	
 	
 }

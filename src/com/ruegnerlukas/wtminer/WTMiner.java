@@ -65,12 +65,12 @@ public class WTMiner {
 	
 	
 	public static final String PATH_TO_BLKDIR_WEAPONS = "C:\\Users\\LukasRuegner\\Desktop\\groundmodels_weapons";
-	public static final String PATH_UNPACKED_FILES_WEAPONS = "C:\\Users\\LukasRuegner\\Desktop\\groundmodels_weapons\\_unpacked";
-	public static final String PATH_TO_OUTPUT_WEAPONS = "C:\\Users\\LukasRuegner\\Desktop\\groundmodels_weapons\\_unpacked\\weapons.xml";
+	public static final String PATH_UNPACKED_FILES_WEAPONS = "C:\\Users\\LukasRuegner\\Desktop\\groundmodels_weapons\\unpacked";
+	public static final String PATH_TO_OUTPUT_WEAPONS = "C:\\Users\\LukasRuegner\\Desktop\\groundmodels_weapons\\unpacked\\weapons.xml";
 	
 	public static final String PATH_TO_BLKDIR_VEHICLES = "C:\\Users\\LukasRuegner\\Desktop\\tankmodels";
-	public static final String PATH_UNPACKED_FILES_VEHICLES = "C:\\Users\\LukasRuegner\\Desktop\\tankmodels\\_unpacked";
-	public static final String PATH_TO_OUTPUT_VEHICLES = "C:\\Users\\LukasRuegner\\Desktop\\tankmodels\\_unpacked\\tanks.xml";
+	public static final String PATH_UNPACKED_FILES_VEHICLES = "C:\\Users\\LukasRuegner\\Desktop\\tankmodels\\unpacked";
+	public static final String PATH_TO_OUTPUT_VEHICLES = "C:\\Users\\LukasRuegner\\Desktop\\tankmodels\\unpacked\\tanks.xml";
 	
 	public static final String PATH_TO_OUTPUT_COMBINED = "C:\\Users\\LukasRuegner\\Desktop\\vehicle_data.xml";
 
@@ -91,13 +91,12 @@ public class WTMiner {
 		
 		
 		// vehicles
-		unpackBLKs(PATH_TO_BLKDIR_VEHICLES, PATH_UNPACKED_FILES_VEHICLES);
+//		unpackBLKs(PATH_TO_BLKDIR_VEHICLES, PATH_UNPACKED_FILES_VEHICLES);
 		List<Vehicle> vehicles = extractDataVehicles(PATH_UNPACKED_FILES_VEHICLES);
 		saveVehiclesToFile(vehicles, PATH_TO_OUTPUT_VEHICLES);
 
-		
 		// ground weapons
-		unpackBLKs(PATH_TO_BLKDIR_WEAPONS, PATH_UNPACKED_FILES_WEAPONS);
+//		unpackBLKs(PATH_TO_BLKDIR_WEAPONS, PATH_UNPACKED_FILES_WEAPONS);
 		List<Weapon> weapons = extractDataWeapons(PATH_UNPACKED_FILES_WEAPONS);
 		saveWeaponsToFile(weapons, PATH_TO_OUTPUT_WEAPONS);
 		
@@ -149,9 +148,11 @@ public class WTMiner {
 				
 				String fovOut = elementVehicle.getAttribute("fovOut");
 				String fovIn = elementVehicle.getAttribute("fovIn");
+				String fovSight = elementVehicle.getAttribute("fovSight");
 				elementVehicleMerged.setAttribute("fovOut", fovOut);
 				elementVehicleMerged.setAttribute("fovIn", fovIn);
-				
+				elementVehicleMerged.setAttribute("fovSight", fovSight);
+
 				Element elementWeapons = docMerged.createElement("weapons");
 				elementVehicleMerged.appendChild(elementWeapons);
 				
@@ -175,7 +176,7 @@ public class WTMiner {
 						Element elementAmmoMerged = docMerged.createElement(elementAmmo.getTagName());
 						elementAmmoMerged.setAttribute("type", elementAmmo.getAttribute("type"));
 						elementAmmoMerged.setAttribute("speed", elementAmmo.getAttribute("speed"));
-						elementAmmoMerged.setAttribute("mass", elementAmmo.getAttribute("mass"));
+//						elementAmmoMerged.setAttribute("mass", elementAmmo.getAttribute("mass"));
 						elementWeaponAmmo.appendChild(elementAmmoMerged);
 					}
 
@@ -402,6 +403,14 @@ public class WTMiner {
 						JsonElement elementZoomInFOV = objCockpit.get("zoomInFov");
 						vehicle.fovOut = elementZoomOutFOV.getAsFloat();
 						vehicle.fovIn = elementZoomInFOV.getAsFloat();
+						if(objCockpit.has("sightFov")) {
+							JsonElement elementSightFOV = objCockpit.get("sightFov");
+							vehicle.fovSight = elementSightFOV.getAsFloat();
+						} else {
+							vehicle.fovSight = vehicle.fovOut*2;
+						}
+					} else {
+						System.err.println("Error when searching fovs (" + file.getName() + ")");
 					}
 					
 				} else {
@@ -440,8 +449,18 @@ public class WTMiner {
 						}
 						
 						if(nFOVsFound != 2) {
-							System.err.println("Invalid number of fovs found");
+							System.err.println("Invalid number of fovs found: " + nFOVsFound + "(" + file.getName() + ")");
 							continue;
+						}
+						
+						for(int j=0; j<arrCockpit.size(); j++) {
+							JsonElement element = arrCockpit.get(j);
+							if(element instanceof JsonObject) {
+								JsonObject obj = (JsonObject)element;
+								if(obj.has("sightFov")) {
+									vehicle.fovSight = ((JsonPrimitive)obj.get("sightFov")).getAsFloat();	// TODO: two different "sightFov"s in sight file
+								}
+							}
 						}
 						
 						
@@ -572,13 +591,13 @@ public class WTMiner {
 							ammo.speed = 0;
 						}
 						
-						JsonElement elementMass = jsonBullet.get("mass");
-						if(elementMass.isJsonPrimitive()) {
-							JsonPrimitive primSpeed = (JsonPrimitive)elementMass;
-							if(primSpeed.isNumber()) {
+//						JsonElement elementMass = jsonBullet.get("mass");
+//						if(elementMass.isJsonPrimitive()) {
+//							JsonPrimitive primSpeed = (JsonPrimitive)elementMass;
+//							if(primSpeed.isNumber()) {
 //								ammo.mass = primSpeed.getAsDouble();
-							}
-						}
+//							}
+//						}
 						
 						if(!cannon.ammo.contains(ammo)) {
 							cannon.ammo.add(ammo);
@@ -638,7 +657,8 @@ public class WTMiner {
 				
 				elementVehicle.setAttribute("fovOut", ""+vehicle.fovOut);
 				elementVehicle.setAttribute("fovIn", ""+vehicle.fovIn);
-				
+				elementVehicle.setAttribute("fovSight", ""+vehicle.fovSight);
+
 				for(int i=0; i<vehicle.weapons.size(); i++) {
 					String weaponName = vehicle.weapons.get(i);
 					String triggerGroup = vehicle.triggerGroups.get(i);
@@ -713,9 +733,9 @@ public class WTMiner {
 					attrSpeed.setNodeValue(""+(int)bullet.speed);
 					elementBullet.setAttributeNode(attrSpeed);
 					
-					Attr attrMass = doc.createAttribute("mass");
+//					Attr attrMass = doc.createAttribute("mass");
 //					attrMass.setNodeValue(""+(double)bullet.mass);
-					elementBullet.setAttributeNode(attrMass);
+//					elementBullet.setAttributeNode(attrMass);
 					
 					Attr attrType = doc.createAttribute("type");
 					attrType.setNodeValue(bullet.type);

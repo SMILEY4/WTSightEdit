@@ -13,7 +13,7 @@ public class TestGenerator {
 
 	public static void main(String[] args) {
 		
-		Block block = new Block("root");
+//		Block block = new Block("root");
 //		block.elements.add(new ParamText("thousandth", "real;ussr;nato"));
 //		block.elements.add(new ParamFloat("fontSizeMult", 2));
 //		block.elements.add(new ParamFloat("rangefinderTextScale", 2));
@@ -67,9 +67,9 @@ public class TestGenerator {
 //		block.elements.add(new ParamVec2("textPos", 0.1f, 0.1f));
 //		randomize(block);
 //		((ParamVec2)block.getElementByName("radialRadius")).value.y = 1;
-		
-		
-		block.resourcePrint(-1);
+//		
+//		
+//		block.resourcePrint(-1);
 		
 		
 		
