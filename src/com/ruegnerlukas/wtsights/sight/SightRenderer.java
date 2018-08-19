@@ -30,6 +30,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -39,6 +42,9 @@ public class SightRenderer {
 	private static final Color COLOR_DEBUG_1 = new Color(1, 1, 0, 0.0f);
 	
 	private static Color COLOR_SELECTION = new Color(1, 0, 0, 0.8f);
+	
+	
+	
 	
 	
 	
@@ -83,9 +89,10 @@ public class SightRenderer {
 			drawObject(canvas, g, dataSight, dataCalib, currentAmmoData, entry.getValue());
 		}
 		
-		
-//		drawVignette(canvas, g, dataSight, dataCalib, currentAmmoData);
-		
+//		if(dataSight.envShowVignette) {
+//			drawVignette(canvas, g, dataSight, dataCalib, currentAmmoData);
+//		}
+//		
 	}
 
 	
@@ -106,11 +113,24 @@ public class SightRenderer {
 	
 	
 	private static void drawVignette(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
-//		if(dataSight.envZoomedIn) {
-//			g.drawImage(vignetteIn, 0, 0, canvas.getWidth(), canvas.getHeight());
-//		} else {
-//			g.drawImage(vignetteOut, 0, 0, canvas.getWidth(), canvas.getHeight());
-//		}
+		
+//		float fov = dataSight.envZoomedIn ? dataCalib.vehicle.fovIn : dataCalib.vehicle.fovOut;
+//		float value = dataCalib.vehicle.fovSight / fov;
+//		
+//		value = (float) ((dataSight.envProgress/100 * 15) / fov);
+//		
+////		System.out.println("fov="+fov + " fovSight=" + dataCalib.vehicle.fovSight + "  ->  " + value);
+//		System.out.println("fov="+fov + " fovSight=" + ((dataSight.envProgress/100 * 15) + "  ->  " + value));
+//
+//		RadialGradient gradient = new RadialGradient(
+//				0, 0, 0.5, 0.5, value, true,
+//				CycleMethod.NO_CYCLE,
+//				new Stop[] {new Stop(0.3, Color.TRANSPARENT), new Stop(0.4, dataSight.envSightColor)}
+//				);
+//		
+//		g.setFill(gradient);
+//		g.fillRect(0, -(canvas.getWidth()-canvas.getHeight())/2, canvas.getWidth(), canvas.getWidth());
+		
 	}
 	
 	

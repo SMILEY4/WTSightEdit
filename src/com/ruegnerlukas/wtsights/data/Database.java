@@ -17,6 +17,10 @@ public class Database {
 
 	
 	
+	public static List<Vehicle> getVehicles() {
+		return vehicles;
+	}
+	
 	
 	public static void loadVehicles(File file) {
 		try {

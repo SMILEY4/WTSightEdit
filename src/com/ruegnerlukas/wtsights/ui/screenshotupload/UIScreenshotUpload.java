@@ -124,6 +124,9 @@ public class UIScreenshotUpload {
 			if(weapon.triggerGroup.equals("torpedoes") || weapon.triggerGroup.equals("depth_charge") || weapon.triggerGroup.equals("mine") || weapon.triggerGroup.equals("smoke")) {
 				continue;
 			}
+			if(weapon.triggerGroup.equals("machinegun") || weapon.triggerGroup.equals("coaxial")) {
+				continue;
+			}
 			for(int j=0; j<weapon.ammo.size(); j++) {
 				Ammo ammo = weapon.ammo.get(j);
 				fxListAmmo.add(ammo.name + ";" + ammo.type);

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.UIEnvironment">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="258.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.UIEnvironment">
    <children>
       <ScrollPane fitToWidth="true" prefHeight="300.0" prefWidth="260.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
@@ -41,7 +41,10 @@
                               <Tooltip text="The path to the current background image." />
                            </tooltip></TextField>
                         <Label prefWidth="100000.0" text="Resolution:" />
-                        <ChoiceBox fx:id="choiceResolution" prefWidth="10000.0" />
+                        <ChoiceBox fx:id="choiceResolution" prefWidth="10000.0">
+                           <tooltip>
+                              <Tooltip text="Select the resolution of the canvas." />
+                           </tooltip></ChoiceBox>
                         <Separator prefWidth="200.0">
                            <padding>
                               <Insets bottom="5.0" top="5.0" />
@@ -57,6 +60,17 @@
                               <Insets bottom="5.0" top="5.0" />
                            </padding>
                         </Separator>
+                        <Label prefWidth="100000.0" text="Vignette" />
+                        <CheckBox fx:id="cbShowVignette" mnemonicParsing="false" onAction="#onShowVignette" prefWidth="100000.0" selected="true" text="Show Vignette">
+                           <tooltip>
+                              <Tooltip text="Whether or not to show the vignette. This does not effect the ingame sight." />
+                           </tooltip>
+                        </CheckBox>
+                        <Separator prefWidth="200.0">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </Separator>
                         <Label prefWidth="100000.0" text="Rangefinder" />
                         <CheckBox fx:id="cbShowRangefinder" mnemonicParsing="false" onAction="#onShowRangefinder" prefWidth="100000.0" text="Show Rangefinder">
                            <tooltip>
@@ -65,7 +79,7 @@
                         <Label prefWidth="100000.0" text="Progress:" />
                         <Slider fx:id="rangefinderProgress" blockIncrement="1.0" prefWidth="100000.0">
                            <tooltip>
-                              <Tooltip text="The Range finder prgress in percent." />
+                              <Tooltip text="The progress of the Rangefinder in percent." />
                            </tooltip></Slider>
                         <Separator prefWidth="200.0">
                            <padding>

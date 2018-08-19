@@ -35,6 +35,7 @@ public class UIEnvironment {
 	@FXML private TextField pathBackground;
 	@FXML private ChoiceBox<String> choiceResolution;
 	@FXML private ColorPicker colorSight;
+	@FXML private CheckBox cbShowVignette;
 	@FXML private CheckBox cbShowRangefinder;
 	@FXML private Slider rangefinderProgress;
 	@FXML private Slider rangeCorrection;
@@ -121,7 +122,17 @@ public class UIEnvironment {
 				dataSight.envBackground = new Image(new FileInputStream(file));
 				pathBackground.setText(file.getAbsolutePath());
 				Logger.get().info("Selected background: " + file);
-				editor.rebuildCanvas();
+				int width = (int)dataSight.envBackground.getWidth();
+				int height = (int)dataSight.envBackground.getHeight();
+				for(String res : choiceResolution.getItems()) {
+					int w = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
+					int h = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
+					if(w == width && h == height) {
+						choiceResolution.getSelectionModel().select(res);
+						break;
+					}
+				}
+				editor.rebuildCanvas(width, height);
 			} catch (FileNotFoundException e) {
 				Logger.get().error(e);
 			}
@@ -135,7 +146,9 @@ public class UIEnvironment {
 	void onResetBackground(ActionEvent event) {
 		pathBackground.setText("");
 		dataSight.envBackground = null;
-		editor.rebuildCanvas();
+		int width = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
+		int height = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
+		editor.rebuildCanvas(width, height);
 	}
 
 	
@@ -157,6 +170,15 @@ public class UIEnvironment {
 	}
 
 
+	
+	
+	@FXML
+	void onShowVignette(ActionEvent event) {
+		dataSight.envShowVignette = cbShowVignette.isSelected();
+		editor.repaintCanvas();
+	}
+	
+	
 	
 	
 	@FXML

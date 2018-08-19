@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,9 @@ import org.xml.sax.SAXException;
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
+import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.Block;
@@ -64,6 +68,7 @@ import com.ruegnerlukas.wtsights.data.sight.BallisticsBlock;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
+import com.ruegnerlukas.wtsights.sight.Conversion;
 import com.ruegnerlukas.wtutils.XMLUtils;
 
 import javafx.scene.control.Alert;
@@ -73,8 +78,6 @@ import javafx.scene.paint.Color;
 
 public class DataLoader {
 
-	
-	
 	
 	/**
 	 * loads the files with merged data (vehicles+ammoData)
@@ -126,6 +129,7 @@ public class DataLoader {
 			vehicle.name = elementVehicle.getTagName();
 			vehicle.fovOut = Float.parseFloat(elementVehicle.getAttribute("fovOut"));
 			vehicle.fovIn = Float.parseFloat(elementVehicle.getAttribute("fovIn"));
+			vehicle.fovSight = Float.parseFloat(elementVehicle.getAttribute("fovSight"));
 
 			Element elementWeaponsRoot = null;
 			for(int j=0; j<elementVehicle.getElementsByTagName("weapons").getLength(); j++) {

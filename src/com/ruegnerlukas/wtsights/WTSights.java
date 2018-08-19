@@ -2,6 +2,9 @@ package com.ruegnerlukas.wtsights;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.SystemUtils;
@@ -11,6 +14,7 @@ import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.data.Database;
+import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtutils.Config2;
@@ -34,7 +38,7 @@ public class WTSights extends Application {
 	
 	
 	public static void main(String[] args) {
-
+		
 		for(String arg : args) {
 			if(arg.equalsIgnoreCase("dev")) {
 				DEV_MODE = true;
