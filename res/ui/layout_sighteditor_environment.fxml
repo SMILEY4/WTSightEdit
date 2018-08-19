@@ -60,8 +60,8 @@
                               <Insets bottom="5.0" top="5.0" />
                            </padding>
                         </Separator>
-                        <Label prefWidth="100000.0" text="Vignette" />
-                        <CheckBox fx:id="cbShowVignette" mnemonicParsing="false" onAction="#onShowVignette" prefWidth="100000.0" selected="true" text="Show Vignette">
+                        <Label disable="true" prefWidth="100000.0" text="Vignette" />
+                        <CheckBox fx:id="cbShowVignette" disable="true" mnemonicParsing="false" onAction="#onShowVignette" prefWidth="100000.0" text="Show Vignette">
                            <tooltip>
                               <Tooltip text="Whether or not to show the vignette. This does not effect the ingame sight." />
                            </tooltip>

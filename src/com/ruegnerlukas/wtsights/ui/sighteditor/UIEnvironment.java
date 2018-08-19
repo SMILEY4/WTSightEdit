@@ -86,6 +86,9 @@ public class UIEnvironment {
 		// sight color
 		colorSight.setValue(dataSight.envSightColor);
 		
+		// vignette
+		dataSight.envShowVignette = cbShowVignette.isSelected();
+		
 		// rangefinder
 		cbShowRangefinder.setSelected(dataSight.envShowRangeFinder);
 		rangefinderProgress.valueProperty().addListener(new ChangeListener<Number>() {
@@ -125,14 +128,10 @@ public class UIEnvironment {
 				int width = (int)dataSight.envBackground.getWidth();
 				int height = (int)dataSight.envBackground.getHeight();
 				
-				System.out.println("search " + width + " " + height);
-				
 				for(String res : choiceResolution.getItems()) {
 					int w = Integer.parseInt(res.split(" x ")[0]);
 					int h = Integer.parseInt(res.split(" x ")[1]);
-					System.out.println("TEST " + w + "  " + h);
 					if(w == width && h == height) {
-						System.out.println(" -> select "+ res);
 						choiceResolution.getSelectionModel().select(res);
 						break;
 					}
