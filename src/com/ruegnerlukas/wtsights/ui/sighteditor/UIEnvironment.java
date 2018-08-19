@@ -124,10 +124,15 @@ public class UIEnvironment {
 				Logger.get().info("Selected background: " + file);
 				int width = (int)dataSight.envBackground.getWidth();
 				int height = (int)dataSight.envBackground.getHeight();
+				
+				System.out.println("search " + width + " " + height);
+				
 				for(String res : choiceResolution.getItems()) {
-					int w = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
-					int h = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
+					int w = Integer.parseInt(res.split(" x ")[0]);
+					int h = Integer.parseInt(res.split(" x ")[1]);
+					System.out.println("TEST " + w + "  " + h);
 					if(w == width && h == height) {
+						System.out.println(" -> select "+ res);
 						choiceResolution.getSelectionModel().select(res);
 						break;
 					}
