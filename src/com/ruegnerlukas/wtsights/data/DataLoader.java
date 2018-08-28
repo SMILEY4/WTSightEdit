@@ -1,32 +1,16 @@
 package com.ruegnerlukas.wtsights.data;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,39 +20,32 @@ import org.xml.sax.SAXException;
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
-import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.Block;
-import com.ruegnerlukas.wtsights.data.sight.BlockElement;
-import com.ruegnerlukas.wtsights.data.sight.ParamBool;
-import com.ruegnerlukas.wtsights.data.sight.ParamColor;
-import com.ruegnerlukas.wtsights.data.sight.ParamFloat;
-import com.ruegnerlukas.wtsights.data.sight.ParamInteger;
-import com.ruegnerlukas.wtsights.data.sight.ParamText;
-import com.ruegnerlukas.wtsights.data.sight.ParamVec2;
-import com.ruegnerlukas.wtsights.data.sight.ParamVec3;
-import com.ruegnerlukas.wtsights.data.sight.ParamVec4;
-import com.ruegnerlukas.wtsights.data.sight.Parameter;
+import com.ruegnerlukas.wtsights.data.sight.BIndicator;
+import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.SightData.ScaleMode;
-import com.ruegnerlukas.wtsights.data.sight.SightData.TextAlign;
-import com.ruegnerlukas.wtsights.data.sight.SightData.Thousandth;
-import com.ruegnerlukas.wtsights.data.sight.SightData.TriggerGroup;
-import com.ruegnerlukas.wtsights.data.sight.objects.CircleObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.LineObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.QuadObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.SightObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.SightObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.objects.TextObject;
-import com.ruegnerlukas.wtsights.data.sight.BLKSightParser;
-import com.ruegnerlukas.wtsights.data.sight.BallisticsBlock;
+import com.ruegnerlukas.wtsights.data.sight.elements.*;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
+import com.ruegnerlukas.wtsights.data.sightfile.BLKSightParser;
+import com.ruegnerlukas.wtsights.data.sightfile.Block;
+import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamBool;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamColor;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamFloat;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamInteger;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamText;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamVec2;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamVec3;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamVec4;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
-import com.ruegnerlukas.wtsights.sight.Conversion;
+import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
+import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
+import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
+import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 import com.ruegnerlukas.wtutils.XMLUtils;
 
 import javafx.scene.control.Alert;
@@ -305,18 +282,18 @@ public class DataLoader {
 		Logger.get().info("Loading sight-file");
 		if(file == null || !file.exists()) {
 			Logger.get().error("Error loading file: " + file);
-			return new SightData();
+			return new SightData(true);
 		}
 		
-		SightData dataSight = new SightData();
-		
-		dataSight.hrMils.clear();
-		dataSight.hrMajors.clear();
-		
-		dataSight.brIndicators.bDists.clear();
-		dataSight.brIndicators.bMajors.clear();
-		dataSight.brIndicators.bExtensions.clear();
-		dataSight.brIndicators.bTextOffsets.clear();
+		SightData dataSight = new SightData(true);
+		ElementCentralVertLine centralVertLine = (ElementCentralVertLine)dataSight.getElements(ElementType.CENTRAL_VERT_LINE).get(0);
+		ElementCentralHorzLine centralHorzLine = (ElementCentralHorzLine)dataSight.getElements(ElementType.CENTRAL_HORZ_LINE).get(0);
+		ElementRangefinder rangefinder = (ElementRangefinder)dataSight.getElements(ElementType.RANGEFINDER).get(0);
+		ElementHorzRangeIndicators horzRange = (ElementHorzRangeIndicators)dataSight.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
+		ElementBallRangeIndicator ballRange = (ElementBallRangeIndicator)dataSight.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0);
+
+		horzRange.indicators.clear();
+		ballRange.indicators.clear();
 		
 		Block rootBlock = BLKSightParser.parse(file);
 		
@@ -338,58 +315,55 @@ public class DataLoader {
 					break;
 				}
 				case "drawCentralLineVert": {
-					dataSight.gnrDrawCentralVertLine = ((ParamBool)e).value;
+					centralVertLine.drawCentralVertLine = ((ParamBool)e).value;
 					break;
 				}
 				case "drawCentralLineHorz": {
-					dataSight.gnrDrawCentralHorzLine = ((ParamBool)e).value;
+					centralHorzLine.drawCentralHorzLine = ((ParamBool)e).value;
 					break;
 				}
-				
 				
 				// RANGEFINDER
 				case "rangefinderHorizontalOffset": {
-					dataSight.rfOffset.x = ((ParamFloat)e).value;
+					rangefinder.position.x = ((ParamFloat)e).value;
 					break;
 				}
 				case "rangefinderVerticalOffset": {
-					dataSight.rfOffset.y = ((ParamFloat)e).value;
+					rangefinder.position.y = ((ParamFloat)e).value;
 					break;
 				}
 				case "rangefinderProgressBarColor1": {
 					ParamColor vec = (ParamColor)e;
-					dataSight.rfColor1 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
+					rangefinder.color1 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
 					break;
 				}
 				case "rangefinderProgressBarColor2": {
 					ParamColor vec = (ParamColor)e;
-					dataSight.rfColor2 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
+					rangefinder.color2 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
 					break;
 				}
 				case "rangefinderTextScale": {
-					dataSight.rfTextScale = ((ParamFloat)e).value;
+					rangefinder.textScale = ((ParamFloat)e).value;
 					break;
 				}
 				case "rangefinderUseThousandth": {
-					dataSight.rfUseThousandth = ((ParamBool)e).value;
+					rangefinder.useThousandth = ((ParamBool)e).value;
 					break;
 				}
 				
 				
 				// HORZ RANGE INDICATORS
 				case "crosshairHorVertSize": {
-					dataSight.hrSizeMajor = ((ParamVec2)e).value.x;
-					dataSight.hrSizeMinor = ((ParamVec2)e).value.y;
+					horzRange.sizeMajor = ((ParamVec2)e).value.x;
+					horzRange.sizeMinor = ((ParamVec2)e).value.y;
 					break;
 				}
 				case "crosshair_hor_ranges": {
-					
 					for(BlockElement ehr : ((Block)e).elements) {
 						switch(ehr.name) {
 							case "range": {
 								ParamVec2 p = (ParamVec2)ehr;
-								dataSight.hrMils.add(p.value.getIntX());
-								dataSight.hrMajors.add(p.value.getIntY()!=0);
+								horzRange.indicators.add(new HIndicator(p.value.getIntX(), p.value.getIntY()!=0));
 								break;
 							}
 						}
@@ -406,37 +380,36 @@ public class DataLoader {
 								
 								if(ebr instanceof ParamVec2) {
 									ParamVec2 p = (ParamVec2)ebr;
-									dataSight.brIndicators.bDists.add(p.value.getIntX());
-									dataSight.brIndicators.bMajors.add(p.value.getIntY()!=0);
-									dataSight.brIndicators.bExtensions.add(0.0);
-									dataSight.brIndicators.bTextOffsets.add(new Vector2d(0.0,0.0));
+									ballRange.indicators.add(new BIndicator(p.value.getIntX(), p.value.getIntY()!=0, 0, 0, 0));
 									break;
 								}
 								if(ebr instanceof ParamVec3) {
 									ParamVec3 p = (ParamVec3)ebr;
-									dataSight.brIndicators.bDists.add(p.value.getIntX());
-									dataSight.brIndicators.bMajors.add(p.value.getIntY()!=0);
-									dataSight.brIndicators.bExtensions.add(p.value.getDoubleZ());
-									dataSight.brIndicators.bTextOffsets.add(new Vector2d(0.0,0.0));
+									ballRange.indicators.add(new BIndicator(p.value.getIntX(), p.value.getIntY()!=0, p.value.getFloatZ(), 0, 0));
 									break;
 								}
 								if(ebr instanceof Block) {
 									
+									BIndicator indicator = new BIndicator(0, false, 0, 0, 0);
+									ballRange.indicators.add(indicator);
+									
 									for(BlockElement ed : ((Block)ebr).elements) {
+										
 										switch(ed.name) {
 											case "distance" : {
 												if(ed instanceof ParamVec3) {
 													ParamVec3 p = (ParamVec3)ed;
-													dataSight.brIndicators.bDists.add(p.value.getIntX());
-													dataSight.brIndicators.bMajors.add(p.value.getIntY()!=0);
-													dataSight.brIndicators.bExtensions.add(p.value.getDoubleZ());
+													indicator.setDistance(p.value.getIntX());
+													indicator.setMajor(p.value.getIntY()!=0);
+													indicator.setExtend(p.value.getFloatZ());
 													break;
 												}
 												break;
 											}
 											case "textPos" : {
 												if(ed instanceof ParamVec2) {
-													dataSight.brIndicators.bTextOffsets.add(new Vector2d(((ParamVec2)ed).value));
+													indicator.setTextX(((ParamVec2)ed).value.x);
+													indicator.setTextY(((ParamVec2)ed).value.y);
 													break;
 												}
 												break;
@@ -455,76 +428,76 @@ public class DataLoader {
 					break;
 				}
 				case "drawUpward": {
-					dataSight.brIndicators.bDrawUpward = ((ParamBool)e).value;
+					ballRange.drawUpward = ((ParamBool)e).value;
 					break;
 				}
 				case "distancePos": {
-					dataSight.brIndicators.bMainPos = new Vector2d(((ParamVec2)e).value);
+					ballRange.position = new Vector2d(((ParamVec2)e).value);
 					break;
 				}
 				case "move": {
-					dataSight.brIndicators.bMove = ((ParamBool)e).value;
+					ballRange.move = ((ParamBool)e).value;
 					break;
 				}
 				case "radial": {
-					dataSight.brIndicators.bScaleMode = ((ParamBool)e).value ? ScaleMode.RADIAL : ScaleMode.VERTICAL;
+					ballRange.scaleMode = ((ParamBool)e).value ? ScaleMode.RADIAL : ScaleMode.VERTICAL;
 					break;
 				}
 				case "circleMode": {
-					dataSight.brIndicators.bCircleMode = ((ParamBool)e).value;
+					ballRange.circleMode = ((ParamBool)e).value;
 					break;
 				}
 				case "crosshairDistHorSizeMain": {
-					dataSight.brIndicators.bSizeMain = new Vector2d(((ParamVec2)e).value);
+					ballRange.size = new Vector2d(((ParamVec2)e).value);
 					break;
 				}
 				case "textPos": {
-					dataSight.brIndicators.bTextOffset = new Vector2d(((ParamVec2)e).value);
+					ballRange.textPos = new Vector2d(((ParamVec2)e).value);
 					break;
 				}
 				case "textAlign": {
 					if(((ParamInteger)e).value == -1) {
-						dataSight.brIndicators.bTextAlign = TextAlign.LEFT;
+						ballRange.textAlign = TextAlign.LEFT;
 					}
 					if(((ParamInteger)e).value == 0) {
-						dataSight.brIndicators.bTextAlign = TextAlign.CENTER;
+						ballRange.textAlign = TextAlign.CENTER;
 					}
 					if(((ParamInteger)e).value == +1) {
-						dataSight.brIndicators.bTextAlign = TextAlign.RIGHT;
+						ballRange.textAlign = TextAlign.RIGHT;
 					}
 					break;
 				}
 				case "textShift": {
-					dataSight.brIndicators.bTextShift = ((ParamFloat)e).value;
+					ballRange.textShift = ((ParamFloat)e).value;
 					break;
 				}
 				case "drawAdditionalLines": {
-					dataSight.brIndicators.bDrawCenteredLines = ((ParamBool)e).value;
+					ballRange.drawAddLines = ((ParamBool)e).value;
 					break;
 				}
 				case "crosshairDistHorSizeAdditional": {
-					dataSight.brIndicators.bSizeCentered = new Vector2d(((ParamVec2)e).value);
+					ballRange.sizeAddLine = new Vector2d(((ParamVec2)e).value);
 					break;
 				}
 				case "radialStretch": {
-					dataSight.brIndicators.bRadialStretch = ((ParamFloat)e).value;
+					ballRange.radialStretch = ((ParamFloat)e).value;
 					break;
 				}
 				case "radialAngle": {
-					dataSight.brIndicators.bRadialAngle = ((ParamFloat)e).value;
+					ballRange.radialAngle = ((ParamFloat)e).value;
 					break;
 				}
 				case "radialRadius": {
-					dataSight.brIndicators.bRadialRadius = ((ParamVec2)e).value.x;
-					dataSight.brIndicators.bRadiusUseMils = MathUtils.isNearlyEqual(((ParamVec2)e).value.y, 0.0) ? false : true;
+					ballRange.radialRadius = ((ParamVec2)e).value.x;
+					ballRange.radiusUseMils = MathUtils.isNearlyEqual(((ParamVec2)e).value.y, 0.0) ? false : true;
 					break;
 				}
 				case "drawDistanceCorrection": {
-					dataSight.brIndicators.bDrawCorrection = ((ParamBool)e).value;
+					ballRange.drawCorrLabel = ((ParamBool)e).value;
 					break;
 				}
 				case "distanceCorrectionPos": {
-					dataSight.brIndicators.bCorrectionPos = new Vector2d(((ParamVec2)e).value);
+					ballRange.posCorrLabel = new Vector2d(((ParamVec2)e).value);
 					break;
 				}
 				
@@ -539,27 +512,27 @@ public class DataLoader {
 								if(eBullets.metadata != null) {
 									name = eBullets.metadata.substring(0, eBullets.metadata.lastIndexOf('('));
 								}
-								BallisticsBlock ballistics = new BallisticsBlock(false, name == null ? "block_"+(dataSight.shellBlocks.size()+1) : name);
-								ballistics.bDists.clear();
-								ballistics.bMajors.clear();
-								ballistics.bExtensions.clear();
-								ballistics.bTextOffsets.clear();
-
+								
+								ElementShellBlock shellBlock = new ElementShellBlock(name == null ? "block_"+(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).size()+1) : name);
+								shellBlock.indicators.clear();
+								
+								String bulletType = "";
+								int bulletSpeed = 0;
 								
 								for(BlockElement eBullet : ((Block)eBullets).elements) {
 									
 									switch(eBullet.name) {
 									
 										case "bulletType" : {
-											ballistics.bBulletType = ((ParamText)eBullet).text;
+											bulletType = ((ParamText)eBullet).text;
 											break;
 										}
 										case "speed" : {
-											ballistics.bBulletSpeed = (int)((ParamFloat)eBullet).value;
+											bulletSpeed = (int)((ParamFloat)eBullet).value;
 											break;
 										}
 										case "triggerGroup": {
-											ballistics.bTriggerGroup = TriggerGroup.get( ((ParamText)eBullet).text );
+											shellBlock.triggerGroup = TriggerGroup.get( ((ParamText)eBullet).text );
 											break;
 										}
 										
@@ -572,37 +545,35 @@ public class DataLoader {
 														
 														if(ebr instanceof ParamVec2) {
 															ParamVec2 p = (ParamVec2)ebr;
-															ballistics.bDists.add(p.value.getIntX());
-															ballistics.bMajors.add(p.value.getIntY()!=0);
-															ballistics.bExtensions.add(0.0);
-															ballistics.bTextOffsets.add(new Vector2d(0.0,0.0));
+															shellBlock.indicators.add(new BIndicator(p.value.getIntX(), p.value.getIntY()!=0, 0, 0, 0));
 															break;
 														}
 														if(ebr instanceof ParamVec3) {
 															ParamVec3 p = (ParamVec3)ebr;
-															ballistics.bDists.add(p.value.getIntX());
-															ballistics.bMajors.add(p.value.getIntY()!=0);
-															ballistics.bExtensions.add(p.value.getDoubleZ());
-															ballistics.bTextOffsets.add(new Vector2d(0.0,0.0));
+															shellBlock.indicators.add(new BIndicator(p.value.getIntX(), p.value.getIntY()!=0, p.value.getFloatZ(), 0, 0));
 															break;
 														}
 														if(ebr instanceof Block) {
+															
+															BIndicator indicator = new BIndicator(0, false, 0, 0, 0);
+															shellBlock.indicators.add(indicator);
 															
 															for(BlockElement ed : ((Block)ebr).elements) {
 																switch(ed.name) {
 																	case "distance" : {
 																		if(ed instanceof ParamVec3) {
 																			ParamVec3 p = (ParamVec3)ed;
-																			ballistics.bDists.add(p.value.getIntX());
-																			ballistics.bMajors.add(p.value.getIntY()!=0);
-																			ballistics.bExtensions.add(p.value.getDoubleZ());
+																			indicator.setDistance(p.value.getIntX());
+																			indicator.setMajor(p.value.getIntY()!=0);
+																			indicator.setExtend(p.value.getFloatZ());
 																			break;
 																		}
 																		break;
 																	}
 																	case "textPos" : {
 																		if(ed instanceof ParamVec2) {
-																			ballistics.bTextOffsets.add(new Vector2d(((ParamVec2)ed).value));
+																			indicator.setTextX(((ParamVec2)ed).value.x);
+																			indicator.setTextY(((ParamVec2)ed).value.y);
 																			break;
 																		}
 																		break;
@@ -621,68 +592,68 @@ public class DataLoader {
 											break;
 										}
 										case "drawUpward": {
-											ballistics.bDrawUpward = ((ParamBool)eBullet).value;
+											shellBlock.drawUpward = ((ParamBool)eBullet).value;
 											break;
 										}
 										case "distancePos": {
-											ballistics.bMainPos = new Vector2d(((ParamVec2)eBullet).value);
+											shellBlock.position = new Vector2d(((ParamVec2)eBullet).value);
 											break;
 										}
 										case "move": {
-											ballistics.bMove = ((ParamBool)eBullet).value;
+											shellBlock.move = ((ParamBool)eBullet).value;
 											break;
 										}
 										case "radial": {
-											ballistics.bScaleMode = ((ParamBool)eBullet).value ? ScaleMode.RADIAL : ScaleMode.VERTICAL;
+											shellBlock.scaleMode = ((ParamBool)eBullet).value ? ScaleMode.RADIAL : ScaleMode.VERTICAL;
 											break;
 										}
 										case "circleMode": {
-											ballistics.bCircleMode = ((ParamBool)eBullet).value;
+											shellBlock.circleMode = ((ParamBool)eBullet).value;
 											break;
 										}
 										case "crosshairDistHorSizeMain": {
-											ballistics.bSizeMain = new Vector2d(((ParamVec2)eBullet).value);
+											shellBlock.size = new Vector2d(((ParamVec2)eBullet).value);
 											break;
 										}
 										case "textPos": {
-											ballistics.bTextOffset = new Vector2d(((ParamVec2)eBullet).value);
+											shellBlock.textPos = new Vector2d(((ParamVec2)eBullet).value);
 											break;
 										}
 										case "textAlign": {
 											if(((ParamInteger)eBullet).value == -1) {
-												ballistics.bTextAlign = TextAlign.LEFT;
+												shellBlock.textAlign = TextAlign.LEFT;
 											}
 											if(((ParamInteger)eBullet).value == 0) {
-												ballistics.bTextAlign = TextAlign.CENTER;
+												shellBlock.textAlign = TextAlign.CENTER;
 											}
 											if(((ParamInteger)eBullet).value == +1) {
-												ballistics.bTextAlign = TextAlign.RIGHT;
+												shellBlock.textAlign = TextAlign.RIGHT;
 											}
 											break;
 										}
 										case "textShift": {
-											ballistics.bTextShift = ((ParamFloat)eBullet).value;
+											shellBlock.textShift = ((ParamFloat)eBullet).value;
 											break;
 										}
 										case "drawAdditionalLines": {
-											ballistics.bDrawCenteredLines = ((ParamBool)eBullet).value;
+											shellBlock.drawAddLines = ((ParamBool)eBullet).value;
 											break;
 										}
 										case "crosshairDistHorSizeAdditional": {
-											ballistics.bSizeCentered = new Vector2d(((ParamVec2)eBullet).value);
+											shellBlock.sizeAddLine = new Vector2d(((ParamVec2)eBullet).value);
 											break;
 										}
 										case "radialStretch": {
-											ballistics.bRadialStretch = ((ParamFloat)eBullet).value;
+											shellBlock.radialStretch = ((ParamFloat)eBullet).value;
 											break;
 										}
 										case "radialAngle": {
-											ballistics.bRadialAngle = ((ParamFloat)eBullet).value;
+											shellBlock.radialAngle = ((ParamFloat)eBullet).value;
 											break;
 										}
 										case "radialRadius": {
-											ballistics.bRadialRadius = ((ParamVec2)eBullet).value.x;
-											ballistics.bRadiusUseMils = MathUtils.isNearlyEqual(((ParamVec2)eBullet).value.y, 0.0) ? false : true;
+											shellBlock.radialRadius = ((ParamVec2)eBullet).value.x;
+											shellBlock.radiusUseMils = MathUtils.isNearlyEqual(((ParamVec2)eBullet).value.y, 0.0) ? false : true;
 											break;
 										}
 										
@@ -690,16 +661,17 @@ public class DataLoader {
 
 								}
 
-								List<Ammo> ammoCanidates = Database.getAmmo(dataCalib.vehicle.name, ballistics.bBulletType, ballistics.bBulletSpeed);
+								List<Ammo> ammoCanidates = Database.getAmmo(dataCalib.vehicle.name, bulletType, bulletSpeed);
 								select: for(Ammo ammo : ammoCanidates) {
 									for(CalibrationAmmoData dataAmmo : dataCalib.ammoData) {
 										if(dataAmmo.ammo.name.equalsIgnoreCase(ammo.name)) {
-											ballistics.bBulletName = ammo.name;
+											shellBlock.dataAmmo = dataAmmo;
 											break select;
 										}
 									}
 								}
-								dataSight.shellBlocks.put(ballistics.name, ballistics);
+								
+								dataSight.addElement(shellBlock);
 								break;
 							}
 						}
@@ -714,8 +686,8 @@ public class DataLoader {
 						switch(eLines.name) {
 							case "line": {
 								
-								LineObject objLine = new LineObject();
-								objLine.name = "line_" + (dataSight.objects.size()+1);
+								ElementCustomLine objLine = new ElementCustomLine();
+								objLine.name = "line_" + (dataSight.getElements(ElementType.CUSTOM_LINE).size()+1);
 								if(eLines.metadata != null) {
 									objLine.name = eLines.metadata;
 								}
@@ -723,31 +695,31 @@ public class DataLoader {
 								for(BlockElement eLine : ((Block)eLines).elements) {
 									switch(eLine.name) {
 										case "thousandth": {
-											objLine.cmnUseThousandth = ((ParamBool)eLine).value;
+											objLine.useThousandth = ((ParamBool)eLine).value;
 											break;
 										}
 										case "move": {
-											objLine.cmnMovement = ((ParamBool)eLine).value ? Movement.MOVE : objLine.cmnMovement;
+											objLine.movement = ((ParamBool)eLine).value ? Movement.MOVE : objLine.movement;
 											break;
 										}
 										case "moveRadial": {
-											objLine.cmnMovement = ((ParamBool)eLine).value ? Movement.MOVE_RADIAL : objLine.cmnMovement;
+											objLine.movement = ((ParamBool)eLine).value ? Movement.MOVE_RADIAL : objLine.movement;
 											break;
 										}
 										case "radialAngle": {
-											objLine.cmnAngle = ((ParamFloat)eLine).value;
+											objLine.angle = ((ParamFloat)eLine).value;
 											break;
 										}
 										case "radialCenter": {
-											objLine.cmnRadCenter = new Vector2d(((ParamVec2)eLine).value);
+											objLine.radCenter = new Vector2d(((ParamVec2)eLine).value);
 											break;
 										}
 										case "center": {
-											objLine.cmnCenter = new Vector2d(((ParamVec2)eLine).value);
+											objLine.center = new Vector2d(((ParamVec2)eLine).value);
 											break;
 										}
 										case "radialMoveSpeed": {
-											objLine.cmnSpeed = ((ParamFloat)eLine).value;
+											objLine.speed = ((ParamFloat)eLine).value;
 											break;
 										}
 										case "line": {
@@ -757,7 +729,7 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.objects.put(objLine.name, objLine);
+								dataSight.addElement(objLine);
 								break;
 							}
 						}
@@ -774,8 +746,8 @@ public class DataLoader {
 						switch(eTexts.name) {
 							case "text": {
 								
-								TextObject objText = new TextObject();
-								objText.name = "text_" + (dataSight.objects.size()+1);
+								ElementCustomText objText = new ElementCustomText();
+								objText.name = "text_" + (dataSight.getElements(ElementType.CUSTOM_TEXT).size()+1);
 								if(eTexts.metadata != null) {
 									objText.name = eTexts.metadata;
 								}
@@ -783,31 +755,31 @@ public class DataLoader {
 								for(BlockElement eText : ((Block)eTexts).elements) {
 									switch(eText.name) {
 										case "thousandth": {
-											objText.cmnUseThousandth = ((ParamBool)eText).value;
+											objText.useThousandth = ((ParamBool)eText).value;
 											break;
 										}
 										case "move": {
-											objText.cmnMovement = ((ParamBool)eText).value ? Movement.MOVE : objText.cmnMovement;
+											objText.movement = ((ParamBool)eText).value ? Movement.MOVE : objText.movement;
 											break;
 										}
 										case "moveRadial": {
-											objText.cmnMovement = ((ParamBool)eText).value ? Movement.MOVE_RADIAL : objText.cmnMovement;
+											objText.movement = ((ParamBool)eText).value ? Movement.MOVE_RADIAL : objText.movement;
 											break;
 										}
 										case "radialAngle": {
-											objText.cmnAngle = ((ParamFloat)eText).value;
+											objText.angle = ((ParamFloat)eText).value;
 											break;
 										}
 										case "radialCenter": {
-											objText.cmnRadCenter = new Vector2d(((ParamVec2)eText).value);
+											objText.radCenter = new Vector2d(((ParamVec2)eText).value);
 											break;
 										}
 										case "center": {
-											objText.cmnCenter = new Vector2d(((ParamVec2)eText).value);
+											objText.center = new Vector2d(((ParamVec2)eText).value);
 											break;
 										}
 										case "radialMoveSpeed": {
-											objText.cmnSpeed = ((ParamFloat)eText).value;
+											objText.speed = ((ParamFloat)eText).value;
 											break;
 										}
 										case "text": {
@@ -815,7 +787,7 @@ public class DataLoader {
 											break;
 										}
 										case "pos": {
-											objText.pos = new Vector2d(((ParamVec2)eText).value);
+											objText.position = new Vector2d(((ParamVec2)eText).value);
 											break;
 										}
 										case "align": {
@@ -836,7 +808,7 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.objects.put(objText.name, objText);
+								dataSight.addElement(objText);
 								break;
 							}
 						}
@@ -855,8 +827,8 @@ public class DataLoader {
 						switch(eCircles.name) {
 							case "circle": {
 							
-								CircleObject objCircle = new CircleObject();
-								objCircle.name = "circle_" + (dataSight.objects.size()+1);
+								ElementCustomCircle objCircle = new ElementCustomCircle();
+								objCircle.name = "circle_" + (dataSight.getElements(ElementType.CUSTOM_CIRCLE).size()+1);
 								if(eCircles.metadata != null) {
 									objCircle.name = eCircles.metadata;
 								}
@@ -864,31 +836,31 @@ public class DataLoader {
 								for(BlockElement eCircle : ((Block)eCircles).elements) {
 									switch(eCircle.name) {
 										case "thousandth": {
-											objCircle.cmnUseThousandth = ((ParamBool)eCircle).value;
+											objCircle.useThousandth = ((ParamBool)eCircle).value;
 											break;
 										}
 										case "move": {
-											objCircle.cmnMovement = ((ParamBool)eCircle).value ? Movement.MOVE : objCircle.cmnMovement;
+											objCircle.movement = ((ParamBool)eCircle).value ? Movement.MOVE : objCircle.movement;
 											break;
 										}
 										case "moveRadial": {
-											objCircle.cmnMovement = ((ParamBool)eCircle).value ? Movement.MOVE_RADIAL : objCircle.cmnMovement;
+											objCircle.movement = ((ParamBool)eCircle).value ? Movement.MOVE_RADIAL : objCircle.movement;
 											break;
 										}
 										case "radialAngle": {
-											objCircle.cmnAngle = ((ParamFloat)eCircle).value;
+											objCircle.angle = ((ParamFloat)eCircle).value;
 											break;
 										}
 										case "radialCenter": {
-											objCircle.cmnRadCenter = new Vector2d(((ParamVec2)eCircle).value);
+											objCircle.radCenter = new Vector2d(((ParamVec2)eCircle).value);
 											break;
 										}
 										case "center": {
-											objCircle.cmnCenter = new Vector2d(((ParamVec2)eCircle).value);
+											objCircle.center = new Vector2d(((ParamVec2)eCircle).value);
 											break;
 										}
 										case "radialMoveSpeed": {
-											objCircle.cmnSpeed = ((ParamFloat)eCircle).value;
+											objCircle.speed = ((ParamFloat)eCircle).value;
 											break;
 										}
 										case "segment": {
@@ -896,7 +868,7 @@ public class DataLoader {
 											break;
 										}
 										case "pos": {
-											objCircle.pos = new Vector2d(((ParamVec2)eCircle).value);
+											objCircle.position = new Vector2d(((ParamVec2)eCircle).value);
 											break;
 										}
 										case "diameter": {
@@ -909,7 +881,7 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.objects.put(objCircle.name, objCircle);
+								dataSight.addElement(objCircle);
 								break;
 							}
 						}
@@ -927,8 +899,8 @@ public class DataLoader {
 						switch(eQuads.name) {
 							case "quad": {
 								
-								QuadObject objQuad = new QuadObject();
-								objQuad.name = "quad_" + (dataSight.objects.size()+1);
+								ElementCustomQuad objQuad = new ElementCustomQuad();
+								objQuad.name = "quad_" + (dataSight.getElements(ElementType.CUSTOM_QUAD).size()+1);
 								if(eQuads.metadata != null) {
 									objQuad.name = eQuads.metadata;
 								}
@@ -936,31 +908,31 @@ public class DataLoader {
 								for(BlockElement eQuad : ((Block)eQuads).elements) {
 									switch(eQuad.name) {
 										case "thousandth": {
-											objQuad.cmnUseThousandth = ((ParamBool)eQuad).value;
+											objQuad.useThousandth = ((ParamBool)eQuad).value;
 											break;
 										}
 										case "move": {
-											objQuad.cmnMovement = ((ParamBool)eQuad).value ? Movement.MOVE : objQuad.cmnMovement;
+											objQuad.movement = ((ParamBool)eQuad).value ? Movement.MOVE : objQuad.movement;
 											break;
 										}
 										case "moveRadial": {
-											objQuad.cmnMovement = ((ParamBool)eQuad).value ? Movement.MOVE_RADIAL : objQuad.cmnMovement;
+											objQuad.movement = ((ParamBool)eQuad).value ? Movement.MOVE_RADIAL : objQuad.movement;
 											break;
 										}
 										case "radialAngle": {
-											objQuad.cmnAngle = ((ParamFloat)eQuad).value;
+											objQuad.angle = ((ParamFloat)eQuad).value;
 											break;
 										}
 										case "radialCenter": {
-											objQuad.cmnRadCenter = new Vector2d(((ParamVec2)eQuad).value);
+											objQuad.radCenter = new Vector2d(((ParamVec2)eQuad).value);
 											break;
 										}
 										case "center": {
-											objQuad.cmnCenter = new Vector2d(((ParamVec2)eQuad).value);
+											objQuad.center = new Vector2d(((ParamVec2)eQuad).value);
 											break;
 										}
 										case "radialMoveSpeed": {
-											objQuad.cmnSpeed = ((ParamFloat)eQuad).value;
+											objQuad.speed = ((ParamFloat)eQuad).value;
 											break;
 										}
 										case "tl": {
@@ -981,7 +953,7 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.objects.put(objQuad.name, objQuad);
+								dataSight.addElement(objQuad);
 								break;
 							}
 						}

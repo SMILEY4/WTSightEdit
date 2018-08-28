@@ -3,45 +3,48 @@ package com.ruegnerlukas.wtsights.ui.sighteditor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 public class UIEnvironment {
 
-
-	@FXML private ResourceBundle resources;
-	@FXML private URL location;
-	
 	private UISightEditor editor;
-	private SightData dataSight;
 
+	@FXML private ComboBox<String> comboAmmo;
+	@FXML private ChoiceBox<String> choiceZoomMode;
+	@FXML private CheckBox cbShowRangefinder;
+	@FXML private Slider sliderRangefinderProgress;
+	@FXML private Slider sliderRangeCorrection;
+	@FXML private CheckBox cbCrosshairLighting;
 	@FXML private TextField pathBackground;
 	@FXML private ChoiceBox<String> choiceResolution;
-	@FXML private ColorPicker colorSight;
-	@FXML private CheckBox cbShowVignette;
-	@FXML private CheckBox cbShowRangefinder;
-	@FXML private Slider rangefinderProgress;
-	@FXML private Slider rangeCorrection;
 
 	
 	
+
+
 	
 	public void setEditor(UISightEditor editor) {
 		this.editor = editor;
@@ -50,15 +53,108 @@ public class UIEnvironment {
 	
 	
 	
-	public void setDataSight(SightData data) {
-		this.dataSight = data;
-	}
-	
-	
-	
-	
 	public void create() {
 		
+		// AMMO
+		comboAmmo.setButtonCell(new ListCell<String>() {
+			@Override protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(item);
+				if (item == null || empty) {
+					setGraphic(null);
+				} else {
+					String name = item != null ? item.split(";")[0] : "<null>";
+					String type = item != null ? item.split(";")[1] : "<null>";
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					setText(name);
+				}
+			}
+		});
+		
+		comboAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override public ListCell<String> call(ListView<String> p) {
+				return new ListCell<String>() {
+					@Override protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(item);
+						if (item == null || empty) {
+							setGraphic(null);
+						} else {
+							String name = item != null ? item.split(";")[0] : "<null>";
+							String type = item != null ? item.split(";")[1] : "<null>";
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							setText(name);
+						}
+					}
+				};
+			}
+		});
+		
+		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
+			comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+		}
+		comboAmmo.getSelectionModel().select(0);
+		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				onAmmoSelected(newValue.split(";")[0]);
+			}
+		});
+		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
+		
+		
+		
+		// ZOOM MODE
+		choiceZoomMode.getItems().add("Show Zoomed Out");
+		choiceZoomMode.getItems().add("Show Zoomed In");
+		choiceZoomMode.getSelectionModel().select(0);
+		choiceZoomMode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if(newValue.equalsIgnoreCase("Show Zoomed Out")) {
+					onZoomMode(false);
+				} else {
+					onZoomMode(true);
+				}
+			}
+		});
+		onZoomMode(editor.getSightData().envZoomedIn);
+		
+		
+		// RANGEFINDER
+		cbShowRangefinder.setSelected(editor.getSightData().envShowRangeFinder);
+		sliderRangefinderProgress.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				onRangefinderProgress(newValue.intValue());
+			}
+		});
+		sliderRangefinderProgress.setValue(editor.getSightData().envRFProgress);
+		
+		
+		// RANGE CORRECTION
+		sliderRangeCorrection.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				onRangeCorrection(newValue.intValue());
+			}
+		});
+		sliderRangeCorrection.setValue(editor.getSightData().envRangeCorrection);
+		
+		
+		// CROSSHAIR LIGHTING
+		cbCrosshairLighting.setSelected(false);
+		
+		
+		// RESOLUTION
 		choiceResolution.getItems().add("1024 x 768");
 		choiceResolution.getItems().add("1152 x 864");
 		choiceResolution.getItems().add("1280 x 720");
@@ -83,30 +179,71 @@ public class UIEnvironment {
 			}
 		});
 		
-		// sight color
-		colorSight.setValue(dataSight.envSightColor);
-		
-		// vignette
-		dataSight.envShowVignette = cbShowVignette.isSelected();
-		
-		// rangefinder
-		cbShowRangefinder.setSelected(dataSight.envShowRangeFinder);
-		rangefinderProgress.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				onRangefinderProgress(newValue.intValue());
+	}
+	
+	
+	
+
+	
+	
+	void onAmmoSelected(String ammoName) {
+		editor.setAmmoData(null);
+		for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
+			CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
+			if(ammoData.ammo.name.equalsIgnoreCase(ammoName)) {
+				editor.setAmmoData(ammoData);
+				break;
 			}
-		});
-		rangefinderProgress.setValue(dataSight.envProgress);
-		
-		// range correction
-		rangeCorrection.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				onRangeCorrection(newValue.intValue());
-			}
-		});
-		rangeCorrection.setValue(dataSight.envRangeCorrection);
+		}
+		Logger.get().debug("Selected ammo: " + (editor.getAmmoData() == null ? "null" : editor.getAmmoData().ammo.name) );
+		editor.repaintCanvas();
+	}
+	
+
+	
+	
+	void onZoomMode(boolean zoomedIn) {
+		editor.getSightData().envZoomedIn = zoomedIn;
+		editor.repaintCanvas();
+	}
+	
+	
+	
+	
+	@FXML
+	void onShowRangefinder(ActionEvent event) {
+		editor.getSightData().envShowRangeFinder = cbShowRangefinder.isSelected();
+		editor.repaintCanvas();
+	}
+	
+	
+	
+	
+	void onRangefinderProgress(double progress) {
+		editor.getSightData().envRFProgress = progress;
+		editor.repaintCanvas();
+	}
+	
+	
+	
+	
+	void onRangeCorrection(int range) {
+		editor.getSightData().envRangeCorrection = range;//(range+49)/50 * 50;
+		editor.repaintCanvas();
+	}
+	
+	
+	
+	
+	@FXML
+	void onCrosshairLighting(ActionEvent event) {
+		boolean enabled = cbCrosshairLighting.isSelected();
+		if(enabled) {
+			editor.getSightData().envSightColor = new Color(255/255,75/255,55/255, 1f);
+		} else {
+			editor.getSightData().envSightColor = Color.BLACK;
+		}
+		editor.repaintCanvas();
 	}
 	
 	
@@ -122,11 +259,11 @@ public class UIEnvironment {
 		File file = fc.showOpenDialog(((Button)event.getSource()).getScene().getWindow());
 		if (file != null) {
 			try {
-				dataSight.envBackground = new Image(new FileInputStream(file));
+				editor.getSightData().envBackground = new Image(new FileInputStream(file));
 				pathBackground.setText(file.getAbsolutePath());
 				Logger.get().info("Selected background: " + file);
-				int width = (int)dataSight.envBackground.getWidth();
-				int height = (int)dataSight.envBackground.getHeight();
+				int width = (int)editor.getSightData().envBackground.getWidth();
+				int height = (int)editor.getSightData().envBackground.getHeight();
 				
 				for(String res : choiceResolution.getItems()) {
 					int w = Integer.parseInt(res.split(" x ")[0]);
@@ -136,6 +273,7 @@ public class UIEnvironment {
 						break;
 					}
 				}
+				choiceResolution.setDisable(true);
 				editor.rebuildCanvas(width, height);
 			} catch (FileNotFoundException e) {
 				Logger.get().error(e);
@@ -143,13 +281,14 @@ public class UIEnvironment {
 		}
 	}
 
-	
-	
-	
+
+
+
 	@FXML
 	void onResetBackground(ActionEvent event) {
 		pathBackground.setText("");
-		dataSight.envBackground = null;
+		editor.getSightData().envBackground = null;
+		choiceResolution.setDisable(false);
 		int width = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
 		int height = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
 		editor.rebuildCanvas(width, height);
@@ -159,63 +298,11 @@ public class UIEnvironment {
 	
 
 	void onSelectResolution(int width, int height) {
+		Logger.get().info("Resolution selected: " + width  + "x" + height);
 		editor.rebuildCanvas(width, height);
 	}
 	
 
-	
-	
-	@FXML
-	void onColorSight(ActionEvent event) {
-		ColorPicker picker = (ColorPicker)event.getSource();
-		Color color = picker.getValue();
-		dataSight.envSightColor = color;
-		editor.repaintCanvas();
-	}
 
-
-	
-	
-	@FXML
-	void onShowVignette(ActionEvent event) {
-		dataSight.envShowVignette = cbShowVignette.isSelected();
-		editor.repaintCanvas();
-	}
-	
-	
-	
-	
-	@FXML
-	void onShowRangefinder(ActionEvent event) {
-		dataSight.envShowRangeFinder = cbShowRangefinder.isSelected();
-		editor.repaintCanvas();
-	}
-
-	
-	
-
-	void onRangefinderProgress(double progress) {
-		dataSight.envProgress = progress;
-		editor.repaintCanvas();
-	}
-
-
-	
-	
-	void onRangeCorrection(int range) {
-		dataSight.envRangeCorrection = range;//(range+49)/50 * 50;
-		editor.repaintCanvas();
-	}
-	
-	
-
-	
-	@FXML
-	void initialize() {
-		assert pathBackground != null : "fx:id=\"pathBackground\" was not injected: check your FXML file 'layout_sighteditor_environment.fxml'.";
-		assert colorSight != null : "fx:id=\"colorSight\" was not injected: check your FXML file 'layout_sighteditor_environment.fxml'.";
-		assert cbShowRangefinder != null : "fx:id=\"cbShow\" was not injected: check your FXML file 'layout_sighteditor_rangefinder.fxml'.";
-		assert rangefinderProgress != null : "fx:id=\"progress\" was not injected: check your FXML file 'layout_sighteditor_rangefinder.fxml'.";
-	}
 	
 }
