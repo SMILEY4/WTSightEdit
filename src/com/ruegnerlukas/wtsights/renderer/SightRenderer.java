@@ -59,25 +59,34 @@ public class SightRenderer {
 		
 		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, dataSight.gnrThousandth);
 		
-		drawBackground(canvas, g, dataSight, dataCalib, currentAmmoData);
+		// background
+		drawBackground(canvas, g, dataSight);
 		
-		drawCenteredLines(canvas, g, dataSight, dataCalib, currentAmmoData);
+		// centered lines
+		drawCenteredLines(canvas, g, dataSight);
 		
+		// rangefinder
 		if(dataSight.envShowRangeFinder) {
-			drawRangefinder(canvas, g, dataSight, dataCalib, currentAmmoData);
+			drawRangefinder(canvas, g, dataSight);
 		}
 		
-		drawHorzRangeIndicators(canvas, g, dataSight, dataCalib, currentAmmoData);
+		// horz range indicators
+		drawHorzRangeIndicators(canvas, g, dataSight);
 		
-		if(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty()) {
+		// ballistic range indicators
+		if(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty() && currentAmmoData!=null) {
 			drawBallisticsBlock(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementBallRangeIndicator)dataSight.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0));
 		}
 		
-		for(Element e : dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
-			ElementShellBlock shellBlock = (ElementShellBlock)e;
-			drawBallisticsBlock(canvas, g, dataSight, dataCalib, shellBlock.dataAmmo, shellBlock);
+		// shell block indicators
+		if(currentAmmoData != null) {
+			for(Element e : dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
+				ElementShellBlock shellBlock = (ElementShellBlock)e;
+				drawBallisticsBlock(canvas, g, dataSight, dataCalib, shellBlock.dataAmmo, shellBlock);
+			}
 		}
 		
+		// custom elements
 		for(Element e : dataSight.getElements(ElementType.CUSTOM_CIRCLE)) {
 			drawCircleObject(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementCustomCircle)e);
 		}
@@ -98,7 +107,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBackground(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	private static void drawBackground(Canvas canvas, GraphicsContext g, SightData dataSight) {
 		if(dataSight.envBackground != null) {
 			g.drawImage(dataSight.envBackground, 0, 0, canvas.getWidth(), canvas.getHeight());
 		} else {
@@ -112,7 +121,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, SightData dataSight) {
 		
 		final double lineSize = 1.0 * dataSight.gnrLineSize * dataSight.gnrFontScale;
 
@@ -131,7 +140,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangefinder(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	private static void drawRangefinder(Canvas canvas, GraphicsContext g, SightData dataSight) {
 		
 		ElementRangefinder rangefinder = (ElementRangefinder)dataSight.getElements(ElementType.RANGEFINDER).get(0);
 		
@@ -195,23 +204,12 @@ public class SightRenderer {
 		g.setTextAlign(TextAlignment.LEFT);
 		g.setTextBaseline(VPos.BASELINE);
 		
-		// draw selection
-//		if(dataSight.selectedElement == SelectedElement.RANGEFINDER) {
-//			g.setStroke(COLOR_SELECTION);
-//			g.setLineDashes(3, 3);
-//			g.strokeRect(x-1, y-height/2-1, width+2, height+2);
-//			g.strokeLine(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth()/2, y+height/2);
-//			g.strokeLine(canvas.getWidth()/2, y+height/2, x, y+height/2);
-//			g.setLineDashes(null);
-//		}
-		
-		
 	}
 	
 	
 	
 	
-	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, SightData dataSight) {
 		
 		ElementHorzRangeIndicators horRange = (ElementHorzRangeIndicators)dataSight.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
 		
@@ -243,12 +241,6 @@ public class SightRenderer {
 			// draw line
 			g.setFill(dataSight.envSightColor);
 			g.fillRect(x-lineSize/2, y-length, lineSize, length*2);
-//			if(dataSight.selectedElement == SelectedElement.HORZ_RANGE) {
-//				g.setStroke(COLOR_SELECTION);
-//				g.setLineDashes(3, 3);
-//				g.strokeRect(x-lineSize/2, y-length, lineSize, length*2);
-//				g.setLineDashes(null);
-//			}
 			
 			// draw label
 			if(isMajor) {
@@ -262,18 +254,11 @@ public class SightRenderer {
 				
 				g.fillText(""+Math.abs(mil), x, yLabel);
 				
-//				if(dataSight.selectedElement == SelectedElement.HORZ_RANGE) {
-//					g.setFill(COLOR_SELECTION);
-//					g.fillText(""+label, x, yLabel);
-//				}
-				
 				g.setTextAlign(TextAlignment.LEFT);
 				g.setTextBaseline(VPos.BASELINE);
 			}
 			
-
 		}
-		
 	}
 	
 	
@@ -290,7 +275,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementBallRangeIndicator block) {
+	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, SightData dataSight, ElementBallRangeIndicator block) {
 		
 		if(block.drawCorrLabel && dataSight.envRangeCorrection > 0) {
 			
@@ -320,22 +305,13 @@ public class SightRenderer {
 			corrY = corrY + (canvas.getHeight()/2);
 			corrY = corrY - corrHelper.getLayoutBounds().getHeight();
 			
-			
 			// draw label
 			g.setTextBaseline(VPos.CENTER);
 			g.setFont(corrFont);
 			g.setTextAlign(TextAlignment.LEFT);
 			g.fillText("Distance:"+dataSight.envRangeCorrection, corrX, corrY);
-
-//			if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//					|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//				g.setFill(COLOR_SELECTION);
-//				g.fillText("Distance:"+dataSight.envRangeCorrection, corrX, corrY);
-//			}
-			
 			g.setTextAlign(TextAlignment.RIGHT);
 			g.setTextBaseline(VPos.BASELINE);
-			
 			
 		}
 		
@@ -407,14 +383,6 @@ public class SightRenderer {
 				if(!MathUtils.isNearlyEqual(lengthCentral, 0)) {
 					g.setFill(dataSight.envSightColor);
 					g.fillRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
-				
-//					if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//							|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//						g.setStroke(COLOR_SELECTION);
-//						g.setLineDashes(3, 3);
-//						g.strokeRect(xCentral-lengthCentral, yCentral-lineSize/2, lengthCentral*2, lineSize);
-//						g.setLineDashes(null);
-//					}
 				}
 			}
 			
@@ -463,14 +431,6 @@ public class SightRenderer {
 			if(!MathUtils.isNearlyEqual(mainLength, 0)) {
 				g.setFill(dataSight.envSightColor);
 				g.fillRect(mainX, mainY, mainLength, lineSize);
-				
-//				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//					g.setStroke(COLOR_SELECTION);
-//					g.setLineDashes(3, 3);
-//					g.strokeRect(mainX, mainY, mainLength, lineSize);
-//					g.setLineDashes(null);
-//				}
 			}
 			
 			// main labels
@@ -503,13 +463,7 @@ public class SightRenderer {
 				g.setFont(bIndFont);
 				
 				g.fillText(""+Math.abs(mil/100), mainX+textOffX, mainY+textOffY);
-				
-//				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//					g.setFill(COLOR_SELECTION);
-//					g.fillText(""+Math.abs(mil/100), mainX+textOffX, mainY+textOffY);
-//				}
-				
+
 				g.setTextAlign(TextAlignment.LEFT);
 				g.setTextBaseline(VPos.BASELINE);
 				
@@ -520,7 +474,7 @@ public class SightRenderer {
 		
 		// draw range correction label
 		if(block.drawCorrLabel) {
-			drawRangeCorrectionLabel(canvas, g, dataSight, dataCalib, currentAmmoData, block);
+			drawRangeCorrectionLabel(canvas, g, dataSight, block);
 		}
 		
 	}
@@ -543,7 +497,7 @@ public class SightRenderer {
 		
 		// draw range correction label
 		if(block.drawCorrLabel) {
-			drawRangeCorrectionLabel(canvas, g, dataSight, dataCalib, currentAmmoData, block);
+			drawRangeCorrectionLabel(canvas, g, dataSight, block);
 		}
 		
 	}
@@ -661,25 +615,8 @@ public class SightRenderer {
 						canvas.getHeight()/2 - originY + posEnd.y
 						);
 				g.setLineWidth(1);
-
-//				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//					g.setStroke(COLOR_SELECTION);
-//					g.setLineDashes(3, 3);
-//					g.setLineWidth(lineSize);
-//					g.strokeLine(
-//							canvas.getWidth()/2 - originX + posStart.x,
-//							canvas.getHeight()/2 - originY + posStart.y,
-//							canvas.getWidth()/2 - originX + posEnd.x,
-//							canvas.getHeight()/2 - originY + posEnd.y
-//							);
-//					g.setLineDashes(null);
-//					g.setLineWidth(1);
-//				}
 				
 			}
-			
-
 			
 			
 			
@@ -709,16 +646,6 @@ public class SightRenderer {
 						canvas.getWidth()/2 - originX + posEnd.x + dir.copy().setLength(textOffset).x,
 						canvas.getHeight()/2 - originY + posEnd.y + dir.copy().setLength(textOffset).y
 						);
-				
-//				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//					g.setFill(COLOR_SELECTION);
-//					g.fillText(
-//							""+Math.abs(meters/100),
-//							canvas.getWidth()/2 - originX + posEnd.x + dir.copy().setLength(textOffset).x,
-//							canvas.getHeight()/2 - originY + posEnd.y + dir.copy().setLength(textOffset).y
-//							);
-//				}
 				
 				g.setTextAlign(TextAlignment.LEFT);
 				g.setTextBaseline(VPos.BASELINE);
@@ -844,19 +771,6 @@ public class SightRenderer {
 					circleRadius, circleRadius);
 			g.setLineWidth(1);
 			
-//			if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//					|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//				g.setStroke(COLOR_SELECTION);
-//				g.setLineDashes(3, 3);
-//				g.setLineWidth(circleWidth);
-//				g.strokeOval(
-//						canvas.getWidth()/2 - originX + dir.x - circleRadius/2,
-//						canvas.getHeight()/2 - originY + dir.y - circleRadius/2,
-//						circleRadius, circleRadius);
-//				g.setLineDashes(null);
-//				g.setLineWidth(1);
-//			}
-			
 			g.setLineDashes(5);
 			if(i == 0) {
 				g.setStroke(COLOR_DEBUG_1);
@@ -898,17 +812,7 @@ public class SightRenderer {
 						canvas.getWidth()/2 - originX + dir.x + dir.copy().setLength(textOffset).x,
 						canvas.getHeight()/2 - originY + dir.y + dir.copy().setLength(textOffset).y
 						);
-				
-//				if((dataSight.selectedElement == SelectedElement.BALL_RANGE && dataSight.selectedSubElement.equals(dataSight.brIndicators.name))
-//						|| (dataSight.selectedElement == SelectedElement.SHELL_BLOCK && dataSight.selectedSubElement.equals(block.name))) {
-//					g.setFill(COLOR_SELECTION);
-//					g.fillText(
-//							""+Math.abs(meters/100),
-//							canvas.getWidth()/2 - originX + dir.x + dir.copy().setLength(textOffset).x,
-//							canvas.getHeight()/2 - originY + dir.y + dir.copy().setLength(textOffset).y
-//							);
-//					}
-				
+
 				g.setTextAlign(TextAlignment.LEFT);
 				g.setTextBaseline(VPos.BASELINE);
 				
@@ -949,23 +853,31 @@ public class SightRenderer {
 			
 		} else if(objLine.movement == Movement.MOVE) {
 			
-			List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-			fittingPoints.add(new Vector2d(0, 0));
-			for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-				Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-				if(currentAmmoData.zoomedIn) {
-					p.y /= Conversion.get().zoomInMul;
+			
+			double rangeCorrectionMil = 0;
+			
+			if(currentAmmoData != null) {
+				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
+				fittingPoints.add(new Vector2d(0, 0));
+				for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+					Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
+					if(currentAmmoData.zoomedIn) {
+						p.y /= Conversion.get().zoomInMul;
+					}
+					fittingPoints.add(p);
 				}
-				fittingPoints.add(p);
-			}
-			Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-			if(fittingParams == null) {
-				return;
+				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+				if(fittingParams == null) {
+					return;
+				}
+				final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
+				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
+				
+			} else {
+				// found values by testing  50m = 0.6875mil
+				rangeCorrectionMil = dataSight.envRangeCorrection * (0.6875/50.0);
 			}
 			
-			
-			final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
-			final double rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
 			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvas.getHeight(), dataSight.envZoomedIn);
 			
 			if(objLine.useThousandth) {
@@ -999,7 +911,7 @@ public class SightRenderer {
 			} else {
 				centerOW = objLine.center;
 			}
-			final double radius = centerOW.dist(objLine.radCenter);
+			final double radius = objLine.useThousandth ? centerOW.dist(objLine.radCenter) : Conversion.get().screenspace2mil(centerOW.dist(objLine.radCenter), dataSight.envZoomedIn);
 			if(MathUtils.isNearlyEqual(radius, 0)) {
 				return;
 			}
@@ -1043,15 +955,6 @@ public class SightRenderer {
 		g.strokeLine(sxPX, syPX, exPX, eyPX);
 		g.setLineWidth(1);
 		
-//		if(dataSight.selectedElement == SelectedElement.CUSTOM_ELEMENT && dataSight.selectedSubElement.equals(objLine.name)) {
-//			g.setStroke(COLOR_SELECTION);
-//			g.setLineDashes(3, 3);
-//			g.setLineWidth(dataSight.gnrLineSize*dataSight.gnrFontScale);
-//			g.strokeLine(sxPX, syPX, exPX, eyPX);
-//			g.setLineDashes(null);
-//			g.setLineWidth(1);
-//		}
-		
 	}
 	
 	
@@ -1083,23 +986,30 @@ public class SightRenderer {
 				yPX = Conversion.get().screenspace2pixel(objText.position.y, canvas.getHeight(), dataSight.envZoomedIn);
 			}
 			
-			List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-			fittingPoints.add(new Vector2d(0, 0));
-			for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-				Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-				if(currentAmmoData.zoomedIn) {
-					p.y /= Conversion.get().zoomInMul;
+			double rangeCorrectionMil = 0;
+			
+			if(currentAmmoData != null) {
+				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
+				fittingPoints.add(new Vector2d(0, 0));
+				for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+					Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
+					if(currentAmmoData.zoomedIn) {
+						p.y /= Conversion.get().zoomInMul;
+					}
+					fittingPoints.add(p);
 				}
-				fittingPoints.add(p);
-			}
-			Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-			if(fittingParams == null) {
-				return;
+				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+				if(fittingParams == null) {
+					return;
+				}
+				final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
+				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
+				
+			} else {
+				// found values by testing  50m = 0.6875mil
+				rangeCorrectionMil = dataSight.envRangeCorrection * (0.6875/50.0);
 			}
 			
-			
-			final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
-			final double rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
 			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvas.getHeight(), dataSight.envZoomedIn);
 			
 			if(dataSight.gnrApplyCorrectionToGun) {
@@ -1117,7 +1027,7 @@ public class SightRenderer {
 			} else {
 				centerOW = objText.center;
 			}
-			final double radius = centerOW.dist(objText.radCenter);
+			final double radius = objText.useThousandth ? centerOW.dist(objText.radCenter) : Conversion.get().screenspace2mil(centerOW.dist(objText.radCenter), dataSight.envZoomedIn);
 			if(MathUtils.isNearlyEqual(radius, 0)) {
 				return;
 			}
@@ -1160,14 +1070,7 @@ public class SightRenderer {
 		g.setTextAlign( (objText.align==TextAlign.LEFT ? TextAlignment.LEFT : (objText.align==TextAlign.CENTER ? TextAlignment.CENTER : TextAlignment.RIGHT)) );
 		g.setTextBaseline(VPos.CENTER);
 		g.setFont(font);
-		
 		g.fillText(objText.text, xPX, yPX);
-		
-//		if(dataSight.selectedElement == SelectedElement.CUSTOM_ELEMENT && dataSight.selectedSubElement.equals(objText.name)) {
-//			g.setFill(COLOR_SELECTION);
-//			g.fillText(objText.text, xPX, yPX);
-//		}
-		
 		g.setTextAlign(TextAlignment.LEFT);
 		g.setTextBaseline(VPos.BASELINE);
 		
@@ -1208,23 +1111,30 @@ public class SightRenderer {
 				dPX = Conversion.get().screenspace2pixel(objCircle.diameter, canvas.getHeight(), dataSight.envZoomedIn);
 			}
 			
-			List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-			fittingPoints.add(new Vector2d(0, 0));
-			for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-				Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-				if(currentAmmoData.zoomedIn) {
-					p.y /= Conversion.get().zoomInMul;
+			double rangeCorrectionMil = 0;
+			
+			if(currentAmmoData != null) {
+				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
+				fittingPoints.add(new Vector2d(0, 0));
+				for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+					Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
+					if(currentAmmoData.zoomedIn) {
+						p.y /= Conversion.get().zoomInMul;
+					}
+					fittingPoints.add(p);
 				}
-				fittingPoints.add(p);
-			}
-			Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-			if(fittingParams == null) {
-				return;
+				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+				if(fittingParams == null) {
+					return;
+				}
+				final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
+				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
+				
+			} else {
+				// found values by testing  50m = 0.6875mil
+				rangeCorrectionMil = dataSight.envRangeCorrection * (0.6875/50.0);
 			}
 			
-			
-			final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
-			final double rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
 			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvas.getHeight(), dataSight.envZoomedIn);
 			
 			if(dataSight.gnrApplyCorrectionToGun) {
@@ -1241,7 +1151,7 @@ public class SightRenderer {
 			} else {
 				centerOW = objCircle.center;
 			}
-			final double radius = centerOW.dist(objCircle.radCenter);
+			final double radius = objCircle.useThousandth ? centerOW.dist(objCircle.radCenter) : Conversion.get().screenspace2mil(centerOW.dist(objCircle.radCenter), dataSight.envZoomedIn);
 			if(MathUtils.isNearlyEqual(radius, 0)) {
 				return;
 			}
@@ -1278,13 +1188,6 @@ public class SightRenderer {
 		
 		if(MathUtils.isNearlyEqual(objCircle.segment.x, 0.0, false) && MathUtils.isNearlyEqual(objCircle.segment.y, 360.0, true)) {
 			g.strokeOval(xPX-dPX/2, yPX-dPX/2, dPX, dPX);
-		
-//			if(dataSight.selectedElement == SelectedElement.CUSTOM_ELEMENT && dataSight.selectedSubElement.equals(objCircle.name)) {
-//				g.setStroke(COLOR_SELECTION);
-//				g.setLineDashes(3, 3);
-//				g.strokeOval(xPX-dPX/2, yPX-dPX/2, dPX, dPX);
-//				g.setLineDashes(null);
-//			}
 			
 		} else {
 			
@@ -1376,23 +1279,30 @@ public class SightRenderer {
 				yPX4 = Conversion.get().screenspace2pixel(objQuad.pos4.y, canvas.getHeight(), dataSight.envZoomedIn);
 			}
 			
-			List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-			fittingPoints.add(new Vector2d(0, 0));
-			for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-				Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-				if(currentAmmoData.zoomedIn) {
-					p.y /= Conversion.get().zoomInMul;
+			double rangeCorrectionMil = 0;
+			
+			if(currentAmmoData != null) {
+				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
+				fittingPoints.add(new Vector2d(0, 0));
+				for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+					Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
+					if(currentAmmoData.zoomedIn) {
+						p.y /= Conversion.get().zoomInMul;
+					}
+					fittingPoints.add(p);
 				}
-				fittingPoints.add(p);
-			}
-			Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-			if(fittingParams == null) {
-				return;
+				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+				if(fittingParams == null) {
+					return;
+				}
+				final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
+				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
+				
+			} else {
+				// found values by testing  50m = 0.6875mil
+				rangeCorrectionMil = dataSight.envRangeCorrection * (0.6875/50.0);
 			}
 			
-			
-			final double rangeCorrectionResultPX = SightUtils.ballisticFunction(dataSight.envRangeCorrection/100.0, fittingParams);
-			final double rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvas.getHeight(), false);
 			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvas.getHeight(), dataSight.envZoomedIn);
 			
 			if(dataSight.gnrApplyCorrectionToGun) {
@@ -1416,7 +1326,7 @@ public class SightRenderer {
 			} else {
 				centerOW = objQuad.center;
 			}
-			final double radius = centerOW.dist(objQuad.radCenter);
+			final double radius = objQuad.useThousandth ? centerOW.dist(objQuad.radCenter) : Conversion.get().screenspace2mil(centerOW.dist(objQuad.radCenter), dataSight.envZoomedIn);
 			if(MathUtils.isNearlyEqual(radius, 0)) {
 				return;
 			}
@@ -1475,13 +1385,7 @@ public class SightRenderer {
 		
 		g.setFill(dataSight.envSightColor);
 		g.fillPolygon(new double[] {xPX1, xPX2, xPX3, xPX4}, new double[] {yPX1, yPX2, yPX3, yPX4}, 4);
-		
-//		if(dataSight.selectedElement == SelectedElement.CUSTOM_ELEMENT && dataSight.selectedSubElement.equals(objQuad.name)) {
-//			g.setStroke(COLOR_SELECTION);
-//			g.setLineDashes(3, 3);
-//			g.strokePolygon(new double[] {xPX1, xPX2, xPX3, xPX4}, new double[] {yPX1, yPX2, yPX3, yPX4}, 4);
-//			g.setLineDashes(null);
-//		}
+
 	}
 	
 	

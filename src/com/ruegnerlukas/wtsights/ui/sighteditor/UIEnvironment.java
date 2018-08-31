@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
@@ -41,7 +42,9 @@ public class UIEnvironment {
 	@FXML private TextField pathBackground;
 	@FXML private ChoiceBox<String> choiceResolution;
 
-	
+	@FXML private Label labelValueRFProgress;
+	@FXML private Label labelValueRange;
+
 	
 
 
@@ -97,9 +100,13 @@ public class UIEnvironment {
 				};
 			}
 		});
-		
-		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-			comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+
+		if(editor.getCalibrationData().ammoData.isEmpty()) {
+			comboAmmo.getItems().add("No Ammunition available;-");
+		} else {
+			for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
+				comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+			}
 		}
 		comboAmmo.getSelectionModel().select(0);
 		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -138,7 +145,7 @@ public class UIEnvironment {
 			}
 		});
 		sliderRangefinderProgress.setValue(editor.getSightData().envRFProgress);
-		
+		onRangefinderProgress(editor.getSightData().envRFProgress);
 		
 		// RANGE CORRECTION
 		sliderRangeCorrection.valueProperty().addListener(new ChangeListener<Number>() {
@@ -148,7 +155,7 @@ public class UIEnvironment {
 			}
 		});
 		sliderRangeCorrection.setValue(editor.getSightData().envRangeCorrection);
-		
+		onRangeCorrection(editor.getSightData().envRangeCorrection);
 		
 		// CROSSHAIR LIGHTING
 		cbCrosshairLighting.setSelected(false);
@@ -169,7 +176,7 @@ public class UIEnvironment {
 		choiceResolution.getItems().add("1600 x 900");
 		choiceResolution.getItems().add("1680 x 1050");
 		choiceResolution.getItems().add("1920 x 1080");
-		choiceResolution.getSelectionModel().select("1280 x 720");
+		choiceResolution.getSelectionModel().select("1920 x 1080");
 		choiceResolution.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -221,6 +228,7 @@ public class UIEnvironment {
 	
 	void onRangefinderProgress(double progress) {
 		editor.getSightData().envRFProgress = progress;
+		labelValueRFProgress.setText(progress+"%");
 		editor.repaintCanvas();
 	}
 	
@@ -229,6 +237,7 @@ public class UIEnvironment {
 	
 	void onRangeCorrection(int range) {
 		editor.getSightData().envRangeCorrection = range;//(range+49)/50 * 50;
+		labelValueRange.setText(range+"m");
 		editor.repaintCanvas();
 	}
 	

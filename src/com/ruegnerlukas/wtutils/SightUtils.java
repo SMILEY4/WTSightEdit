@@ -204,7 +204,8 @@ public class SightUtils {
 	
 	
 	public static double rangeCorrection_meters2sovmil(double meters) {
-		return (meters/10) * 0.0912205;
+//		return (meters/10) * 0.0912205;
+		return (meters/10) * 0.11;
 	}
 	
 	

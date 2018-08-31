@@ -33,14 +33,24 @@
                            </padding>
                         </Separator>
                         <CheckBox fx:id="cbShowRangefinder" mnemonicParsing="false" onAction="#onShowRangefinder" prefWidth="1000000.0" text="Show Rangefinder" />
-                        <Label prefWidth="1000000.0" text="Rangefinder Progress:" />
+                        <HBox>
+                           <children>
+                              <Label prefWidth="1000000.0" text="Rangefinder Progress:" />
+                              <Label fx:id="labelValueRFProgress" alignment="CENTER_RIGHT" minWidth="50.0" prefHeight="21.0" prefWidth="50.0" text="100%" />
+                           </children>
+                        </HBox>
                         <Slider fx:id="sliderRangefinderProgress" blockIncrement="1.0" majorTickUnit="10.0" minorTickCount="0" prefWidth="1000000.0" showTickMarks="true" />
                         <Separator prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label prefWidth="1000000.0" text="Range Correction:" />
+                        <HBox>
+                           <children>
+                              <Label prefWidth="1000000.0" text="Range Correction:" />
+                              <Label fx:id="labelValueRange" alignment="CENTER_RIGHT" minWidth="50.0" prefHeight="21.0" prefWidth="50.0" text="1000m" />
+                           </children>
+                        </HBox>
                         <Slider fx:id="sliderRangeCorrection" blockIncrement="1.0" majorTickUnit="1000.0" max="4000.0" minorTickCount="4" prefWidth="1000000.0" showTickLabels="true" showTickMarks="true" />
                         <Separator prefWidth="1000000.0">
                            <padding>
