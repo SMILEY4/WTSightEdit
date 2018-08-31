@@ -3,34 +3,30 @@ package com.ruegnerlukas.wtsights.ui.sighteditor;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.SightData.Thousandth;
 import com.ruegnerlukas.wtutils.FXUtils;
+import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 
 public class UIGeneral {
 
-
-	@FXML private ResourceBundle resources;
-	@FXML private URL location;
-
 	private UISightEditor editor;
-	private SightData dataSight;
-
-	@FXML private ComboBox<String> thousands;
-	@FXML private Spinner<Double> fontScale;
-	@FXML private Spinner<Double> lineScale;
-	@FXML private CheckBox cbCentralVert;
-	@FXML private CheckBox cbCentralHorz;
+	
+	@FXML private ChoiceBox<String> choiceThousandth;
+	@FXML private Spinner<Float> fontSize;
+	@FXML private Spinner<Float> lineSize;
 	@FXML private CheckBox cbApplyCorrection;
 
+	
+	
 
 	
 	
@@ -41,119 +37,79 @@ public class UIGeneral {
 
 
 
-	public void setDataSight(SightData data) {
-		this.dataSight = data;
-	}
-
-
-
-
 	public void create() {
 		
-		for(Thousandth t : SightData.THOUSANDTH_LIST) {
-			thousands.getItems().add(t.display);
+		for(Thousandth t : Thousandth.values()) {
+			choiceThousandth.getItems().add(t.display);
 		}
-		thousands.getSelectionModel().select(dataSight.gnrThousandth.display);
-		thousands.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		choiceThousandth.getSelectionModel().select(editor.getSightData().gnrThousandth.display);
+		choiceThousandth.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onThousands(newValue);
+				Thousandth thousandth = null;
+				for(Thousandth t : Thousandth.values()) {
+					if(t.display.equalsIgnoreCase(newValue)) {
+						thousandth = t;
+						break;
+					}
+				}
+				if(thousandth != null) { selectThousandth(thousandth); }
 			}
 		});
 		
 		
 		// font scale
-		FXUtils.initSpinner(fontScale, dataSight.gnrFontScale, 0, 1000, 0.1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(fontSize, editor.getSightData().gnrFontScale, 0, 1000, 0.1, 1, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-				onFontScale(newValue.doubleValue());
+				setFontSize(newValue.floatValue());
 			}
 		});
 		
 		// line scale
-		FXUtils.initSpinner(lineScale, dataSight.gnrLineSize, 0, 1000, 0.5, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(lineSize, editor.getSightData().gnrLineSize, 0, 1000, 0.5, 1, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-				onLineScale(newValue.doubleValue());
+				setLineSize(newValue.floatValue());
 			}
 		});
 		
-		// central lines
-		cbCentralVert.setSelected(dataSight.gnrDrawCentralVertLine);
-		cbCentralHorz.setSelected(dataSight.gnrDrawCentralHorzLine);
-	
 		// apply correction
-		cbApplyCorrection.setSelected(dataSight.gnrApplyCorrectionToGun);
+		cbApplyCorrection.setSelected(editor.getSightData().gnrApplyCorrectionToGun);
 	
 	}
-
-
-
-
-	void onThousands(String strThousands) {
-		Thousandth thousands = null;
-		for(Thousandth t : SightData.THOUSANDTH_LIST) {
-			if(t.display.equalsIgnoreCase(strThousands)) {
-				thousands = t;
-				break;
-			}
-		}
-		if(thousands != null) {
-			dataSight.gnrThousandth = thousands;
-		}
-		editor.repaintCanvas();
-	}
-	
-
 	
 	
-	void onFontScale(double scale) {
-		dataSight.gnrFontScale = scale;
-		editor.repaintCanvas();
-	}
-	
-	
-	
-	
-	void onLineScale(double scale) {
-		dataSight.gnrLineSize = scale;
-		editor.repaintCanvas();
-	}
-	
-	
-	
-	
-	@FXML
-	void onDrawCentralHorz(ActionEvent event) {
-		dataSight.gnrDrawCentralHorzLine = cbCentralHorz.isSelected();
-		editor.repaintCanvas();
-	}
-
-
-
-
-	@FXML
-	void onDrawCentralVert(ActionEvent event) {
-		dataSight.gnrDrawCentralVertLine = cbCentralVert.isSelected();
-		editor.repaintCanvas();
-	}
-
-
 	
 	
 	@FXML
 	void onApplyCorrection(ActionEvent event) {
-		dataSight.gnrApplyCorrectionToGun = cbApplyCorrection.isSelected();
+		editor.getSightData().gnrApplyCorrectionToGun = cbApplyCorrection.isSelected();
 		editor.repaintCanvas();
 	}
 	
-
+	
+	
+	
+	void selectThousandth(Thousandth thousandth) {
+		editor.getSightData().gnrThousandth = thousandth;
+		editor.repaintCanvas();
+	}
+	
+	
 
 	
-	@FXML
-	void initialize() {
-		assert thousands != null : "fx:id=\"thousands\" was not injected: check your FXML file 'layout_sighteditor_general.fxml'.";
-		assert fontScale != null : "fx:id=\"fontScale\" was not injected: check your FXML file 'layout_sighteditor_general.fxml'.";
-		assert lineScale != null : "fx:id=\"lineScale\" was not injected: check your FXML file 'layout_sighteditor_general.fxml'.";
+	void setFontSize(float size) {
+		editor.getSightData().gnrFontScale = size;
+		editor.repaintCanvas();
 	}
+	
+	
+	
+	
+	void setLineSize(float size) {
+		editor.getSightData().gnrLineSize = size;
+		editor.repaintCanvas();
+	}
+	
 	
 	
 }

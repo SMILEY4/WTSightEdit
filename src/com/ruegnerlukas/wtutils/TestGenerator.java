@@ -2,12 +2,12 @@ package com.ruegnerlukas.wtutils;
 
 import java.util.Random;
 
-import com.ruegnerlukas.wtsights.data.sight.Block;
-import com.ruegnerlukas.wtsights.data.sight.BlockElement;
-import com.ruegnerlukas.wtsights.data.sight.ParamBool;
-import com.ruegnerlukas.wtsights.data.sight.ParamFloat;
-import com.ruegnerlukas.wtsights.data.sight.ParamText;
-import com.ruegnerlukas.wtsights.data.sight.ParamVec2;
+import com.ruegnerlukas.wtsights.data.sightfile.Block;
+import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamBool;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamFloat;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamText;
+import com.ruegnerlukas.wtsights.data.sightfile.ParamVec2;
 
 public class TestGenerator {
 

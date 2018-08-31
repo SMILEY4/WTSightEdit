@@ -28,6 +28,7 @@ import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils;
@@ -258,8 +259,12 @@ public class UICalibrationEditor {
 			}
 		});
 
-		for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
-			choiceAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+		if(dataCalib.ammoData.isEmpty()) {
+			choiceAmmo.getItems().add("No Ammunition available;-");
+		} else {
+			for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
+				choiceAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+			}
 		}
 		choiceAmmo.getSelectionModel().select(0);
 		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -280,7 +285,7 @@ public class UICalibrationEditor {
 		
 		Logger.get().debug("Select ammo '" + ammoName + "'");
 		
-		if(ammoName == null || "null".equalsIgnoreCase(ammoName)) {
+		if(ammoName == null || "null".equalsIgnoreCase(ammoName) || "No Ammunition available".equalsIgnoreCase(ammoName)) {
 			
 			currentImage = null;
 			currentAmmoData = null;
@@ -674,7 +679,7 @@ public class UICalibrationEditor {
 			this.stage.close();
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
 			UISightEditor.openNew(dataCalib);
-			
+
 		} else {
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
 			SightData dataSight = DataLoader.loadSight(fileSight, dataCalib);

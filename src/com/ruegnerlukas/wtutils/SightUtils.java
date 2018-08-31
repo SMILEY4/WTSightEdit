@@ -13,14 +13,102 @@ import org.apache.commons.math3.linear.SingularMatrixException;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
-import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.simplemath.vectors.vecN.VectorNd;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 
 public class SightUtils {
 
 	private static final double PI = Math.PI;
+	
+	public static enum Thousandth {
+		USSR("ussr", "ussr (6000)", 6000),
+		NATO("nato", "nato (6400)", 6400),
+		REAL("real", "real (6283)", 6283);
+		
+		public final String tag;
+		public final String display;
+		public int value;
+
+		private Thousandth(String tag, String display, int value) {
+			this.tag = tag;
+			this.display = display;
+			this.value = value;
+		}
+		
+		public static Thousandth get(String str) {
+			if(str.equalsIgnoreCase("ussr")) { return USSR; };
+			if(str.equalsIgnoreCase("nato")) { return NATO; };
+			if(str.equalsIgnoreCase("real")) { return REAL; };
+			return USSR;
+		}
+	}
+
+	
+	
+	
+	
+	public static enum TextAlign {
+		LEFT(-1),
+		CENTER(0),
+		RIGHT(1);
+		
+		public final int id;
+		
+		private TextAlign(int id) {
+			this.id = id;
+		}
+		
+		public static TextAlign get(int id) {
+			if(id == -1) { return LEFT; }
+			if(id ==  0) { return CENTER; }
+			if(id == +1) { return RIGHT; }
+			return LEFT;
+		}
+		
+		public static TextAlign get(String str) {
+			if(LEFT.toString().equalsIgnoreCase(str)) { return LEFT; 	 }
+			if(RIGHT.toString().equalsIgnoreCase(str)) { return RIGHT; 	 }
+			if(CENTER.toString().equalsIgnoreCase(str)) { return CENTER; }
+			return LEFT;
+		}
+	}
+	
+	
+	
+	
+	public static enum ScaleMode {
+		VERTICAL,
+		RADIAL
+	}
+	
+	
+	
+	public static enum TriggerGroup {
+		PRIMARY,
+		SECONDARY,
+		COAXIAL,
+		MACHINEGUN,
+		SPECIAL,
+		TORPEDOES,
+		DEPTH_CHARGE,
+		ROCKETS,
+		MINE,
+		SMOKE;
+		
+		
+		public static TriggerGroup get(String strTriggerGroup) {
+			if("primary".equalsIgnoreCase(strTriggerGroup)) 	 { return PRIMARY;		}
+			if("secondary".equalsIgnoreCase(strTriggerGroup)) 	 { return SECONDARY; 	}
+			if("coaxial".equalsIgnoreCase(strTriggerGroup)) 	 { return COAXIAL; 		}
+			if("machinegun".equalsIgnoreCase(strTriggerGroup))   { return MACHINEGUN; 	}
+			if("special".equalsIgnoreCase(strTriggerGroup)) 	 { return SPECIAL; 		}
+			if("torpedoes".equalsIgnoreCase(strTriggerGroup)) 	 { return TORPEDOES; 	}
+			if("depth_charge".equalsIgnoreCase(strTriggerGroup)) { return DEPTH_CHARGE; }
+			if("rockets".equalsIgnoreCase(strTriggerGroup)) 	 { return ROCKETS; 		}
+			if("mine".equalsIgnoreCase(strTriggerGroup)) 		 { return MINE; 		}
+			if("smoke".equalsIgnoreCase(strTriggerGroup)) 		 { return SMOKE; 		}
+			return null;
+		}
+		
+	}
 	
 	
 	/*
@@ -116,7 +204,8 @@ public class SightUtils {
 	
 	
 	public static double rangeCorrection_meters2sovmil(double meters) {
-		return (meters/10) * 0.0912205;
+//		return (meters/10) * 0.0912205;
+		return (meters/10) * 0.11;
 	}
 	
 	

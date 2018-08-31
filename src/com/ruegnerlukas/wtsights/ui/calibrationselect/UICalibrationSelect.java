@@ -15,6 +15,7 @@ import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -169,6 +170,7 @@ public class UICalibrationSelect {
 				CalibrationData dataCalib = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
 				this.stage.close();
 				UISightEditor.openNew(dataCalib);
+
 			}
 		}
 		

@@ -32,16 +32,15 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.BallisticsBlock;
+import com.ruegnerlukas.wtsights.data.sight.BIndicator;
+import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.SightData.ScaleMode;
-import com.ruegnerlukas.wtsights.data.sight.objects.CircleObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.LineObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.QuadObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.SightObject;
-import com.ruegnerlukas.wtsights.data.sight.objects.SightObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.objects.TextObject;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
+import com.ruegnerlukas.wtsights.data.sight.elements.*;
 
 public class DataWriter {
 
@@ -173,28 +172,31 @@ public class DataWriter {
 		lines.add("thousandth:t = \"" + data.gnrThousandth.tag + "\"");
 		lines.add("fontSizeMult:r = " + data.gnrFontScale);
 		lines.add("lineSizeMult:r = " + data.gnrLineSize);
-		lines.add("drawCentralLineVert:b = " + (data.gnrDrawCentralVertLine ? "yes" : "no") );
-		lines.add("drawCentralLineHorz:b = " + (data.gnrDrawCentralHorzLine ? "yes" : "no") );
 		lines.add("applyCorrectionToGun:b = " + (data.gnrApplyCorrectionToGun ? "yes" : "no") );
+		lines.add("drawCentralLineVert:b = " + (((ElementCentralVertLine)data.getElements(ElementType.CENTRAL_VERT_LINE).get(0)).drawCentralVertLine ? "yes" : "no") );
+		lines.add("drawCentralLineHorz:b = " + (((ElementCentralHorzLine)data.getElements(ElementType.CENTRAL_HORZ_LINE).get(0)).drawCentralHorzLine ? "yes" : "no") );
 		lines.add("");
 		
 		// rangefinder
+		ElementRangefinder rangefinder = (ElementRangefinder)data.getElements(ElementType.RANGEFINDER).get(0);
 		lines.add("// rangefinder");
-		lines.add("rangefinderHorizontalOffset:r = " + data.rfOffset.x);
-		lines.add("rangefinderVerticalOffset:r = " + data.rfOffset.y);
-		lines.add("rangefinderProgressBarColor1:c = " + (int)(data.rfColor1.getRed()*255) + "," + (int)(data.rfColor1.getGreen()*255) + "," + (int)(data.rfColor1.getBlue()*255) + "," + (int)(data.rfColor1.getOpacity()*255));
-		lines.add("rangefinderProgressBarColor2:c = " + (int)(data.rfColor2.getRed()*255) + "," + (int)(data.rfColor2.getGreen()*255) + "," + (int)(data.rfColor2.getBlue()*255) + "," + (int)(data.rfColor2.getOpacity()*255));
-		lines.add("rangefinderTextScale:r = " + data.rfTextScale);
-		lines.add("rangefinderUseThousandth:b = " + (data.rfUseThousandth ? "yes" : "no") );
+		lines.add("rangefinderHorizontalOffset:r = " + rangefinder.position.x);
+		lines.add("rangefinderVerticalOffset:r = " + rangefinder.position.y);
+		lines.add("rangefinderProgressBarColor1:c = " + (int)(rangefinder.color1.getRed()*255) + "," + (int)(rangefinder.color1.getGreen()*255) + "," + (int)(rangefinder.color1.getBlue()*255) + "," + (int)(rangefinder.color1.getOpacity()*255));
+		lines.add("rangefinderProgressBarColor2:c = " + (int)(rangefinder.color2.getRed()*255) + "," + (int)(rangefinder.color2.getGreen()*255) + "," + (int)(rangefinder.color2.getBlue()*255) + "," + (int)(rangefinder.color2.getOpacity()*255));
+		lines.add("rangefinderTextScale:r = " + rangefinder.textScale);
+		lines.add("rangefinderUseThousandth:b = " + (rangefinder.useThousandth ? "yes" : "no") );
 		lines.add("");
 		
 		// horz range indicators
+		ElementHorzRangeIndicators horzRange = (ElementHorzRangeIndicators)data.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
 		lines.add("// horizontal range indicators");
-		lines.add("crosshairHorVertSize:p2 = " + data.hrSizeMajor + "," + data.hrSizeMinor);
+		lines.add("crosshairHorVertSize:p2 = " + horzRange.sizeMajor + "," + horzRange.sizeMinor);
 		lines.add("crosshair_hor_ranges {");
-		for(int i=0; i<data.hrMils.size(); i++) {
-			int mil = data.hrMils.get(i);
-			int label = data.hrMajors.get(i) ? Math.abs(mil) : 0;
+		for(int i=0; i<horzRange.indicators.size(); i++) {
+			HIndicator indicator = horzRange.indicators.get(i);
+			int mil = indicator.getMil();
+			int label = indicator.isMajor() ? Math.abs(indicator.getMil()) : 0;
 			lines.add("  range:p2 = " + mil + "," + label);	
 		}
 		lines.add("}");
@@ -202,94 +204,101 @@ public class DataWriter {
 		
 		
 		// ballistic range indicators
-		lines.add("// ballistic range indicators");
-		lines.add("drawUpward:b = " + (data.brIndicators.bDrawUpward ? "yes" : "no") );
-		lines.add("distancePos:p2 = " + data.brIndicators.bMainPos.x + "," + data.brIndicators.bMainPos.y);
-		if(data.brIndicators.bMove) {
-			lines.add("move:b = " + (data.brIndicators.bMove ? "yes" : "no") );
+		if(!data.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).isEmpty()) {
+			ElementBallRangeIndicator ballRange = (ElementBallRangeIndicator)data.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0);
+			lines.add("// ballistic range indicators");
+			lines.add("drawUpward:b = " + (ballRange.drawUpward ? "yes" : "no") );
+			lines.add("distancePos:p2 = " + ballRange.position.x + "," + ballRange.position.y);
+			if(ballRange.move) {
+				lines.add("move:b = " + (ballRange.move ? "yes" : "no") );
+			}
+			if(ballRange.scaleMode == ScaleMode.RADIAL) {
+				lines.add("radial:b = " + (ballRange.scaleMode == ScaleMode.RADIAL ? "yes" : "no"));
+			}
+			if(ballRange.circleMode) {
+				lines.add("circleMode:b = " + (ballRange.circleMode ? "yes" : "no"));
+			}
+			lines.add("crosshairDistHorSizeMain:p2 = " + ballRange.size.x + "," + ballRange.size.y);
+			lines.add("textPos:p2 = " + ballRange.textPos.x + "," + ballRange.textPos.y);
+			lines.add("textAlign:i = " + ballRange.textAlign.id);
+			lines.add("textShift:r = " + ballRange.textShift);
+			lines.add("drawAdditionalLines:b = " + (ballRange.drawAddLines ? "yes" : "no") );
+			lines.add("crosshairDistHorSizeAdditional:p2 = " + ballRange.sizeAddLine.x + "," + ballRange.sizeAddLine.y);
+			if(ballRange.scaleMode == ScaleMode.RADIAL) {
+				lines.add("radialStretch:r = " + ballRange.radialStretch);
+				lines.add("radialAngle:r = " + ballRange.radialAngle);
+				lines.add("radialRadius:p2 = " + ballRange.radialRadius + "," + (ballRange.radiusUseMils ? "1" : "0") );
+			}
+			lines.add("drawDistanceCorrection:b = " + (ballRange.drawCorrLabel ? "yes" : "no") );
+			if(ballRange.drawCorrLabel) {
+				lines.add("distanceCorrectionPos:p2 = " + ballRange.posCorrLabel.x + "," + ballRange.posCorrLabel.y);
+			}
+			lines.add("");
+			
+			lines.add("crosshair_distances {");
+			for(int i=0; i<ballRange.indicators.size(); i++) {
+				BIndicator indicator = ballRange.indicators.get(i);
+				int dist = indicator.getDistance();
+				boolean major = indicator.isMajor();
+				int label = major ? Math.abs(dist/100) : 0;
+				double extend = indicator.getExtend();
+				Vector2d textOff = new Vector2d(indicator.getTextX(), indicator.getTextY());
+				lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+			}
+			lines.add("}");
+			lines.add("");
 		}
-		if(data.brIndicators.bScaleMode == ScaleMode.RADIAL) {
-			lines.add("radial:b = " + (data.brIndicators.bScaleMode == ScaleMode.RADIAL ? "yes" : "no"));
-		}
-		if(data.brIndicators.bCircleMode) {
-			lines.add("circleMode:b = " + (data.brIndicators.bCircleMode ? "yes" : "no"));
-		}
-		lines.add("crosshairDistHorSizeMain:p2 = " + data.brIndicators.bSizeMain.x + "," + data.brIndicators.bSizeMain.y);
-		lines.add("textPos:p2 = " + data.brIndicators.bTextOffset.x + "," + data.brIndicators.bTextOffset.y);
-		lines.add("textAlign:i = " + data.brIndicators.bTextAlign.id);
-		lines.add("textShift:r = " + data.brIndicators.bTextShift);
-		lines.add("drawAdditionalLines:b = " + (data.brIndicators.bDrawCenteredLines ? "yes" : "no") );
-		lines.add("crosshairDistHorSizeAdditional:p2 = " + data.brIndicators.bSizeCentered.x + "," + data.brIndicators.bSizeCentered.y);
-		if(data.brIndicators.bScaleMode == ScaleMode.RADIAL) {
-			lines.add("radialStretch:r = " + data.brIndicators.bRadialStretch);
-			lines.add("radialAngle:r = " + data.brIndicators.bRadialAngle);
-			lines.add("radialRadius:p2 = " + data.brIndicators.bRadialRadius + "," + (data.brIndicators.bRadiusUseMils ? "1" : "0") );
-		}
-		lines.add("drawDistanceCorrection:b = " + (data.brIndicators.bDrawCorrection ? "yes" : "no") );
-		if(data.brIndicators.bDrawCorrection) {
-			lines.add("distanceCorrectionPos:p2 = " + data.brIndicators.bCorrectionPos.x + "," + data.brIndicators.bCorrectionPos.y);
-		}
-		lines.add("");
-
-		lines.add("crosshair_distances {");
-		for(int i=0; i<data.brIndicators.bDists.size(); i++) {
-			int dist = data.brIndicators.bDists.get(i);
-			boolean major = data.brIndicators.bMajors.get(i);
-			int label = major ? Math.abs(dist/100) : 0;
-			double extend = data.brIndicators.bExtensions.get(i);
-			Vector2d textOff = data.brIndicators.bTextOffsets.get(i);
-			lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
-		}
-		lines.add("}");
-		lines.add("");
 		
 		
 		
 		// shell ballistics blocks
-		if(!data.shellBlocks.isEmpty()) {
+		if(!data.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty()) {
 			lines.add("// shell ballistics blocks");
 			lines.add("ballistics {");
 			
-			for(Entry<String,BallisticsBlock> entry : data.shellBlocks.entrySet()) {
+			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 
-				BallisticsBlock block = entry.getValue();
+				ElementShellBlock shellBlock = (ElementShellBlock)element;
 				
-				lines.add("  //-- " + block.name + " (" + block.bBulletName + ")");
+				lines.add("  //-- " + shellBlock.name + " (" + shellBlock.dataAmmo.ammo.name + ")");
 				lines.add("  bullet {");
 				
-				lines.add("    bulletType:t = \"" + block.bBulletType + "\"");
-				lines.add("    speed:r = " + block.bBulletSpeed);
-				lines.add("    triggerGroup:t = \"" + block.bTriggerGroup + "\"");
+				lines.add("    bulletType:t = \"" + shellBlock.dataAmmo.ammo.type + "\"");
+				lines.add("    speed:r = " + shellBlock.dataAmmo.ammo.speed);
+				lines.add("    triggerGroup:t = \"" + shellBlock.triggerGroup + "\"");
 				lines.add("    thousandth:b = " + "no");
-				lines.add("    drawUpward:b = " + (block.bDrawUpward ? "yes" : "no") );
-				lines.add("    distancePos:p2 = " + block.bMainPos.x + "," + block.bMainPos.y);
-				lines.add("    move:b = " + (block.bMove ? "yes" : "no") );
-				if(block.bScaleMode == ScaleMode.RADIAL) {
-					lines.add("    radial:b = " + (block.bScaleMode == ScaleMode.RADIAL ? "yes" : "no") );
+				lines.add("    drawUpward:b = " + (shellBlock.drawUpward ? "yes" : "no") );
+				lines.add("    distancePos:p2 = " + shellBlock.position.x + "," + shellBlock.position.y);
+				lines.add("    move:b = " + (shellBlock.move ? "yes" : "no") );
+				if(shellBlock.scaleMode == ScaleMode.RADIAL) {
+					lines.add("    radial:b = " + (shellBlock.scaleMode == ScaleMode.RADIAL ? "yes" : "no") );
 				}
-				if(block.bCircleMode) {
-					lines.add("    circleMode:b = " + (block.bCircleMode ? "yes" : "no") );
+				if(shellBlock.circleMode) {
+					lines.add("    circleMode:b = " + (shellBlock.circleMode ? "yes" : "no") );
 				}
-				lines.add("    crosshairDistHorSizeMain:p2 = " + block.bSizeMain.x + "," + block.bSizeMain.y);
-				lines.add("    textPos:p2 = " + block.bTextOffset.x + "," + block.bTextOffset.y);
-				lines.add("    textAlign:i = " + block.bTextAlign.id);
-				lines.add("    textShift:r = " + block.bTextShift);
+				lines.add("    crosshairDistHorSizeMain:p2 = " + shellBlock.size.x + "," + shellBlock.size.y);
+				lines.add("    textPos:p2 = " + shellBlock.textPos.x + "," + shellBlock.textPos.y);
+				lines.add("    textAlign:i = " + shellBlock.textAlign.id);
+				lines.add("    textShift:r = " + shellBlock.textShift);
 				
-				lines.add("    drawAdditionalLines:b = " + (block.bDrawCenteredLines ? "yes" : "no") );
-				lines.add("    crosshairDistHorSizeAdditional:p2 = " + block.bSizeCentered.x + "," + block.bSizeCentered.y);
+				lines.add("    drawAdditionalLines:b = " + (shellBlock.drawAddLines ? "yes" : "no") );
+				lines.add("    crosshairDistHorSizeAdditional:p2 = " + shellBlock.sizeAddLine.x + "," + shellBlock.sizeAddLine.y);
 				
-				if(block.bScaleMode == ScaleMode.RADIAL) {
-					lines.add("    radialStretch:r = " + block.bRadialStretch);
-					lines.add("    radialAngle:r = " + block.bRadialAngle);
-					lines.add("    radialRadius:p2 = " + block.bRadialRadius + "," + (block.bRadiusUseMils ? "1" : "0" ));
+				if(shellBlock.scaleMode == ScaleMode.RADIAL) {
+					lines.add("    radialStretch:r = " + shellBlock.radialStretch);
+					lines.add("    radialAngle:r = " + shellBlock.radialAngle);
+					lines.add("    radialRadius:p2 = " + shellBlock.radialRadius + "," + (shellBlock.radiusUseMils ? "1" : "0" ));
 				}
 				lines.add("    crosshair_distances {");
-				for(int i=0; i<block.bDists.size(); i++) {
-					int dist = block.bDists.get(i);
-					boolean major = block.bMajors.get(i);
+				
+				for(int i=0; i<shellBlock.indicators.size(); i++) {
+					BIndicator indicator = shellBlock.indicators.get(i);
+					
+					int dist = indicator.getDistance();
+					boolean major = indicator.isMajor();
 					int label = major ? Math.abs(dist/100) : 0;
-					double extend = block.bExtensions.get(i);
-					Vector2d textOff = block.bTextOffsets.get(i);
+					double extend = indicator.getExtend();
+					Vector2d textOff = new Vector2d(indicator.getTextX(), indicator.getTextY());
 					lines.add("        distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
 				}
 				lines.add("    }");
@@ -302,51 +311,26 @@ public class DataWriter {
 		
 		
 		// custom elements
-		List<LineObject> objLines = new ArrayList<LineObject>();
-		List<TextObject> objTexts = new ArrayList<TextObject>();
-		List<CircleObject> objCicles = new ArrayList<CircleObject>();
-		List<QuadObject> objQuads = new ArrayList<QuadObject>();
-
-		for(Entry<String,SightObject> entry : data.objects.entrySet()) {
-			SightObject obj = entry.getValue();
-
-			if(obj instanceof LineObject) {
-				objLines.add((LineObject)obj);
-				continue;
-			}
-			if(obj instanceof TextObject) {
-				objTexts.add((TextObject)obj);
-				continue;
-			}
-			if(obj instanceof CircleObject) {
-				objCicles.add((CircleObject)obj);
-				continue;
-			}
-			if(obj instanceof QuadObject) {
-				objQuads.add((QuadObject)obj);
-				continue;
-			}
-			
-		}
 		
 		// lines
-		if(!objLines.isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_LINE).isEmpty()) {
 			lines.add("// lines");
 			lines.add("drawLines {");
-			for(LineObject lineObj : objLines) {
+			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_LINE)) {
+				ElementCustomLine lineObj = (ElementCustomLine)element;
 				lines.add("  //-- " + lineObj.name);
 				lines.add("  line {");
-				lines.add("    thousandth:b = " + (lineObj.cmnUseThousandth ? "yes" : "no") );
-				if(lineObj.cmnMovement == Movement.MOVE) {
-					lines.add("    move:b = " + (lineObj.cmnMovement == Movement.STATIC ? "no" : "yes") );
+				lines.add("    thousandth:b = " + (lineObj.useThousandth ? "yes" : "no") );
+				if(lineObj.movement == Movement.MOVE) {
+					lines.add("    move:b = " + (lineObj.movement == Movement.STATIC ? "no" : "yes") );
 				}
-				if(lineObj.cmnMovement == Movement.MOVE_RADIAL) {
-					lines.add("    moveRadial:b = " + (lineObj.cmnMovement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + lineObj.cmnAngle);
-					lines.add("    radialCenter:p2 = " + lineObj.cmnRadCenter.x + "," + lineObj.cmnRadCenter.y);
-					lines.add("    radialMoveSpeed:r = " + lineObj.cmnSpeed);
-					if(!lineObj.useAutoCenter) {
-						lines.add("    center:p2 = " + lineObj.cmnCenter.x + "," + lineObj.cmnCenter.y);
+				if(lineObj.movement == Movement.MOVE_RADIAL) {
+					lines.add("    moveRadial:b = " + (lineObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
+					lines.add("    radialAngle:r = " + lineObj.angle);
+					lines.add("    radialCenter:p2 = " + lineObj.radCenter.x + "," + lineObj.radCenter.y);
+					lines.add("    radialMoveSpeed:r = " + lineObj.speed);
+					if(!lineObj.autoCenter) {
+						lines.add("    center:p2 = " + lineObj.center.x + "," + lineObj.center.y);
 					}
 				}
 				lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
@@ -356,27 +340,28 @@ public class DataWriter {
 		}
 		
 		// text
-		if(!objTexts.isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_TEXT).isEmpty()) {
 			lines.add("// text");
 			lines.add("drawTexts {");
-			for(TextObject textObj : objTexts) {
+			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_TEXT)) {
+				ElementCustomText textObj = (ElementCustomText)element;
 				lines.add("  //-- " +  textObj.name);
 				lines.add("  text {");
 				lines.add("    text:t = " + "\""+textObj.text + "\"");
-				lines.add("    thousandth:b = " + (textObj.cmnUseThousandth ? "yes" : "no") );
-				if(textObj.cmnMovement == Movement.MOVE) {
-					lines.add("    move:b = " + (textObj.cmnMovement == Movement.STATIC ? "no" : "yes") );
+				lines.add("    thousandth:b = " + (textObj.useThousandth ? "yes" : "no") );
+				if(textObj.movement == Movement.MOVE) {
+					lines.add("    move:b = " + (textObj.movement == Movement.STATIC ? "no" : "yes") );
 				}
-				if(textObj.cmnMovement == Movement.MOVE_RADIAL) {
-					lines.add("    moveRadial:b = " + (textObj.cmnMovement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + textObj.cmnAngle);
-					lines.add("    radialCenter:p2 = " + textObj.cmnRadCenter.x + "," + textObj.cmnRadCenter.y);
-					lines.add("    radialMoveSpeed:r = " + textObj.cmnSpeed);
-					if(!textObj.useAutoCenter) {
-						lines.add("    center:p2 = " + textObj.cmnCenter.x + "," + textObj.cmnCenter.y);
+				if(textObj.movement == Movement.MOVE_RADIAL) {
+					lines.add("    moveRadial:b = " + (textObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
+					lines.add("    radialAngle:r = " + textObj.angle);
+					lines.add("    radialCenter:p2 = " + textObj.radCenter.x + "," + textObj.radCenter.y);
+					lines.add("    radialMoveSpeed:r = " + textObj.speed);
+					if(!textObj.autoCenter) {
+						lines.add("    center:p2 = " + textObj.center.x + "," + textObj.center.y);
 					}
 				}
-				lines.add("    pos:p2 = " + textObj.pos.x + "," + textObj.pos.y);
+				lines.add("    pos:p2 = " + textObj.position.x + "," + textObj.position.y);
 				lines.add("    align:i = " + textObj.align.id);
 				lines.add("    size:r = " + textObj.size);
 				lines.add("  }");
@@ -385,27 +370,28 @@ public class DataWriter {
 		}
 		
 		// circles
-		if(!objCicles.isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_CIRCLE).isEmpty()) {
 			lines.add("// circles");
 			lines.add("drawCircles {");
-			for(CircleObject circleObj : objCicles) {
+			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_CIRCLE)) {
+				ElementCustomCircle circleObj = (ElementCustomCircle)element;
 				lines.add("  //-- " + circleObj.name);
 				lines.add("  circle {");
-				lines.add("    thousandth:b = " + (circleObj.cmnUseThousandth ? "yes" : "no") );
-				if(circleObj.cmnMovement == Movement.MOVE) {
-					lines.add("    move:b = " + (circleObj.cmnMovement == Movement.STATIC ? "no" : "yes") );
+				lines.add("    thousandth:b = " + (circleObj.useThousandth ? "yes" : "no") );
+				if(circleObj.movement == Movement.MOVE) {
+					lines.add("    move:b = " + (circleObj.movement == Movement.STATIC ? "no" : "yes") );
 				}
-				if(circleObj.cmnMovement == Movement.MOVE_RADIAL) {
-					lines.add("    moveRadial:b = " + (circleObj.cmnMovement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + circleObj.cmnAngle);
-					lines.add("    radialCenter:p2 = " + circleObj.cmnRadCenter.x + "," + circleObj.cmnRadCenter.y);
-					lines.add("    radialMoveSpeed:r = " + circleObj.cmnSpeed);
-					if(!circleObj.useAutoCenter) {
-						lines.add("    center:p2 = " + circleObj.cmnCenter.x + "," + circleObj.cmnCenter.y);
+				if(circleObj.movement == Movement.MOVE_RADIAL) {
+					lines.add("    moveRadial:b = " + (circleObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
+					lines.add("    radialAngle:r = " + circleObj.angle);
+					lines.add("    radialCenter:p2 = " + circleObj.radCenter.x + "," + circleObj.radCenter.y);
+					lines.add("    radialMoveSpeed:r = " + circleObj.speed);
+					if(!circleObj.autoCenter) {
+						lines.add("    center:p2 = " + circleObj.center.x + "," + circleObj.center.y);
 					}
 				}
 				lines.add("    segment:p2 = " + circleObj.segment.x + "," + circleObj.segment.y);
-				lines.add("    pos:p2 = " + circleObj.pos.x + "," + circleObj.pos.y);
+				lines.add("    pos:p2 = " + circleObj.position.x + "," + circleObj.position.y);
 				lines.add("    diameter:r = " + circleObj.diameter);
 				lines.add("    size:r = " + circleObj.size);
 				lines.add("  }");
@@ -415,23 +401,24 @@ public class DataWriter {
 		
 		
 		// quads
-		if(!objLines.isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_QUAD).isEmpty()) {
 			lines.add("// quads");
 			lines.add("drawQuads {");
-			for(QuadObject quadObj : objQuads) {
+			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_QUAD)) {
+				ElementCustomQuad quadObj = (ElementCustomQuad)element;
 				lines.add("  //-- " + quadObj.name);
 				lines.add("  quad {");
-				lines.add("    thousandth:b = " + (quadObj.cmnUseThousandth ? "yes" : "no") );
-				if(quadObj.cmnMovement == Movement.MOVE) {
-					lines.add("    move:b = " + (quadObj.cmnMovement == Movement.STATIC ? "no" : "yes") );
+				lines.add("    thousandth:b = " + (quadObj.useThousandth ? "yes" : "no") );
+				if(quadObj.movement == Movement.MOVE) {
+					lines.add("    move:b = " + (quadObj.movement == Movement.STATIC ? "no" : "yes") );
 				}
-				if(quadObj.cmnMovement == Movement.MOVE_RADIAL) {
-					lines.add("    moveRadial:b = " + (quadObj.cmnMovement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + quadObj.cmnAngle);
-					lines.add("    radialCenter:p2 = " + quadObj.cmnRadCenter.x + "," + quadObj.cmnRadCenter.y);
-					lines.add("    radialMoveSpeed:r = " + quadObj.cmnSpeed);
-					if(!quadObj.useAutoCenter) {
-						lines.add("    center:p2 = " + quadObj.cmnCenter.x + "," + quadObj.cmnCenter.y);
+				if(quadObj.movement == Movement.MOVE_RADIAL) {
+					lines.add("    moveRadial:b = " + (quadObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
+					lines.add("    radialAngle:r = " + quadObj.angle);
+					lines.add("    radialCenter:p2 = " + quadObj.radCenter.x + "," + quadObj.radCenter.y);
+					lines.add("    radialMoveSpeed:r = " + quadObj.speed);
+					if(!quadObj.autoCenter) {
+						lines.add("    center:p2 = " + quadObj.center.x + "," + quadObj.center.y);
 					}
 				}
 				lines.add("    tl:p2 = " + quadObj.pos1.x + "," + quadObj.pos1.y);

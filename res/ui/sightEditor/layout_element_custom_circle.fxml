@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="734.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.modules.UICustomCircle">
+   <children>
+      <ScrollPane fitToWidth="true" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0">
+               <children>
+                  <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" onAction="#onUseThousandth" prefWidth="1000000.0" text="Use Thousandth" />
+                        <Separator prefWidth="200.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Movement:" />
+                        <ChoiceBox fx:id="choiceMovement" minWidth="0.0" prefWidth="1000000.0" />
+                        <Separator prefWidth="200.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Angle:" />
+                        <Spinner fx:id="spinnerAngle" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Center:" />
+                        <CheckBox fx:id="cbUseAutoCenter" minWidth="0.0" mnemonicParsing="false" onAction="#onUseAutoCenter" prefWidth="1000000.0" text="Use Auto-Center" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerCenterX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerCenterY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Origin:" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerOriginX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerOriginY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Move Speed:" />
+                        <Spinner fx:id="spinnerSpeed" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Diameter" />
+                        <Spinner fx:id="spinnerDiameter" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Segment:" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerSegment1" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerSegment2" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="Outline Thickness:" />
+                        <Spinner fx:id="spinnerThickness" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
