@@ -31,6 +31,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -125,9 +126,14 @@ public class FXUtils {
 	
 	
 	
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public static void initSpinner(Spinner<?> spinner, double defaultValue, double min, double max, double step, int decPlaces, ChangeListener listener) {
+		initSpinner(spinner, defaultValue, min, max, step, decPlaces, true, listener);
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void initSpinner(Spinner<?> spinner, double defaultValue, double min, double max, double step, int decPlaces, boolean enableMouseWheel, ChangeListener listener) {
 		if(decPlaces <= 0) {
 			SpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory((int)min, (int)max, (int)defaultValue, (int)step);
 			valueFactory.setConverter(new StringConverterInt());
@@ -138,7 +144,17 @@ public class FXUtils {
 			valueFactory.setConverter(new StringConverterDouble(decPlaces, defaultValue));
 			spinner.setValueFactory(valueFactory);
 		}
-		
+		if(enableMouseWheel) {
+			spinner.setOnScroll(new EventHandler<ScrollEvent>() {
+				@Override public void handle(ScrollEvent event) {
+					if(event.getDeltaY() > 0) {
+						spinner.getValueFactory().increment(1);
+					} else {
+						spinner.getValueFactory().decrement(1);
+					}
+				}
+			});
+		}
 		if(listener != null) {
 			spinner.valueProperty().addListener(listener);
 		}

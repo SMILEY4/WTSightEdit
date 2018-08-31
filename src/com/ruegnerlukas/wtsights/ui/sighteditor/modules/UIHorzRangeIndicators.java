@@ -176,7 +176,7 @@ public class UIHorzRangeIndicators implements Module {
 	
 		Spinner<Integer> spMils = new Spinner<Integer>();
 		spMils.setEditable(true);
-		FXUtils.initSpinner(spMils, distance, -99, 99, 1, 0, new ChangeListener<Integer>() {
+		FXUtils.initSpinner(spMils, distance, -99, 99, 1, 0, false, new ChangeListener<Integer>() {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;

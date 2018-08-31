@@ -562,7 +562,7 @@ public class UIShellBlock implements Module {
 	
 		Spinner<Integer> spDistance = new Spinner<Integer>();
 		spDistance.setEditable(true);
-		FXUtils.initSpinner(spDistance, distance, 0, 9000, 100, 0, new ChangeListener<Integer>() {
+		FXUtils.initSpinner(spDistance, distance, 0, 9000, 100, 0, false, new ChangeListener<Integer>() {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
@@ -578,7 +578,7 @@ public class UIShellBlock implements Module {
 		
 		Spinner<Double> spExtend = new Spinner<Double>();
 		spExtend.setEditable(true);
-		FXUtils.initSpinner(spExtend, extend, -999, 999, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spExtend, extend, -999, 999, 0.005, 3, false, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
@@ -594,7 +594,7 @@ public class UIShellBlock implements Module {
 		
 		Spinner<Double> spTextX = new Spinner<Double>();
 		spTextX.setEditable(true);
-		FXUtils.initSpinner(spTextX, textX, -999, 999, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spTextX, textX, -999, 999, 0.005, 3, false, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
@@ -610,7 +610,7 @@ public class UIShellBlock implements Module {
 	
 		Spinner<Double> spTextY = new Spinner<Double>();
 		spTextY.setEditable(true);
-		FXUtils.initSpinner(spTextY, textY, -999, 999, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spTextY, textY, -999, 999, 0.005, 3, false, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
