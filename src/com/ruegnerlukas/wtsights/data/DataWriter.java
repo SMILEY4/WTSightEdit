@@ -204,48 +204,50 @@ public class DataWriter {
 		
 		
 		// ballistic range indicators
-		ElementBallRangeIndicator ballRange = (ElementBallRangeIndicator)data.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0);
-		lines.add("// ballistic range indicators");
-		lines.add("drawUpward:b = " + (ballRange.drawUpward ? "yes" : "no") );
-		lines.add("distancePos:p2 = " + ballRange.position.x + "," + ballRange.position.y);
-		if(ballRange.move) {
-			lines.add("move:b = " + (ballRange.move ? "yes" : "no") );
+		if(!data.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).isEmpty()) {
+			ElementBallRangeIndicator ballRange = (ElementBallRangeIndicator)data.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0);
+			lines.add("// ballistic range indicators");
+			lines.add("drawUpward:b = " + (ballRange.drawUpward ? "yes" : "no") );
+			lines.add("distancePos:p2 = " + ballRange.position.x + "," + ballRange.position.y);
+			if(ballRange.move) {
+				lines.add("move:b = " + (ballRange.move ? "yes" : "no") );
+			}
+			if(ballRange.scaleMode == ScaleMode.RADIAL) {
+				lines.add("radial:b = " + (ballRange.scaleMode == ScaleMode.RADIAL ? "yes" : "no"));
+			}
+			if(ballRange.circleMode) {
+				lines.add("circleMode:b = " + (ballRange.circleMode ? "yes" : "no"));
+			}
+			lines.add("crosshairDistHorSizeMain:p2 = " + ballRange.size.x + "," + ballRange.size.y);
+			lines.add("textPos:p2 = " + ballRange.textPos.x + "," + ballRange.textPos.y);
+			lines.add("textAlign:i = " + ballRange.textAlign.id);
+			lines.add("textShift:r = " + ballRange.textShift);
+			lines.add("drawAdditionalLines:b = " + (ballRange.drawAddLines ? "yes" : "no") );
+			lines.add("crosshairDistHorSizeAdditional:p2 = " + ballRange.sizeAddLine.x + "," + ballRange.sizeAddLine.y);
+			if(ballRange.scaleMode == ScaleMode.RADIAL) {
+				lines.add("radialStretch:r = " + ballRange.radialStretch);
+				lines.add("radialAngle:r = " + ballRange.radialAngle);
+				lines.add("radialRadius:p2 = " + ballRange.radialRadius + "," + (ballRange.radiusUseMils ? "1" : "0") );
+			}
+			lines.add("drawDistanceCorrection:b = " + (ballRange.drawCorrLabel ? "yes" : "no") );
+			if(ballRange.drawCorrLabel) {
+				lines.add("distanceCorrectionPos:p2 = " + ballRange.posCorrLabel.x + "," + ballRange.posCorrLabel.y);
+			}
+			lines.add("");
+			
+			lines.add("crosshair_distances {");
+			for(int i=0; i<ballRange.indicators.size(); i++) {
+				BIndicator indicator = ballRange.indicators.get(i);
+				int dist = indicator.getDistance();
+				boolean major = indicator.isMajor();
+				int label = major ? Math.abs(dist/100) : 0;
+				double extend = indicator.getExtend();
+				Vector2d textOff = new Vector2d(indicator.getTextX(), indicator.getTextY());
+				lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+			}
+			lines.add("}");
+			lines.add("");
 		}
-		if(ballRange.scaleMode == ScaleMode.RADIAL) {
-			lines.add("radial:b = " + (ballRange.scaleMode == ScaleMode.RADIAL ? "yes" : "no"));
-		}
-		if(ballRange.circleMode) {
-			lines.add("circleMode:b = " + (ballRange.circleMode ? "yes" : "no"));
-		}
-		lines.add("crosshairDistHorSizeMain:p2 = " + ballRange.size.x + "," + ballRange.size.y);
-		lines.add("textPos:p2 = " + ballRange.textPos.x + "," + ballRange.textPos.y);
-		lines.add("textAlign:i = " + ballRange.textAlign.id);
-		lines.add("textShift:r = " + ballRange.textShift);
-		lines.add("drawAdditionalLines:b = " + (ballRange.drawAddLines ? "yes" : "no") );
-		lines.add("crosshairDistHorSizeAdditional:p2 = " + ballRange.sizeAddLine.x + "," + ballRange.sizeAddLine.y);
-		if(ballRange.scaleMode == ScaleMode.RADIAL) {
-			lines.add("radialStretch:r = " + ballRange.radialStretch);
-			lines.add("radialAngle:r = " + ballRange.radialAngle);
-			lines.add("radialRadius:p2 = " + ballRange.radialRadius + "," + (ballRange.radiusUseMils ? "1" : "0") );
-		}
-		lines.add("drawDistanceCorrection:b = " + (ballRange.drawCorrLabel ? "yes" : "no") );
-		if(ballRange.drawCorrLabel) {
-			lines.add("distanceCorrectionPos:p2 = " + ballRange.posCorrLabel.x + "," + ballRange.posCorrLabel.y);
-		}
-		lines.add("");
-
-		lines.add("crosshair_distances {");
-		for(int i=0; i<ballRange.indicators.size(); i++) {
-			BIndicator indicator = ballRange.indicators.get(i);
-			int dist = indicator.getDistance();
-			boolean major = indicator.isMajor();
-			int label = major ? Math.abs(dist/100) : 0;
-			double extend = indicator.getExtend();
-			Vector2d textOff = new Vector2d(indicator.getTextX(), indicator.getTextY());
-			lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
-		}
-		lines.add("}");
-		lines.add("");
 		
 		
 		
