@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -230,11 +231,13 @@ public class UISightEditor {
 		
 		listViewElements.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				String elementName = newValue.split(";")[0];
-				for(Element e : dataSight.collectElements()) {
-					if(e.name.equals(elementName)) {
-						onSelectElement(e);
-						break;
+				if(newValue != null) {
+					String elementName = newValue.split(";")[0];
+					for(Element e : dataSight.collectElements()) {
+						if(e.name.equals(elementName)) {
+							onSelectElement(e);
+							break;
+						}
 					}
 				}
 			}
@@ -246,6 +249,7 @@ public class UISightEditor {
 		}
 		
 		onSelectElement(null);
+		sortList();
 		
 		Logger.get().debug("SightEditor created");
 		rebuildCanvas();
@@ -273,6 +277,22 @@ public class UISightEditor {
 	
 	
 	
+	void sortList() {
+		listViewElements.getItems().sort(new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				int resType = (o1.split(";")[1]).compareTo(o2.split(";")[1]);
+				if(resType == 0) {
+					return (o1.split(";")[0]).compareTo(o2.split(";")[0]);
+				} else {
+					return resType;
+				}
+			}
+		});
+	}
+	
+	
+	
 	
 	@FXML
 	void onAddElement(ActionEvent event) {
@@ -282,6 +302,7 @@ public class UISightEditor {
 			dataSight.addElement(element);
 			listViewElements.getItems().add(listViewElements.getItems().size(), element.name + ";" + element.type.toString());
 			listViewElements.getSelectionModel().select(listViewElements.getItems().size()-1);
+			sortList();
 			repaintCanvas();
 		} else {
 			Logger.get().info("Created null element");
@@ -350,6 +371,7 @@ public class UISightEditor {
 			listViewElements.getItems().remove(index);
 			listViewElements.getItems().add(index, element.name+";"+element.type.toString());
 			listViewElements.getSelectionModel().select(index);
+			sortList();
 			repaintCanvas();
 		}
 	}
@@ -379,6 +401,7 @@ public class UISightEditor {
 		
 		if(result.get() == buttonDelete) {
 			deleteElement(listViewElements.getSelectionModel().getSelectedItem(), true);
+			sortList();
 			repaintCanvas();
 			
 		} else if(result.get() == buttonCancel) {
