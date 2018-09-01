@@ -1,5 +1,7 @@
 package com.ruegnerlukas.wtutils;
 
+import com.ruegnerlukas.simplemath.MathUtils;
+
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -7,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class ZoomableScrollPane extends ScrollPane {
 
@@ -66,6 +69,7 @@ public class ZoomableScrollPane extends ScrollPane {
 
 
 	private void onScroll(double wheelDelta, Point2D mousePoint) {
+		
 		double zoomFactor = Math.exp(wheelDelta * zoomIntensity);
 
 		Bounds innerBounds = zoomNode.getLayoutBounds();
@@ -91,6 +95,14 @@ public class ZoomableScrollPane extends ScrollPane {
 		Bounds updatedInnerBounds = zoomNode.getBoundsInLocal();
 		this.setHvalue((valX + adjustment.getX()) / (updatedInnerBounds.getWidth() - viewportBounds.getWidth()));
 		this.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
+	
+		zoomEvent();
 	}
+	
+	
+	
+	
+	public void zoomEvent() {}
+	
 	
 }

@@ -2,6 +2,9 @@ package com.ruegnerlukas.wtsights;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
@@ -10,8 +13,10 @@ import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.data.Database;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
+import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -122,8 +127,19 @@ public class WTSights extends Application {
 			} 
 		});
 		
-		UIMainMenu.openNew(primaryStage);
-
+//		UIMainMenu.openNew(primaryStage);
+		
+		ArrayList<Ammo> ammoList = new ArrayList<Ammo>();
+		Ammo ammo = new Ammo();
+		ammo.name = "ammo_75mm_pzgr_39";
+		ammo.type = "apcbc_tank";
+		ammo.speed = 740;
+		ammoList.add(ammo);
+		
+		HashMap<Ammo,File> imageMap = new HashMap<Ammo,File>();
+		imageMap.put(ammo, new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\apcbc.png"));
+		
+		UICalibrationEditor.openNew(Database.getVehicleByName("vehicle_germ_pzkpfw_iv_ausf_f2"), ammoList, imageMap);
 	}
 
 	
