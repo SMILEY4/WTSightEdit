@@ -1,15 +1,15 @@
-package com.ruegnerlukas.wtutils;
-
-import com.ruegnerlukas.simplemath.MathUtils;
+package com.ruegnerlukas.wtutils.canvas;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 public class ZoomableScrollPane extends ScrollPane {
 
@@ -23,6 +23,14 @@ public class ZoomableScrollPane extends ScrollPane {
 
 	public ZoomableScrollPane(Node target) {
 		super();
+		
+		target.addEventHandler(MouseEvent.ANY, event -> {
+		    if(event.getButton() != MouseButton.SECONDARY) {
+		    	target.getScene().setCursor(Cursor.DEFAULT);
+		    	event.consume();
+		    }
+		});
+		
 		this.target = target;
 		this.zoomNode = new Group(target);
 		setContent(outerNode(zoomNode));

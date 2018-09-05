@@ -1,23 +1,21 @@
-package com.ruegnerlukas.wtutils;
+package com.ruegnerlukas.wtutils.canvas;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.lang.reflect.InvocationTargetException;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
-import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.twelvemonkeys.image.ResampleOp;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
@@ -26,19 +24,20 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Scale;
 
 public class WTCanvas {
 
 	private ZoomableScrollPane scrollPane;
 	private Pane paneDummy;
+	private SwingNode nodeCanvas;
 	private JPanel canvas;
 	
 	private final Rectanglef bounds = new Rectanglef(0, 0, 0, 0);
 	private boolean boundsAllVisible = false;
 	
-	private BufferedImageOp resampler;
 	private BufferedImage rendertarget;
-	private BufferedImage rendertargetSmall;
+	private Pinboard pinboard;
 	
 	private boolean cursorVisible = false;
 	private Vector2i cursorPosition = new Vector2i();
@@ -63,16 +62,16 @@ public class WTCanvas {
 				onMouseMoved();
 			}
 		});
-//		paneDummy.setOnMouseDragged(new EventHandler<MouseEvent>() {
-//			@Override public void handle(MouseEvent event) {
-//				if(event.getButton() != MouseButton.SECONDARY) {
-//					event.consume();
-//					cursorVisible = true;
-//					cursorPosition.set(event.getX(), event.getY());
-//					onMouseDragged();
-//				}
-//			}
-//		});
+		paneDummy.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override public void handle(MouseEvent event) {
+				if(event.getButton() != MouseButton.SECONDARY) {
+					event.consume();
+					cursorVisible = true;
+					cursorPosition.set(event.getX(), event.getY());
+					onMouseDragged();
+				}
+			}
+		});
 		paneDummy.setOnMouseExited(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -107,27 +106,27 @@ public class WTCanvas {
 		// add dummy to scrollpane
 		scrollPane = new ZoomableScrollPane(paneDummy) {
 			@Override public void zoomEvent() {
-				repaint(false);
+				repaint();
 			}
 		};
 		scrollPane.vvalueProperty().addListener(new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				repaint(false);
+				repaint();
 			}
 		});
 		scrollPane.hvalueProperty().addListener(new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				repaint(false);
+				repaint();
 			}
 		});
 		scrollPane.widthProperty().addListener(new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				repaint(false);
+				repaint();
 			}
 		});
 		scrollPane.heightProperty().addListener(new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				repaint(false);
+				repaint();
 			}
 		});
 		paneCanvas.getChildren().add(scrollPane);
@@ -137,10 +136,8 @@ public class WTCanvas {
 		AnchorPane.setBottomAnchor(scrollPane, 0.0);
 		
 		// create awt canvas
-		SwingNode swingNode = new SwingNode();
-		
+		nodeCanvas = new SwingNode();
 		try {	
-			
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
@@ -159,21 +156,22 @@ public class WTCanvas {
 						}
 					});
 					canvas.repaint();
-					swingNode.setContent(canvas);
+					nodeCanvas.setContent(canvas);
 				}
 			});
-			
 		} catch (InvocationTargetException | InterruptedException e) {
 			Logger.get().error("Error when creating AWTCanvas" + e);
 		}
+		nodeCanvas.setMouseTransparent(true);
+		paneCanvas.getChildren().add(nodeCanvas);
+		AnchorPane.setLeftAnchor(nodeCanvas, 0.0);
+		AnchorPane.setRightAnchor(nodeCanvas, 18.0);
+		AnchorPane.setTopAnchor(nodeCanvas, 0.0);
+		AnchorPane.setBottomAnchor(nodeCanvas, 18.0);
+		nodeCanvas.toFront();
 		
-		swingNode.setMouseTransparent(true);
-		paneCanvas.getChildren().add(swingNode);
-		AnchorPane.setLeftAnchor(swingNode, 0.0);
-		AnchorPane.setRightAnchor(swingNode, 18.0);
-		AnchorPane.setTopAnchor(swingNode, 0.0);
-		AnchorPane.setBottomAnchor(swingNode, 18.0);
-		swingNode.toFront();
+		// create pinboard
+		pinboard = new Pinboard();
 		
 		// create rendertargets
 		resizeRendertarget(width, height);
@@ -185,27 +183,52 @@ public class WTCanvas {
 	public void resizeRendertarget(int width, int height) {
 		
 		if( rendertarget != null && width == rendertarget.getWidth() && height == rendertarget.getHeight() ) {
-			repaint(true);
+			repaint();
 			
 		} else {
-			resampler = new ResampleOp(width/2, height/2);
 			rendertarget = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			rendertargetSmall = new BufferedImage(width/2, height/2, BufferedImage.TYPE_INT_RGB);
 			paneDummy.setMinSize(width, height);
 			paneDummy.setPrefSize(width, height);
 			paneDummy.setMaxSize(width, height);
-			repaint(true);
+			repaint();
 		}
 	}
 	
 	
 	
 	
-	public void repaint(boolean resample) {
-//		if(resample) {
-//			resampler.filter(rendertarget, rendertargetSmall);
-//		}
-		canvas.repaint();
+	public void repaint() {
+		
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override public void run() {
+					try {
+						
+						calculateBounds();
+						canvas.repaint();
+						
+					} catch(Exception e) {
+						Logger.get().error(e);
+					}
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override public void run() {
+//				try {
+//					
+//					calculateBounds();
+//					canvas.repaint();
+//					
+//				} catch(Exception e) {
+//					Logger.get().error(e);
+//				}
+//			}
+//		});
+		
 	}
 	
 	
@@ -213,21 +236,13 @@ public class WTCanvas {
 	
 	private void draw(Graphics2D g) {
 		
-		calculateBounds();
-		
 		if(boundsAllVisible) {
 			final double scaleContent = paneDummy.getScaleX();
 			final int width = (int)(rendertarget.getWidth() * scaleContent);
 			final int height = (int)(rendertarget.getHeight() * scaleContent);
 			final int x = (canvas.getWidth()-width) / 2;
 			final int y = (canvas.getHeight()-height) / 2;
-			
-			if(scaleContent < 0.5) {	// use smaller version for better filtering
-//				g.drawImage(rendertargetSmall, x, y, width, height, null);
-				g.drawImage(rendertarget, x, y, width, height, null);
-			} else {
-				g.drawImage(rendertarget, x, y, width, height, null);
-			}
+			g.drawImage(rendertarget, x, y, width, height, null);
 		    
 		} else {
 			g.drawImage(
@@ -243,6 +258,8 @@ public class WTCanvas {
 					null
 				);
 		}
+		
+		pinboard.draw(g, this, paneDummy, nodeCanvas);
 		
 	}
 	
@@ -305,6 +322,20 @@ public class WTCanvas {
 	
 	
 	
+	public int getNodeWidth() {
+		return canvas.getWidth();
+	}
+	
+	
+	
+	
+	public int getNodeHeight() {
+		return canvas.getHeight();
+	}
+	
+	
+	
+	
 	public int getCursorX() {
 		return this.cursorPosition.x;
 	}
@@ -328,6 +359,13 @@ public class WTCanvas {
 	
 	public boolean isCursorVisible() {
 		return this.cursorVisible;
+	}
+	
+	
+	
+	
+	public Pinboard getPinboard() {
+		return this.pinboard;
 	}
 	
 	
