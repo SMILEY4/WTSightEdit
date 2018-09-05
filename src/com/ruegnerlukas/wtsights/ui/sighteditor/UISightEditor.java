@@ -27,7 +27,7 @@ import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
 import com.ruegnerlukas.wtsights.ui.sighteditor.modules.UIRangefinder;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
-import com.ruegnerlukas.wtutils.ZoomableScrollPane;
+import com.ruegnerlukas.wtutils.canvas.ZoomableScrollPane;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

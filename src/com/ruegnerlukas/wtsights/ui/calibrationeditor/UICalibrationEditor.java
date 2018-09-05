@@ -8,21 +8,16 @@ import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import javax.swing.SwingUtilities;
-
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
-import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.DataWriter;
@@ -38,7 +33,8 @@ import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Config2;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils;
-import com.ruegnerlukas.wtutils.WTCanvas;
+import com.ruegnerlukas.wtutils.canvas.WTCanvas;
+import com.ruegnerlukas.wtutils.canvas.pin.TextPin;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -46,6 +42,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -59,6 +56,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -341,6 +339,25 @@ public class UICalibrationEditor {
 	
 	
 	
+	private void updateMarkerPins() {
+		
+		// remove all
+		for(int i=0; i<currentAmmoData.markerRanges.size()+10; i++) {
+			wtCanvas.getPinboard().removePin("marker_"+i);
+		}
+		
+		for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+			double y = currentAmmoData.markerRanges.get(i).x + currentAmmoData.markerCenter.x;
+			TextPin pin = new TextPin("marker_" + (i+1) );
+			pin.text = ""+(i+1);
+			pin.position.set(wtCanvas.getWidth()/2+7, (int)y);
+			pin.color = Color.MAGENTA;
+			pin.align = TextPin.Align.LEFT_CENTER;
+			wtCanvas.getPinboard().addPin(pin);
+		}
+		
+	}
+	
 	
 	private void updateRangeList() {
 		
@@ -354,7 +371,21 @@ public class UICalibrationEditor {
 				
 				Vector2i marker = currentAmmoData.markerRanges.get(i);
 				
+				HBox boxMarker = new HBox();
+				boxMarker.setMinSize(0, 31);
+				boxMarker.setPrefSize(10000, 31);
+				boxMarker.setMaxSize(10000, 31);
+
+				Label label = new Label((i+1) + ":");
+				label.setAlignment(Pos.CENTER);
+				label.setMinSize(31, 31);
+				label.setPrefSize(31, 31);
+				label.setMaxSize(31, 31);
+				
 				Spinner<Integer> spinner = new Spinner<Integer>();
+				spinner.setMinSize(0, 31);
+				spinner.setPrefSize(10000, 31);
+				spinner.setMaxSize(10000, 31);
 				FXUtils.initSpinner(spinner, marker.y, 0, 3200, 200, 0, new ChangeListener<Integer>() {
 					@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 						marker.y = newValue;
@@ -362,7 +393,9 @@ public class UICalibrationEditor {
 					}
 				});
 				
-				boxRanges.getChildren().add(spinner);
+				boxMarker.getChildren().addAll(label, spinner);
+				
+				boxRanges.getChildren().add(boxMarker);
 				VBox.setVgrow(spinner, Priority.ALWAYS);
 			}
 			
@@ -372,120 +405,105 @@ public class UICalibrationEditor {
 	
 	
 	
-	final static BasicStroke dashed =new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{5.0f}, 0.0f);
+	final static BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{5.0f}, 0.0f);
+	final static Color DARK_RED = new Color(150, 0, 0);
 	
 	private void repaintCanvas() {
 		
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					try {
-					
-					Graphics2D g = wtCanvas.getGraphics();
-					
-					// draw background
-					BufferedImage currentImage = dataCalib.images.get("image_"+currentAmmoData.ammo.name);
-					if(currentAmmoData != null) {
-						g.drawImage(currentImage, 0, 0, null);
-					} else {
-						g.setColor(Color.LIGHT_GRAY);
-						g.fillRect(0, 0, wtCanvas.getWidth(), wtCanvas.getHeight());
-					}
-					
-					// draw cursor
-					Vector2i cpos = wtCanvas.getCursorPosition();
-					if(wtCanvas.isCursorVisible()) {
+		Graphics2D g = wtCanvas.getGraphics();
+		
+		// draw background
+		BufferedImage currentImage = dataCalib.images.get("image_"+currentAmmoData.ammo.name);
+		if(currentAmmoData != null) {
+			g.drawImage(currentImage, 0, 0, null);
+		} else {
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, wtCanvas.getWidth(), wtCanvas.getHeight());
+		}
+		
+		// draw cursor
+		Vector2i cpos = wtCanvas.getCursorPosition();
+		if(wtCanvas.isCursorVisible()) {
+			g.setColor(DARK_RED);
+			Stroke defaultStroke = g.getStroke();
+			g.setStroke(dashed);
+			g.drawLine(-2, cpos.y, wtCanvas.getWidth(), cpos.y);
+			g.setStroke(defaultStroke);
+			g.setColor(Color.RED);
+			g.drawLine(wtCanvas.getWidth()/2, cpos.y+3, wtCanvas.getWidth()/2, cpos.y-3);
+		}
+		
+
+		if(currentAmmoData != null && currentImage != null) {
+			
+			List<Vector2i> allMarkers = currentAmmoData.markerRanges;
+			
+			int mc = currentAmmoData.markerCenter.x;
+			
+			double minDist = Integer.MAX_VALUE;
+			Vector2i minMarker = null;
+			Vector2i tmp = new Vector2i();
+			
+			for(Vector2i m : currentAmmoData.markerRanges) {
+				double dist = tmp.set(cpos.getIntX(), m.x+mc).dist(cpos.getIntX(), cpos.getIntY());
+				if(dist < minDist) {
+					minDist = dist;
+					minMarker = m;
+				}
+			}
+			
+			
+			for (Vector2i marker : allMarkers) {
+				
+				if (marker == minMarker) {
+					g.setColor(Color.YELLOW);
+				} else {
+					g.setColor(Color.MAGENTA);
+				}
+				
+				int mx = currentImage.getWidth()/2;
+				int my = marker.x + mc;
+				
+				g.drawLine(mx-3, my-3, mx+3, my+3);
+				g.drawLine(mx+3, my-3, mx-3, my+3);
+				
+
+				Font fontSaved = g.getFont();
+				g.setFont(font);
+//				g.drawString(""+(allMarkers.indexOf(marker)+1), mx + 5, my);
+				g.setFont(fontSaved);
+				
+			}
+			
+			
+			if(currentAmmoData.markerRanges.size() > 0) {
+				
+				// ballistic range indicators
+				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
+				fittingPoints.add(new Vector2d(0, 0));
+				for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+					Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
+					fittingPoints.add(p);
+				}
+				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+				
+				if(fittingParams != null) {
+					for(int i=200; i<=2800; i+=200) {
+						double resultPX = SightUtils.ballisticFunction(i/100.0, fittingParams);
+						int x = (int) (wtCanvas.getWidth()/2) - 15;
+						int y = (int) (currentAmmoData.markerCenter.x + resultPX);
 						g.setColor(Color.RED);
-						g.drawLine(cpos.x-10, cpos.y, cpos.x+10, cpos.y);
-						g.drawLine(cpos.x, cpos.y-10, cpos.x, cpos.y+10);
-						Stroke defaultStroke = g.getStroke();
-						g.setStroke(dashed);
-						g.drawLine(0, cpos.y, wtCanvas.getWidth(), cpos.y);
-						g.setStroke(defaultStroke);
-					}
-
-					if(currentAmmoData != null && currentImage != null) {
-						
-						List<Vector2i> allMarkers = currentAmmoData.markerRanges;
-						
-						int mc = currentAmmoData.markerCenter.x;
-						
-						double minDist = Integer.MAX_VALUE;
-						Vector2i minMarker = null;
-						Vector2i tmp = new Vector2i();
-						
-						for(Vector2i m : currentAmmoData.markerRanges) {
-							double dist = tmp.set(cpos.getIntX(), m.x+mc).dist(cpos.getIntX(), cpos.getIntY());
-							if(dist < minDist) {
-								minDist = dist;
-								minMarker = m;
-							}
-						}
-						
-						
-						for (Vector2i marker : allMarkers) {
-							
-							if (marker == minMarker) {
-								g.setColor(Color.YELLOW);
-							} else {
-								g.setColor(Color.MAGENTA);
-							}
-							
-							int mx = currentImage.getWidth()/2;
-							int my = marker.x + mc;
-							
-							g.drawLine(mx-3, my-3, mx+3, my+3);
-							g.drawLine(mx+3, my-3, mx-3, my+3);
-							
-
-							g.setFont(font);
-							g.drawString(""+(allMarkers.indexOf(marker)+1), mx + 5, my);
-							
-							
-						}
-						
-						
-						if(currentAmmoData.markerRanges.size() > 0) {
-							
-							// ballistic range indicators
-							List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-							fittingPoints.add(new Vector2d(0, 0));
-							for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-								Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-								fittingPoints.add(p);
-							}
-							Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-							
-							if(fittingParams != null) {
-								for(int i=200; i<=2800; i+=200) {
-									double resultPX = SightUtils.ballisticFunction(i/100.0, fittingParams);
-									int x = (int) (wtCanvas.getWidth()/2) - 15;
-									int y = (int) (currentAmmoData.markerCenter.x + resultPX);
-									g.setColor(Color.RED);
-									g.drawLine(x-4, y, x+4, y);
-								}
-							}
-							
-							
-						}
-						
-					}
-					
-					g.dispose();
-					wtCanvas.repaint(true);
-					
-					} catch(Exception e) {
-						Logger.get().error(e);
+						g.drawLine(x-4, y, x+4, y);
 					}
 				}
-			});
-		} catch (InvocationTargetException | InterruptedException e) {
-			Logger.get().error(e);
+				
+				
+			}
+			
 		}
 		
 		
-		
+		wtCanvas.repaint();
 	}
 	
 	
@@ -508,11 +526,16 @@ public class UICalibrationEditor {
 			return;
 		}
 		int mc = currentAmmoData.markerCenter.x;
+		Vector2i vec = null;
 		if(currentAmmoData.markerRanges.size() == 0) {
-			currentAmmoData.markerRanges.add(new Vector2i( (int)y-mc, 200));
+			vec = new Vector2i( (int)y-mc, 200);
 		} else {
-			currentAmmoData.markerRanges.add(new Vector2i( (int)y-mc, currentAmmoData.markerRanges.get(currentAmmoData.markerRanges.size()-1).y+200));
+			vec = new Vector2i( (int)y-mc, currentAmmoData.markerRanges.get(currentAmmoData.markerRanges.size()-1).y+200);
 		}
+		currentAmmoData.markerRanges.add(vec);
+		
+		updateMarkerPins();
+		
 		Logger.get().debug("Adding marker at y=" + (int)(y-mc) );
 		updateRangeList();
 		repaintCanvas();
@@ -545,6 +568,7 @@ public class UICalibrationEditor {
 			Logger.get().debug("Deleted marker " + minMarker );
 		}
 		
+		updateMarkerPins();
 		updateRangeList();
 		repaintCanvas();
 	}
