@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtutils.Config;
 
 public class AmmoIcons {
 
@@ -95,6 +96,10 @@ public class AmmoIcons {
 	}
 
 	
+	
+	public static BufferedImage getIcon(String type) {
+		return getIcon(type, "dark".equals(Config.app_style));
+	}
 	
 	
 	public static BufferedImage getIcon(String type, boolean dark) {

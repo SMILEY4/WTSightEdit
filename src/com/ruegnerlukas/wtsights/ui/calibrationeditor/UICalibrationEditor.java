@@ -30,7 +30,7 @@ import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
@@ -97,10 +97,11 @@ public class UICalibrationEditor {
 
 		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoList + "; sight=" + fileSight.getAbsolutePath());
 
-		int width = Config2.app_window_size.x;
-		int height = Config2.app_window_size.y;
+		int width = Config.app_window_size.x;
+		int height = Config.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
+		boolean styleDark = "dark".equals(Config.app_style);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration"+(styleDark?"_dark":"")+".fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -114,10 +115,11 @@ public class UICalibrationEditor {
 
 		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoList);
 
-		int width = Config2.app_window_size.x;
-		int height = Config2.app_window_size.y;
+		int width = Config.app_window_size.x;
+		int height = Config.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
+		boolean styleDark = "dark".equals(Config.app_style);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration"+(styleDark?"_dark":"")+".fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -130,10 +132,11 @@ public class UICalibrationEditor {
 
 		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  data=" + dataCalib + "; vehicle="+dataCalib.vehicle.name);
 
-		int width = Config2.app_window_size.x;
-		int height = Config2.app_window_size.y;
+		int width = Config.app_window_size.x;
+		int height = Config.app_window_size.y;
 		
-		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration.fxml", width, height, "Create Ballistic Data");
+		boolean styleDark = "dark".equals(Config.app_style);
+		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/layout_calibration"+(styleDark?"_dark":"")+".fxml", width, height, "Create Ballistic Data");
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
@@ -248,7 +251,7 @@ public class UICalibrationEditor {
 				} else {
 					String name = item != null ? item.split(";")[0] : "<null>";
 					String type = item != null ? item.split(";")[1] : "<null>";
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
 					imgView.setSmooth(true);
 					imgView.setPreserveRatio(true);
 					imgView.setFitHeight(40);
@@ -269,7 +272,7 @@ public class UICalibrationEditor {
 						} else {
 							String name = item != null ? item.split(";")[0] : "<null>";
 							String type = item != null ? item.split(";")[1] : "<null>";
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
 							imgView.setSmooth(true);
 							imgView.setPreserveRatio(true);
 							imgView.setFitHeight(40);

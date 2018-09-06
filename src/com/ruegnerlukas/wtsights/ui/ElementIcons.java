@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtutils.Config;
 
 public class ElementIcons {
 
@@ -70,6 +71,11 @@ public class ElementIcons {
 	}
 
 	
+	
+	
+	public static BufferedImage getIcon(int index) {
+		return getIcon(index, "dark".equals(Config.app_style));
+	}
 	
 	
 	public static BufferedImage getIcon(int index, boolean dark) {
