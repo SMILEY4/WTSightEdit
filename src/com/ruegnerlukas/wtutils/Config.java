@@ -1,113 +1,103 @@
-//package com.ruegnerlukas.wtutils;
-//
-//import java.io.BufferedReader;
-//import java.io.BufferedWriter;
-//import java.io.File;
-//import java.io.FileReader;
-//import java.io.FileWriter;
-//import java.io.IOException;
-//import java.io.PrintWriter;
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-//
-//public class Config {
-//
-//	
-//	private static Map<String,String> configMap = new HashMap<String,String>();
-//	
-//	
-//	
-//	
-//	
-//	public static void load(File file) {
-//
-//		configMap.clear();
-//		
-//		if(!file.exists()) {
-//			Logger.get().warn("Config file does not exist. Creating default config file.");
-//			create(file);
-//		}
-//		
-//		try {
-//			
-//			
-//			BufferedReader reader = new BufferedReader(new FileReader(file));
-//			String line = null;
-//			
-//			while( (line = reader.readLine()) != null) {
-//				
-//				line = line.trim();
-//				if(line.isEmpty() || line.startsWith(";")) {
-//					continue;
-//				}
-//				
-//				try {
-//					String key = line.split("=")[0].toLowerCase().trim();
-//					String value = line.split("=")[1].trim();
-//					configMap.put(key, value);
-//				} catch(Exception e) {
-//					// ignore
-//				}
-//			}
-//			
-//			reader.close();
-//			
-//			Logger.get().info("Config file loaded (" + file.getAbsolutePath() + ")");
-//			
-//		} catch (IOException e) {
-//			Logger.get().error(e);
-//		}
-//		
-//		
-//	}
-//
-//	
-//	
-//	
-//	public static void create(File file) {
-//		
-//		final String default_config =
-//				"; updater\r\n" + 
-//				"auto_update = true\r\n" + 
-//				"update_path = https://raw.githubusercontent.com/SMILEY4/WTSightEdit/master/data\r\n" + 
-//				"\r\n" + 
-//				"; application\r\n" + 
-//				"window_size = 1280,720\r\n" + 
-//				"skin = default";
-//		
-//		try {
-//			if(!file.getParentFile().exists()) {
-//				file.getParentFile().mkdir();
-//			}
-//			file.createNewFile();
-//			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, false)));
-//			out.write(default_config);
-//			out.close();
-//		} catch (IOException e) {
-//			Logger.get().error(e);
-//		}
-//		
-//	}
-//	
-//	
-//	
-//	
-//	public static String getValue(String key) {
-//		return configMap.get(key.toLowerCase().trim());
-//	}
-//	
-//	
-//	public static String[] getValues(String key) {
-//		String value = configMap.get(key.toLowerCase().trim());
-//		if(value != null) {
-//			return value.split(",");
-//		} else {
-//			return null;
-//		}
-//	}
-//	
-//	
-//	
-//}
+package com.ruegnerlukas.wtutils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+
+public class Config {
+
+	
+	public static String build_version = "version_error";
+	public static String build_date = "date_error";
+	
+	public static boolean update_auto = true;
+	public static Vector2i app_window_size = new Vector2i(1280, 720);
+	public static String app_style = "default";
+
+	
+	
+	
+	public static void load(File cfgFile) {
+		
+		Logger.get().info("Loading config: " + cfgFile.getAbsolutePath());
+
+		// read file
+		String strJson = "";
+		
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(cfgFile));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			strJson = response.toString();
+		} catch(IOException e) {
+			Logger.get().warn("Loading config failed" + e);
+			return;
+		}
+
+		
+		// parse json
+		JsonParser parser = new JsonParser();
+		JsonObject jsonConfig = null;
+		try {
+			jsonConfig = parser.parse(strJson).getAsJsonObject();
+		} catch(Exception e) {
+			Logger.get().warn("Parsing config failed" + e);
+			return;
+		}
+
+		// get data
+		JsonObject jsonInfo = jsonConfig.has("info") ? jsonConfig.get("info").getAsJsonObject() : null;
+		JsonObject jsonDefault = jsonConfig.has("default") ? jsonConfig.get("default").getAsJsonObject() : null;
+		JsonObject jsonUser = jsonConfig.has("user") ? jsonConfig.get("user").getAsJsonObject() : null;
+
+		// info
+		if(jsonInfo != null) {
+			if(jsonInfo.has("build_version")) { build_version = jsonInfo.get("build_version").getAsString(); }
+			if(jsonInfo.has("build_date")) 	  { build_date = jsonInfo.get("build_date").getAsString(); }
+		}
+		
+		// default
+		if(jsonDefault != null) {
+			if(jsonDefault.has("update_auto")) { update_auto = jsonDefault.get("update_auto").getAsBoolean(); }
+			if(jsonDefault.has("app_window_size")) {
+				String[] strSize = jsonDefault.get("app_window_size").getAsString().split(",");
+				app_window_size = new Vector2i(Integer.parseInt(strSize[0]), Integer.parseInt(strSize[1]));
+			}
+			if(jsonDefault.has("app_style")) 	  { app_style = jsonDefault.get("app_style").getAsString(); }
+		}
+		
+		// user
+		if(jsonUser != null) {
+			if(jsonUser.has("update_auto")) { update_auto = jsonUser.get("update_auto").getAsBoolean(); }
+			if(jsonUser.has("app_window_size")) {
+				String[] strSize = jsonUser.get("app_window_size").getAsString().split(",");
+				app_window_size = new Vector2i(Integer.parseInt(strSize[0]), Integer.parseInt(strSize[1]));
+			}
+			if(jsonUser.has("app_style")) 	  { app_style = jsonUser.get("app_style").getAsString(); }
+		}
+		
+		Logger.get().info("Config successfuly loaded.");
+		
+	}
+	
+	
+	
+}
+
+
+
+
+
+
+
+
