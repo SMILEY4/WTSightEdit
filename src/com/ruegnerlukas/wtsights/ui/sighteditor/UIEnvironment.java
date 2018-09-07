@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -37,7 +38,7 @@ public class UIEnvironment {
 
 	private UISightEditor editor;
 
-	@FXML private ComboBox<String> comboAmmo;
+	@FXML private ComboBox<Ammo> comboAmmo;
 	@FXML private ChoiceBox<String> choiceZoomMode;
 	@FXML private CheckBox cbShowRangefinder;
 	@FXML private Slider sliderRangefinderProgress;
@@ -65,20 +66,23 @@ public class UIEnvironment {
 		// AMMO
 		FXUtils.initComboboxAmmo(comboAmmo);
 		if(editor.getCalibrationData().ammoData.isEmpty()) {
-			comboAmmo.getItems().add("No Ammunition available;-");
+			Ammo ammo = new Ammo();
+			ammo.type = "undefined";
+			ammo.name = "No Ammunition available";
+			comboAmmo.getItems().add(ammo);
 		} else {
 			for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-				comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+				comboAmmo.getItems().add(ammoData.ammo);
 			}
 		}
 		comboAmmo.getSelectionModel().select(0);
-		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue.split(";")[0]);
+			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
+				onAmmoSelected(newValue);
 			}
 		});
-		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
+		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
 		
 		
 		
@@ -156,11 +160,11 @@ public class UIEnvironment {
 
 	
 	
-	void onAmmoSelected(String ammoName) {
+	void onAmmoSelected(Ammo ammo) {
 		editor.setAmmoData(null);
 		for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
 			CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-			if(ammoData.ammo.name.equalsIgnoreCase(ammoName)) {
+			if(ammoData.ammo.name.equalsIgnoreCase(ammo.name)) {
 				editor.setAmmoData(ammoData);
 				break;
 			}
@@ -211,9 +215,9 @@ public class UIEnvironment {
 	void onCrosshairLighting(ActionEvent event) {
 		boolean enabled = cbCrosshairLighting.isSelected();
 		if(enabled) {
-			editor.getSightData().envSightColor = new java.awt.Color(255,75,55);
+			editor.getSightData().envSightColor = new Color(1.0, 75.0/255.0, 55.0/255.0, 1.0);
 		} else {
-			editor.getSightData().envSightColor = java.awt.Color.BLACK;
+			editor.getSightData().envSightColor = Color.BLACK;
 		}
 		editor.repaintCanvas();
 	}
@@ -231,7 +235,7 @@ public class UIEnvironment {
 		File file = fc.showOpenDialog(((Button)event.getSource()).getScene().getWindow());
 		if (file != null) {
 			try {
-				editor.getSightData().envBackground = ImageIO.read(file);
+				editor.getSightData().envBackground = new Image(new FileInputStream(file));
 				pathBackground.setText(file.getAbsolutePath());
 				Logger.get().info("Selected background: " + file);
 				int width = (int)editor.getSightData().envBackground.getWidth();
@@ -245,11 +249,8 @@ public class UIEnvironment {
 						break;
 					}
 				}
-				choiceResolution.setDisable(true);
 				editor.rebuildCanvas(width, height);
 			} catch (FileNotFoundException e) {
-				Logger.get().error(e);
-			} catch (IOException e) {
 				Logger.get().error(e);
 			}
 		}

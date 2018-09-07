@@ -102,11 +102,13 @@ public class DataLoader {
 			Element elementVehicle = (Element)listVehicles.item(i);
 			
 			Vehicle vehicle = new Vehicle();
-			vehiclesOut.add(vehicle);
 			vehicle.name = elementVehicle.getTagName();
 			vehicle.fovOut = Float.parseFloat(elementVehicle.getAttribute("fovOut"));
 			vehicle.fovIn = Float.parseFloat(elementVehicle.getAttribute("fovIn"));
 			vehicle.fovSight = Float.parseFloat(elementVehicle.getAttribute("fovSight"));
+			if( !(vehicle.name.contains("tutorial") || vehicle.name.contains("dummy")) ) {
+				vehiclesOut.add(vehicle);
+			}
 
 			Element elementWeaponsRoot = null;
 			for(int j=0; j<elementVehicle.getElementsByTagName("weapons").getLength(); j++) {
@@ -334,12 +336,14 @@ public class DataLoader {
 				}
 				case "rangefinderProgressBarColor1": {
 					ParamColor vec = (ParamColor)e;
-					rangefinder.color1 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
+					vec.value.clampComponents(0, 255f).div(255f);
+					rangefinder.color1 = new Color(vec.value.x, vec.value.y, vec.value.z, vec.value.w);
 					break;
 				}
 				case "rangefinderProgressBarColor2": {
 					ParamColor vec = (ParamColor)e;
-					rangefinder.color2 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
+					vec.value.clampComponents(0, 255f).div(255f);
+					rangefinder.color2 = new Color(vec.value.x, vec.value.y, vec.value.z, vec.value.w);
 					break;
 				}
 				case "rangefinderTextScale": {

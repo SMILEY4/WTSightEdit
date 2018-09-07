@@ -24,11 +24,19 @@ public class Database {
 	
 	public static void loadVehicles(File file) {
 		try {
-			vehicles = DataLoader.loadVehicleDataFile(file);
 			vehicleMap = new HashMap<String,Vehicle>();
+			vehicles = DataLoader.loadVehicleDataFile(file);
 			for(int i=0, n=vehicles.size(); i<n; i++) {
-				Vehicle v = vehicles.get(i);
-				vehicleMap.put(v.name, v);
+				Vehicle vehicle = vehicles.get(i);
+				vehicle.namePretty = toPrettyVehicleName(vehicle.name);
+				
+				for(Weapon weapon : vehicle.weaponsList) {
+					for(Ammo ammo : weapon.ammo) {
+						ammo.namePretty = toPrettyAmmoName(ammo.name);
+					}
+				}
+				
+				vehicleMap.put(vehicle.name, vehicle);
 			}
 			Logger.get().info("Vehicles loaded (" + vehicleMap.size() + ")");
 		} catch (Exception e) {
@@ -39,7 +47,26 @@ public class Database {
 	
 	
 	
-	public static List<String> getVehicleNames(String filter) {
+	public static String toPrettyAmmoName(String name) {
+		name = name.replace("ammo_", "").replaceAll("_", " ");
+		return name;
+	}
+	
+	
+	
+	
+	public static String toPrettyVehicleName(String name) {
+		name = name.replace("vehicle_", "");
+		String nation = name.split("_",2)[0];
+		String vehicle = name.split("_",2)[1];
+		vehicle = vehicle.replaceAll("_", " ");
+		return "(" + nation.toUpperCase() + ") " + vehicle;
+	}
+	
+	
+	
+	
+	public static List<String> getVehicleNamesFiltered(String filter) {
 		List<String> names = new ArrayList<String>();
 		for(int i=0, n=vehicles.size(); i<n; i++) {
 			Vehicle v = vehicles.get(i);

@@ -22,7 +22,7 @@ import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.collections.FXCollections;
@@ -115,7 +115,7 @@ public class UIScreenshotUpload {
 		this.vehicle = vehicle;
 		
 		// VEHICLE NAME
-		labelTankName.setText(vehicle.name);
+		labelTankName.setText(vehicle.namePretty);
 		
 		// LIST
 		ObservableList<String> fxListAmmo = FXCollections.observableArrayList();
@@ -327,7 +327,7 @@ public class UIScreenshotUpload {
 				String type = item != null ? item.split(";")[1] : "<null>";
 				label.setText(name);
 				label.setTooltip(new Tooltip("Type = " + type));
-				ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
+				ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
 				imgView.setSmooth(true);
 				imgView.setPreserveRatio(true);
 				imgView.setFitHeight(40);

@@ -1,4 +1,4 @@
-package com.ruegnerlukas.wtutils.canvas.pin;
+package com.ruegnerlukas.wtutils.awtCanvas.pin;
 
 public class TextPin extends Pin {
 

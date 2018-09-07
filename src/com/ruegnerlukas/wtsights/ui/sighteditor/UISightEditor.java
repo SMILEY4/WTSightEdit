@@ -3,10 +3,8 @@ package com.ruegnerlukas.wtsights.ui.sighteditor;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -20,15 +18,12 @@ import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.renderer.SightRenderer;
-import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
-import com.ruegnerlukas.wtsights.ui.sighteditor.modules.UIRangefinder;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
-import com.ruegnerlukas.wtutils.canvas.ZoomableScrollPane;
-
+import com.ruegnerlukas.wtutils.ZoomableScrollPane;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
@@ -45,7 +40,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -54,7 +48,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -105,8 +98,8 @@ public class UISightEditor {
 		
 		Logger.get().info("Navigate to 'SightEditor New' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataCalib == null ? "null" : dataCalib.vehicle.name) );
 
-		int width = Config2.app_window_size.x;
-		int height = Config2.app_window_size.y;
+		int width = Config.app_window_size.x;
+		int height = Config.app_window_size.y;
 		
 		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/sightEditor/layout_sighteditor.fxml", width, height, "Edit Sight");
 		UISightEditor controller = (UISightEditor)sceneObjects[0];
@@ -121,8 +114,8 @@ public class UISightEditor {
 		
 		Logger.get().info("Navigate to 'SightEditor New' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataCalib == null ? "null" : dataCalib.vehicle.name) + "; sightData="+dataSight);
 
-		int width = Config2.app_window_size.x;
-		int height = Config2.app_window_size.y;
+		int width = Config.app_window_size.x;
+		int height = Config.app_window_size.y;
 		
 		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/sightEditor/layout_sighteditor.fxml", width, height, "Edit Sight");
 		UISightEditor controller = (UISightEditor)sceneObjects[0];
@@ -153,7 +146,7 @@ public class UISightEditor {
 	
 	private void create() {
 		
-		labelVehicleName.setText(dataCalib.vehicle.name);
+		labelVehicleName.setText(dataCalib.vehicle.namePretty);
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(UISightEditor.class.getResource("/ui/sightEditor/layout_general.fxml"));
@@ -216,7 +209,7 @@ public class UISightEditor {
 							String[] split = item.split(";");
 							String name = split[0];
 							ElementType type = ElementType.get(split[1]);
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(type.iconIndex, false), null));
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(type.iconIndex), null));
 							imgView.setSmooth(true);
 							imgView.setPreserveRatio(true);
 							imgView.setFitHeight(20);
@@ -251,8 +244,9 @@ public class UISightEditor {
 		onSelectElement(null);
 		sortList();
 		
-		Logger.get().debug("SightEditor created");
 		rebuildCanvas();
+		
+		Logger.get().debug("SightEditor created");
 	}
 
 	
@@ -509,13 +503,9 @@ public class UISightEditor {
 	}
 	
 	
-	
-	
 	public void rebuildCanvas() {
 		rebuildCanvas(1920, 1080);
 	}
-	
-	
 	
 	
 	public void rebuildCanvas(int width, int height) {
@@ -581,8 +571,6 @@ public class UISightEditor {
 		repaintCanvas();
 		
 	}
-	
-	
 	
 	
 	public void repaintCanvas() {

@@ -9,6 +9,7 @@ import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.renderer.Conversion;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
@@ -46,7 +47,7 @@ public class UIShellBlock implements Module {
 	
 	
 
-	@FXML private ComboBox<String> comboAmmo;
+	@FXML private ComboBox<Ammo> comboAmmo;
 	@FXML private ChoiceBox<String> choiceScaleMode;
 
 	@FXML private VBox boxVertical;
@@ -105,16 +106,16 @@ public class UIShellBlock implements Module {
 		// AMMO
 		FXUtils.initComboboxAmmo(comboAmmo);
 		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-			comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+			comboAmmo.getItems().add(ammoData.ammo);
 		}
 		comboAmmo.getSelectionModel().select(0);
-		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue.split(";")[0]);
+			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
+				onAmmoSelected(newValue);
 			}
 		});
-		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
+		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
 		
 		if(elementDefault.scaleMode == ScaleMode.VERTICAL) {
 			boxVertical.setDisable(false);
@@ -473,9 +474,9 @@ public class UIShellBlock implements Module {
 		
 		if(element != null) {
 			if(element.dataAmmo == null) {
-				onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
+				onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
 			} else {
-				comboAmmo.getSelectionModel().select(element.dataAmmo.ammo.name + ";" + element.dataAmmo.ammo.type);
+				comboAmmo.getSelectionModel().select(element.dataAmmo.ammo);
 			}
 			choiceScaleMode.getSelectionModel().select(element.scaleMode.toString());
 			vTextShift.getValueFactory().setValue(element.textShift);
@@ -647,14 +648,14 @@ public class UIShellBlock implements Module {
 	
 	
 	
-	void onAmmoSelected(String ammoName) {
-		if(element == null) {
+	void onAmmoSelected(Ammo ammo) {
+		if(element == null || ammo == null || "undefined".equalsIgnoreCase(ammo.type)) {
 			return;
 		}
 		element.dataAmmo = null;
 		for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
 			CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-			if(ammoData.ammo.name.equalsIgnoreCase(ammoName)) {
+			if(ammoData.ammo.name.equalsIgnoreCase(ammo.name)) {
 				element.dataAmmo = ammoData;
 				break;
 			}

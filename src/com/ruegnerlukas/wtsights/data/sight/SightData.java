@@ -30,7 +30,7 @@ public class SightData {
 	public double 	envRFProgress 		= 30;
 	public int		envRangeCorrection 	= 0;
 	public Color 	envSightColor 		= Color.BLACK;
-	public Image 	envBackground 		= null;
+	public Image	envBackground 	= null;
 	
 	
 	// elements

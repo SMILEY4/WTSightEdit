@@ -1,20 +1,17 @@
 package com.ruegnerlukas.wtsights.ui.calibrationeditor;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
+
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
@@ -26,7 +23,6 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
-import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
@@ -34,34 +30,31 @@ import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
-import com.ruegnerlukas.wtutils.canvas.pin.TextPin;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class UICalibrationEditor {
 
@@ -70,7 +63,7 @@ public class UICalibrationEditor {
 	@FXML private ResourceBundle resources;
 	@FXML private URL location;
 
-	@FXML private ComboBox<String> choiceAmmo;
+	@FXML private ComboBox<Ammo> choiceAmmo;
 	
 	@FXML private CheckBox cbZoomedIn;
 	
@@ -78,15 +71,16 @@ public class UICalibrationEditor {
 
 	@FXML private Label labelInfo;
 
-	@FXML private AnchorPane paneCanvas;
-	private WTCanvas wtCanvas;
-	private Font font = new Font("Arial", Font.PLAIN, 10);
-
-
 	private File fileSight;
 	
 	private CalibrationData dataCalib;
 	private CalibrationAmmoData currentAmmoData;
+	
+	@FXML private AnchorPane paneCanvas;
+	private WTCanvas wtCanvas;
+	private Image currentImage;
+	private Map<String,Image> imageCache = new HashMap<String,Image>();
+	private Font font = new Font("Arial", 10);
 	
 	
 	
@@ -209,78 +203,85 @@ public class UICalibrationEditor {
 	
 	
 	private void create() {
-
-		// canvas
-		wtCanvas = new WTCanvas(paneCanvas, 1920, 1080) {
-			@Override
-			public void onMouseMoved() {
-				repaintCanvas();
+		
+		// CANVAS
+		wtCanvas = new WTCanvas(paneCanvas) {
+			@Override public void onMouseMoved() {
+				wtCanvas.repaint();
 			}
-			@Override
-			public void onMouseDragged() {
-				repaintCanvas();
+			@Override public void onMouseDragged() {
+				wtCanvas.repaint();
 			}
-			@Override
-			public void onMousePressed(MouseButton btn) {
-				repaintCanvas();
+			@Override public void onMousePressed(MouseButton btn) {
+				wtCanvas.repaint();
 			}
-			@Override
-			public void onMouseReleased(MouseButton btn) {
-				onAddMarker(wtCanvas.getCursorY());
-				repaintCanvas();
-			}
-		};
-		stage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.BACK_SPACE && wtCanvas.isCursorVisible()) {
-					event.consume();
-					onDeleteMarkerRequest(wtCanvas.getCursorY(), wtCanvas.getCursorY());
-					repaintCanvas();
+			@Override public void onMouseReleased(MouseButton btn) {
+				if(btn == MouseButton.PRIMARY) {
+					onAddMarker(wtCanvas.cursorPosition.y);
+					wtCanvas.repaint();
 				}
 			}
-		});
+			@Override public void onKeyReleased(KeyCode code) {
+				onDeleteMarkerRequest(wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y);
+				wtCanvas.repaint();
+			}
+			@Override public void onRepaint(GraphicsContext g) {
+				repaintCanvas(g);
+			};
+		};
 		
 		// AMMO CHOICE
 		FXUtils.initComboboxAmmo(choiceAmmo);
 		if(dataCalib.ammoData.isEmpty()) {
-			choiceAmmo.getItems().add("No Ammunition available;-");
+			Ammo ammo = new Ammo();
+			ammo.type = "undefined";
+			ammo.name = "No Ammunition available";
+			choiceAmmo.getItems().add(ammo);
 		} else {
 			for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
-				choiceAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+				choiceAmmo.getItems().add(ammoData.ammo);
 			}
 		}
 		choiceAmmo.getSelectionModel().select(0);
-		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue.split(";")[0]);
+			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
+				onAmmoSelected(newValue);
 			}
 		});
-		onAmmoSelected(choiceAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
-		
+		onAmmoSelected(choiceAmmo.getSelectionModel().getSelectedItem());
 	}
 	
 	
 	
 	
-	void onAmmoSelected(String ammoName) {
+	void onAmmoSelected(Ammo ammo) {
 		
 		
-		Logger.get().debug("Select ammo '" + ammoName + "'");
+		Logger.get().debug("Select ammo '" + ammo.name + "'");
 		
-		if(ammoName == null || "null".equalsIgnoreCase(ammoName) || "No Ammunition available".equalsIgnoreCase(ammoName)) {
+		if(ammo == null || "undefined".equalsIgnoreCase(ammo.type)) {
+			
+			currentImage = null;
 			currentAmmoData = null;
 			cbZoomedIn.setDisable(true);
-			wtCanvas.resizeRendertarget(1280, 720);
-			repaintCanvas();
+			wtCanvas.rebuildCanvas(SwingFXUtils.toFXImage(new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_RGB), null));
 			
 		} else {
+			
+			if(imageCache.containsKey("image_"+ammo.name)) {
+				currentImage = imageCache.get("image_"+ammo.name);
+				Logger.get().debug("Image retrieved from cache");
+			} else {
+				BufferedImage bufImg = dataCalib.images.get("image_"+ammo.name);
+				currentImage = SwingFXUtils.toFXImage(bufImg, null);
+				imageCache.put("image_"+ammo.name, currentImage);
+			}
 			
 			currentAmmoData = null;
 			for(int i=0; i<dataCalib.ammoData.size(); i++) {
 				CalibrationAmmoData ammoData = dataCalib.ammoData.get(i);
-				if((ammoData.ammo.name).equalsIgnoreCase(ammoName)) {
+				if((ammoData.ammo.name).equalsIgnoreCase(ammo.name)) {
 					currentAmmoData = ammoData;
 					break;
 				}
@@ -291,39 +292,19 @@ public class UICalibrationEditor {
 			cbZoomedIn.setDisable(false);
 			cbZoomedIn.setSelected(currentAmmoData.zoomedIn);
 			updateRangeList();
-			
-			BufferedImage currentImage = dataCalib.images.get("image_"+currentAmmoData.ammo.name);
-			wtCanvas.resizeRendertarget(currentImage.getWidth(), currentImage.getHeight());
-			repaintCanvas();
+			wtCanvas.rebuildCanvas(currentImage);
 		}
 		
 	}
 	
 	
-	
-	private void updateMarkerPins() {
-		
-		// remove all
-		for(int i=0; i<currentAmmoData.markerRanges.size()+10; i++) {
-			wtCanvas.getPinboard().removePin("marker_"+i);
-		}
-		
-		for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-			double y = currentAmmoData.markerRanges.get(i).x + currentAmmoData.markerCenter.x;
-			TextPin pin = new TextPin("marker_" + (i+1) );
-			pin.text = ""+(i+1);
-			pin.position.set(wtCanvas.getWidth()/2+7, (int)y);
-			pin.color = Color.MAGENTA;
-			pin.align = TextPin.Align.LEFT_CENTER;
-			wtCanvas.getPinboard().addPin(pin);
-		}
-		
-	}
 	
 	
 	private void updateRangeList() {
 		
 		Logger.get().debug("Updating Range List " + currentAmmoData.markerRanges);
+		
+		boxRanges.getChildren().clear();
 		
 		boxRanges.getChildren().clear();
 		
@@ -351,7 +332,7 @@ public class UICalibrationEditor {
 				FXUtils.initSpinner(spinner, marker.y, 0, 3200, 200, 0, new ChangeListener<Integer>() {
 					@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 						marker.y = newValue;
-						repaintCanvas();
+						wtCanvas.repaint();
 					}
 				});
 				
@@ -367,105 +348,179 @@ public class UICalibrationEditor {
 	
 	
 	
-	final static BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{5.0f}, 0.0f);
-	final static Color DARK_RED = new Color(150, 0, 0);
+//	
+//	private void rebuildCanvas(Image img) {
+//		
+//		canvas = new Canvas(img.getWidth(), img.getHeight());
+//		
+//		canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent event) {
+//				event.consume();
+//				cursorVisible = true;
+//				cursorPosition.set(event.getX(), event.getY());
+//				repaintCanvas();
+//			}
+//		});
+//		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent event) {
+//				if(event.getButton() == MouseButton.PRIMARY) {
+//					event.consume();
+//					cursorVisible = true;
+//					cursorPosition.set(event.getX(), event.getY());
+//					repaintCanvas();
+//				}
+//			}
+//		});
+//		canvas.setOnMouseExited(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent event) {
+//				event.consume();
+//				cursorVisible = false;
+//				repaintCanvas();
+//			}
+//		});
+//		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent event) {
+//				if(event.getButton() == MouseButton.PRIMARY) {
+//					event.consume();
+//					cursorVisible = true;
+//					repaintCanvas();
+//				}
+//			}
+//		});
+//		canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent event) {
+//				if(event.getButton() == MouseButton.PRIMARY) {
+//					event.consume();
+//					onAddMarker(event.getY());
+//					cursorVisible = true;
+//					repaintCanvas();
+//				}
+//			}
+//		});
+//	
+//		stage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+//			@Override
+//			public void handle(KeyEvent event) {
+//				if(event.getCode() == KeyCode.BACK_SPACE && cursorVisible) {
+//					event.consume();
+//					onDeleteMarkerRequest(cursorPosition.x, cursorPosition.y);
+//					repaintCanvas();
+//				}
+//			}
+//		});
+//		
+//		paneCanvasControl = new ZoomableScrollPane(canvas);
+//		paneCanvas.getChildren().add(paneCanvasControl);
+//		AnchorPane.setLeftAnchor(paneCanvasControl, 0.0);
+//		AnchorPane.setRightAnchor(paneCanvasControl, 0.0);
+//		AnchorPane.setTopAnchor(paneCanvasControl, 0.0);
+//		AnchorPane.setBottomAnchor(paneCanvasControl, 0.0);
+//		
+//		repaintCanvas();
+//		
+//	}
 	
-	private void repaintCanvas() {
+	
+	
+	
+	private void repaintCanvas(GraphicsContext g) {
 		
-		Graphics2D g = wtCanvas.getGraphics();
-		
-		// draw background
-		BufferedImage currentImage = dataCalib.images.get("image_"+currentAmmoData.ammo.name);
-		if(currentAmmoData != null) {
-			g.drawImage(currentImage, 0, 0, null);
-		} else {
-			g.setColor(Color.LIGHT_GRAY);
+		if(wtCanvas != null) {
+
+			g.setFill(Color.LIGHTGRAY);
 			g.fillRect(0, 0, wtCanvas.getWidth(), wtCanvas.getHeight());
-		}
-		
-		// draw cursor
-		Vector2i cpos = wtCanvas.getCursorPosition();
-		if(wtCanvas.isCursorVisible()) {
-			g.setColor(DARK_RED);
-			Stroke defaultStroke = g.getStroke();
-			g.setStroke(dashed);
-			g.drawLine(-2, cpos.y, wtCanvas.getWidth(), cpos.y);
-			g.setStroke(defaultStroke);
-			g.setColor(Color.RED);
-			g.drawLine(wtCanvas.getWidth()/2, cpos.y+3, wtCanvas.getWidth()/2, cpos.y-3);
-		}
-		
-
-		if(currentAmmoData != null && currentImage != null) {
 			
-			List<Vector2i> allMarkers = currentAmmoData.markerRanges;
-			
-			int mc = currentAmmoData.markerCenter.x;
-			
-			double minDist = Integer.MAX_VALUE;
-			Vector2i minMarker = null;
-			Vector2i tmp = new Vector2i();
-			
-			for(Vector2i m : currentAmmoData.markerRanges) {
-				double dist = tmp.set(cpos.getIntX(), m.x+mc).dist(cpos.getIntX(), cpos.getIntY());
-				if(dist < minDist) {
-					minDist = dist;
-					minMarker = m;
-				}
+			if(currentImage != null) {
+				g.drawImage(currentImage, 0, 0, wtCanvas.getWidth(), wtCanvas.getHeight());
 			}
 			
 			
-			for (Vector2i marker : allMarkers) {
-				
-				if (marker == minMarker) {
-					g.setColor(Color.YELLOW);
-				} else {
-					g.setColor(Color.MAGENTA);
-				}
-				
-				int mx = currentImage.getWidth()/2;
-				int my = marker.x + mc;
-				
-				g.drawLine(mx-3, my-3, mx+3, my+3);
-				g.drawLine(mx+3, my-3, mx-3, my+3);
-				
-
-				Font fontSaved = g.getFont();
-				g.setFont(font);
-//				g.drawString(""+(allMarkers.indexOf(marker)+1), mx + 5, my);
-				g.setFont(fontSaved);
-				
+			if(wtCanvas.cursorVisible) {
+				g.setStroke(Color.RED);
+				g.strokeLine(wtCanvas.cursorPosition.x-10, wtCanvas.cursorPosition.y, wtCanvas.cursorPosition.x+10, wtCanvas.cursorPosition.y);
+				g.strokeLine(wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y-10, wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y+10);
+				g.setLineDashes(5);
+				g.strokeLine(0, wtCanvas.cursorPosition.y, wtCanvas.getWidth(), wtCanvas.cursorPosition.y);
+				g.setLineDashes(null);
 			}
+
 			
-			
-			if(currentAmmoData.markerRanges.size() > 0) {
+			if(currentAmmoData != null && currentImage != null) {
 				
-				// ballistic range indicators
-				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-				fittingPoints.add(new Vector2d(0, 0));
-				for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-					Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-					fittingPoints.add(p);
-				}
-				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+				List<Vector2i> allMarkers = currentAmmoData.markerRanges;
 				
-				if(fittingParams != null) {
-					for(int i=200; i<=2800; i+=200) {
-						double resultPX = SightUtils.ballisticFunction(i/100.0, fittingParams);
-						int x = (int) (wtCanvas.getWidth()/2) - 15;
-						int y = (int) (currentAmmoData.markerCenter.x + resultPX);
-						g.setColor(Color.RED);
-						g.drawLine(x-4, y, x+4, y);
+				
+				int mc = currentAmmoData.markerCenter.x;
+				
+				double minDist = Integer.MAX_VALUE;
+				Vector2i minMarker = null;
+				Vector2i tmp = new Vector2i();
+				
+				for(Vector2i m : currentAmmoData.markerRanges) {
+					double dist = tmp.set(wtCanvas.cursorPosition.getIntX(), m.x+mc).dist(wtCanvas.cursorPosition.getIntX(), wtCanvas.cursorPosition.getIntY());
+					if(dist < minDist) {
+						minDist = dist;
+						minMarker = m;
 					}
 				}
 				
 				
+				for (Vector2i marker : allMarkers) {
+					
+					if (marker == minMarker) {
+						g.setFill(Color.YELLOW);
+						g.setStroke(Color.YELLOW);
+					} else {
+						g.setFill(Color.MEDIUMVIOLETRED);
+						g.setStroke(Color.MEDIUMVIOLETRED);
+					}
+					
+					double mx = currentImage.getWidth()/2;
+					double my = marker.x + mc;
+					
+					g.strokeLine(mx-3, my-3, mx+3, my+3);
+					g.strokeLine(mx+3, my-3, mx-3, my+3);
+					
+					g.setFont(font);
+					g.strokeText(""+(allMarkers.indexOf(marker)+1), mx + 5, my);
+					
+					
+				}
+				
+				
+				if(currentAmmoData.markerRanges.size() > 0) {
+					
+					// ballistic range indicators
+					List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
+					fittingPoints.add(new Vector2d(0, 0));
+					for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
+						Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
+						fittingPoints.add(p);
+					}
+					Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
+					
+					if(fittingParams != null) {
+						for(int i=200; i<=2800; i+=200) {
+							double resultPX = SightUtils.ballisticFunction(i/100.0, fittingParams);
+							float x = (float) (wtCanvas.getWidth()/2) - 15;
+							float y = (float) (currentAmmoData.markerCenter.x + resultPX);
+							g.setStroke(Color.RED);
+							g.strokeLine(x-4, y, x+4, y);
+						}
+					}
+					
+					
+				}
+				
 			}
 			
 		}
 		
-		
-		wtCanvas.repaint();
 	}
 	
 	
@@ -477,7 +532,7 @@ public class UICalibrationEditor {
 			return;
 		}
 		currentAmmoData.zoomedIn = cbZoomedIn.isSelected();
-		repaintCanvas();
+		wtCanvas.repaint();
 	}
 	
 	
@@ -488,19 +543,14 @@ public class UICalibrationEditor {
 			return;
 		}
 		int mc = currentAmmoData.markerCenter.x;
-		Vector2i vec = null;
 		if(currentAmmoData.markerRanges.size() == 0) {
-			vec = new Vector2i( (int)y-mc, 200);
+			currentAmmoData.markerRanges.add(new Vector2i( (int)y-mc, 200));
 		} else {
-			vec = new Vector2i( (int)y-mc, currentAmmoData.markerRanges.get(currentAmmoData.markerRanges.size()-1).y+200);
+			currentAmmoData.markerRanges.add(new Vector2i( (int)y-mc, currentAmmoData.markerRanges.get(currentAmmoData.markerRanges.size()-1).y+200));
 		}
-		currentAmmoData.markerRanges.add(vec);
-		
-		updateMarkerPins();
-		
 		Logger.get().debug("Adding marker at y=" + (int)(y-mc) );
 		updateRangeList();
-		repaintCanvas();
+		wtCanvas.repaint();
 	}
 
 	
@@ -530,9 +580,8 @@ public class UICalibrationEditor {
 			Logger.get().debug("Deleted marker " + minMarker );
 		}
 		
-		updateMarkerPins();
 		updateRangeList();
-		repaintCanvas();
+		wtCanvas.repaint();
 	}
 	
 	
@@ -543,7 +592,7 @@ public class UICalibrationEditor {
 			return;
 		}
 		
-		String ammoName = choiceAmmo.getSelectionModel().getSelectedItem();
+		String ammoName = choiceAmmo.getSelectionModel().getSelectedItem().name;
 		
 		CalibrationAmmoData ammoData = null;
 		for(CalibrationAmmoData d : dataCalib.ammoData) {
@@ -557,7 +606,7 @@ public class UICalibrationEditor {
 		
 		Logger.get("Set marker range: index="+index + " to " + distance + "m");
 		
-		repaintCanvas();
+		wtCanvas.repaint();
 	}
 	
 	

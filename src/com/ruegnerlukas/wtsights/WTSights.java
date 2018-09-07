@@ -12,13 +12,17 @@ import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
+import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.Database;
+import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.application.Application;
@@ -95,7 +99,7 @@ public class WTSights extends Application {
 		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() +" "+ SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
 		
 		
-		Config2.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
+		Config.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
 		
 		launch(args);
 	}
@@ -127,19 +131,27 @@ public class WTSights extends Application {
 			} 
 		});
 		
-//		UIMainMenu.openNew(primaryStage);
+		// STANDARD START
+		UIMainMenu.openNew(primaryStage);
 		
-		ArrayList<Ammo> ammoList = new ArrayList<Ammo>();
-		Ammo ammo = new Ammo();
-		ammo.name = "ammo_75mm_pzgr_39";
-		ammo.type = "apcbc_tank";
-		ammo.speed = 740;
-		ammoList.add(ammo);
+//		JUMP TO SIGHT EDITOR
+//		CalibrationData dataCalib = DataLoader.loadExternalCalibFile(new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\calibration_pz4f2_v3.xml"));
+//		SightData dataSight = DataLoader.loadSight(new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\sight_1.blk"), dataCalib);
+//		UISightEditor.openNew(dataCalib, dataSight);
 		
-		HashMap<Ammo,File> imageMap = new HashMap<Ammo,File>();
-		imageMap.put(ammo, new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\apcbc.png"));
 		
-		UICalibrationEditor.openNew(Database.getVehicleByName("vehicle_germ_pzkpfw_iv_ausf_f2"), ammoList, imageMap);
+//		JUMP TO CALIB.EDITOR
+//		ArrayList<Ammo> ammoList = new ArrayList<Ammo>();
+//		Ammo ammo = new Ammo();
+//		ammo.name = "ammo_75mm_pzgr_39";
+//		ammo.type = "apcbc_tank";
+//		ammo.speed = 740;
+//		ammoList.add(ammo);
+//		
+//		HashMap<Ammo,File> imageMap = new HashMap<Ammo,File>();
+//		imageMap.put(ammo, new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\apcbc.png"));
+//		
+//		UICalibrationEditor.openNew(Database.getVehicleByName("vehicle_germ_pzkpfw_iv_ausf_f2"), ammoList, imageMap);
 	}
 
 	

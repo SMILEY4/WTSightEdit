@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.fxml.FXML;
@@ -38,11 +38,11 @@ public class UIAbout {
 		
 		textArea.setText(""+
 				"Product Version\r\n" + 
-				"    " + "WT Sight Editor v" + Config2.build_version + "\r\n" + 
+				"    " + "WT Sight Editor v" + Config.build_version + "\r\n" + 
 				"\r\n" + 
 				"Build Information\r\n" + 
-				"    " + "Version "  + Config2.build_version + "\r\n" + 
-				"    " + "Date: " + Config2.build_date + "\r\n" + 
+				"    " + "Version "  + Config.build_version + "\r\n" + 
+				"    " + "Date: " + Config.build_date + "\r\n" + 
 				"\r\n" + 
 				"Java version (Installed): " + "\r\n" + 
 				"    " + SystemUtils.getJavaRuntimeName() + " "+ SystemUtils.getJavaRuntimeVersion() + "\r\n" + 

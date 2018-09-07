@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Spinner;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class UIRangefinder implements Module {
@@ -78,8 +79,8 @@ public class UIRangefinder implements Module {
 		});
 		
 		// color
-		colorPicker1.setValue(elementDefault.color1);
-		colorPicker2.setValue(elementDefault.color2);
+		colorPicker1.setValue(new Color(elementDefault.color1.getRed(), elementDefault.color1.getGreen(), elementDefault.color1.getBlue(), elementDefault.color1.getOpacity()));
+		colorPicker2.setValue(new Color(elementDefault.color2.getRed(), elementDefault.color2.getGreen(), elementDefault.color2.getBlue(), elementDefault.color2.getOpacity()));
 
 		setElement(null);
 	}
@@ -98,8 +99,8 @@ public class UIRangefinder implements Module {
 			spinnerPosY.getValueFactory().setValue(element.position.y);
 			cbUseThousandth.setSelected(element.useThousandth);
 			spinnerTextScale.getValueFactory().setValue(element.textScale);
-			colorPicker1.setValue(element.color1);
-			colorPicker2.setValue(element.color2);
+			colorPicker1.setValue(new Color(element.color1.getRed(), element.color1.getGreen(), element.color1.getBlue(), element.color1.getOpacity()));
+			colorPicker2.setValue(new Color(element.color2.getRed(), element.color2.getGreen(), element.color2.getBlue(), element.color2.getOpacity()));
 		}
 	}
 	
@@ -141,7 +142,7 @@ public class UIRangefinder implements Module {
 	@FXML
 	void onPickColor1(ActionEvent event) {
 		if(element == null) { return; }
-		element.color1 = colorPicker1.getValue();
+		element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
 		editor.repaintCanvas();
 	}
 	
@@ -151,7 +152,7 @@ public class UIRangefinder implements Module {
 	@FXML
 	void onPickColor2(ActionEvent event) {
 		if(element == null) { return; }
-		element.color2 = colorPicker2.getValue();
+		element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
 		editor.repaintCanvas();
 	}
 	

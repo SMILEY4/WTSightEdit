@@ -8,6 +8,7 @@ import java.text.ParseException;
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
@@ -171,42 +172,38 @@ public class FXUtils {
 	
 	
 	
-	public static void initComboboxAmmo(ComboBox<String> combobox) {
-		combobox.setButtonCell(new ListCell<String>() {
-			@Override protected void updateItem(String item, boolean empty) {
+	public static void initComboboxAmmo(ComboBox<Ammo> combobox) {
+		combobox.setButtonCell(new ListCell<Ammo>() {
+			@Override protected void updateItem(Ammo item, boolean empty) {
 				super.updateItem(item, empty);
-				setText(item);
 				if (item == null || empty) {
+					setText("");
 					setGraphic(null);
 				} else {
-					String name = item != null ? item.split(";")[0] : "<null>";
-					String type = item != null ? item.split(";")[1] : "<null>";
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.type), null));
 					imgView.setSmooth(true);
 					imgView.setPreserveRatio(true);
 					imgView.setFitHeight(40);
 					setGraphic(imgView);
-					setText(name);
+					setText(item.namePretty);
 				}
 			}
 		});
-		combobox.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override public ListCell<String> call(ListView<String> p) {
-				return new ListCell<String>() {
-					@Override protected void updateItem(String item, boolean empty) {
+		combobox.setCellFactory(new Callback<ListView<Ammo>, ListCell<Ammo>>() {
+			@Override public ListCell<Ammo> call(ListView<Ammo> p) {
+				return new ListCell<Ammo>() {
+					@Override protected void updateItem(Ammo item, boolean empty) {
 						super.updateItem(item, empty);
-						setText(item);
 						if (item == null || empty) {
+							setText("");
 							setGraphic(null);
 						} else {
-							String name = item != null ? item.split(";")[0] : "<null>";
-							String type = item != null ? item.split(";")[1] : "<null>";
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.type), null));
 							imgView.setSmooth(true);
 							imgView.setPreserveRatio(true);
 							imgView.setFitHeight(40);
 							setGraphic(imgView);
-							setText(name);
+							setText(item.namePretty);
 						}
 					}
 				};

@@ -2,12 +2,9 @@ package com.ruegnerlukas.wtsights.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
@@ -34,11 +31,7 @@ import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -49,8 +42,6 @@ public class SightRenderer {
 
 	private static final Color COLOR_DEBUG_0 = new Color(0, 0, 1, 0.0f);
 	private static final Color COLOR_DEBUG_1 = new Color(1, 1, 0, 0.0f);
-	
-	private static Color COLOR_SELECTION = new Color(1, 0, 0, 0.8f);
 	
 	
 	

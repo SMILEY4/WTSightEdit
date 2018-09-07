@@ -1,14 +1,11 @@
-package com.ruegnerlukas.wtutils.canvas;
+package com.ruegnerlukas.wtutils;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class ZoomableScrollPane extends ScrollPane {
@@ -23,14 +20,6 @@ public class ZoomableScrollPane extends ScrollPane {
 
 	public ZoomableScrollPane(Node target) {
 		super();
-		
-		target.addEventHandler(MouseEvent.ANY, event -> {
-		    if(event.getButton() != MouseButton.SECONDARY) {
-		    	target.getScene().setCursor(Cursor.DEFAULT);
-		    	event.consume();
-		    }
-		});
-		
 		this.target = target;
 		this.zoomNode = new Group(target);
 		setContent(outerNode(zoomNode));
@@ -77,7 +66,6 @@ public class ZoomableScrollPane extends ScrollPane {
 
 
 	private void onScroll(double wheelDelta, Point2D mousePoint) {
-		
 		double zoomFactor = Math.exp(wheelDelta * zoomIntensity);
 
 		Bounds innerBounds = zoomNode.getLayoutBounds();
@@ -103,14 +91,6 @@ public class ZoomableScrollPane extends ScrollPane {
 		Bounds updatedInnerBounds = zoomNode.getBoundsInLocal();
 		this.setHvalue((valX + adjustment.getX()) / (updatedInnerBounds.getWidth() - viewportBounds.getWidth()));
 		this.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
-	
-		zoomEvent();
 	}
-	
-	
-	
-	
-	public void zoomEvent() {}
-	
 	
 }
