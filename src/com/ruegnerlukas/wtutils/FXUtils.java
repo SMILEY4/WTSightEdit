@@ -16,6 +16,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -34,6 +36,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -163,6 +166,52 @@ public class FXUtils {
 		if(listener != null) {
 			spinner.valueProperty().addListener(listener);
 		}
+	}
+	
+	
+	
+	
+	public static void initComboboxAmmo(ComboBox<String> combobox) {
+		combobox.setButtonCell(new ListCell<String>() {
+			@Override protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(item);
+				if (item == null || empty) {
+					setGraphic(null);
+				} else {
+					String name = item != null ? item.split(";")[0] : "<null>";
+					String type = item != null ? item.split(";")[1] : "<null>";
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					setText(name);
+				}
+			}
+		});
+		combobox.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override public ListCell<String> call(ListView<String> p) {
+				return new ListCell<String>() {
+					@Override protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(item);
+						if (item == null || empty) {
+							setGraphic(null);
+						} else {
+							String name = item != null ? item.split(";")[0] : "<null>";
+							String type = item != null ? item.split(";")[1] : "<null>";
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							setText(name);
+						}
+					}
+				};
+			}
+		});
 	}
 	
 	

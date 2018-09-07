@@ -103,48 +103,7 @@ public class UIShellBlock implements Module {
 		ElementBallRangeIndicator elementDefault = new ElementBallRangeIndicator();
 		
 		// AMMO
-		comboAmmo.setButtonCell(new ListCell<String>() {
-			@Override protected void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				setText(item);
-				if (item == null || empty) {
-					setGraphic(null);
-				} else {
-					String name = item != null ? item.split(";")[0] : "<null>";
-					String type = item != null ? item.split(";")[1] : "<null>";
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
-					imgView.setSmooth(true);
-					imgView.setPreserveRatio(true);
-					imgView.setFitHeight(40);
-					setGraphic(imgView);
-					setText(name);
-				}
-			}
-		});
-		
-		comboAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override public ListCell<String> call(ListView<String> p) {
-				return new ListCell<String>() {
-					@Override protected void updateItem(String item, boolean empty) {
-						super.updateItem(item, empty);
-						setText(item);
-						if (item == null || empty) {
-							setGraphic(null);
-						} else {
-							String name = item != null ? item.split(";")[0] : "<null>";
-							String type = item != null ? item.split(";")[1] : "<null>";
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
-							imgView.setSmooth(true);
-							imgView.setPreserveRatio(true);
-							imgView.setFitHeight(40);
-							setGraphic(imgView);
-							setText(name);
-						}
-					}
-				};
-			}
-		});
-		
+		FXUtils.initComboboxAmmo(comboAmmo);
 		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
 			comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
 		}

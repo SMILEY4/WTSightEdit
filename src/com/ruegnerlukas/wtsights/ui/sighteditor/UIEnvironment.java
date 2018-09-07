@@ -3,11 +3,15 @@ package com.ruegnerlukas.wtsights.ui.sighteditor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
+import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -59,48 +63,7 @@ public class UIEnvironment {
 	public void create() {
 		
 		// AMMO
-		comboAmmo.setButtonCell(new ListCell<String>() {
-			@Override protected void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				setText(item);
-				if (item == null || empty) {
-					setGraphic(null);
-				} else {
-					String name = item != null ? item.split(";")[0] : "<null>";
-					String type = item != null ? item.split(";")[1] : "<null>";
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
-					imgView.setSmooth(true);
-					imgView.setPreserveRatio(true);
-					imgView.setFitHeight(40);
-					setGraphic(imgView);
-					setText(name);
-				}
-			}
-		});
-		
-		comboAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override public ListCell<String> call(ListView<String> p) {
-				return new ListCell<String>() {
-					@Override protected void updateItem(String item, boolean empty) {
-						super.updateItem(item, empty);
-						setText(item);
-						if (item == null || empty) {
-							setGraphic(null);
-						} else {
-							String name = item != null ? item.split(";")[0] : "<null>";
-							String type = item != null ? item.split(";")[1] : "<null>";
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
-							imgView.setSmooth(true);
-							imgView.setPreserveRatio(true);
-							imgView.setFitHeight(40);
-							setGraphic(imgView);
-							setText(name);
-						}
-					}
-				};
-			}
-		});
-
+		FXUtils.initComboboxAmmo(comboAmmo);
 		if(editor.getCalibrationData().ammoData.isEmpty()) {
 			comboAmmo.getItems().add("No Ammunition available;-");
 		} else {
@@ -248,9 +211,9 @@ public class UIEnvironment {
 	void onCrosshairLighting(ActionEvent event) {
 		boolean enabled = cbCrosshairLighting.isSelected();
 		if(enabled) {
-			editor.getSightData().envSightColor = new Color(255/255,75/255,55/255, 1f);
+			editor.getSightData().envSightColor = new java.awt.Color(255,75,55);
 		} else {
-			editor.getSightData().envSightColor = Color.BLACK;
+			editor.getSightData().envSightColor = java.awt.Color.BLACK;
 		}
 		editor.repaintCanvas();
 	}
@@ -268,7 +231,7 @@ public class UIEnvironment {
 		File file = fc.showOpenDialog(((Button)event.getSource()).getScene().getWindow());
 		if (file != null) {
 			try {
-				editor.getSightData().envBackground = new Image(new FileInputStream(file));
+				editor.getSightData().envBackground = ImageIO.read(file);
 				pathBackground.setText(file.getAbsolutePath());
 				Logger.get().info("Selected background: " + file);
 				int width = (int)editor.getSightData().envBackground.getWidth();
@@ -285,6 +248,8 @@ public class UIEnvironment {
 				choiceResolution.setDisable(true);
 				editor.rebuildCanvas(width, height);
 			} catch (FileNotFoundException e) {
+				Logger.get().error(e);
+			} catch (IOException e) {
 				Logger.get().error(e);
 			}
 		}
