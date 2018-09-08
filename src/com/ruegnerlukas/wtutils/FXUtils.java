@@ -2,6 +2,7 @@ package com.ruegnerlukas.wtutils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.GenericArrayType;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
@@ -155,6 +156,25 @@ public class FXUtils {
 		if(enableMouseWheel) {
 			spinner.setOnScroll(new EventHandler<ScrollEvent>() {
 				@Override public void handle(ScrollEvent event) {
+
+					// early out if is in scrollable scrollpane
+					if(spinner.getParent() != null) {
+						Parent parent = spinner;
+						while( (parent = parent.getParent()) != null) {
+							if(parent instanceof ScrollPane) {
+								ScrollPane scrollPane = (ScrollPane)parent;
+								if(scrollPane.getContent() != null && scrollPane.getContent() instanceof AnchorPane) {
+									double heightScroll = scrollPane.getHeight();
+									double heightContent = ((AnchorPane)scrollPane.getContent()).getHeight();
+									if(heightScroll < heightContent) {
+										return;
+									} 
+								}
+							}
+						}
+					}
+					
+					
 					if(event.getDeltaY() > 0) {
 						spinner.getValueFactory().increment(1);
 					} else {
