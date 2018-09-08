@@ -170,7 +170,7 @@ public class UIEnvironment {
 			}
 		}
 		Logger.get().debug("Selected ammo: " + (editor.getAmmoData() == null ? "null" : editor.getAmmoData().ammo.name) );
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 
@@ -178,7 +178,7 @@ public class UIEnvironment {
 	
 	void onZoomMode(boolean zoomedIn) {
 		editor.getSightData().envZoomedIn = zoomedIn;
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -187,7 +187,7 @@ public class UIEnvironment {
 	@FXML
 	void onShowRangefinder(ActionEvent event) {
 		editor.getSightData().envShowRangeFinder = cbShowRangefinder.isSelected();
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -196,7 +196,7 @@ public class UIEnvironment {
 	void onRangefinderProgress(double progress) {
 		editor.getSightData().envRFProgress = progress;
 		labelValueRFProgress.setText(progress+"%");
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -205,7 +205,7 @@ public class UIEnvironment {
 	void onRangeCorrection(int range) {
 		editor.getSightData().envRangeCorrection = range;//(range+49)/50 * 50;
 		labelValueRange.setText(range+"m");
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -219,7 +219,7 @@ public class UIEnvironment {
 		} else {
 			editor.getSightData().envSightColor = Color.BLACK;
 		}
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -249,7 +249,7 @@ public class UIEnvironment {
 						break;
 					}
 				}
-				editor.rebuildCanvas(width, height);
+				editor.wtCanvas.rebuildCanvas(width, height);
 			} catch (FileNotFoundException e) {
 				Logger.get().error(e);
 			}
@@ -266,7 +266,7 @@ public class UIEnvironment {
 		choiceResolution.setDisable(false);
 		int width = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
 		int height = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
-		editor.rebuildCanvas(width, height);
+		editor.wtCanvas.rebuildCanvas(width, height);
 	}
 
 	
@@ -274,7 +274,7 @@ public class UIEnvironment {
 
 	void onSelectResolution(int width, int height) {
 		Logger.get().info("Resolution selected: " + width  + "x" + height);
-		editor.rebuildCanvas(width, height);
+		editor.wtCanvas.rebuildCanvas(width, height);
 	}
 	
 

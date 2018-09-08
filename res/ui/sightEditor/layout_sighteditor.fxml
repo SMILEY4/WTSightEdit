@@ -17,7 +17,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <Label fx:id="labelVehicleName" alignment="CENTER" layoutX="123.0" layoutY="185.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" text="vehicle_name" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <TabPane layoutX="79.0" layoutY="159.0" prefHeight="718.0" prefWidth="316.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                  <TabPane layoutX="79.0" layoutY="159.0" prefWidth="316.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
                     <tabs>
                       <Tab text="General">
                         <content>

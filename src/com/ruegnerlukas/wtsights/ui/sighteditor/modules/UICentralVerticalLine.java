@@ -58,6 +58,6 @@ public class UICentralVerticalLine implements Module {
 	void onShowLine(ActionEvent event) {
 		if(element == null) { return; }
 		element.drawCentralVertLine = cbShowLine.isSelected();
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 }

@@ -74,7 +74,7 @@ public class UICustomQuad implements Module {
 					cbUseAutoCenter.setDisable(element.movement != Movement.MOVE_RADIAL);
 					spinnerCenterX.setDisable(elementDefault.autoCenter);
 					spinnerCenterY.setDisable(elementDefault.autoCenter);
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -84,7 +84,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.angle = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -97,7 +97,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -105,7 +105,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -113,7 +113,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -121,7 +121,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -129,7 +129,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -140,7 +140,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos1.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -148,7 +148,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos1.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -158,7 +158,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos2.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -166,7 +166,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos2.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -176,7 +176,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos3.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -184,7 +184,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos3.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -194,7 +194,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos4.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -202,7 +202,7 @@ public class UICustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos4.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -259,7 +259,7 @@ public class UICustomQuad implements Module {
 			element.useThousandth = cbUseThousandth.isSelected();
 			spinnerCenterX.setDisable(element.autoCenter);
 			spinnerCenterY.setDisable(element.autoCenter);
-			editor.repaintCanvas();
+			editor.wtCanvas.repaint();
 		}
 	}
 	
@@ -289,7 +289,7 @@ public class UICustomQuad implements Module {
 				FXUtils.initSpinner(spinnerPos4Y, Conversion.get().mil2screenspace(spinnerPos4Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 
 			}
-			editor.repaintCanvas();
+			editor.wtCanvas.repaint();
 		}
 	}
 	

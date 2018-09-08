@@ -50,7 +50,7 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					element.position.x = newValue.intValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -60,7 +60,7 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -73,7 +73,7 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textScale = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -131,7 +131,7 @@ public class UIRangefinder implements Module {
 			});
 		}
 		
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -143,7 +143,7 @@ public class UIRangefinder implements Module {
 	void onPickColor1(ActionEvent event) {
 		if(element == null) { return; }
 		element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -153,7 +153,7 @@ public class UIRangefinder implements Module {
 	void onPickColor2(ActionEvent event) {
 		if(element == null) { return; }
 		element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	

@@ -58,6 +58,6 @@ public class UICentralHorizontalLine implements Module {
 	void onShowLine(ActionEvent event) {
 		if(element == null) { return; }
 		element.drawCentralHorzLine = cbShowLine.isSelected();
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 }

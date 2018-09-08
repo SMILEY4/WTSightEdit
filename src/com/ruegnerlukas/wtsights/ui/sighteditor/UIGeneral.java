@@ -83,7 +83,7 @@ public class UIGeneral {
 	@FXML
 	void onApplyCorrection(ActionEvent event) {
 		editor.getSightData().gnrApplyCorrectionToGun = cbApplyCorrection.isSelected();
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -91,7 +91,7 @@ public class UIGeneral {
 	
 	void selectThousandth(Thousandth thousandth) {
 		editor.getSightData().gnrThousandth = thousandth;
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -99,7 +99,7 @@ public class UIGeneral {
 	
 	void setFontSize(float size) {
 		editor.getSightData().gnrFontScale = size;
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -107,7 +107,7 @@ public class UIGeneral {
 	
 	void setLineSize(float size) {
 		editor.getSightData().gnrLineSize = size;
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	

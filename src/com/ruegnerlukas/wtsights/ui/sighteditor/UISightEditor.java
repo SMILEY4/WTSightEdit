@@ -24,6 +24,8 @@ import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.ZoomableScrollPane;
+import com.ruegnerlukas.wtutils.canvas.WTCanvas;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
@@ -33,18 +35,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -61,10 +66,7 @@ public class UISightEditor {
 
 	// canvas
 	@FXML private AnchorPane paneCanvas;
-	private ZoomableScrollPane paneCanvasControl;
-	private Canvas canvas;
-	private boolean cursorVisible = false;
-	private Vector2d cursorPosition = new Vector2d();
+	public WTCanvas wtCanvas;
 	
 	// ui
 	@FXML private Label labelVehicleName;
@@ -146,6 +148,29 @@ public class UISightEditor {
 	
 	private void create() {
 		
+		// CANVAS
+		wtCanvas = new WTCanvas(paneCanvas) {
+			@Override public void onMouseMoved() {
+				wtCanvas.repaint();
+			}
+			@Override public void onMouseDragged() {
+				wtCanvas.repaint();
+			}
+			@Override public void onMousePressed(MouseButton btn) {
+				wtCanvas.repaint();
+			}
+			@Override public void onMouseReleased(MouseButton btn) {
+				wtCanvas.repaint();
+			}
+			@Override public void onKeyReleased(KeyCode code) {
+				wtCanvas.repaint();
+			}
+			@Override public void onRepaint(GraphicsContext g) {
+				repaintCanvas(g);
+			};
+		};
+		wtCanvas.rebuildCanvas(1920, 1080);
+		
 		labelVehicleName.setText(dataCalib.vehicle.namePretty);
 		
 		try {
@@ -194,7 +219,7 @@ public class UISightEditor {
 		initModule(ElementType.CUSTOM_QUAD, "/ui/sightEditor/layout_element_custom_quad.fxml");
 		initModule(ElementType.CUSTOM_TEXT, "/ui/sightEditor/layout_element_custom_text.fxml");
 
-		
+
 		// ELEMENTS LIST
 		listViewElements.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override public ListCell<String> call(ListView<String> param) {
@@ -244,9 +269,10 @@ public class UISightEditor {
 		onSelectElement(null);
 		sortList();
 		
-		rebuildCanvas();
+		wtCanvas.rebuildCanvas(1920, 1080);
 		
 		Logger.get().debug("SightEditor created");
+	
 	}
 
 	
@@ -297,7 +323,7 @@ public class UISightEditor {
 			listViewElements.getItems().add(listViewElements.getItems().size(), element.name + ";" + element.type.toString());
 			listViewElements.getSelectionModel().select(listViewElements.getItems().size()-1);
 			sortList();
-			repaintCanvas();
+			wtCanvas.repaint();
 		} else {
 			Logger.get().info("Created null element");
 		}
@@ -366,7 +392,7 @@ public class UISightEditor {
 			listViewElements.getItems().add(index, element.name+";"+element.type.toString());
 			listViewElements.getSelectionModel().select(index);
 			sortList();
-			repaintCanvas();
+			wtCanvas.repaint();
 		}
 	}
 	
@@ -396,7 +422,7 @@ public class UISightEditor {
 		if(result.get() == buttonDelete) {
 			deleteElement(listViewElements.getSelectionModel().getSelectedItem(), true);
 			sortList();
-			repaintCanvas();
+			wtCanvas.repaint();
 			
 		} else if(result.get() == buttonCancel) {
 			return;
@@ -503,80 +529,11 @@ public class UISightEditor {
 	}
 	
 	
-	public void rebuildCanvas() {
-		rebuildCanvas(1920, 1080);
-	}
 	
 	
-	public void rebuildCanvas(int width, int height) {
-		
-		if(dataSight.envBackground != null) {
-			canvas = new Canvas(dataSight.envBackground.getWidth(), dataSight.envBackground.getHeight());
-		} else {
-			canvas = new Canvas(width, height);
-		}
-		
-		canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				event.consume();
-				cursorVisible = true;
-				cursorPosition.set(event.getX(), event.getY());
-			}
-		});
-		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if(event.getButton() == MouseButton.PRIMARY) {
-					event.consume();
-					cursorVisible = true;
-					cursorPosition.set(event.getX(), event.getY());
-				}
-			}
-		});
-		canvas.setOnMouseExited(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				event.consume();
-				cursorVisible = false;
-			}
-		});
-		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if(event.getButton() == MouseButton.PRIMARY) {
-					event.consume();
-					cursorVisible = true;
-				}
-			}
-		});
-		canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if(event.getButton() == MouseButton.PRIMARY) {
-					event.consume();
-					cursorVisible = true;
-				}
-			}
-		});
-	
-		
-		paneCanvasControl = new ZoomableScrollPane(canvas);
-		paneCanvas.getChildren().add(paneCanvasControl);
-		AnchorPane.setLeftAnchor(paneCanvasControl, 0.0);
-		AnchorPane.setRightAnchor(paneCanvasControl, 0.0);
-		AnchorPane.setTopAnchor(paneCanvasControl, 0.0);
-		AnchorPane.setBottomAnchor(paneCanvasControl, 0.0);
-
-		repaintCanvas();
-		
-	}
-	
-	
-	public void repaintCanvas() {
-		if(canvas != null) {
-			GraphicsContext g = canvas.getGraphicsContext2D();
-			SightRenderer.draw(canvas, g, dataSight, dataCalib, getAmmoData());
+	public void repaintCanvas(GraphicsContext g) {
+		if(wtCanvas != null) {
+			SightRenderer.draw(wtCanvas.canvas, g, dataSight, dataCalib, getAmmoData());
 		}
 	}
 

@@ -70,7 +70,7 @@ public class UIHorzRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMajor = newValue.floatValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -80,7 +80,7 @@ public class UIHorzRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMinor = newValue.floatValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -110,7 +110,7 @@ public class UIHorzRangeIndicators implements Module {
 							HIndicator indicator = new HIndicator(0, true);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true);
-							editor.repaintCanvas();
+							editor.wtCanvas.repaint();
 						}
 					}
 				},
@@ -230,7 +230,7 @@ public class UIHorzRangeIndicators implements Module {
 	
 	
 	void onIndicatorEdit(HIndicator indicator) {
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -239,7 +239,7 @@ public class UIHorzRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			editor.repaintCanvas();
+			editor.wtCanvas.repaint();
 		}
 	}
 	

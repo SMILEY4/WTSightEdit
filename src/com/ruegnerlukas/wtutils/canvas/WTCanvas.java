@@ -1,9 +1,12 @@
 package com.ruegnerlukas.wtutils.canvas;
 
+import java.awt.image.BufferedImage;
+
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.wtutils.ZoomableScrollPane;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -26,10 +29,15 @@ public class WTCanvas {
 	
 	public WTCanvas(AnchorPane parent) {
 		this.parent = parent;
+		
 	}
 	
 	
 	
+	
+	public void rebuildCanvas(int width, int height) {
+		rebuildCanvas(SwingFXUtils.toFXImage(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), null));
+	}
 	
 	
 	public void rebuildCanvas(Image img) {

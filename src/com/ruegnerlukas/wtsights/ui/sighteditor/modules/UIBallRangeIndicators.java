@@ -126,7 +126,7 @@ public class UIBallRangeIndicators implements Module {
 					boxRadial.setDisable(false);
 					boxRadial.setVisible(true);
 				}
-				editor.repaintCanvas();
+				editor.wtCanvas.repaint();
 			}
 		});
 		
@@ -135,7 +135,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textShift = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -143,7 +143,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -151,7 +151,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -159,7 +159,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -167,7 +167,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -175,7 +175,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -183,7 +183,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -191,7 +191,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -199,7 +199,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -212,7 +212,7 @@ public class UIBallRangeIndicators implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});		
@@ -222,7 +222,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.drawAddLines = vDrawAddLines.isSelected();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -244,7 +244,7 @@ public class UIBallRangeIndicators implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
-				editor.repaintCanvas();
+				editor.wtCanvas.repaint();
 			}
 		});
 		if(elementDefault.circleMode) {
@@ -259,7 +259,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -267,7 +267,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -275,7 +275,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -283,7 +283,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -291,7 +291,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -299,7 +299,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialAngle = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -307,7 +307,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialStretch = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -317,7 +317,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -335,7 +335,7 @@ public class UIBallRangeIndicators implements Module {
 					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
 				
-				editor.repaintCanvas();
+				editor.wtCanvas.repaint();
 			}
 		});
 		rTextAlignment.getItems().addAll(TextAlign.LEFT.toString(), TextAlign.CENTER.toString(), TextAlign.RIGHT.toString());
@@ -347,7 +347,7 @@ public class UIBallRangeIndicators implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});	
@@ -358,7 +358,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -366,7 +366,7 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -407,7 +407,7 @@ public class UIBallRangeIndicators implements Module {
 							BIndicator indicator = new BIndicator(0, true, 0, 0, 0);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true, 0, 0, 0);
-							editor.repaintCanvas();
+							editor.wtCanvas.repaint();
 						}
 					}
 				},
@@ -604,7 +604,7 @@ public class UIBallRangeIndicators implements Module {
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -613,7 +613,7 @@ public class UIBallRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			editor.repaintCanvas();
+			editor.wtCanvas.repaint();
 		}
 	}
 	
