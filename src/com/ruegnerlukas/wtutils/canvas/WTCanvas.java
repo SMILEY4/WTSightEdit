@@ -1,13 +1,10 @@
 package com.ruegnerlukas.wtutils.canvas;
 
-import java.awt.image.BufferedImage;
-
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.wtutils.ZoomableScrollPane;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -22,6 +19,7 @@ public class WTCanvas {
 	public AnchorPane parent;
 	public ZoomableScrollPane paneCanvasControl;
 	public Canvas canvas;
+	public ResizableCanvas canvasOverlay;
 	
 	public boolean cursorVisible = false;
 	public Vector2d cursorPosition = new Vector2d();
@@ -30,6 +28,20 @@ public class WTCanvas {
 	public WTCanvas(AnchorPane parent) {
 		this.parent = parent;
 		
+		this.canvasOverlay = new ResizableCanvas(parent) {
+			@Override
+			public void onRepaint(GraphicsContext g) {
+				onRepaintOverlay(g);
+			}
+		};
+		canvasOverlay.setMouseTransparent(true);
+		parent.getChildren().add(canvasOverlay);
+		AnchorPane.setLeftAnchor(canvasOverlay, 0.0);
+		AnchorPane.setRightAnchor(canvasOverlay, 0.0);
+		AnchorPane.setTopAnchor(canvasOverlay, 0.0);
+		AnchorPane.setBottomAnchor(canvasOverlay, 0.0);
+		canvasOverlay.toFront();
+
 	}
 	
 	
@@ -43,6 +55,7 @@ public class WTCanvas {
 	public void rebuildCanvas(int width, int height) {
 		
 		if( canvas != null && width == (int)canvas.getWidth() && height == (int)canvas.getHeight() ) {
+			repaint();
 			return;
 		}
 
@@ -109,12 +122,18 @@ public class WTCanvas {
 			}
 		});
 		
-		paneCanvasControl = new ZoomableScrollPane(canvas);
+		paneCanvasControl = new ZoomableScrollPane(canvas) {
+			@Override
+			public void onZoom() {
+				canvasOverlay.repaint();
+			};
+		};
 		AnchorPane.setLeftAnchor(paneCanvasControl, 0.0);
 		AnchorPane.setRightAnchor(paneCanvasControl, 0.0);
 		AnchorPane.setTopAnchor(paneCanvasControl, 0.0);
 		AnchorPane.setBottomAnchor(paneCanvasControl, 0.0);
-		parent.getChildren().setAll(paneCanvasControl);
+		parent.getChildren().setAll(canvasOverlay, paneCanvasControl);
+		canvasOverlay.toFront();
 		
 		repaint();
 		
@@ -125,8 +144,8 @@ public class WTCanvas {
 	
 	
 	public void repaint() {
-		GraphicsContext g = canvas.getGraphicsContext2D();
-		onRepaint(g);
+		onRepaint(canvas.getGraphicsContext2D());
+		canvasOverlay.repaint();
 	}
 	
 	
@@ -141,12 +160,28 @@ public class WTCanvas {
 	}
 	
 	
+	
+	
+	public Point2D transformToOverlay(double x, double y) {
+		return canvasOverlay.sceneToLocal(canvas.localToScene(x, y));
+	}
+	
+	
+	
+	
+	public Point2D transformToCanvas(double x, double y) {
+		return canvas.sceneToLocal(canvasOverlay.localToScene(x, y));
+	}
+	
+	
+	
 	public void onMouseMoved() {}
 	public void onMouseDragged() {}
 	public void onMousePressed(MouseButton btn) {}
 	public void onMouseReleased(MouseButton btn) {}
 	public void onKeyReleased(KeyCode code) {}
 	public void onRepaint(GraphicsContext g) {};
-	
+	public void onRepaintOverlay(GraphicsContext g) {};
+
 	
 }

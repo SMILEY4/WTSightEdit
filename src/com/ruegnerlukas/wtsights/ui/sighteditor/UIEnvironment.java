@@ -3,20 +3,14 @@ package com.ruegnerlukas.wtsights.ui.sighteditor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
-import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,15 +18,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 
 public class UIEnvironment {
 

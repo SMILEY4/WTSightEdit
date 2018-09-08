@@ -36,14 +36,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -80,7 +81,7 @@ public class UICalibrationEditor {
 	private WTCanvas wtCanvas;
 	private Image currentImage;
 	private Map<String,Image> imageCache = new HashMap<String,Image>();
-	private Font font = new Font("Arial", 10);
+	private Font font = new Font("Arial", 18);
 	
 	
 	
@@ -228,6 +229,9 @@ public class UICalibrationEditor {
 			@Override public void onRepaint(GraphicsContext g) {
 				repaintCanvas(g);
 			};
+			@Override public void onRepaintOverlay(GraphicsContext g) {
+				repaintOverlayCanvas(g);
+			};
 		};
 		
 		// AMMO CHOICE
@@ -361,20 +365,21 @@ public class UICalibrationEditor {
 			}
 			
 			
-			if(wtCanvas.cursorVisible) {
-				g.setStroke(Color.RED);
-				g.strokeLine(wtCanvas.cursorPosition.x-10, wtCanvas.cursorPosition.y, wtCanvas.cursorPosition.x+10, wtCanvas.cursorPosition.y);
-				g.strokeLine(wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y-10, wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y+10);
-				g.setLineDashes(5);
-				g.strokeLine(0, wtCanvas.cursorPosition.y, wtCanvas.getWidth(), wtCanvas.cursorPosition.y);
-				g.setLineDashes(null);
-			}
+//			if(wtCanvas.cursorVisible) {
+//				
+//				g.setStroke(Color.RED);
+//				
+//				g.strokeLine(wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y-4, wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y+4);
+//			
+//				g.setLineDashes(5);
+//				g.strokeLine(-2, wtCanvas.cursorPosition.y, wtCanvas.getWidth(), wtCanvas.cursorPosition.y);
+//				g.setLineDashes(null);
+//			}
 
 			
 			if(currentAmmoData != null && currentImage != null) {
 				
 				List<Vector2i> allMarkers = currentAmmoData.markerRanges;
-				
 				
 				int mc = currentAmmoData.markerCenter.x;
 				
@@ -407,10 +412,6 @@ public class UICalibrationEditor {
 					g.strokeLine(mx-3, my-3, mx+3, my+3);
 					g.strokeLine(mx+3, my-3, mx-3, my+3);
 					
-					g.setFont(font);
-					g.strokeText(""+(allMarkers.indexOf(marker)+1), mx + 5, my);
-					
-					
 				}
 				
 				
@@ -440,10 +441,82 @@ public class UICalibrationEditor {
 				
 			}
 			
+			repaintOverlayCanvas(wtCanvas.canvasOverlay.getGraphicsContext2D());
+			
 		}
 		
 	}
 	
+	
+	
+	private void repaintOverlayCanvas(GraphicsContext g) {
+
+		if(wtCanvas == null) {
+			return;
+		}
+		
+		// CURSOR
+		if(wtCanvas.cursorVisible) {
+			
+			g.setLineWidth(2);
+			g.setStroke(Color.RED);
+			
+			Point2D pc0 = wtCanvas.transformToOverlay(wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y-4);
+			Point2D pc1 = wtCanvas.transformToOverlay(wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y+4);
+			g.strokeLine(pc0.getX(), pc0.getY(), pc1.getX(), pc1.getY());
+		
+			
+			Point2D pl0 = wtCanvas.transformToOverlay(-3, wtCanvas.cursorPosition.y);
+			Point2D pl1 = wtCanvas.transformToOverlay(wtCanvas.getWidth(), wtCanvas.cursorPosition.y);
+
+			g.setLineDashes(6);
+			g.strokeLine(pl0.getX(), pl0.getY(), pl1.getX(), pl1.getY());
+			g.setLineDashes(null);
+		}
+		
+		
+		if(currentAmmoData != null && currentImage != null) {
+			
+			// MARKER
+			List<Vector2i> allMarkers = currentAmmoData.markerRanges;
+			
+			int mc = currentAmmoData.markerCenter.x;
+			
+			double minDist = Integer.MAX_VALUE;
+			Vector2i minMarker = null;
+			Vector2i tmp = new Vector2i();
+			
+			for(Vector2i m : currentAmmoData.markerRanges) {
+				double dist = tmp.set(wtCanvas.cursorPosition.getIntX(), m.x+mc).dist(wtCanvas.cursorPosition.getIntX(), wtCanvas.cursorPosition.getIntY());
+				if(dist < minDist) {
+					minDist = dist;
+					minMarker = m;
+				}
+			}
+			
+			for (Vector2i marker : allMarkers) {
+				
+				if (marker == minMarker) {
+					g.setFill(Color.YELLOW);
+					g.setStroke(Color.YELLOW);
+				} else {
+					g.setFill(Color.MEDIUMVIOLETRED);
+					g.setStroke(Color.MEDIUMVIOLETRED);
+				}
+				
+				double mx = currentImage.getWidth()/2;
+				double my = marker.x + mc;
+				Point2D p = wtCanvas.transformToOverlay(mx+6, my);
+				
+				g.setFont(font);
+				g.strokeText(""+(allMarkers.indexOf(marker)+1), p.getX(), p.getY());
+				
+			}
+			
+		}
+		
+		
+	}
 	
 	
 	

@@ -5,16 +5,13 @@ import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.ruegnerlukas.wtlauncher.LauncherController;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -2,8 +2,6 @@ package com.ruegnerlukas.wtsights;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.SystemUtils;
@@ -12,16 +10,10 @@ import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
-import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.Database;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
-import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
-import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 

@@ -1,10 +1,5 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
