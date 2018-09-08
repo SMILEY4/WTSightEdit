@@ -265,7 +265,7 @@ public class UICalibrationEditor {
 			currentImage = null;
 			currentAmmoData = null;
 			cbZoomedIn.setDisable(true);
-			wtCanvas.rebuildCanvas(SwingFXUtils.toFXImage(new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_RGB), null));
+			wtCanvas.rebuildCanvas(1920, 1080);
 			
 		} else {
 			

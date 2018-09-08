@@ -35,14 +35,18 @@ public class WTCanvas {
 	
 	
 	
-	public void rebuildCanvas(int width, int height) {
-		rebuildCanvas(SwingFXUtils.toFXImage(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), null));
+	public void rebuildCanvas(Image img) {
+		rebuildCanvas((int)img.getWidth(), (int)img.getHeight());
 	}
 	
 	
-	public void rebuildCanvas(Image img) {
+	public void rebuildCanvas(int width, int height) {
 		
-		canvas = new Canvas(img.getWidth(), img.getHeight());
+		if( canvas != null && width == (int)canvas.getWidth() && height == (int)canvas.getHeight() ) {
+			return;
+		}
+
+		canvas = new Canvas(width, height);
 		
 		canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
 			@Override
