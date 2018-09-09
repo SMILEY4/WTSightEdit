@@ -20,6 +20,8 @@ public class LayoutBallRangeIndicators implements ILayoutData {
 	
 	// RADIAL - LINES
 	public Vector2d rlCenter = new Vector2d();
+	public double rlRadius;
+	public double rlRadiusOutside;
 	public double rlLineSize;
 	public Vector4d[] rlLines = null;
 	public Vector2d[] rlTextPositions = null;
@@ -27,6 +29,7 @@ public class LayoutBallRangeIndicators implements ILayoutData {
 	
 	// RADIAL - CIRCLES
 	public Vector2d rcCenter = new Vector2d();
+	public double rcRadius;
 	public double rcLineWidth;
 	public Circlef[] rcCircles = null;
 	public Vector2d[] rcTextPositions = null;

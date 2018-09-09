@@ -31,6 +31,7 @@ public class WTCanvas {
 	
 	public boolean constantOverlayUpdate = true;
 	public int overlayUpdateDelay = 30; // in ms
+	public ScheduledExecutorService ses;
 	
 	
 	
@@ -52,7 +53,7 @@ public class WTCanvas {
 		canvasOverlay.toFront();
 
 		if(constantOverlayUpdate) {
-			ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+			ses = Executors.newSingleThreadScheduledExecutor();
 			ses.scheduleAtFixedRate(new Runnable() {
 			     @Override public void run() {
 			    	 Platform.runLater(new Runnable() {

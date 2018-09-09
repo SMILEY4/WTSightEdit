@@ -301,17 +301,23 @@ public class ElementBallRangeIndicator extends Element {
 			radiusMil = Conversion.get().screenspace2mil(radialRadius, sightData.envZoomedIn);
 		}
 		
+		
 		double radiusPX = 0;
 		if(radiusUseMils) {
 			radiusPX = Conversion.get().mil2pixel(radialRadius, canvasHeight, sightData.envZoomedIn);
 		} else {
 			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight, sightData.envZoomedIn);
 		}
-		
+		layoutData.rlRadius = radiusPX;
 		
 		Conversion conversionUSSR = new Conversion();
 		conversionUSSR.initialize(canvasWidth, canvasHeight, calibData.vehicle.fovOut, calibData.vehicle.fovIn, Thousandth.USSR);
 		
+		// length
+		double length = Conversion.get().screenspace2pixel(size.x, canvasHeight, sightData.envZoomedIn);
+		length = length * sightData.gnrFontScale;
+		layoutData.rlRadius = layoutData.rlRadius-length/2;
+		layoutData.rlRadiusOutside = layoutData.rlRadius+length;
 		
 		// draw indicators
 		for(int i=0; i<indicators.size(); i++) {
@@ -343,10 +349,6 @@ public class ElementBallRangeIndicator extends Element {
 			} else {
 				dir.rotateRad(-rangeAngle).rotateDeg(+angleCorrection);
 			}
-			
-			// length
-			double length = Conversion.get().screenspace2pixel(size.x, canvasHeight, sightData.envZoomedIn);
-			length = length * sightData.gnrFontScale;
 			
 			// line position
 			Vector2d posStart = dir.copy().setLength(dir.length()-length/2);
@@ -443,6 +445,7 @@ public class ElementBallRangeIndicator extends Element {
 			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight,
 					sightData.envZoomedIn);
 		}
+		layoutData.rcRadius = radiusPX;
 
 		Conversion conversionUSSR = new Conversion();
 		conversionUSSR.initialize(canvasWidth, canvasHeight, calibData.vehicle.fovOut, calibData.vehicle.fovIn, Thousandth.USSR);

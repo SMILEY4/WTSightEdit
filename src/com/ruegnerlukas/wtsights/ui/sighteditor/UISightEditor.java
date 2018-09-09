@@ -29,6 +29,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -50,6 +51,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 public class UISightEditor {
@@ -103,6 +105,14 @@ public class UISightEditor {
 		Object[] sceneObjects = FXUtils.openFXScene(null, "/ui/sightEditor/layout_sighteditor.fxml", width, height, "Edit Sight");
 		UISightEditor controller = (UISightEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
+		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override public void handle(WindowEvent event) {
+				if(controller.wtCanvas != null && controller.wtCanvas.ses != null) {
+					controller.wtCanvas.ses.shutdownNow();
+				}
+			}
+		});
 		
 		controller.create(stage, dataCalib);
 	}

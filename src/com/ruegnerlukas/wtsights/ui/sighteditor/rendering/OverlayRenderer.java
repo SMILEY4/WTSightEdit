@@ -3,7 +3,6 @@ package com.ruegnerlukas.wtsights.ui.sighteditor.rendering;
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
@@ -36,6 +35,7 @@ import com.ruegnerlukas.wtutils.canvas.WTCanvas;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 
 
@@ -44,6 +44,12 @@ public class OverlayRenderer {
 	
 	private static final Color COLOR_SELECTION_1 = Color.BLACK;
 	private static final Color COLOR_SELECTION_2 = Color.WHITE;
+	private static final Color COLOR_SELECTION_3 = new Color(0.2f, 0.2f, 0.2f, 1f);
+	private static final Color COLOR_SELECTION_4 = new Color(0.8f, 0.8f, 0.8f, 1f);
+
+
+	private static final Font font = new Font("Arial", 15);
+	
 	
 	
 	
@@ -56,7 +62,6 @@ public class OverlayRenderer {
 		
 		
 		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, dataSight.gnrThousandth);
-		
 		
 		
 		if(selectedElement.type == ElementType.CENTRAL_VERT_LINE) {
@@ -93,6 +98,7 @@ public class OverlayRenderer {
 				if(major) {
 					drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, textPos.x, textPos.y, 6);
 				}
+				
 			}
 			
 			
@@ -100,22 +106,24 @@ public class OverlayRenderer {
 		} else if(selectedElement.type == ElementType.CUSTOM_LINE) {
 			ElementCustomLine element = (ElementCustomLine)selectedElement;
 			LayoutLineObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			System.out.println(layout.lineSize);
 			drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
-		
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, "S");
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.end.x, layout.end.y, "E");
+
 			
 		
 		} else if(selectedElement.type == ElementType.CUSTOM_CIRCLE) {
 			ElementCustomCircle element = (ElementCustomCircle)selectedElement;
 			LayoutCircleObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
-			drawCircle(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.radius, layout.lineWidth);
-			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, 6);
-			
 			if(layout.useLineSegments) {
 				Vector2d v0 = new Vector2d(0, 1).rotateDeg(-element.segment.x).setLength(layout.circle.radius+layout.circle.radius*0.1);
 				Vector2d v1 = new Vector2d(0, 1).rotateDeg(-element.segment.y).setLength(layout.circle.radius+layout.circle.radius*0.1);
-				drawThinLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.cx+v0.x, layout.circle.cy+v0.y);
-				drawThinLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.cx+v1.x, layout.circle.cy+v1.y);
+				drawThinLine(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.cx+v0.x, layout.circle.cy+v0.y);
+				drawThinLine(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.cx+v1.x, layout.circle.cy+v1.y);
 			}
+			drawCircle(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.radius, layout.lineWidth);
+			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, 6);
 			
 			
 			
@@ -134,7 +142,11 @@ public class OverlayRenderer {
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p1.x, layout.p1.y, 4);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p2.x, layout.p2.y, 4);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p3.x, layout.p3.y, 4);
-			
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x+5, layout.p0.y+5, "1");
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p1.x+5, layout.p1.y+5, "2");
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p2.x+5, layout.p2.y+5, "3");
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p3.x+5, layout.p3.y+5, "4");
+
 			
 			
 		} else if(selectedElement.type == ElementType.SHELL_BALLISTICS_BLOCK || selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS) {
@@ -161,6 +173,10 @@ public class OverlayRenderer {
 				}
 				
 			} else if(element.scaleMode == ScaleMode.RADIAL && !element.circleMode) {
+				
+				drawThinCircle(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.rlCenter.x, layout.rlCenter.y, layout.rlRadius);
+				drawThinCircle(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.rlCenter.x, layout.rlCenter.y, layout.rlRadiusOutside);
+				
 				for(int i=0; i<layout.rlLines.length; i++) {
 					boolean major = element.indicators.get(i).isMajor();
 					Vector4d line = layout.rlLines[i];
@@ -173,6 +189,9 @@ public class OverlayRenderer {
 				}
 				
 			} else if(element.scaleMode == ScaleMode.RADIAL && element.circleMode) {
+				
+				drawThinCircle(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.rlCenter.x, layout.rlCenter.y, layout.rcRadius);
+
 				for(int i=0; i<layout.rlLines.length; i++) {
 					boolean major = element.indicators.get(i).isMajor();
 					Circlef circle = layout.rcCircles[i];
@@ -192,6 +211,53 @@ public class OverlayRenderer {
 	}
 	
 	
+	
+	
+	private static void drawText(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x, double y, String str) {
+	
+		Point2D p = canvas.transformToOverlay(x, y);
+		double px = ((int)p.getX())+0.5;
+		double py = ((int)p.getY())+0.5;
+		
+		g.setFont(font);
+		
+		g.setLineDashes(null);
+
+		g.setLineWidth(3);
+		g.setStroke(color1);
+		g.strokeText(str, px, py);
+
+		g.setLineWidth(1);
+		g.setStroke(color2);
+		g.strokeText(str, px, py);
+
+	}
+	
+	
+	
+	private static void drawThinCircle(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x, double y, double radius) {
+		
+		Point2D p0 = canvas.transformToOverlay(x-radius, y-radius);
+		Point2D p1 = canvas.transformToOverlay(x+radius, y+radius);
+		
+		double px0 = ((int)p0.getX())+0.5;
+		double py0 = ((int)p0.getY())+0.5;
+		double size = p1.getX()-p0.getX();
+		
+		
+		g.setLineWidth(1);
+		
+		g.setStroke(color1);
+		g.setLineDashes(null);
+		g.strokeOval(px0, py0, size, size);
+
+		g.setStroke(color2);
+		g.setLineDashes(5, 8);
+		g.setLineDashOffset(getDashOffset());
+		g.strokeOval(px0, py0, size, size);
+		
+	}
+
 	
 	
 	private static void drawCircle(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x, double y, double radius, double lineSize) {
@@ -229,9 +295,9 @@ public class OverlayRenderer {
 	
 	
 	
+	
 	static Vector2d dir = new Vector2d();
 	static Vector2d cap = new Vector2d();
-	static Vector3d vec = new Vector3d();
 	static Vector2d perp = new Vector2d();
 	static Vector2d start = new Vector2d();
 	static Vector2d end = new Vector2d();
@@ -239,6 +305,7 @@ public class OverlayRenderer {
 	static Vector2d b = new Vector2d();
 	static Vector2d c = new Vector2d();
 	static Vector2d d = new Vector2d();
+	
 
 	private static void drawLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1, double lineSize) {
 		
@@ -250,11 +317,9 @@ public class OverlayRenderer {
 		double px1 = ((int)p1.getX())+0.5;
 		double py1 = ((int)p1.getY())+0.5;
 		
-		Vector2d.setVectorAB(py0, py0, px1, py1, dir);
+		Vector2d.setVectorAB(px0, py0, px1, py1, dir);
 		cap.set(dir).setLength(lineSize*canvas.canvas.getScaleX()/2);
-		
-		vec.set(dir.x, dir.y, 0).cross(0, 0, 1);
-		perp.set(vec.x, vec.y).setLength(lineSize*canvas.canvas.getScaleX()/2);
+		perp.set(dir).normalize().rotateDeg(90).setLength(lineSize*canvas.canvas.getScaleX()/2);
 		
 		start.set(px0, py0);
 		end.set(px1, py1);
@@ -265,7 +330,6 @@ public class OverlayRenderer {
 		d.set(end).sub(perp).add(cap);
 
 		g.setLineWidth(1);
-		
 		g.setStroke(color1);
 		g.setLineDashes(null);
 		g.strokeLine(a.x, a.y, b.x, b.y);
@@ -285,6 +349,7 @@ public class OverlayRenderer {
 		
 	}
 
+	
 	
 	
 	private static void drawThinLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1) {
@@ -309,6 +374,7 @@ public class OverlayRenderer {
 		g.strokeLine(px0, py0, px1, py1);
 		
 	}
+	
 	
 	
 	
@@ -337,6 +403,7 @@ public class OverlayRenderer {
 		g.strokeRect(px, py, ((int)rw), ((int)rh));
 		
 	}
+	
 	
 	
 	
@@ -374,6 +441,7 @@ public class OverlayRenderer {
 	
 	
 	
+	
 	private static void drawCross(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x, double y, double radius) {
 		
 		Point2D p = canvas.transformToOverlay(x, y);
@@ -402,6 +470,7 @@ public class OverlayRenderer {
 		
 	}
 
+	
 	
 	
 	private static double getDashOffset() {

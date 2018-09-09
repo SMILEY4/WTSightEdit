@@ -172,7 +172,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
@@ -180,7 +180,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
@@ -188,7 +188,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.x = newValue.doubleValue();
@@ -196,7 +196,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.y = newValue.doubleValue();
@@ -272,7 +272,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rSize, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rSize, elementDefault.size.x, 0, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
@@ -280,7 +280,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, 0, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
@@ -288,7 +288,7 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, -1000, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
+		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
