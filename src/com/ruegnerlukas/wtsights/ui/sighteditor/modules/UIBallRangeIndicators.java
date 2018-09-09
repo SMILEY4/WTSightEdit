@@ -3,13 +3,11 @@ package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 import java.util.Comparator;
 
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.renderer.Conversion;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
@@ -19,9 +17,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -68,6 +65,10 @@ public class UIBallRangeIndicators implements Module {
 	@FXML private Spinner<Double> rTextOffset;
 	@FXML private ChoiceBox<String> rTextAlignment;
 	
+	@FXML private CheckBox cbDrawUpward;
+	@FXML private CheckBox cbCanMove;
+	@FXML private CheckBox cbDrawCorrLabel;
+
 	@FXML private Spinner<Double> spinnerCorrX;
 	@FXML private Spinner<Double> spinnerCorrY;
 	
@@ -351,6 +352,36 @@ public class UIBallRangeIndicators implements Module {
 				}
 			}
 		});	
+		
+		cbDrawUpward.setSelected(elementDefault.drawUpward);
+		cbDrawUpward.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawUpward = cbDrawUpward.isSelected();
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbCanMove.setSelected(elementDefault.move);
+		cbCanMove.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.move = cbCanMove.isSelected();
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbDrawCorrLabel.setSelected(elementDefault.drawCorrLabel);
+		cbDrawCorrLabel.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawCorrLabel = cbDrawCorrLabel.isSelected();
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
 		
 		
 		

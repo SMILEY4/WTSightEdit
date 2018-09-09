@@ -10,35 +10,28 @@ import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
-import com.ruegnerlukas.wtsights.renderer.Conversion;
-import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 public class UIShellBlock implements Module {
 
@@ -76,6 +69,10 @@ public class UIShellBlock implements Module {
 	@FXML private Spinner<Double> rAngle;
 	@FXML private Spinner<Double> rTextOffset;
 	@FXML private ChoiceBox<String> rTextAlignment;
+	
+	@FXML private CheckBox cbDrawUpward;
+	@FXML private CheckBox cbCanMove;
+	@FXML private CheckBox cbDrawCorrLabel;
 	
 	@FXML private Spinner<Double> spinnerCorrX;
 	@FXML private Spinner<Double> spinnerCorrY;
@@ -375,6 +372,36 @@ public class UIShellBlock implements Module {
 			}
 		});	
 		
+		
+		cbDrawUpward.setSelected(elementDefault.drawUpward);
+		cbDrawUpward.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawUpward = cbDrawUpward.isSelected();
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbCanMove.setSelected(elementDefault.move);
+		cbCanMove.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.move = cbCanMove.isSelected();
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbDrawCorrLabel.setSelected(elementDefault.drawCorrLabel);
+		cbDrawCorrLabel.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawCorrLabel = cbDrawCorrLabel.isSelected();
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
 		
 		
 		FXUtils.initSpinner(spinnerCorrX, elementDefault.posCorrLabel.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {

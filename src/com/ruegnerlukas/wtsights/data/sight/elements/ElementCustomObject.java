@@ -2,7 +2,7 @@ package com.ruegnerlukas.wtsights.data.sight.elements;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 
-public class ElementCustomObject extends Element {
+public abstract class ElementCustomObject extends Element {
 	
 	public static enum Movement {
 		STATIC, MOVE, MOVE_RADIAL;
@@ -28,5 +28,6 @@ public class ElementCustomObject extends Element {
 	protected ElementCustomObject(String name, ElementType type) {
 		super(name, type);
 	}
+	
 	
 }

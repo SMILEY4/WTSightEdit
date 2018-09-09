@@ -465,7 +465,6 @@ public class UICalibrationEditor {
 			Point2D pc1 = wtCanvas.transformToOverlay(wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y+4);
 			g.strokeLine(pc0.getX(), pc0.getY(), pc1.getX(), pc1.getY());
 		
-			
 			Point2D pl0 = wtCanvas.transformToOverlay(-3, wtCanvas.cursorPosition.y);
 			Point2D pl1 = wtCanvas.transformToOverlay(wtCanvas.getWidth(), wtCanvas.cursorPosition.y);
 

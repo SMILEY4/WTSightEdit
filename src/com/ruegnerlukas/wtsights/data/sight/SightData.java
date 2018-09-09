@@ -6,7 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.ruegnerlukas.wtsights.data.sight.elements.*;
+import com.ruegnerlukas.wtsights.data.sight.elements.Element;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
@@ -14,6 +20,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class SightData {
+	
+	
+	// temp
 	
 	
 	// general

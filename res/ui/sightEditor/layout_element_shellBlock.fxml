@@ -144,9 +144,9 @@
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </padding>
                                                 </Separator>
-                                                <CheckBox minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Upward" />
-                                                <CheckBox minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Can Move" />
-                                                <CheckBox minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Range Correction Label" />
+                                                <CheckBox fx:id="cbDrawUpward" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Upward" />
+                                                <CheckBox fx:id="cbCanMove" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Can Move" />
+                                                <CheckBox fx:id="cbDrawCorrLabel" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Range Correction Label" />
                                                 <Label minWidth="0.0" prefWidth="1000000.0" text="Range Correction Label" />
                                                 <HBox>
                                                    <children>

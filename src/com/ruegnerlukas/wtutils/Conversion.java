@@ -1,4 +1,4 @@
-package com.ruegnerlukas.wtsights.renderer;
+package com.ruegnerlukas.wtutils;
 
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 

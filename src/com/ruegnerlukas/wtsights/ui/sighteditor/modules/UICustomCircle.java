@@ -4,9 +4,9 @@ import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.renderer.Conversion;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
