@@ -3,13 +3,14 @@ package com.ruegnerlukas.wtsights.data.sight.elements.layouts;
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
+import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 
 public class LayoutBallRangeIndicators implements ILayoutData {
 
-	// LABEL
-	public Vector2d posLabel = new Vector2d();
-	
+	public double fontSize;
+	public Vector3d corrLabel = new Vector3d(); // x, y, fontSize
+
 	// VERTICAL
 	public Rectanglef[] vMainBounds = null;
 	public Rectanglef[] vCenterBounds = null;

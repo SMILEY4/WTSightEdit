@@ -6,6 +6,7 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutRangefinder;
+import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
 
 import javafx.scene.paint.Color;
@@ -22,7 +23,8 @@ public class ElementRangefinder extends Element {
 	public double		textScale		= 0.7;					// the scale of the text and progressbar (relative to general font scale)
 	
 	public LayoutRangefinder layoutData = new LayoutRangefinder();
-	
+	private Text text = new Text();
+
 	
 	
 	
@@ -62,14 +64,13 @@ public class ElementRangefinder extends Element {
 		x += canvasWidth/2.0;
 		y = canvasHeight/2.0 - y;
 		
-		
-		Font font = null;
 		if(sightData.envZoomedIn) {
-			font = new Font("Arial", 18.0 * sightData.gnrFontScale * textScale * Conversion.get().zoomInMul);
+			layoutData.fontSize = 18.0 * sightData.gnrFontScale * textScale * Conversion.get().zoomInMul;
 		} else {
-			font = new Font("Arial", 17.5 * sightData.gnrFontScale * textScale);
+			layoutData.fontSize = 17.5 * sightData.gnrFontScale * textScale;
 		}
-		Text text = new Text();
+		
+		Font font = SightRenderer.getFont(layoutData.fontSize);
 		text.setFont(font);
 		text.setText("Measuring range");
 		text.setWrappingWidth(0);

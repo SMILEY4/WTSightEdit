@@ -14,6 +14,7 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutBallRangeIndicators;
+import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
@@ -46,7 +47,7 @@ public class ElementBallRangeIndicator extends Element {
 	public List<BIndicator> indicators = new ArrayList<BIndicator>();
 	
 	public LayoutBallRangeIndicators layoutData = new LayoutBallRangeIndicators();
-	
+	private Text corrHelper = new Text();
 	
 	
 	
@@ -109,6 +110,8 @@ public class ElementBallRangeIndicator extends Element {
 		}
 		
 		final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		
+		layoutData.fontSize = 25 * sightData.gnrFontScale * 0.5f * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
 		// point fitting
 		List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
@@ -254,6 +257,8 @@ public class ElementBallRangeIndicator extends Element {
 		final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale;
 		layoutData.rlLineSize = lineSize;
 		
+		layoutData.fontSize = 25 * sightData.gnrFontScale * 0.5f * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+
 		// point fitting
 		List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
 		fittingPoints.add(new Vector2d(0, 0));
@@ -401,6 +406,8 @@ public class ElementBallRangeIndicator extends Element {
 			return null;
 		}
 
+		layoutData.fontSize = 25 * sightData.gnrFontScale * 0.5f * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		
 		// origin x
 		double originX = position.x;
 		if (sightData.envZoomedIn) {
@@ -502,8 +509,9 @@ public class ElementBallRangeIndicator extends Element {
 	
 	public LayoutBallRangeIndicators layoutLabel(SightData sightData, double canvasWidth, double canvasHeight) {
 		
-		Font corrFont = new Font("Arial", 25.5*0.5*sightData.gnrFontScale*(sightData.envZoomedIn ? Conversion.get().zoomInMul:1));
-		Text corrHelper = new Text();
+		final double fontSize = 25.5*0.5*sightData.gnrFontScale*(sightData.envZoomedIn?Conversion.get().zoomInMul:1);
+		
+		Font corrFont = SightRenderer.getFont(fontSize);
 		corrHelper.setFont(corrFont);
 		corrHelper.setWrappingWidth(0);
 		corrHelper.setLineSpacing(0);
@@ -528,7 +536,7 @@ public class ElementBallRangeIndicator extends Element {
 		corrY = corrY + (canvasHeight/2);
 		corrY = corrY - corrHelper.getLayoutBounds().getHeight();
 		
-		layoutData.posLabel.set(corrX, corrY);
+		layoutData.corrLabel.set(corrX, corrY, fontSize);
 		
 		return layoutData;
 	}

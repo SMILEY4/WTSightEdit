@@ -19,6 +19,7 @@ import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
+import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
@@ -484,6 +485,10 @@ public class UISightEditor {
 			}
 
 		}
+		
+		dataSight.selectedElement = element;
+		wtCanvas.repaint();
+		
 	}
 	
 	

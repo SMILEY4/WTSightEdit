@@ -44,6 +44,7 @@ public class SightData {
 	
 	// elements
 	public HashMap<ElementType, List<Element>> elements = new HashMap<ElementType, List<Element>>();
+	public Element selectedElement = null;
 	
 	
 	

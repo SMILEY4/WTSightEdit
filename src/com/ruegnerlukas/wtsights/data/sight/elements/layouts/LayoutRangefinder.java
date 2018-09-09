@@ -7,5 +7,6 @@ public class LayoutRangefinder implements ILayoutData {
 	
 	public Rectanglef bounds = new Rectanglef();
 	public Vector2d textPos = new Vector2d();
+	public double fontSize;
 	
 }

@@ -7,5 +7,6 @@ public class LayoutHorzRangeIndicators implements ILayoutData {
 	
 	public Rectanglef[] bounds = null;
 	public Vector2d[] textPositions = null;
+	public double fontSize;
 	
 }

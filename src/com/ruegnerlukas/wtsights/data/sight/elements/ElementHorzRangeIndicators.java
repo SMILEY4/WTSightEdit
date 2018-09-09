@@ -66,6 +66,8 @@ public class ElementHorzRangeIndicators extends Element {
 		
 		final double lineSize = sightData.gnrLineSize * sightData.gnrFontScale;
 		
+		layoutData.fontSize = 12.5 * sightData.gnrFontScale * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		
 		for(int i=0; i<indicators.size(); i++) {
 			
 			HIndicator indicator = indicators.get(i);

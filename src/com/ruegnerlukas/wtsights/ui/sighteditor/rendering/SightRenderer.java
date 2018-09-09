@@ -1,8 +1,13 @@
-package com.ruegnerlukas.wtsights.ui.sighteditor;
+package com.ruegnerlukas.wtsights.ui.sighteditor.rendering;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
+import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
@@ -44,6 +49,40 @@ import javafx.scene.text.TextAlignment;
 
 public class SightRenderer {
 
+	private static final int MAX_FONT_CACHE_SIZE = 20;
+	private static List<Font> fontCache = new ArrayList<Font>();
+	
+	
+	public static Font getFont(double size) {
+		
+		for(int i=0, n=fontCache.size(); i<n; i++) {
+			Font font = fontCache.get(i);
+			
+			if(MathUtils.isNearlyEqual(font.getSize(), size)) {
+				fontCache.remove(font);
+				fontCache.add(font);
+				return font;
+			}
+			
+		}
+		
+		Font font = new Font("Arial", size);
+		fontCache.add(font);
+		
+		if(MAX_FONT_CACHE_SIZE < fontCache.size()) {
+			fontCache.remove(fontCache.size()-1);
+		}
+		
+		return font;
+	}
+	
+	
+	private static final Color COLOR_SELECTION_0 = Color.WHITE;
+	private static final Color COLOR_SELECTION_1 = Color.WHITE;
+	
+	
+	
+	
 	
 	public static void draw(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
 		
@@ -119,6 +158,8 @@ public class SightRenderer {
 		if(horzLine.drawCentralHorzLine) {
 			g.fillRect(horzBounds.x, horzBounds.y, horzBounds.width, horzBounds.height);
 		}
+		
+		
 		if(vertLine.drawCentralVertLine) {
 			g.fillRect(vertBounds.x, vertBounds.y, vertBounds.width, vertBounds.height);
 		}
@@ -131,17 +172,13 @@ public class SightRenderer {
 	private static void drawRangefinder(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData ammoData) {
 		
 		ElementRangefinder rangefinder = (ElementRangefinder)dataSight.getElements(ElementType.RANGEFINDER).get(0);
+		
 		LayoutRangefinder layout = rangefinder.layout(dataSight, dataCalib, ammoData, canvas.getWidth(), canvas.getHeight());
 		Rectanglef bounds = layout.bounds;
 		Vector2d textPos = layout.textPos;
 		
 		// font
-		Font font = null;
-		if(dataSight.envZoomedIn) {
-			font = new Font("Arial", 18.0 * dataSight.gnrFontScale * rangefinder.textScale * Conversion.get().zoomInMul);
-		} else {
-			font = new Font("Arial", 17.5 * dataSight.gnrFontScale * rangefinder.textScale);
-		}
+		Font font = getFont(layout.fontSize);
 
 		// draw background
 		g.setFill(rangefinder.color1);
@@ -184,7 +221,7 @@ public class SightRenderer {
 			
 			// draw label
 			if(indicator.isMajor()) {
-				Font font = new Font("Arial", 12.5 * dataSight.gnrFontScale * (dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1) );
+				Font font = getFont(layoutData.fontSize );
 				g.setFill(dataSight.envSightColor);
 				g.setTextAlign(TextAlignment.CENTER);
 				g.setTextBaseline(VPos.CENTER);
@@ -215,14 +252,14 @@ public class SightRenderer {
 		
 		if(block.drawCorrLabel && dataSight.envRangeCorrection > 0) {
 			
-			Font corrFont = new Font("Arial", 25.5*0.5*dataSight.gnrFontScale*(dataSight.envZoomedIn?Conversion.get().zoomInMul:1));
+			Vector3d layout = block.layoutLabel(dataSight, canvas.getWidth(), canvas.getHeight()).corrLabel;
+
+			Font corrFont = getFont(layout.z);
 			Text corrHelper = new Text();
 			corrHelper.setFont(corrFont);
 			corrHelper.setWrappingWidth(0);
 			corrHelper.setLineSpacing(0);
 			corrHelper.setText("Distance:"+dataSight.envRangeCorrection);
-
-			Vector2d layout = block.layoutLabel(dataSight, canvas.getWidth(), canvas.getHeight()).posLabel;
 			
 			// draw label
 			g.setTextBaseline(VPos.CENTER);
@@ -247,7 +284,7 @@ public class SightRenderer {
 
 		LayoutBallRangeIndicators layout = block.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
 
-		Font bIndFont = new Font("Arial", 25*dataSight.gnrFontScale*0.5f*(dataSight.envZoomedIn?Conversion.get().zoomInMul:1));
+		Font bIndFont = getFont(layout.fontSize);
 		
 		// draw indicators
 		for(int i=0; i<block.indicators.size(); i++) {
@@ -323,7 +360,7 @@ public class SightRenderer {
 		LayoutBallRangeIndicators layout = block.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
 		
 		final double lineSize = layout.rlLineSize;
-		Font bIndFont = new Font("Arial", 25*dataSight.gnrFontScale*0.5f*(dataSight.envZoomedIn?Conversion.get().zoomInMul:1));
+		Font bIndFont = getFont(layout.fontSize);
 		
 		// draw indicators
 		for(int i=0; i<block.indicators.size(); i++) {
@@ -366,7 +403,7 @@ public class SightRenderer {
 		LayoutBallRangeIndicators layout = block.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
 		
 		// font
-		Font bIndFont = new Font("Arial", 25*dataSight.gnrFontScale*0.5f*(dataSight.envZoomedIn?Conversion.get().zoomInMul:1));
+		Font bIndFont = getFont(layout.fontSize);
 		double lineWidth = layout.rcLineWidth;
 		
 		// draw indicators
@@ -423,7 +460,7 @@ public class SightRenderer {
 	private static void drawTextObject(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementCustomText objText) {
 	
 		LayoutTextObject layout = objText.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
-		Font font = new Font("Arial", layout.fontSize );
+		Font font = getFont(layout.fontSize );
 		
 		// draw text
 		g.setFill(dataSight.envSightColor);
