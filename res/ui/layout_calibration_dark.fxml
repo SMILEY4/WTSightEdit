@@ -20,6 +20,7 @@
                <children>
                   <VBox maxWidth="150.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0" spacing="5.0" style="-fx-background-color: linear-gradient(#474747, #3a3a3a); -fx-border-color: linear-gradient(#484848, #5a5a5a);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
+                        <Label fx:id="labelVehicleName" prefWidth="100000.0" text="vehicle_name" />
                         <ComboBox fx:id="choiceAmmo" prefWidth="10000.0" />
                         <Separator prefWidth="10000.0">
                            <padding>

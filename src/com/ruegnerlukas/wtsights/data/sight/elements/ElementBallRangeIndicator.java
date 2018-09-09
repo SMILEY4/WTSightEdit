@@ -291,6 +291,7 @@ public class ElementBallRangeIndicator extends Element {
 		originY = originY * sightData.gnrFontScale;
 		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, sightData.envZoomedIn);
 	
+		layoutData.rlCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
 		
 		// radius
 		double radiusMil = 0;
@@ -381,7 +382,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	public LayoutBallRangeIndicators layoutRadialCircles(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
-		if(layoutData == null || layoutData.rcCircles.length != indicators.size() ) {
+		if(layoutData.rcCircles == null || layoutData.rcCircles.length != indicators.size() ) {
 			layoutData.rcCircles = new Circlef[indicators.size()];
 			layoutData.rcTextPositions = new Vector2d[indicators.size()];
 			for(int i=0; i<indicators.size(); i++) {
@@ -424,6 +425,9 @@ public class ElementBallRangeIndicator extends Element {
 		originY = originY * sightData.gnrFontScale;
 		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, sightData.envZoomedIn);
 
+		layoutData.rcCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
+
+		
 		// radius
 		double radiusMil = 0;
 		if (radiusUseMils) {

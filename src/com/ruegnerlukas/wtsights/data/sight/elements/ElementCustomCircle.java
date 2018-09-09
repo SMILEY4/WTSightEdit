@@ -151,6 +151,7 @@ public class ElementCustomCircle extends ElementCustomObject {
 			
 		} else {
 
+			layout.circle.set(xPX, yPX, dPX/2);
 			layout.useLineSegments = true;
 			
 			final double angleStart = segment.x;

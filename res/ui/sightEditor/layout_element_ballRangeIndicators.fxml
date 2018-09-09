@@ -46,12 +46,12 @@
                                                       <VBox fx:id="boxVertical" layoutX="89.0" spacing="5.0" style="-fx-border-color: rgba(0%, 0%, 0%, 0.25); -fx-border-radius: 3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Text Shift:" />
-                                                            <Spinner fx:id="vTextShift" minWidth="0.0" prefWidth="1000000.0" />
+                                                            <Spinner fx:id="vTextShift" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Text Offset:" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
-                                                                  <Spinner fx:id="vTextX" minWidth="0.0" prefWidth="1000000.0" />
-                                                                  <Spinner fx:id="vTextY" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vTextX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vTextY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Text Alignment:" />
@@ -64,15 +64,15 @@
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
                                                             <HBox>
                                                                <children>
-                                                                  <Spinner fx:id="vPosX" minWidth="0.0" prefWidth="1000000.0" />
-                                                                  <Spinner fx:id="vPosY" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Size (Major,Minor):" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
-                                                                  <Spinner fx:id="vSizeMajor" minWidth="0.0" prefWidth="1000000.0" />
-                                                                  <Spinner fx:id="vSizeMinor" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vSizeMajor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vSizeMinor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
                                                             <Separator minWidth="0.0" prefWidth="1000000.0">
@@ -88,8 +88,8 @@
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Size Additional (Major,Minor):" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
-                                                                  <Spinner fx:id="vSizeAddMajor" minWidth="0.0" prefWidth="1000000.0" />
-                                                                  <Spinner fx:id="vSizeAddMinor" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vSizeAddMajor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="vSizeAddMinor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
                                                          </children>
@@ -148,8 +148,8 @@
                                                 <Label minWidth="0.0" prefWidth="1000000.0" text="Range Correction Label" />
                                                 <HBox>
                                                    <children>
-                                                      <Spinner fx:id="spinnerCorrX" minWidth="0.0" prefWidth="1000000.0" />
-                                                      <Spinner fx:id="spinnerCorrY" minWidth="0.0" prefWidth="1000000.0" />
+                                                      <Spinner fx:id="spinnerCorrX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                      <Spinner fx:id="spinnerCorrY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                    </children>
                                                 </HBox>
                                              </children>

@@ -35,12 +35,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -64,6 +66,8 @@ public class UICalibrationEditor {
 	@FXML private ResourceBundle resources;
 	@FXML private URL location;
 
+	@FXML private Label labelVehicleName;
+	
 	@FXML private ComboBox<Ammo> choiceAmmo;
 	
 	@FXML private CheckBox cbZoomedIn;
@@ -234,6 +238,9 @@ public class UICalibrationEditor {
 			};
 		};
 		
+		// NAME LABEL
+		labelVehicleName.setText(dataCalib.vehicle.namePretty);
+		
 		// AMMO CHOICE
 		FXUtils.initComboboxAmmo(choiceAmmo);
 		if(dataCalib.ammoData.isEmpty()) {
@@ -333,6 +340,7 @@ public class UICalibrationEditor {
 				spinner.setMinSize(0, 31);
 				spinner.setPrefSize(10000, 31);
 				spinner.setMaxSize(10000, 31);
+				spinner.setEditable(true);
 				FXUtils.initSpinner(spinner, marker.y, 0, 3200, 200, 0, new ChangeListener<Integer>() {
 					@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 						marker.y = newValue;
@@ -340,7 +348,17 @@ public class UICalibrationEditor {
 					}
 				});
 				
-				boxMarker.getChildren().addAll(label, spinner);
+				Button btnRemove = new Button("X");
+				btnRemove.setMinSize(31, 31);
+				btnRemove.setPrefSize(31, 31);
+				btnRemove.setMaxSize(31, 31);
+				btnRemove.setOnAction(new EventHandler<ActionEvent>() {
+					@Override public void handle(ActionEvent event) {
+						deleteMarker(marker);
+					}
+				});
+				
+				boxMarker.getChildren().addAll(label, spinner, btnRemove);
 				
 				boxRanges.getChildren().add(boxMarker);
 				VBox.setVgrow(spinner, Priority.ALWAYS);
@@ -568,15 +586,20 @@ public class UICalibrationEditor {
 			}
 		}
 		
-		if(minMarker != null) {
-			currentAmmoData.markerRanges.remove(minMarker);
-			Logger.get().debug("Deleted marker " + minMarker );
+		deleteMarker(minMarker);
+	}
+	
+	
+	
+	
+	private void deleteMarker(Vector2i marker) {
+		if(marker != null) {
+			currentAmmoData.markerRanges.remove(marker);
+			Logger.get().debug("Deleted marker " + marker );
 		}
-		
 		updateRangeList();
 		wtCanvas.repaint();
 	}
-	
 	
 	
 	

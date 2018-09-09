@@ -291,7 +291,7 @@ public class UIShellBlock implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rSize, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rSize, elementDefault.size.x, -1000, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
@@ -299,7 +299,7 @@ public class UIShellBlock implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, -1000, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();

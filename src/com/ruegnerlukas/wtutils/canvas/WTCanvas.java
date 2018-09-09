@@ -1,8 +1,13 @@
 package com.ruegnerlukas.wtutils.canvas;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.wtutils.ZoomableScrollPane;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -24,6 +29,10 @@ public class WTCanvas {
 	public boolean cursorVisible = false;
 	public Vector2d cursorPosition = new Vector2d();
 	
+	public boolean constantOverlayUpdate = true;
+	public int overlayUpdateDelay = 30; // in ms
+	
+	
 	
 	public WTCanvas(AnchorPane parent) {
 		this.parent = parent;
@@ -42,6 +51,19 @@ public class WTCanvas {
 		AnchorPane.setBottomAnchor(canvasOverlay, 0.0);
 		canvasOverlay.toFront();
 
+		if(constantOverlayUpdate) {
+			ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+			ses.scheduleAtFixedRate(new Runnable() {
+			     @Override public void run() {
+			    	 Platform.runLater(new Runnable() {
+						@Override public void run() {
+							canvasOverlay.repaint();
+						}
+			    	 });
+			     }
+			}, 0, overlayUpdateDelay, TimeUnit.MILLISECONDS);
+		}
+		
 	}
 	
 	

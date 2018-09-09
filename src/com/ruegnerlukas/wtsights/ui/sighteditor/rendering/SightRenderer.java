@@ -76,10 +76,7 @@ public class SightRenderer {
 		return font;
 	}
 	
-	
-	private static final Color COLOR_SELECTION_0 = Color.WHITE;
-	private static final Color COLOR_SELECTION_1 = Color.WHITE;
-	
+
 	
 	
 	
@@ -449,7 +446,7 @@ public class SightRenderer {
 	private static void drawLineObject(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementCustomLine objLine) {
 		LayoutLineObject layout = objLine.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
 		g.setStroke(dataSight.envSightColor);
-		g.setLineWidth(dataSight.gnrLineSize*dataSight.gnrFontScale);
+		g.setLineWidth(layout.lineSize);
 		g.strokeLine(layout.start.x, layout.start.y, layout.end.x, layout.end.y);
 		g.setLineWidth(1);
 	}

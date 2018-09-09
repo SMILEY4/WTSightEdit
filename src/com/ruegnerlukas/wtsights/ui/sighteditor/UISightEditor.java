@@ -19,6 +19,7 @@ import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
+import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.OverlayRenderer;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -38,6 +39,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -60,6 +62,8 @@ public class UISightEditor {
 	// canvas
 	@FXML private AnchorPane paneCanvas;
 	public WTCanvas wtCanvas;
+	
+	@FXML private CheckBox cbShowSelections;
 	
 	// ui
 	@FXML private Label labelVehicleName;
@@ -144,23 +148,31 @@ public class UISightEditor {
 		// CANVAS
 		wtCanvas = new WTCanvas(paneCanvas) {
 			@Override public void onMouseMoved() {
-				wtCanvas.repaint();
+//				wtCanvas.repaint();
 			}
 			@Override public void onMouseDragged() {
+				InteractionHandler.mouseDrag(wtCanvas.cursorPosition, wtCanvas, dataSight, dataCalib, dataAmmo);
 				wtCanvas.repaint();
 			}
 			@Override public void onMousePressed(MouseButton btn) {
-				wtCanvas.repaint();
+//				wtCanvas.repaint();
 			}
 			@Override public void onMouseReleased(MouseButton btn) {
-				wtCanvas.repaint();
+//				wtCanvas.repaint();
 			}
 			@Override public void onKeyReleased(KeyCode code) {
-				wtCanvas.repaint();
+//				wtCanvas.repaint();
 			}
 			@Override public void onRepaint(GraphicsContext g) {
-				repaintCanvas(g);
-			};
+				if(wtCanvas != null) {
+					SightRenderer.draw(wtCanvas.canvas, g, dataSight, dataCalib, getAmmoData());
+				}
+			}
+			@Override public void onRepaintOverlay(GraphicsContext g) {
+				if(wtCanvas != null && cbShowSelections.isSelected()) {
+					OverlayRenderer.drawElementSelection(wtCanvas, g, dataSight, dataCalib, getAmmoData());
+				}
+			}
 		};
 		wtCanvas.rebuildCanvas(1920, 1080);
 		
@@ -525,15 +537,6 @@ public class UISightEditor {
 		
 	}
 	
-	
-	
-	
-	public void repaintCanvas(GraphicsContext g) {
-		if(wtCanvas != null) {
-			SightRenderer.draw(wtCanvas.canvas, g, dataSight, dataCalib, getAmmoData());
-		}
-	}
-
 	
 	
 	
