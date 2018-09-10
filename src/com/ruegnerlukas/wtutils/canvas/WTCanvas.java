@@ -36,7 +36,12 @@ public class WTCanvas {
 	
 	
 	public WTCanvas(AnchorPane parent) {
+		this(parent, true);
+	}
+	
+	public WTCanvas(AnchorPane parent, boolean constantOverlayUpdate) {
 		this.parent = parent;
+		this.constantOverlayUpdate = constantOverlayUpdate;
 		
 		this.canvasOverlay = new ResizableCanvas(parent) {
 			@Override

@@ -16,7 +16,7 @@ public class Workflow {
 		EDIT_CALIBRATION,
 		EDIT_SIGHT,
 		ABOUT,
-		SETTINGS
+		HELP
 	}
 	
 	

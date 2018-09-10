@@ -1,5 +1,6 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.rendering;
 
+import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
@@ -47,9 +48,39 @@ public class OverlayRenderer {
 	private static final Color COLOR_SELECTION_3 = new Color(0.2f, 0.2f, 0.2f, 1f);
 	private static final Color COLOR_SELECTION_4 = new Color(0.8f, 0.8f, 0.8f, 1f);
 
+	private static final Color COLOR_GRID = new Color(0.0f, 0.0f, 1f, 0.25f);
+
+	
 
 	private static final Font font = new Font("Arial", 15);
 	
+	
+	
+	public static void draw(WTCanvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+		
+		if(dataSight.envDisplayGrid && !MathUtils.isNearlyEqual(0, dataSight.envGridWidth) && !MathUtils.isNearlyEqual(0, dataSight.envGridHeight)) {
+			
+			double pxWidth = Conversion.get().mil2pixel(dataSight.envGridWidth, canvas.getHeight(), dataSight.envZoomedIn);
+			double pxHeight = Conversion.get().mil2pixel(dataSight.envGridHeight, canvas.getHeight(), dataSight.envZoomedIn);
+			
+			int nx = (int) (canvas.getWidth() / pxWidth);
+			int ny = (int) (canvas.getHeight() / pxHeight);
+			
+			for(int x=-nx/2-1; x<=nx/2; x++) {
+				for(int y=-ny/2-1; y<=ny/2; y++) {
+					double cx = x * pxWidth + canvas.getWidth()/2;
+					double cy = y * pxHeight + canvas.getHeight()/2;
+					double cw = pxWidth;
+					double ch = pxHeight;
+					drawRect(COLOR_GRID, COLOR_GRID, canvas, g, cx, cy, cw, ch);
+				}
+			}
+			
+			
+		}
+		
+		drawElementSelection(canvas, g, dataSight, dataCalib, currentAmmoData);
+	}
 	
 	
 	
@@ -106,10 +137,12 @@ public class OverlayRenderer {
 		} else if(selectedElement.type == ElementType.CUSTOM_LINE) {
 			ElementCustomLine element = (ElementCustomLine)selectedElement;
 			LayoutLineObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
-			System.out.println(layout.lineSize);
 			drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
-			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, "S");
-			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.end.x, layout.end.y, "E");
+			
+			Vector2d dir = Vector2d.createVectorAB(layout.start, layout.end).setLength(3);
+			
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x-dir.x, layout.start.y-dir.y, "S");
+			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.end.x+dir.x, layout.end.y+dir.y, "E");
 
 			
 		
@@ -378,11 +411,19 @@ public class OverlayRenderer {
 	
 	
 	
+	static Rectanglef view = new Rectanglef();
+	
 	private static void drawRect(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x, double y, double width, double height) {
+		
+		view.set(0, 0, canvas.getWidth(), canvas.getHeight());
 		
 		Point2D p0 = canvas.transformToOverlay(x, y);
 		Point2D p1 = canvas.transformToOverlay(x+width, y+height);
 
+		if(!view.containsPoint(p0.getX(), p0.getY()) && !view.containsPoint(p1.getX(), p1.getY()) ) {
+			return;
+		}
+		
 		double rx = p0.getX();
 		double ry = p0.getY();
 		double rw = p1.getX()-p0.getX();

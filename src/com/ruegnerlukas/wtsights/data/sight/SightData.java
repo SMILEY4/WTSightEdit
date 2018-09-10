@@ -39,8 +39,11 @@ public class SightData {
 	public double 	envRFProgress 		= 30;
 	public int		envRangeCorrection 	= 0;
 	public Color 	envSightColor 		= Color.BLACK;
-	public Image	envBackground 	= null;
-	
+	public Image	envBackground 		= null;
+	public boolean	envDisplayGrid		= false;
+	public double	envGridWidth 		= 20;
+	public double	envGridHeight 		= 20;
+
 	
 	// elements
 	public HashMap<ElementType, List<Element>> elements = new HashMap<ElementType, List<Element>>();

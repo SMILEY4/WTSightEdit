@@ -180,7 +180,7 @@ public class UISightEditor {
 			}
 			@Override public void onRepaintOverlay(GraphicsContext g) {
 				if(wtCanvas != null && cbShowSelections.isSelected()) {
-					OverlayRenderer.drawElementSelection(wtCanvas, g, dataSight, dataCalib, getAmmoData());
+					OverlayRenderer.draw(wtCanvas, g, dataSight, dataCalib, getAmmoData());
 				}
 			}
 		};

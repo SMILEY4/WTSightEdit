@@ -481,11 +481,11 @@ public class ElementBallRangeIndicator extends Element {
 			}
 
 			// circle radius
-			double circleRadius = size.y;
-			circleRadius = circleRadius + indicator.getExtend();
-			circleRadius = circleRadius * 2;
-			circleRadius = circleRadius * sightData.gnrFontScale;
-			circleRadius = Conversion.get().screenspace2pixel(circleRadius, canvasHeight, sightData.envZoomedIn);
+			double circleDiameter = size.y;
+			circleDiameter = circleDiameter + indicator.getExtend();
+			circleDiameter = circleDiameter * 2;
+			circleDiameter = circleDiameter * sightData.gnrFontScale;
+			circleDiameter = Conversion.get().screenspace2pixel(circleDiameter, canvasHeight, sightData.envZoomedIn);
 
 			// circle width
 			double circleWidth = size.x;
@@ -495,7 +495,7 @@ public class ElementBallRangeIndicator extends Element {
 			layoutData.rcLineWidth = circleWidth;
 			
 			// circle
-			layoutData.rcCircles[i].set(canvasWidth / 2 - originX + dir.x, canvasHeight / 2 - originY + dir.y, circleRadius);
+			layoutData.rcCircles[i].set(canvasWidth / 2 - originX + dir.x, canvasHeight / 2 - originY + dir.y, circleDiameter/2);
 			
 
 			// labels

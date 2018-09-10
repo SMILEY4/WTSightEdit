@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,8 +28,18 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.*;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.data.sightfile.BLKSightParser;
 import com.ruegnerlukas.wtsights.data.sightfile.Block;
 import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
@@ -314,6 +326,10 @@ public class DataLoader {
 				}
 				case "lineSizeMult": {
 					dataSight.gnrLineSize = ((ParamFloat)e).value;
+					break;
+				}
+				case "applyCorrectionToGun": {
+					dataSight.gnrApplyCorrectionToGun = ((ParamBool)e).value;
 					break;
 				}
 				case "drawCentralLineVert": {

@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -37,6 +36,9 @@ public class UIAbout {
 	private void create() {
 		
 		textArea.setText(""+
+				"\r\n" + 
+				"Created by smiley_4_\r\n" + 
+				"\r\n" + 
 				"Product Version\r\n" + 
 				"    " + "WT Sight Editor v" + Config.build_version + "\r\n" + 
 				"\r\n" + 
@@ -50,9 +52,7 @@ public class UIAbout {
 				"\r\n" + 
 				"\r\n" +
 				"\r\n" + 
-				"\r\n" + 
 				"THIRD-PARTY-LIBRARIES:" +
-				"\r\n" + 
 				"\r\n" + 
 				"The following software may be included in this product: apache-commons-math.\r\n" + 
 				"This software contains the following license and notice below:\r\n" + 

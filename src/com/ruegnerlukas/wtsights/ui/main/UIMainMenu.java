@@ -13,6 +13,7 @@ import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.about.UIAbout;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
+import com.ruegnerlukas.wtsights.ui.help.UIHelp;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -130,6 +131,9 @@ public class UIMainMenu {
 
 	@FXML
 	void onHelp(ActionEvent event) {
+		Workflow.steps.clear();
+		Workflow.steps.add(Step.HELP);
+		UIHelp.openNew();
 	}
 
 	

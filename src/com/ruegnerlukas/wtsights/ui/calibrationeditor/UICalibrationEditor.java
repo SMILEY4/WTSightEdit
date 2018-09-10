@@ -210,7 +210,7 @@ public class UICalibrationEditor {
 	private void create() {
 		
 		// CANVAS
-		wtCanvas = new WTCanvas(paneCanvas) {
+		wtCanvas = new WTCanvas(paneCanvas, false) {
 			@Override public void onMouseMoved() {
 				wtCanvas.repaint();
 			}

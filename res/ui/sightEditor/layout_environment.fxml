@@ -9,6 +9,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -58,6 +59,18 @@
                            </padding>
                         </Separator>
                         <CheckBox fx:id="cbCrosshairLighting" mnemonicParsing="false" onAction="#onCrosshairLighting" prefWidth="1000000.0" text="Enable Crosshair Lighting" />
+                        <Separator prefWidth="1000000.0">
+                           <padding>
+                              <Insets bottom="15.0" top="15.0" />
+                           </padding>
+                        </Separator>
+                        <CheckBox fx:id="cbDisplayGrid" mnemonicParsing="false" prefWidth="1000000.0" text="Display Grid Overlay" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerGridWidth" editable="true" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerGridHeight" editable="true" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
                         <Separator prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="15.0" top="15.0" />

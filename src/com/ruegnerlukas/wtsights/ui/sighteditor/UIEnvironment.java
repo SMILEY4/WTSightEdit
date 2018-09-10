@@ -12,6 +12,7 @@ import com.ruegnerlukas.wtutils.FXUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -19,6 +20,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -30,11 +32,21 @@ public class UIEnvironment {
 
 	@FXML private ComboBox<Ammo> comboAmmo;
 	@FXML private ChoiceBox<String> choiceZoomMode;
+	
 	@FXML private CheckBox cbShowRangefinder;
+	
 	@FXML private Slider sliderRangefinderProgress;
 	@FXML private Slider sliderRangeCorrection;
+	
 	@FXML private CheckBox cbCrosshairLighting;
+	
+	@FXML private CheckBox cbDisplayGrid;
+	@FXML private Spinner<Double> spinnerGridWidth;
+	@FXML private Spinner<Double> spinnerGridHeight;
+
+	
 	@FXML private TextField pathBackground;
+	
 	@FXML private ChoiceBox<String> choiceResolution;
 
 	@FXML private Label labelValueRFProgress;
@@ -116,6 +128,31 @@ public class UIEnvironment {
 		
 		// CROSSHAIR LIGHTING
 		cbCrosshairLighting.setSelected(false);
+		
+		
+		// GRID OVERLAY
+		cbDisplayGrid.setSelected(editor.getSightData().envDisplayGrid);
+		cbDisplayGrid.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				editor.getSightData().envDisplayGrid = cbDisplayGrid.isSelected();
+				editor.wtCanvas.repaint();
+			}
+		});
+
+
+		FXUtils.initSpinner(spinnerGridWidth, editor.getSightData().envGridWidth, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				editor.getSightData().envGridWidth = newValue;
+				editor.wtCanvas.repaint();
+			}
+		});
+		FXUtils.initSpinner(spinnerGridHeight, editor.getSightData().envGridHeight, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				editor.getSightData().envGridHeight = newValue;
+				editor.wtCanvas.repaint();
+			}
+		}); 
+		
 		
 		
 		// RESOLUTION
