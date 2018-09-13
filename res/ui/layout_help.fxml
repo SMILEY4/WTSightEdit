@@ -50,7 +50,7 @@
                                     <Insets left="15.0" top="30.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Write me message on reddit (smiley_4_) or leave a comment under my last reddit post." wrapText="true">
+                              <Label text="Write me a message on reddit (smiley_4_) or leave a comment under my last reddit post." wrapText="true">
                                  <font>
                                     <Font size="16.0" />
                                  </font>

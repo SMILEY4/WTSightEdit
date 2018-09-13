@@ -62,7 +62,7 @@
                <tooltip>
                   <Tooltip text="About WTSightEdit" />
                </tooltip></Button>
-            <Button mnemonicParsing="false" onAction="#onHelp" prefWidth="300.0" text="Help">
+            <Button disable="true" mnemonicParsing="false" onAction="#onHelp" prefWidth="300.0" text="Help">
                <tooltip>
                   <Tooltip text="Help" />
                </tooltip></Button>
