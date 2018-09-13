@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,8 +28,18 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.*;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.data.sightfile.BLKSightParser;
 import com.ruegnerlukas.wtsights.data.sightfile.Block;
 import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
@@ -102,11 +114,13 @@ public class DataLoader {
 			Element elementVehicle = (Element)listVehicles.item(i);
 			
 			Vehicle vehicle = new Vehicle();
-			vehiclesOut.add(vehicle);
 			vehicle.name = elementVehicle.getTagName();
 			vehicle.fovOut = Float.parseFloat(elementVehicle.getAttribute("fovOut"));
 			vehicle.fovIn = Float.parseFloat(elementVehicle.getAttribute("fovIn"));
 			vehicle.fovSight = Float.parseFloat(elementVehicle.getAttribute("fovSight"));
+			if( !(vehicle.name.contains("tutorial") || vehicle.name.contains("dummy")) ) {
+				vehiclesOut.add(vehicle);
+			}
 
 			Element elementWeaponsRoot = null;
 			for(int j=0; j<elementVehicle.getElementsByTagName("weapons").getLength(); j++) {
@@ -314,6 +328,10 @@ public class DataLoader {
 					dataSight.gnrLineSize = ((ParamFloat)e).value;
 					break;
 				}
+				case "applyCorrectionToGun": {
+					dataSight.gnrApplyCorrectionToGun = ((ParamBool)e).value;
+					break;
+				}
 				case "drawCentralLineVert": {
 					centralVertLine.drawCentralVertLine = ((ParamBool)e).value;
 					break;
@@ -334,12 +352,14 @@ public class DataLoader {
 				}
 				case "rangefinderProgressBarColor1": {
 					ParamColor vec = (ParamColor)e;
-					rangefinder.color1 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
+					vec.value.clampComponents(0, 255f).div(255f);
+					rangefinder.color1 = new Color(vec.value.x, vec.value.y, vec.value.z, vec.value.w);
 					break;
 				}
 				case "rangefinderProgressBarColor2": {
 					ParamColor vec = (ParamColor)e;
-					rangefinder.color2 = new Color(vec.value.x/255.0, vec.value.y/255.0, vec.value.z/255.0, vec.value.w/255.0);
+					vec.value.clampComponents(0, 255f).div(255f);
+					rangefinder.color2 = new Color(vec.value.x, vec.value.y, vec.value.z, vec.value.w);
 					break;
 				}
 				case "rangefinderTextScale": {

@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtlauncher.Updater.InstallStatus;
 import com.ruegnerlukas.wtlauncher.Updater.SearchStatus;
+import com.ruegnerlukas.wtutils.Config;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -42,8 +43,13 @@ public class LauncherController {
 		paneSelect.setOpacity(0.0);
 		paneUpdate.setOpacity(0.0);
 
+		if(Config.update_auto) {
+			Updater.searchUpdate(this);
+		} else {
+			Logger.get().info("Auto-update disabled.");;
+			startApplication();
+		}
 		
-		Updater.searchUpdate(this);
 	}
 	
 	

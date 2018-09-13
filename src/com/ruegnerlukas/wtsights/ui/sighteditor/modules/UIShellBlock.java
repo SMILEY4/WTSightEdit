@@ -9,44 +9,37 @@ import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.renderer.Conversion;
-import com.ruegnerlukas.wtsights.ui.AmmoIcons;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 public class UIShellBlock implements Module {
 
 	private UISightEditor editor;
 	private ElementShellBlock element;
 	
-	
 
-	@FXML private ComboBox<String> comboAmmo;
+	@FXML private ComboBox<Ammo> comboAmmo;
 	@FXML private ChoiceBox<String> choiceScaleMode;
 
 	@FXML private VBox boxVertical;
@@ -76,6 +69,10 @@ public class UIShellBlock implements Module {
 	@FXML private Spinner<Double> rTextOffset;
 	@FXML private ChoiceBox<String> rTextAlignment;
 	
+	@FXML private CheckBox cbDrawUpward;
+	@FXML private CheckBox cbCanMove;
+	@FXML private CheckBox cbDrawCorrLabel;
+	
 	@FXML private Spinner<Double> spinnerCorrX;
 	@FXML private Spinner<Double> spinnerCorrY;
 	
@@ -103,59 +100,18 @@ public class UIShellBlock implements Module {
 		ElementBallRangeIndicator elementDefault = new ElementBallRangeIndicator();
 		
 		// AMMO
-		comboAmmo.setButtonCell(new ListCell<String>() {
-			@Override protected void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				setText(item);
-				if (item == null || empty) {
-					setGraphic(null);
-				} else {
-					String name = item != null ? item.split(";")[0] : "<null>";
-					String type = item != null ? item.split(";")[1] : "<null>";
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
-					imgView.setSmooth(true);
-					imgView.setPreserveRatio(true);
-					imgView.setFitHeight(40);
-					setGraphic(imgView);
-					setText(name);
-				}
-			}
-		});
-		
-		comboAmmo.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override public ListCell<String> call(ListView<String> p) {
-				return new ListCell<String>() {
-					@Override protected void updateItem(String item, boolean empty) {
-						super.updateItem(item, empty);
-						setText(item);
-						if (item == null || empty) {
-							setGraphic(null);
-						} else {
-							String name = item != null ? item.split(";")[0] : "<null>";
-							String type = item != null ? item.split(";")[1] : "<null>";
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type, false), null));
-							imgView.setSmooth(true);
-							imgView.setPreserveRatio(true);
-							imgView.setFitHeight(40);
-							setGraphic(imgView);
-							setText(name);
-						}
-					}
-				};
-			}
-		});
-		
+		FXUtils.initComboboxAmmo(comboAmmo);
 		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-			comboAmmo.getItems().add(ammoData.ammo.name + ";" + ammoData.ammo.type);
+			comboAmmo.getItems().add(ammoData.ammo);
 		}
 		comboAmmo.getSelectionModel().select(0);
-		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				onAmmoSelected(newValue.split(";")[0]);
+			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
+				onAmmoSelected(newValue);
 			}
 		});
-		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
+		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
 		
 		if(elementDefault.scaleMode == ScaleMode.VERTICAL) {
 			boxVertical.setDisable(false);
@@ -189,7 +145,8 @@ public class UIShellBlock implements Module {
 					boxRadial.setDisable(false);
 					boxRadial.setVisible(true);
 				}
-				editor.repaintCanvas();
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
 			}
 		});
 		
@@ -198,7 +155,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textShift = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -206,7 +164,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -214,7 +173,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -222,7 +182,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -230,39 +191,44 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -275,7 +241,8 @@ public class UIShellBlock implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});		
@@ -285,7 +252,8 @@ public class UIShellBlock implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.drawAddLines = vDrawAddLines.isSelected();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -307,7 +275,8 @@ public class UIShellBlock implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
-				editor.repaintCanvas();
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
 			}
 		});
 		if(elementDefault.circleMode) {
@@ -322,7 +291,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -330,31 +300,35 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(rSize, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rSize, elementDefault.size.x, 0, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, 0, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, -1000, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
+		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -362,7 +336,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialAngle = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -370,7 +345,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialStretch = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -380,7 +356,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -397,8 +374,8 @@ public class UIShellBlock implements Module {
 				} else {
 					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
-				
-				editor.repaintCanvas();
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
 			}
 		});
 		rTextAlignment.getItems().addAll(TextAlign.LEFT.toString(), TextAlign.CENTER.toString(), TextAlign.RIGHT.toString());
@@ -410,18 +387,53 @@ public class UIShellBlock implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});	
 		
+		
+		cbDrawUpward.setSelected(elementDefault.drawUpward);
+		cbDrawUpward.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawUpward = cbDrawUpward.isSelected();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbCanMove.setSelected(elementDefault.move);
+		cbCanMove.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.move = cbCanMove.isSelected();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbDrawCorrLabel.setSelected(elementDefault.drawCorrLabel);
+		cbDrawCorrLabel.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawCorrLabel = cbDrawCorrLabel.isSelected();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
 		
 		
 		FXUtils.initSpinner(spinnerCorrX, elementDefault.posCorrLabel.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -429,7 +441,8 @@ public class UIShellBlock implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -470,7 +483,8 @@ public class UIShellBlock implements Module {
 							BIndicator indicator = new BIndicator(0, true, 0, 0, 0);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true, 0, 0, 0);
-							editor.repaintCanvas();
+							element.layoutData.dirty = true;
+							editor.wtCanvas.repaint();
 						}
 					}
 				},
@@ -514,9 +528,9 @@ public class UIShellBlock implements Module {
 		
 		if(element != null) {
 			if(element.dataAmmo == null) {
-				onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem().split(";")[0]);
+				onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
 			} else {
-				comboAmmo.getSelectionModel().select(element.dataAmmo.ammo.name + ";" + element.dataAmmo.ammo.type);
+				comboAmmo.getSelectionModel().select(element.dataAmmo.ammo);
 			}
 			choiceScaleMode.getSelectionModel().select(element.scaleMode.toString());
 			vTextShift.getValueFactory().setValue(element.textShift);
@@ -672,7 +686,7 @@ public class UIShellBlock implements Module {
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -681,27 +695,27 @@ public class UIShellBlock implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			editor.repaintCanvas();
+			editor.wtCanvas.repaint();
 		}
 	}
 	
 	
 	
 	
-	void onAmmoSelected(String ammoName) {
-		if(element == null) {
+	void onAmmoSelected(Ammo ammo) {
+		if(element == null || ammo == null || "undefined".equalsIgnoreCase(ammo.type)) {
 			return;
 		}
 		element.dataAmmo = null;
 		for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
 			CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-			if(ammoData.ammo.name.equalsIgnoreCase(ammoName)) {
+			if(ammoData.ammo.name.equalsIgnoreCase(ammo.name)) {
 				element.dataAmmo = ammoData;
 				break;
 			}
 		}
 		Logger.get().debug("Selected ammo: " + (element.dataAmmo == null ? "null" : element.dataAmmo.ammo.name) );
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 

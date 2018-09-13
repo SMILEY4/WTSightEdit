@@ -20,9 +20,9 @@
                      </padding>
                      <children>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Size Major:" />
-                        <Spinner fx:id="spinnerSizeMajor" minWidth="0.0" prefWidth="1000000.0" />
+                        <Spinner fx:id="spinnerSizeMajor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Size Minor:" />
-                        <Spinner fx:id="spinnerSizeMinor" minWidth="0.0" prefWidth="1000000.0" />
+                        <Spinner fx:id="spinnerSizeMinor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <VBox.margin>
                               <Insets />

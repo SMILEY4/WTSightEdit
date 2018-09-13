@@ -15,7 +15,7 @@ public class CalibrationData {
 	
 	public Vehicle vehicle;
 	public List<CalibrationAmmoData> ammoData = new ArrayList<CalibrationAmmoData>();
-	public Map<String, BufferedImage> images = new HashMap<String,BufferedImage>();
+	public Map<String, BufferedImage> images = new HashMap<String,BufferedImage>(); // key = "image_"+ammo.name
 	
 
 	

@@ -9,6 +9,8 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 public class Vehicle {
 	
 	public String name;
+	public String namePretty;
+	
 	public List<Weapon> weaponsList = new ArrayList<Weapon>();
 
 	public List<String> weapons = new ArrayList<String>();

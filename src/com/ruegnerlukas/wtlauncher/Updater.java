@@ -26,7 +26,7 @@ import com.ruegnerlukas.wtlauncher.githubApi.Release;
 import com.ruegnerlukas.wtlauncher.network.DefaultNetworkInterface;
 import com.ruegnerlukas.wtlauncher.network.LocalNetworkInterface;
 import com.ruegnerlukas.wtlauncher.network.NetworkInterface;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 
 import javafx.application.Platform;
 
@@ -75,7 +75,7 @@ public class Updater {
 				}
 				
 				String latestVersion = latestRelease.tag_name;
-				String localVersion = Config2.build_version;
+				String localVersion = Config.build_version;
 				Logger.get().info("Latest release is " + latestVersion + ". Local version is " + localVersion);
 				
 				if(compareVersions(localVersion, latestVersion) == 1) {

@@ -1,17 +1,24 @@
 package com.ruegnerlukas.wtutils;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.GenericArrayType;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
+import com.ruegnerlukas.wtsights.ui.AmmoIcons;
+import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -30,6 +38,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -147,17 +156,79 @@ public class FXUtils {
 		if(enableMouseWheel) {
 			spinner.setOnScroll(new EventHandler<ScrollEvent>() {
 				@Override public void handle(ScrollEvent event) {
+
+					// early out if is in scrollable scrollpane
+					if(spinner.getParent() != null) {
+						Parent parent = spinner;
+						while( (parent = parent.getParent()) != null) {
+							if(parent instanceof ScrollPane) {
+								ScrollPane scrollPane = (ScrollPane)parent;
+								if(scrollPane.getContent() != null && scrollPane.getContent() instanceof AnchorPane) {
+									double heightScroll = scrollPane.getHeight();
+									double heightContent = ((AnchorPane)scrollPane.getContent()).getHeight();
+									if(heightScroll < heightContent) {
+										return;
+									} 
+								}
+							}
+						}
+					}
+					
+					
 					if(event.getDeltaY() > 0) {
 						spinner.getValueFactory().increment(1);
 					} else {
 						spinner.getValueFactory().decrement(1);
 					}
+					event.consume();
 				}
 			});
 		}
 		if(listener != null) {
 			spinner.valueProperty().addListener(listener);
 		}
+	}
+	
+	
+	
+	
+	public static void initComboboxAmmo(ComboBox<Ammo> combobox) {
+		combobox.setButtonCell(new ListCell<Ammo>() {
+			@Override protected void updateItem(Ammo item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+					setGraphic(null);
+				} else {
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.type), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					setText(item.namePretty);
+				}
+			}
+		});
+		combobox.setCellFactory(new Callback<ListView<Ammo>, ListCell<Ammo>>() {
+			@Override public ListCell<Ammo> call(ListView<Ammo> p) {
+				return new ListCell<Ammo>() {
+					@Override protected void updateItem(Ammo item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty) {
+							setText("");
+							setGraphic(null);
+						} else {
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.type), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							setText(item.namePretty);
+						}
+					}
+				};
+			}
+		});
 	}
 	
 	
@@ -172,10 +243,14 @@ public class FXUtils {
 	
 	
 	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title) {
-		return openFXScene(stage, pathFXML, width, height, title, false);
+		return openFXScene(stage, pathFXML, width, height, title, "dark".equals(Config.app_style), false);
 	}
 	
-	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title, boolean wait) {
+	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title, boolean styleDark) {
+		return openFXScene(stage, pathFXML, width, height, title, styleDark, false);
+	}
+	
+	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title, boolean styleDark, boolean wait) {
 		
 		if(stage == null) {
 			stage = new Stage();
@@ -195,6 +270,15 @@ public class FXUtils {
 
 		
 		Scene scene = new Scene(root, width, height, true, SceneAntialiasing.BALANCED);
+		if(styleDark) {
+			if(WTSights.DEV_MODE) {
+				String css = FXUtils.class.getResource("/ui/modena_dark.css").toExternalForm();
+				scene.getStylesheets().add(css);
+			} else {
+				String css = FXUtils.class.getResource("/ui/modena_dark.css").toExternalForm();
+				scene.getStylesheets().add(css);
+			}
+		}
 		stage.setTitle(title);
 		stage.setScene(scene);
 		if(wait) {
@@ -236,13 +320,19 @@ public class FXUtils {
 		AnchorPane.setBottomAnchor(boxTable, 0.0);
 		AnchorPane.setLeftAnchor(boxTable, 0.0);
 		AnchorPane.setRightAnchor(boxTable, 0.0);
+
+		boolean styleDark = "dark".equals(Config.app_style);
 		
 		// HEADER
 		HBox boxHeader = new HBox();
 		boxHeader.setMinSize(ScrollPane.USE_COMPUTED_SIZE, 31);
 		boxHeader.setPrefSize(ScrollPane.USE_COMPUTED_SIZE, 31);
 		boxHeader.setMaxSize(ScrollPane.USE_COMPUTED_SIZE, 31);	
-		boxHeader.setStyle("-fx-background-color:  linear-gradient(#f8f8f8, #e7e7e7); -fx-border-color:  linear-gradient(#fafafa, #b5b5b5); -fx-border-radius: 3;");
+		if(styleDark) {
+			boxHeader.setStyle("-fx-background-color:  linear-gradient(#474747, #3a3a3a); -fx-border-color:  linear-gradient(#484848, #5a5a5a); -fx-border-radius: 3;");
+		} else {
+			boxHeader.setStyle("-fx-background-color:  linear-gradient(#f8f8f8, #e7e7e7); -fx-border-color:  linear-gradient(#fafafa, #b5b5b5); -fx-border-radius: 3;");
+		}
 		boxTable.getChildren().add(boxHeader);
 		
 		for(int i=0; i<colNames.length; i++) {
@@ -251,7 +341,11 @@ public class FXUtils {
 			label.setMinSize(colSizes[i], 31);
 			label.setPrefSize(colSizes[i], 31);
 			label.setMaxSize(ScrollPane.USE_COMPUTED_SIZE, 31);
-			label.setStyle("-fx-border-color:  linear-gradient(#fafafa, #b5b5b5); -fx-border-radius: 3;");
+			if(styleDark) {
+				label.setStyle("-fx-border-color:  linear-gradient(#484848, #5a5a5a); -fx-border-radius: 3;");
+			} else {
+				label.setStyle("-fx-border-color:  linear-gradient(#fafafa, #b5b5b5); -fx-border-radius: 3;");
+			}
 			if(i == 0) {
 				label.setOnMouseClicked(handlerSort);
 			}

@@ -13,13 +13,15 @@ import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.about.UIAbout;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.UICalibrationSelect;
-import com.ruegnerlukas.wtsights.ui.screenshotupload.UIScreenshotUpload;
+import com.ruegnerlukas.wtsights.ui.help.UIHelp;
 import com.ruegnerlukas.wtsights.ui.vehicleselection.UIVehicleSelect;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -35,12 +37,15 @@ public class UIMainMenu {
 	@FXML private AnchorPane contentPane;
 	@FXML private Label labelVersion;
 	
+	private static Scene scene;
+	@FXML private CheckBox cbSettingDark;
 	
 	
 	
 	public static void openNew(Stage stage) {
 		Logger.get().info("Navigate to 'MainMenu'");
-		Object[] sceneObjects = FXUtils.openFXScene(stage, "/ui/layout_main.fxml", 500, 550, "WT Sight Editor");
+		Object[] sceneObjects = FXUtils.openFXScene(stage, "/ui/layout_main.fxml", 500, 600, "WT Sight Editor");
+		scene = ((Stage)sceneObjects[1]).getScene();
 		UIMainMenu controller = (UIMainMenu)sceneObjects[0];
 		controller.create(stage);
 	}
@@ -49,7 +54,8 @@ public class UIMainMenu {
 	
 	
 	private void create(Stage stage) {
-		labelVersion.setText("Version " + Config2.build_version);
+		labelVersion.setText("Version " + Config.build_version);
+		cbSettingDark.setSelected("dark".equals(Config.app_style)); // themes: "default", "dark"
 	}
 	
 	
@@ -114,13 +120,6 @@ public class UIMainMenu {
 	
 	
 	@FXML
-	void onSettings(ActionEvent event) {
-	}
-
-	
-	
-
-	@FXML
 	void onAbout(ActionEvent event) {
 		Workflow.steps.clear();
 		Workflow.steps.add(Step.ABOUT);
@@ -132,7 +131,34 @@ public class UIMainMenu {
 
 	@FXML
 	void onHelp(ActionEvent event) {
+		Workflow.steps.clear();
+		Workflow.steps.add(Step.HELP);
+		UIHelp.openNew();
 	}
 
+	
+	
+	
+	@FXML
+	void onSettingDark(ActionEvent event) {
+		boolean dark = cbSettingDark.isSelected();
+		if(dark) {
+			Config.app_style = "dark";
+		} else {
+			Config.app_style = "default";
+		}
+		
+		scene.getStylesheets().clear();
+		if(cbSettingDark.isSelected()) {
+			if(WTSights.DEV_MODE) {
+				String css = FXUtils.class.getResource("/ui/modena_dark.css").toExternalForm();
+				scene.getStylesheets().add(css);
+			} else {
+				String css = FXUtils.class.getResource("/ui/modena_dark.css").toExternalForm();
+				scene.getStylesheets().add(css);
+			}
+		}
+		Config.write();
+	}
 
 }

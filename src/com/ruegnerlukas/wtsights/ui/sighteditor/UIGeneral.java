@@ -1,10 +1,5 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
@@ -83,7 +78,8 @@ public class UIGeneral {
 	@FXML
 	void onApplyCorrection(ActionEvent event) {
 		editor.getSightData().gnrApplyCorrectionToGun = cbApplyCorrection.isSelected();
-		editor.repaintCanvas();
+		editor.getSightData().setElementsDirty();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -91,7 +87,8 @@ public class UIGeneral {
 	
 	void selectThousandth(Thousandth thousandth) {
 		editor.getSightData().gnrThousandth = thousandth;
-		editor.repaintCanvas();
+		editor.getSightData().setElementsDirty();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -99,7 +96,8 @@ public class UIGeneral {
 	
 	void setFontSize(float size) {
 		editor.getSightData().gnrFontScale = size;
-		editor.repaintCanvas();
+		editor.getSightData().setElementsDirty();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -107,7 +105,8 @@ public class UIGeneral {
 	
 	void setLineSize(float size) {
 		editor.getSightData().gnrLineSize = size;
-		editor.repaintCanvas();
+		editor.getSightData().setElementsDirty();
+		editor.wtCanvas.repaint();
 	}
 	
 	

@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import javax.swing.plaf.synth.SynthSplitPaneUI;
-
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 public class BLKSightParser {
@@ -22,7 +20,7 @@ public class BLKSightParser {
 		String ppContent = BLKSightParser.prepare(rawContent);
 		List<String> strElements = BLKSightParser.split(ppContent);
 		Block root = BLKSightParser.parseElements(strElements);
-		root.prettyPrint(0);
+//		root.prettyPrint(0);
 		return root;
 	}
 	

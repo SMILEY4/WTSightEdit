@@ -3,13 +3,11 @@ package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 import java.util.Comparator;
 
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.renderer.Conversion;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
@@ -19,9 +17,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -68,6 +65,10 @@ public class UIBallRangeIndicators implements Module {
 	@FXML private Spinner<Double> rTextOffset;
 	@FXML private ChoiceBox<String> rTextAlignment;
 	
+	@FXML private CheckBox cbDrawUpward;
+	@FXML private CheckBox cbCanMove;
+	@FXML private CheckBox cbDrawCorrLabel;
+
 	@FXML private Spinner<Double> spinnerCorrX;
 	@FXML private Spinner<Double> spinnerCorrY;
 	
@@ -126,7 +127,8 @@ public class UIBallRangeIndicators implements Module {
 					boxRadial.setDisable(false);
 					boxRadial.setVisible(true);
 				}
-				editor.repaintCanvas();
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
 			}
 		});
 		
@@ -135,7 +137,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textShift = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -143,7 +146,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -151,7 +155,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -159,7 +164,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -167,39 +173,44 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -212,7 +223,8 @@ public class UIBallRangeIndicators implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});		
@@ -222,7 +234,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.drawAddLines = vDrawAddLines.isSelected();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -244,7 +257,7 @@ public class UIBallRangeIndicators implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
-				editor.repaintCanvas();
+				editor.wtCanvas.repaint();
 			}
 		});
 		if(elementDefault.circleMode) {
@@ -259,7 +272,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -267,31 +281,35 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(rSize, elementDefault.size.x, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rSize, elementDefault.size.x, 0, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, -1000, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rCircleRadius, elementDefault.size.y, 0, 1000, 0.001, 3, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
-		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, -1000, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
+		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -299,7 +317,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialAngle = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -307,7 +326,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialStretch = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -317,7 +337,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -334,8 +355,8 @@ public class UIBallRangeIndicators implements Module {
 				} else {
 					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
-				
-				editor.repaintCanvas();
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
 			}
 		});
 		rTextAlignment.getItems().addAll(TextAlign.LEFT.toString(), TextAlign.CENTER.toString(), TextAlign.RIGHT.toString());
@@ -347,10 +368,44 @@ public class UIBallRangeIndicators implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});	
+		
+		cbDrawUpward.setSelected(elementDefault.drawUpward);
+		cbDrawUpward.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawUpward = cbDrawUpward.isSelected();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbCanMove.setSelected(elementDefault.move);
+		cbCanMove.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.move = cbCanMove.isSelected();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
+		
+		cbDrawCorrLabel.setSelected(elementDefault.drawCorrLabel);
+		cbDrawCorrLabel.selectedProperty().addListener(new ChangeListener() {
+			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				if(element != null) {
+					element.drawCorrLabel = cbDrawCorrLabel.isSelected();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
 		
 		
 		
@@ -358,7 +413,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.x = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -366,7 +422,8 @@ public class UIBallRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -407,7 +464,8 @@ public class UIBallRangeIndicators implements Module {
 							BIndicator indicator = new BIndicator(0, true, 0, 0, 0);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true, 0, 0, 0);
-							editor.repaintCanvas();
+							element.layoutData.dirty = true;
+							editor.wtCanvas.repaint();
 						}
 					}
 				},
@@ -604,7 +662,7 @@ public class UIBallRangeIndicators implements Module {
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
-		editor.repaintCanvas();
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -613,7 +671,8 @@ public class UIBallRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			editor.repaintCanvas();
+			element.layoutData.dirty = true;
+			editor.wtCanvas.repaint();
 		}
 	}
 	

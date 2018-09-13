@@ -6,6 +6,7 @@ public class Ammo {
 	
 	public String type;
 	public String name;
+	public String namePretty;
 	public int speed;
 	
 	

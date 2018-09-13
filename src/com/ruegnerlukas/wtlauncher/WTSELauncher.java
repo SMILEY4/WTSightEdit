@@ -10,7 +10,7 @@ import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
-import com.ruegnerlukas.wtutils.Config2;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.application.Application;
@@ -89,7 +89,7 @@ public class WTSELauncher extends Application {
 		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() +" "+ SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
 
 		
-		Config2.load(new File(BASE_DIR + "\\data\\config.json"));
+		Config.load(new File(BASE_DIR + "\\data\\config.json"));
 		
 		FXUtils.addIcons(primaryStage);
 

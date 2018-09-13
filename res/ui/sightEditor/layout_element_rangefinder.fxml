@@ -25,8 +25,8 @@
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
                         <HBox minWidth="0.0" prefWidth="1000000.0">
                            <children>
-                              <Spinner fx:id="spinnerPosX" minWidth="0.0" prefWidth="1000000.0" />
-                              <Spinner fx:id="spinnerPosY" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
                         <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" onAction="#onUseThousandth" prefWidth="1000000.0" text="Use Thousandth" />
@@ -39,7 +39,7 @@
                            </padding>
                         </Separator>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Text Scale:" />
-                        <Spinner fx:id="spinnerTextScale" minWidth="0.0" prefWidth="1000000.0" />
+                        <Spinner fx:id="spinnerTextScale" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />

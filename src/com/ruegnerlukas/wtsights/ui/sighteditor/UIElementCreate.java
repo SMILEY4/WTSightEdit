@@ -19,9 +19,9 @@ import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -34,12 +34,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -77,6 +76,16 @@ public class UIElementCreate {
 
 		
 		Scene scene = new Scene(root, 500, 225, true, SceneAntialiasing.BALANCED);
+		if("dark".equals(Config.app_style)) {
+			if(WTSights.DEV_MODE) {
+				String css = FXUtils.class.getResource("/ui/modena_dark.css").toExternalForm();
+				scene.getStylesheets().add(css);
+			} else {
+				String css = FXUtils.class.getResource("/ui/modena_dark.css").toExternalForm();
+				scene.getStylesheets().add(css);
+			}
+		}
+
 		stage.setTitle("Create Element");
 		stage.setScene(scene);
 		
@@ -128,7 +137,7 @@ public class UIElementCreate {
 				if (item == null || empty) {
 					setGraphic(null);
 				} else {
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(ElementType.getByDefaultName(item).iconIndex, false), null));
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(ElementType.getByDefaultName(item).iconIndex), null));
 					imgView.setSmooth(true);
 					imgView.setPreserveRatio(true);
 					imgView.setFitHeight(20);
@@ -147,7 +156,7 @@ public class UIElementCreate {
 						if (item == null || empty) {
 							setGraphic(null);
 						} else {
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(ElementType.getByDefaultName(item).iconIndex, false), null));
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(ElementType.getByDefaultName(item).iconIndex), null));
 							imgView.setSmooth(true);
 							imgView.setPreserveRatio(true);
 							imgView.setFitHeight(20);

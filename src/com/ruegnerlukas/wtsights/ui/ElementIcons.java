@@ -3,14 +3,11 @@ package com.ruegnerlukas.wtsights.ui;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtutils.Config;
 
 public class ElementIcons {
 
@@ -70,6 +67,11 @@ public class ElementIcons {
 	}
 
 	
+	
+	
+	public static BufferedImage getIcon(int index) {
+		return getIcon(index, "dark".equals(Config.app_style));
+	}
 	
 	
 	public static BufferedImage getIcon(int index, boolean dark) {

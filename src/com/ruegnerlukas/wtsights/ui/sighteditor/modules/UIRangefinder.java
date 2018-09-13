@@ -3,8 +3,8 @@ package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.renderer.Conversion;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -14,7 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Spinner;
-import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 public class UIRangefinder implements Module {
 
@@ -49,7 +49,8 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					element.position.x = newValue.intValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -59,7 +60,8 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
@@ -72,14 +74,15 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textScale = newValue.doubleValue();
-					editor.repaintCanvas();
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
 				}
 			}
 		});
 		
 		// color
-		colorPicker1.setValue(elementDefault.color1);
-		colorPicker2.setValue(elementDefault.color2);
+		colorPicker1.setValue(new Color(elementDefault.color1.getRed(), elementDefault.color1.getGreen(), elementDefault.color1.getBlue(), elementDefault.color1.getOpacity()));
+		colorPicker2.setValue(new Color(elementDefault.color2.getRed(), elementDefault.color2.getGreen(), elementDefault.color2.getBlue(), elementDefault.color2.getOpacity()));
 
 		setElement(null);
 	}
@@ -98,8 +101,8 @@ public class UIRangefinder implements Module {
 			spinnerPosY.getValueFactory().setValue(element.position.y);
 			cbUseThousandth.setSelected(element.useThousandth);
 			spinnerTextScale.getValueFactory().setValue(element.textScale);
-			colorPicker1.setValue(element.color1);
-			colorPicker2.setValue(element.color2);
+			colorPicker1.setValue(new Color(element.color1.getRed(), element.color1.getGreen(), element.color1.getBlue(), element.color1.getOpacity()));
+			colorPicker2.setValue(new Color(element.color2.getRed(), element.color2.getGreen(), element.color2.getBlue(), element.color2.getOpacity()));
 		}
 	}
 	
@@ -130,7 +133,8 @@ public class UIRangefinder implements Module {
 			});
 		}
 		
-		editor.repaintCanvas();
+		element.layoutData.dirty = true;
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -141,8 +145,9 @@ public class UIRangefinder implements Module {
 	@FXML
 	void onPickColor1(ActionEvent event) {
 		if(element == null) { return; }
-		element.color1 = colorPicker1.getValue();
-		editor.repaintCanvas();
+		element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
+		element.layoutData.dirty = true;
+		editor.wtCanvas.repaint();
 	}
 	
 	
@@ -151,8 +156,9 @@ public class UIRangefinder implements Module {
 	@FXML
 	void onPickColor2(ActionEvent event) {
 		if(element == null) { return; }
-		element.color2 = colorPicker2.getValue();
-		editor.repaintCanvas();
+		element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
+		element.layoutData.dirty = true;
+		editor.wtCanvas.repaint();
 	}
 	
 	

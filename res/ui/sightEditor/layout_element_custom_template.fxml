@@ -36,24 +36,24 @@
                            </padding>
                         </Separator>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Angle:" />
-                        <Spinner fx:id="spinnerAngle" minWidth="0.0" prefWidth="1000000.0" />
+                        <Spinner fx:id="spinnerAngle" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Center:" />
                         <CheckBox fx:id="cbUseAutoCenter" minWidth="0.0" mnemonicParsing="false" onAction="#onUseAutoCenter" prefWidth="1000000.0" text="Use Auto-Center" />
                         <HBox>
                            <children>
-                              <Spinner fx:id="spinnerCenterX" minWidth="0.0" prefWidth="1000000.0" />
-                              <Spinner fx:id="spinnerCenterY" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerCenterX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerCenterY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Origin:" />
                         <HBox>
                            <children>
-                              <Spinner fx:id="spinnerOriginX" minWidth="0.0" prefWidth="1000000.0" />
-                              <Spinner fx:id="spinnerOriginY" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerOriginX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerOriginY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Move Speed:" />
-                        <Spinner fx:id="spinnerSpeed" minWidth="0.0" prefWidth="1000000.0" />
+                        <Spinner fx:id="spinnerSpeed" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator prefWidth="200.0">
                            <VBox.margin>
                               <Insets />
