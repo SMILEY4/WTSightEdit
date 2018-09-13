@@ -10,6 +10,7 @@ import com.ruegnerlukas.wtutils.FXUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
@@ -68,6 +69,31 @@ public class UIRangefinder implements Module {
 		
 		// thousandth
 		cbUseThousandth.setSelected(elementDefault.useThousandth);
+		cbUseThousandth.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element == null) { return; }
+				element.useThousandth = cbUseThousandth.isSelected();
+				if(element.useThousandth) {
+					FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(element.position.y, editor.getSightData().envZoomedIn), -1000, 1000, 1, 1, new ChangeListener<Double>() {
+						@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+							if(element != null) {
+								element.position.y = newValue.intValue();
+							}
+						}
+					});
+				} else {
+					FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(element.position.y, editor.getSightData().envZoomedIn), -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+						@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+							if(element != null) {
+								element.position.y = newValue.intValue();
+							}
+						}
+					});
+				}
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
+			}
+		});
 
 		// text scale
 		FXUtils.initSpinner(spinnerTextScale, elementDefault.textScale, 0, 1000, 0.1, 1, new ChangeListener<Double>() {
@@ -82,8 +108,25 @@ public class UIRangefinder implements Module {
 		
 		// color
 		colorPicker1.setValue(new Color(elementDefault.color1.getRed(), elementDefault.color1.getGreen(), elementDefault.color1.getBlue(), elementDefault.color1.getOpacity()));
+		colorPicker1.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element == null) { return; }
+				element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
+			}
+		});
+		
 		colorPicker2.setValue(new Color(elementDefault.color2.getRed(), elementDefault.color2.getGreen(), elementDefault.color2.getBlue(), elementDefault.color2.getOpacity()));
-
+		colorPicker2.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element == null) { return; }
+				element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
+			}
+		});
+		
 		setElement(null);
 	}
 
@@ -106,60 +149,6 @@ public class UIRangefinder implements Module {
 		}
 	}
 	
-	
-	
-	
-	@FXML
-	void onUseThousandth(ActionEvent event) {
-		if(element == null) { return; }
-		
-		element.useThousandth = cbUseThousandth.isSelected();
-		
-		if(element.useThousandth) {
-			FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(element.position.y, editor.getSightData().envZoomedIn), -1000, 1000, 1, 1, new ChangeListener<Double>() {
-				@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-					if(element != null) {
-						element.position.y = newValue.intValue();
-					}
-				}
-			});
-		} else {
-			FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(element.position.y, editor.getSightData().envZoomedIn), -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
-				@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-					if(element != null) {
-						element.position.y = newValue.intValue();
-					}
-				}
-			});
-		}
-		
-		element.layoutData.dirty = true;
-		editor.wtCanvas.repaint();
-	}
-	
-	
-	
-	
-	
-	
-	@FXML
-	void onPickColor1(ActionEvent event) {
-		if(element == null) { return; }
-		element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
-		element.layoutData.dirty = true;
-		editor.wtCanvas.repaint();
-	}
-	
-	
-	
-	
-	@FXML
-	void onPickColor2(ActionEvent event) {
-		if(element == null) { return; }
-		element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
-		element.layoutData.dirty = true;
-		editor.wtCanvas.repaint();
-	}
 	
 	
 }

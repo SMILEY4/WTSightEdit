@@ -6,6 +6,7 @@ import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 
@@ -31,6 +32,14 @@ public class UICentralVerticalLine implements Module {
 	public void create() {
 		ElementCentralVertLine elementDefault = new ElementCentralVertLine();
 		cbShowLine.setSelected(elementDefault.drawCentralVertLine);
+		cbShowLine.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element == null) { return; }
+				element.drawCentralVertLine = cbShowLine.isSelected();
+				element.layoutData.dirty = true;
+				editor.wtCanvas.repaint();
+			}
+		});
 		setElement(null);
 	}
 
@@ -52,12 +61,4 @@ public class UICentralVerticalLine implements Module {
 
 
 	
-	
-	@FXML
-	void onShowLine(ActionEvent event) {
-		if(element == null) { return; }
-		element.drawCentralVertLine = cbShowLine.isSelected();
-		element.layoutData.dirty = true;
-		editor.wtCanvas.repaint();
-	}
 }
