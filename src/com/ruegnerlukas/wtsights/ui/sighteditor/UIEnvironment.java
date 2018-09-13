@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -43,6 +44,7 @@ public class UIEnvironment {
 	@FXML private CheckBox cbDisplayGrid;
 	@FXML private Spinner<Double> spinnerGridWidth;
 	@FXML private Spinner<Double> spinnerGridHeight;
+	@FXML private ColorPicker colorGrid;
 
 	
 	@FXML private TextField pathBackground;
@@ -139,7 +141,6 @@ public class UIEnvironment {
 			}
 		});
 
-
 		FXUtils.initSpinner(spinnerGridWidth, editor.getSightData().envGridWidth, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				editor.getSightData().envGridWidth = newValue;
@@ -152,6 +153,14 @@ public class UIEnvironment {
 				editor.wtCanvas.repaint();
 			}
 		}); 
+		
+		colorGrid.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				editor.getSightData().envColorGrid = colorGrid.getValue();
+				editor.wtCanvas.repaint();
+			}
+		});
+		colorGrid.setValue(editor.getSightData().envColorGrid);
 		
 		
 		

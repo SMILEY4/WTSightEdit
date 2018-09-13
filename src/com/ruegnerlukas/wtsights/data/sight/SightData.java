@@ -43,6 +43,7 @@ public class SightData {
 	public boolean	envDisplayGrid		= false;
 	public double	envGridWidth 		= 20;
 	public double	envGridHeight 		= 20;
+	public Color	envColorGrid		= new Color(0.0f, 0.0f, 1f, 0.25f);
 
 	
 	// elements

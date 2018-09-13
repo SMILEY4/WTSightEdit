@@ -48,9 +48,6 @@ public class OverlayRenderer {
 	private static final Color COLOR_SELECTION_3 = new Color(0.2f, 0.2f, 0.2f, 1f);
 	private static final Color COLOR_SELECTION_4 = new Color(0.8f, 0.8f, 0.8f, 1f);
 
-	private static final Color COLOR_GRID = new Color(0.0f, 0.0f, 1f, 0.25f);
-
-	
 
 	private static final Font font = new Font("Arial", 15);
 	
@@ -72,7 +69,7 @@ public class OverlayRenderer {
 					double cy = y * pxHeight + canvas.getHeight()/2;
 					double cw = pxWidth;
 					double ch = pxHeight;
-					drawRect(COLOR_GRID, COLOR_GRID, canvas, g, cx, cy, cw, ch);
+					drawRect(dataSight.envColorGrid, dataSight.envColorGrid, canvas, g, cx, cy, cw, ch);
 				}
 			}
 			
