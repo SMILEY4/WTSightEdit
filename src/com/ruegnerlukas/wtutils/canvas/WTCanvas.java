@@ -35,15 +35,17 @@ public class WTCanvas {
 	
 	
 	
+	
 	public WTCanvas(AnchorPane parent) {
 		this(parent, true);
 	}
+	
 	
 	public WTCanvas(AnchorPane parent, boolean constantOverlayUpdate) {
 		this.parent = parent;
 		this.constantOverlayUpdate = constantOverlayUpdate;
 		
-		this.canvasOverlay = new ResizableCanvas(parent) {
+		this.canvasOverlay = new ResizableCanvas(parent, 18, 16) {
 			@Override
 			public void onRepaint(GraphicsContext g) {
 				onRepaintOverlay(g);
@@ -52,11 +54,9 @@ public class WTCanvas {
 		canvasOverlay.setMouseTransparent(true);
 		parent.getChildren().add(canvasOverlay);
 		AnchorPane.setLeftAnchor(canvasOverlay, 0.0);
-		AnchorPane.setRightAnchor(canvasOverlay, 0.0);
 		AnchorPane.setTopAnchor(canvasOverlay, 0.0);
-		AnchorPane.setBottomAnchor(canvasOverlay, 0.0);
 		canvasOverlay.toFront();
-
+		
 		if(constantOverlayUpdate) {
 			ses = Executors.newSingleThreadScheduledExecutor();
 			ses.scheduleAtFixedRate(new Runnable() {
@@ -162,6 +162,7 @@ public class WTCanvas {
 		AnchorPane.setBottomAnchor(paneCanvasControl, 0.0);
 		parent.getChildren().setAll(canvasOverlay, paneCanvasControl);
 		canvasOverlay.toFront();
+
 		
 		repaint();
 		
