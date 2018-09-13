@@ -48,12 +48,25 @@ public class ElementHorzRangeIndicators extends Element {
 			indicators.add(line);
 		}
 	}
+
+	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
 	
 	@Override
 	public LayoutHorzRangeIndicators layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+		
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
 		
 		if(layoutData.bounds == null || layoutData.textPositions == null || layoutData.bounds.length != indicators.size()) {
 			layoutData.bounds = new Rectanglef[indicators.size()];

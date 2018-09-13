@@ -22,7 +22,7 @@ public class ElementCustomCircle extends ElementCustomObject {
 	public Vector2d 	segment 	= new Vector2d(0, 360);
 	public double 		size 		= 1;
 	
-	public LayoutCircleObject layout = new LayoutCircleObject();
+	public LayoutCircleObject layoutData = new LayoutCircleObject();
 	
 	
 	
@@ -36,12 +36,24 @@ public class ElementCustomCircle extends ElementCustomObject {
 		super(ElementType.CUSTOM_CIRCLE.defaultName, ElementType.CUSTOM_CIRCLE);
 	}
 
+
 	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
 	@Override
 	public LayoutCircleObject layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+		
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
 		
 		double xPX = 0;
 		double yPX = 0;
@@ -143,16 +155,16 @@ public class ElementCustomCircle extends ElementCustomObject {
 		xPX += canvasWidth/2;
 		yPX += canvasHeight/2;
 		
-		layout.lineWidth = size*sightData.gnrFontScale;
+		layoutData.lineWidth = size*sightData.gnrFontScale;
 		
 		if(MathUtils.isNearlyEqual(segment.x, 0.0, false) && MathUtils.isNearlyEqual(segment.y, 360.0, true)) {
-			layout.useLineSegments = false;
-			layout.circle.set(xPX, yPX, dPX/2);
+			layoutData.useLineSegments = false;
+			layoutData.circle.set(xPX, yPX, dPX/2);
 			
 		} else {
 
-			layout.circle.set(xPX, yPX, dPX/2);
-			layout.useLineSegments = true;
+			layoutData.circle.set(xPX, yPX, dPX/2);
+			layoutData.useLineSegments = true;
 			
 			final double angleStart = segment.x;
 			final double angleEnd = segment.y;
@@ -163,10 +175,10 @@ public class ElementCustomCircle extends ElementCustomObject {
 			int nLines = Math.min(360, Math.max((int) (((angleEnd-angleStart)/10.0) * (dPX/100.0)), 15));
 			double angleStep = (angleEnd-angleStart)/nLines;
 			
-			if(layout.lines == null || layout.lines.length != nLines) {
-				layout.lines = new Vector4d[nLines];
-				for(int i=0; i<layout.lines.length; i++) {
-					layout.lines[i] = new Vector4d();
+			if(layoutData.lines == null || layoutData.lines.length != nLines) {
+				layoutData.lines = new Vector4d[nLines];
+				for(int i=0; i<layoutData.lines.length; i++) {
+					layoutData.lines[i] = new Vector4d();
 				}
 			}
 			
@@ -177,12 +189,12 @@ public class ElementCustomCircle extends ElementCustomObject {
 				pointer.rotateDeg(-angleStep).setLength(dPX/2);
 				final double x1 = xPX + pointer.x;
 				final double y1 = yPX + pointer.y;
-				layout.lines[i].set(x0, y0, x1, y1);
+				layoutData.lines[i].set(x0, y0, x1, y1);
 			}
 			
 		}
 
-		return layout;
+		return layoutData;
 		
 	}
 	

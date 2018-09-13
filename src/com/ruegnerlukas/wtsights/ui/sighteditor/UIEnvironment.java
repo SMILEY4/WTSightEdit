@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -206,6 +207,7 @@ public class UIEnvironment {
 			}
 		}
 		Logger.get().debug("Selected ammo: " + (editor.getAmmoData() == null ? "null" : editor.getAmmoData().ammo.name) );
+		editor.getSightData().setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -214,6 +216,7 @@ public class UIEnvironment {
 	
 	void onZoomMode(boolean zoomedIn) {
 		editor.getSightData().envZoomedIn = zoomedIn;
+		editor.getSightData().setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -223,6 +226,7 @@ public class UIEnvironment {
 	@FXML
 	void onShowRangefinder(ActionEvent event) {
 		editor.getSightData().envShowRangeFinder = cbShowRangefinder.isSelected();
+		editor.getSightData().setElementsDirty(ElementType.RANGEFINDER);
 		editor.wtCanvas.repaint();
 	}
 	
@@ -232,6 +236,7 @@ public class UIEnvironment {
 	void onRangefinderProgress(double progress) {
 		editor.getSightData().envRFProgress = progress;
 		labelValueRFProgress.setText(progress+"%");
+		editor.getSightData().setElementsDirty(ElementType.RANGEFINDER);
 		editor.wtCanvas.repaint();
 	}
 	
@@ -241,6 +246,7 @@ public class UIEnvironment {
 	void onRangeCorrection(int range) {
 		editor.getSightData().envRangeCorrection = range;//(range+49)/50 * 50;
 		labelValueRange.setText(range+"m");
+		editor.getSightData().setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -311,6 +317,7 @@ public class UIEnvironment {
 	void onSelectResolution(int width, int height) {
 		Logger.get().info("Resolution selected: " + width  + "x" + height);
 		editor.wtCanvas.rebuildCanvas(width, height);
+		editor.getSightData().setElementsDirty();
 	}
 	
 

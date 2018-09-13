@@ -24,12 +24,25 @@ public class ElementCentralVertLine extends Element {
 	}
 	
 	
+
 	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
 	@Override
 	public LayoutCentralVertLine layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+		
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		if(drawCentralVertLine) {
 			final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale;
 			layoutData.bounds.set(canvasWidth/2 - (lineSize/2f), 0, lineSize, canvasHeight);

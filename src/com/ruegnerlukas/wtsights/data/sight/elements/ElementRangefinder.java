@@ -40,8 +40,21 @@ public class ElementRangefinder extends Element {
 	
 	
 	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
+	
+	
+	
+	
+	@Override
 	public LayoutRangefinder layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
 	
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		double x = 0;
 		if(sightData.envZoomedIn) {
 			x = position.x * sightData.gnrFontScale * Conversion.get().zoomInMul;

@@ -25,12 +25,25 @@ public class ElementCentralHorzLine extends Element {
 	}
 	
 	
+
 	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
 	@Override
 	public LayoutCentralHorzLine layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+		
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		if(drawCentralHorzLine) {
 			final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale;
 			layoutData.bounds.set(0, canvasHeight/2 - (lineSize/2f), canvasWidth, lineSize);

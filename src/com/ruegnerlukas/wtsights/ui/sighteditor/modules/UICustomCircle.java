@@ -2,9 +2,8 @@ package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -71,6 +70,7 @@ public class UICustomCircle implements Module {
 					cbUseAutoCenter.setDisable(element.movement != Movement.MOVE_RADIAL);
 					spinnerCenterX.setDisable(elementDefault.autoCenter);
 					spinnerCenterY.setDisable(elementDefault.autoCenter);
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -81,6 +81,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.angle = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -94,6 +95,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.x = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -102,6 +104,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.y = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -110,6 +113,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.x = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -118,6 +122,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.y = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -126,6 +131,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -136,6 +142,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -144,6 +151,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -152,6 +160,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.segment.x = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -160,6 +169,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.segment.y = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -168,6 +178,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -176,6 +187,7 @@ public class UICustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.diameter = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -231,6 +243,7 @@ public class UICustomCircle implements Module {
 			element.useThousandth = cbUseThousandth.isSelected();
 			spinnerCenterX.setDisable(element.autoCenter);
 			spinnerCenterY.setDisable(element.autoCenter);
+			element.layoutData.dirty = true;
 			editor.wtCanvas.repaint();
 		}
 	}
@@ -250,6 +263,7 @@ public class UICustomCircle implements Module {
 				FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 				FXUtils.initSpinner(spinnerDiameter, Conversion.get().mil2screenspace(spinnerDiameter.getValue(), editor.getSightData().envZoomedIn), 0, Integer.MAX_VALUE, 0.01, 2, null);
 			}
+			element.layoutData.dirty = true;
 			editor.wtCanvas.repaint();
 		}
 	}

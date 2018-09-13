@@ -21,7 +21,7 @@ public class ElementCustomQuad extends ElementCustomObject {
 	public Vector2d pos3 = new Vector2d(+0.1, +0.1);
 	public Vector2d pos4 = new Vector2d(-0.1, +0.1);
 	
-	public LayoutQuadObject layout = new LayoutQuadObject();
+	public LayoutQuadObject layoutData = new LayoutQuadObject();
 	
 	
 	
@@ -35,7 +35,14 @@ public class ElementCustomQuad extends ElementCustomObject {
 		super(ElementType.CUSTOM_QUAD.defaultName, ElementType.CUSTOM_QUAD);
 	}
 	
+
 	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
@@ -43,6 +50,11 @@ public class ElementCustomQuad extends ElementCustomObject {
 	@Override
 	public LayoutQuadObject layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
 
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		double xPX1 = 0;
 		double yPX1 = 0;
 		double xPX2 = 0;
@@ -202,12 +214,12 @@ public class ElementCustomQuad extends ElementCustomObject {
 		xPX4 += canvasWidth/2;
 		yPX4 += canvasHeight/2;
 		
-		layout.p0.set(xPX1, yPX1);
-		layout.p1.set(xPX2, yPX2);
-		layout.p2.set(xPX3, yPX3);
-		layout.p3.set(xPX4, yPX4);
+		layoutData.p0.set(xPX1, yPX1);
+		layoutData.p1.set(xPX2, yPX2);
+		layoutData.p2.set(xPX3, yPX3);
+		layoutData.p3.set(xPX4, yPX4);
 	
-		return layout;
+		return layoutData;
 	}
 	
 }

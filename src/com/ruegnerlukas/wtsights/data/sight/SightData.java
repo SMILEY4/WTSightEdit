@@ -147,6 +147,22 @@ public class SightData {
 		return false;
 	}
 	
+	
+	public void setElementsDirty() {
+		for(Entry<ElementType,List<Element>> entry : elements.entrySet()) {
+			for(Element e : entry.getValue()) {
+				e.setDirty();
+			}
+		}
+	}
+	
+	
+	public void setElementsDirty(ElementType type) {
+		for(Element e : elements.get(type)) {
+			e.setDirty();
+		}
+	}
+	
 }
 
 

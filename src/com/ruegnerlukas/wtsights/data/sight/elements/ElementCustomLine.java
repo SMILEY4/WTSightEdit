@@ -19,7 +19,7 @@ public class ElementCustomLine extends ElementCustomObject {
 	public Vector2d start = new Vector2d(0,0);
 	public Vector2d end = new Vector2d(0.1,0.1);
 	
-	public LayoutLineObject layout = new LayoutLineObject();
+	public LayoutLineObject layoutData = new LayoutLineObject();
 	
 	
 	
@@ -34,14 +34,25 @@ public class ElementCustomLine extends ElementCustomObject {
 	}
 	
 	
+
 	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
 	@Override
 	public LayoutLineObject layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
 		
-
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		double sxPX = 0;
 		double syPX = 0;
 		double exPX = 0;
@@ -160,10 +171,10 @@ public class ElementCustomLine extends ElementCustomObject {
 		exPX += canvasWidth/2;
 		eyPX += canvasHeight/2;
 		
-		layout.start.set(sxPX, syPX);
-		layout.end.set(exPX, eyPX);
-		layout.lineSize = sightData.gnrLineSize*sightData.gnrFontScale;
-		return layout;
+		layoutData.start.set(sxPX, syPX);
+		layoutData.end.set(exPX, eyPX);
+		layoutData.lineSize = sightData.gnrLineSize*sightData.gnrFontScale;
+		return layoutData;
 	}
 	
 }

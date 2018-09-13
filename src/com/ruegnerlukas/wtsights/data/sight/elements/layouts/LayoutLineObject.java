@@ -8,4 +8,6 @@ public class LayoutLineObject implements ILayoutData {
 	public Vector2d start = new Vector2d();
 	public Vector2d end = new Vector2d();
 	
+	public boolean dirty = true;
+
 }

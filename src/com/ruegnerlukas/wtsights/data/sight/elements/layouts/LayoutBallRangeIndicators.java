@@ -34,5 +34,7 @@ public class LayoutBallRangeIndicators implements ILayoutData {
 	public Circlef[] rcCircles = null;
 	public Vector2d[] rcTextPositions = null;
 
+	public boolean dirty = true;
+
 	
 }

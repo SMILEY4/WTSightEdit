@@ -9,4 +9,6 @@ public class LayoutQuadObject implements ILayoutData {
 	public Vector2d p2 = new Vector2d();
 	public Vector2d p3 = new Vector2d();
 
+	public boolean dirty = true;
+
 }

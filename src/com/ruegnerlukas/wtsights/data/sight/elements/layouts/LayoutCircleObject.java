@@ -10,4 +10,7 @@ public class LayoutCircleObject implements ILayoutData {
 	public boolean useLineSegments = false;
 	public Circlef circle = new Circlef();
 	public Vector4d[] lines;
+	
+	public boolean dirty = true;
+
 }

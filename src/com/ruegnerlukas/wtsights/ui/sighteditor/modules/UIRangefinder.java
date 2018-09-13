@@ -15,7 +15,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class UIRangefinder implements Module {
 
@@ -50,6 +49,7 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					element.position.x = newValue.intValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -60,6 +60,7 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -73,6 +74,7 @@ public class UIRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textScale = newValue.doubleValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -131,6 +133,7 @@ public class UIRangefinder implements Module {
 			});
 		}
 		
+		element.layoutData.dirty = true;
 		editor.wtCanvas.repaint();
 	}
 	
@@ -143,6 +146,7 @@ public class UIRangefinder implements Module {
 	void onPickColor1(ActionEvent event) {
 		if(element == null) { return; }
 		element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
+		element.layoutData.dirty = true;
 		editor.wtCanvas.repaint();
 	}
 	
@@ -153,6 +157,7 @@ public class UIRangefinder implements Module {
 	void onPickColor2(ActionEvent event) {
 		if(element == null) { return; }
 		element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
+		element.layoutData.dirty = true;
 		editor.wtCanvas.repaint();
 	}
 	

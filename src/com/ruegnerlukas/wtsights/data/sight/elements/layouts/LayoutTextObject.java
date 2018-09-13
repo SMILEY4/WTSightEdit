@@ -6,5 +6,6 @@ public class LayoutTextObject implements ILayoutData {
 
 	public double fontSize;
 	public Vector2d pos = new Vector2d();
-	
+
+	public boolean dirty = true;
 }

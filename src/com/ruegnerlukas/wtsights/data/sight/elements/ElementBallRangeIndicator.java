@@ -75,12 +75,25 @@ public class ElementBallRangeIndicator extends Element {
 		}
 	}
 	
+
 	
+	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
 	@Override
 	public LayoutBallRangeIndicators layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+		
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		if(scaleMode == ScaleMode.VERTICAL) {
 			return layoutVertical(sightData, ammoData, canvasWidth, canvasHeight);
 		} else {

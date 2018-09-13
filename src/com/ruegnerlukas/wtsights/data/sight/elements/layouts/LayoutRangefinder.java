@@ -9,4 +9,6 @@ public class LayoutRangefinder implements ILayoutData {
 	public Vector2d textPos = new Vector2d();
 	public double fontSize;
 	
+	public boolean dirty = true;
+
 }

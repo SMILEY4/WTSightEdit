@@ -4,7 +4,6 @@ import java.util.Comparator;
 
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
@@ -16,26 +15,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.cell.TextFieldTreeTableCell;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.NumberStringConverter;
 
 public class UIHorzRangeIndicators implements Module {
 
@@ -70,6 +56,7 @@ public class UIHorzRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMajor = newValue.floatValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -80,6 +67,7 @@ public class UIHorzRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMinor = newValue.floatValue();
+					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -110,6 +98,7 @@ public class UIHorzRangeIndicators implements Module {
 							HIndicator indicator = new HIndicator(0, true);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true);
+							element.layoutData.dirty = true;
 							editor.wtCanvas.repaint();
 						}
 					}

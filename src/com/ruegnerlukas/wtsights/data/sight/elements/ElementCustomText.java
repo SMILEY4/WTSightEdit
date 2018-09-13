@@ -22,7 +22,7 @@ public class ElementCustomText extends ElementCustomObject {
 	public double 		size 		= 1;
 	public TextAlign 	align 		= TextAlign.LEFT;
 	
-	public LayoutTextObject layout = new LayoutTextObject();
+	public LayoutTextObject layoutData = new LayoutTextObject();
 	
 	
 	
@@ -35,8 +35,14 @@ public class ElementCustomText extends ElementCustomObject {
 	public ElementCustomText() {
 		super(ElementType.CUSTOM_TEXT.defaultName, ElementType.CUSTOM_TEXT);
 	}
+
 	
 	
+	
+	@Override
+	public void setDirty() {
+		this.layoutData.dirty = true;
+	}
 	
 	
 	
@@ -44,6 +50,11 @@ public class ElementCustomText extends ElementCustomObject {
 	@Override
 	public LayoutTextObject layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
 
+		if(!layoutData.dirty) {
+			return layoutData;
+		}
+		layoutData.dirty = false;
+		
 		double xPX = 0;
 		double yPX = 0;
 		
@@ -137,9 +148,9 @@ public class ElementCustomText extends ElementCustomObject {
 		xPX += canvasWidth/2;
 		yPX += canvasHeight/2;
 	
-		layout.fontSize = (sightData.envZoomedIn?18.5:17.5) * sightData.gnrFontScale * size * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
-		layout.pos.set(xPX, yPX);
-		return layout;
+		layoutData.fontSize = (sightData.envZoomedIn?18.5:17.5) * sightData.gnrFontScale * size * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layoutData.pos.set(xPX, yPX);
+		return layoutData;
 	}
 	
 }
