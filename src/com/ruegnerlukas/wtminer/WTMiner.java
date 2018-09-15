@@ -25,8 +25,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
@@ -34,7 +32,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
@@ -168,6 +165,7 @@ public class WTMiner {
 
 					Element elementWeapon = XMLUtils.getElementByTagName(rootWeapons, "weapon_" + elementWeaponVehicle.getAttribute("name").toLowerCase());
 					if (elementWeapon == null) {
+						System.err.println("weapon null: " + "weapon_" + elementWeaponVehicle.getAttribute("name").toLowerCase());
 						continue;
 					}
 
@@ -339,18 +337,35 @@ public class WTMiner {
 				vehicle.name = file.getName().replaceAll(".blkx", "");
 				
 				// weapons
-				List<JsonObject> jsonWeapons = new ArrayList<JsonObject>();
+				List<JsonObject> jsonObjWeapons = new ArrayList<JsonObject>();
 				
 				if(rootElement.isJsonObject()) {
 					JsonObject root = rootElement.getAsJsonObject();
-					JSONUtils.findObject(root, "Weapon", jsonWeapons);
+					JSONUtils.findObject(root, "Weapon", jsonObjWeapons);
 					
 				} else if(rootElement.isJsonArray()) {
 					JsonArray root = rootElement.getAsJsonArray();
-					JSONUtils.findObject(root, "Weapon", jsonWeapons);
+					JSONUtils.findObject(root, "Weapon", jsonObjWeapons);
 				}
 				
-				for(JsonObject jsonWeapon : jsonWeapons) {
+				
+				List<JsonArray> jsonArrWeapons = new ArrayList<JsonArray>();
+				
+				if(rootElement.isJsonObject()) {
+					JsonObject root = rootElement.getAsJsonObject();
+					JSONUtils.findArray(root, "Weapon", jsonArrWeapons);
+					
+				} else if(rootElement.isJsonArray()) {
+					JsonArray root = rootElement.getAsJsonArray();
+					JSONUtils.findArray(root, "Weapon", jsonArrWeapons);
+				}
+				
+				
+				
+				for(JsonObject jsonWeapon : jsonObjWeapons) {
+
+					String weaponName = "?";
+					String triggerGroup = "?";
 					
 					if(jsonWeapon.has("blk") ) {
 						
@@ -360,11 +375,7 @@ public class WTMiner {
 							if(primBLK.isString()) {
 								String strBLK = primBLK.getAsString().replaceAll(".blk", "");
 								String[] pathElements = strBLK.split("/");
-								String weaponName = pathElements[pathElements.length-1];
-								if(vehicle.weapons.contains(weaponName)) {
-									continue;
-								}
-								vehicle.weapons.add(weaponName);
+								weaponName = pathElements[pathElements.length-1];
 							}
 						}
 						
@@ -373,16 +384,116 @@ public class WTMiner {
 							if(elementName.isJsonPrimitive()) {
 								JsonPrimitive primTriggerGroup = (JsonPrimitive)elementName;
 								if(primTriggerGroup.isString()) {
-									vehicle.triggerGroups.add(primTriggerGroup.getAsString());
+									triggerGroup = primTriggerGroup.getAsString();
 								}
 							}
 						} else {
-							vehicle.triggerGroups.add("primary");
+							triggerGroup = "primary";
+						}
+						
+					}
+					
+					
+					if( !weaponName.equals("?") && !triggerGroup.equals("?")) {
+
+						boolean combiExists = false;
+						
+						for(int j=0; j<vehicle.weapons.size(); j++) {
+							String w = vehicle.weapons.get(j);
+							String t = vehicle.triggerGroups.get(j);
+							if(w.equalsIgnoreCase(weaponName) && t.equalsIgnoreCase(triggerGroup)) {
+								combiExists = true;
+								break;
+							}
+						}
+						
+						if(!combiExists) {
+							vehicle.weapons.add(weaponName);
+							vehicle.triggerGroups.add(triggerGroup);
 						}
 						
 					}
 					
 				}
+
+				for(JsonArray jsonWeapon : jsonArrWeapons) {
+
+					String weaponName = "?";
+					String triggerGroup = "?";
+					
+					List<JsonObject> jsonListBlk = new ArrayList<JsonObject>();
+					List<JsonObject> jsonListTriggerGroup = new ArrayList<JsonObject>();
+
+					JSONUtils.findObject(jsonWeapon, "blk", jsonListBlk);
+					JSONUtils.findObject(jsonWeapon, "triggerGroup", jsonListTriggerGroup);
+
+					if(!jsonListBlk.isEmpty() && !jsonListTriggerGroup.isEmpty()) {
+						JsonObject jsonBLK = jsonListBlk.get(0);
+						if(jsonBLK.isJsonPrimitive()) {
+							JsonPrimitive primBLK = jsonBLK.getAsJsonPrimitive();
+							if(primBLK.isString()) {
+								String strBLK = primBLK.getAsString().replaceAll(".blk", "");
+								String[] pathElements = strBLK.split("/");
+								weaponName = pathElements[pathElements.length-1];
+							}
+						}
+						
+						JsonObject jsonTriggerGroup = jsonListTriggerGroup.get(0);
+						if(jsonTriggerGroup.isJsonPrimitive()) {
+							JsonPrimitive primTG = jsonTriggerGroup.getAsJsonPrimitive();
+							if(primTG.isString()) {
+								triggerGroup = primTG.getAsString();
+							}
+						}
+					}
+					
+					
+					List<JsonPrimitive> jsonPrimBLK = new ArrayList<JsonPrimitive>();
+					List<JsonPrimitive> jsonPrimTriggerGroup = new ArrayList<JsonPrimitive>();
+
+					JSONUtils.findPrimitive(jsonWeapon, "blk", jsonPrimBLK);
+					JSONUtils.findPrimitive(jsonWeapon, "triggerGroup", jsonPrimTriggerGroup);
+
+					if( !jsonPrimBLK.isEmpty() && !jsonPrimTriggerGroup.isEmpty()) {
+						
+						JsonPrimitive primBLK = jsonPrimBLK.get(0);
+						
+						if(primBLK.isString()) {
+							String strBLK = primBLK.getAsString().replaceAll(".blk", "");
+							String[] pathElements = strBLK.split("/");
+							weaponName = pathElements[pathElements.length-1];
+						}
+						
+						JsonPrimitive primTG = jsonPrimTriggerGroup.get(0);
+						if(primTG.isString()) {
+							triggerGroup = primTG.getAsString();
+						}
+						
+					}
+					
+					
+					if( !weaponName.equals("?") && !triggerGroup.equals("?")) {
+
+						boolean combiExists = false;
+						
+						for(int j=0; j<vehicle.weapons.size(); j++) {
+							String w = vehicle.weapons.get(j);
+							String t = vehicle.triggerGroups.get(j);
+							if(w.equalsIgnoreCase(weaponName) && t.equalsIgnoreCase(triggerGroup)) {
+								combiExists = true;
+								break;
+							}
+						}
+						
+						if(!combiExists) {
+							vehicle.weapons.add(weaponName);
+							vehicle.triggerGroups.add(triggerGroup);
+						}
+						
+					}
+
+				}
+				
 				
 				// fov
 				List<JsonObject> jsonCockpits = new ArrayList<JsonObject>();
@@ -475,7 +586,6 @@ public class WTMiner {
 				vehicles.add(vehicle);
 
 				System.out.println("Extracted " + "(" + (i+1) + "/" + blkxFiles.length + "):  " + file.getName());
-				
 			}
 			
 			
@@ -559,16 +669,21 @@ public class WTMiner {
 				
 				for(JsonObject jsonBullet : jsonAmmo) {
 					
-					if( jsonBullet.has("bulletName") && jsonBullet.has("bulletType") /* &&jsonBullet.has("speed") */ ) {
+					if(jsonBullet.has("bulletType") /* &&jsonBullet.has("speed") */ ) {
 						
 						Ammo ammo = new Ammo();
 						
-						JsonElement elementName = jsonBullet.get("bulletName");
-						if(elementName.isJsonPrimitive()) {
-							JsonPrimitive primName = (JsonPrimitive)elementName;
-							if(primName.isString()) {
-								ammo.name = primName.getAsString();
+						
+						if(jsonBullet.has("bulletName")) {
+							JsonElement elementName = jsonBullet.get("bulletName");
+							if(elementName.isJsonPrimitive()) {
+								JsonPrimitive primName = (JsonPrimitive)elementName;
+								if(primName.isString()) {
+									ammo.name = primName.getAsString();
+								}
 							}
+						} else {
+							ammo.name = cannon.name;
 						}
 						
 						JsonElement elementType = jsonBullet.get("bulletType");
@@ -598,17 +713,22 @@ public class WTMiner {
 //								ammo.mass = primSpeed.getAsDouble();
 //							}
 //						}
+						System.out.println(" " + ammo.name);
 						
 						if(!cannon.ammo.contains(ammo)) {
 							cannon.ammo.add(ammo);
 						}
 
+					} else {
+						System.err.println("incorrect attribs: " + jsonBullet);
 					}
 					
 				}
 				
 				if(!cannon.ammo.isEmpty()) {
 					cannons.add(cannon);
+				} else {
+					System.err.println(cannon.name + " is empty");
 				}
 				
 				System.out.println("Extracted " + "(" + (i+1) + "/" + blkxFiles.length + "):  " + file.getName());

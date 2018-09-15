@@ -129,6 +129,7 @@ public class ElementBallRangeIndicator extends Element {
 		// point fitting
 		List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
 		fittingPoints.add(new Vector2d(0, 0));
+		
 		for(int i=0; i<ammoData.markerRanges.size(); i++) {
 			Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y/100, ammoData.markerRanges.get(i).x);
 			if(ammoData.zoomedIn) {

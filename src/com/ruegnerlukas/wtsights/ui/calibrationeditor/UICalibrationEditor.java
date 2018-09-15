@@ -247,6 +247,7 @@ public class UICalibrationEditor {
 			Ammo ammo = new Ammo();
 			ammo.type = "undefined";
 			ammo.name = "No Ammunition available";
+			ammo.namePretty = "No Ammunition available";
 			choiceAmmo.getItems().add(ammo);
 		} else {
 			for(CalibrationAmmoData ammoData : dataCalib.ammoData) {

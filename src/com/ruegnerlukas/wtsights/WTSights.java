@@ -107,10 +107,10 @@ public class WTSights extends Application {
 		FXUtils.addIcons(primaryStage);
 		
 		if(DEV_MODE) {
-			AmmoIcons.load("res/assets/ammo_icons.png", false);
+			AmmoIcons.load("res/assets/ammo_icons_2.png", false);
 			ElementIcons.load("res/assets/elementIcons.png", false);
 		} else {
-			AmmoIcons.load("/assets/ammo_icons.png", true);
+			AmmoIcons.load("/assets/ammo_icons_2.png", true);
 			ElementIcons.load("/assets/elementIcons.png", true);
 		}
 		

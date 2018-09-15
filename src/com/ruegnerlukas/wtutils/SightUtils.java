@@ -1,6 +1,5 @@
 package com.ruegnerlukas.wtutils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
@@ -82,33 +81,36 @@ public class SightUtils {
 	
 	
 	public static enum TriggerGroup {
-		PRIMARY,
-		SECONDARY,
-		COAXIAL,
-		MACHINEGUN,
-		SPECIAL,
-		TORPEDOES,
-		DEPTH_CHARGE,
-		ROCKETS,
-		MINE,
-		SMOKE;
+		PRIMARY("primary"),
+		SECONDARY("secondary"),
+		COAXIAL("coaxial"),
+		MACHINEGUN("machinegun"),
+		SPECIAL("special"),
+		TORPEDOES("torpedoes"),
+		DEPTH_CHARGE("depth_charge"),
+		ROCKETS("rockets"),
+		MIN("mine"),
+		SMOKE("smoke"),
+		UNKNOWN("?");
 		
+		public final String id;
 		
-		public static TriggerGroup get(String strTriggerGroup) {
-			if("primary".equalsIgnoreCase(strTriggerGroup)) 	 { return PRIMARY;		}
-			if("secondary".equalsIgnoreCase(strTriggerGroup)) 	 { return SECONDARY; 	}
-			if("coaxial".equalsIgnoreCase(strTriggerGroup)) 	 { return COAXIAL; 		}
-			if("machinegun".equalsIgnoreCase(strTriggerGroup))   { return MACHINEGUN; 	}
-			if("special".equalsIgnoreCase(strTriggerGroup)) 	 { return SPECIAL; 		}
-			if("torpedoes".equalsIgnoreCase(strTriggerGroup)) 	 { return TORPEDOES; 	}
-			if("depth_charge".equalsIgnoreCase(strTriggerGroup)) { return DEPTH_CHARGE; }
-			if("rockets".equalsIgnoreCase(strTriggerGroup)) 	 { return ROCKETS; 		}
-			if("mine".equalsIgnoreCase(strTriggerGroup)) 		 { return MINE; 		}
-			if("smoke".equalsIgnoreCase(strTriggerGroup)) 		 { return SMOKE; 		}
-			return null;
+		private TriggerGroup(String id) {
+			this.id = id;
 		}
 		
+		public static TriggerGroup get(String id) {
+			for(TriggerGroup g : TriggerGroup.values()) {
+				if(g.id.equalsIgnoreCase(id)) {
+					return g;
+				}
+			}
+			return UNKNOWN;
+		}
 	}
+	
+	
+	
 	
 	
 	/*

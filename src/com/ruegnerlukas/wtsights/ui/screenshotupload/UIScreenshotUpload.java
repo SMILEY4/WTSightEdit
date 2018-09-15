@@ -17,6 +17,7 @@ import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtutils.FXUtils;
+import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -109,16 +110,23 @@ public class UIScreenshotUpload {
 		ObservableList<Ammo> fxListAmmo = FXCollections.observableArrayList();
 		for(int i=0; i<vehicle.weaponsList.size(); i++) {
 			Weapon weapon = vehicle.weaponsList.get(i);
-			if(weapon.triggerGroup.equals("torpedoes") || weapon.triggerGroup.equals("depth_charge") || weapon.triggerGroup.equals("mine") || weapon.triggerGroup.equals("smoke")) {
+			
+			// machineguns
+			if(weapon.triggerGroup == TriggerGroup.MACHINEGUN || weapon.triggerGroup == TriggerGroup.COAXIAL) {
+				continue;
+				
+			// cannons
+			} else if(weapon.triggerGroup == TriggerGroup.PRIMARY || weapon.triggerGroup == TriggerGroup.SECONDARY) {
+				for(int j=0; j<weapon.ammo.size(); j++) {
+					Ammo ammo = weapon.ammo.get(j);
+					fxListAmmo.add(ammo);
+				}
+			
+			// other
+			} else {
 				continue;
 			}
-			if(weapon.triggerGroup.equals("machinegun") || weapon.triggerGroup.equals("coaxial")) {
-				continue;
-			}
-			for(int j=0; j<weapon.ammo.size(); j++) {
-				Ammo ammo = weapon.ammo.get(j);
-				fxListAmmo.add(ammo);
-			}
+			
 		}
 		
 		Logger.get().info("Loaded ammunition for " + vehicle.name + ": " + fxListAmmo);
@@ -161,17 +169,16 @@ public class UIScreenshotUpload {
 		boolean isValid = !ammoNames.isEmpty() && (ammoNames.size() == imgFiles.size());
 		
 		if(!isValid) {
-			boolean onlyRockets = true;
+			int nRockets = 0;
 			for(Cell c : cells) {
 				if(c.label.getText() == null || "null".equals(c.label.getText())) {
 					continue;
 				}
-				if(!c.isRocket) {
-					onlyRockets = false;
-					break;
+				if(c.isRocket) {
+					nRockets++;
 				}
 			}
-			if(onlyRockets) {
+			if(nRockets > 0) {
 				isValid = true;
 			}
 		}
@@ -207,7 +214,6 @@ public class UIScreenshotUpload {
 			}
 			
 		}
-		
 		
 		if(Workflow.is(Step.CREATE_CALIBRATION, Step.SELECT_VEHICLE)) {
 			this.stage.close();
@@ -260,6 +266,7 @@ public class UIScreenshotUpload {
 		
 			reset.setMinWidth(40);
 			reset.setMaxWidth(40);
+			reset.setDisable(true);
 			
 			HBox.setMargin(label, new Insets(0, 10, 0, 0));
 			label.setMinWidth(200);
@@ -284,6 +291,7 @@ public class UIScreenshotUpload {
 						fileImage = file;
 						textField.setText(file.getAbsolutePath());
 						lastDirectory = file.getParentFile();
+						reset.setDisable(false);
 					}
 					
 					Logger.get().debug("Image selected: " + file);
@@ -296,6 +304,7 @@ public class UIScreenshotUpload {
 				public void handle(ActionEvent event) {
 					fileImage = null;
 					textField.setText("");
+					reset.setDisable(true);
 				}
 			});
 			

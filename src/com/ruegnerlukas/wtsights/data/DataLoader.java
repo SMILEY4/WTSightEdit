@@ -73,7 +73,7 @@ public class DataLoader {
 	 * */
 	public static List<Vehicle> loadVehicleDataFile(File file) throws Exception {
 		
-		Logger.get().info("Loading vehicleData-file");
+		Logger.get().info("Loading vehicleData-file: " + file.getAbsolutePath());
 
 		if(file == null || !file.exists()) {
 			Logger.get().fatal("Error loading vehicles: Could not find " + file);
@@ -142,7 +142,7 @@ public class DataLoader {
 				
 				Weapon weapon = new Weapon();
 				weapon.name = elementWeapon.getTagName();
-				weapon.triggerGroup = elementWeapon.getAttribute("triggerGroup");
+				weapon.triggerGroup = TriggerGroup.get(elementWeapon.getAttribute("triggerGroup"));
 				vehicle.weaponsList.add(weapon);
 				
 				Element elementAmmoRoot = null;

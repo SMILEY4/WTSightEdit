@@ -100,7 +100,7 @@ public class SightRenderer {
 		drawHorzRangeIndicators(canvas, g, dataSight, dataCalib, currentAmmoData);
 		
 		// ballistic range indicators
-		if(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty() && currentAmmoData!=null) {
+		if(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty() && currentAmmoData != null) {
 			drawBallisticsBlock(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementBallRangeIndicator)dataSight.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0));
 		}
 		

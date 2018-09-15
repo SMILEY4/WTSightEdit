@@ -107,18 +107,19 @@ public class UIShellBlock implements Module {
 		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
 			@Override
 			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
-				Ammo ammo = comboAmmo.getSelectionModel().getSelectedItem();
-				if(element == null || ammo == null || "undefined".equalsIgnoreCase(ammo.type)) {
+				Ammo selectedAmmo = comboAmmo.getSelectionModel().getSelectedItem();
+				if(element == null || selectedAmmo == null || "undefined".equalsIgnoreCase(selectedAmmo.type)) {
 					return;
 				}
 				element.dataAmmo = null;
 				for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
 					CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-					if(ammoData.ammo.name.equalsIgnoreCase(ammo.name)) {
+					if(ammoData.ammo.name.equalsIgnoreCase(selectedAmmo.name)) {
 						element.dataAmmo = ammoData;
 						break;
 					}
 				}
+				element.setDirty();
 				Logger.get().debug("Selected ammo: " + (element.dataAmmo == null ? "null" : element.dataAmmo.ammo.name) );
 				editor.wtCanvas.repaint();
 			}
@@ -541,8 +542,13 @@ public class UIShellBlock implements Module {
 		
 		if(element != null) {
 			if(element.dataAmmo == null) {
-				element.dataAmmo = null;
-				editor.wtCanvas.repaint();
+				
+				for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
+					if(ammoData.ammo.name.equals(comboAmmo.getValue().name)) {
+						element.dataAmmo = ammoData;
+					}
+				}
+				
 			} else {
 				comboAmmo.getSelectionModel().select(element.dataAmmo.ammo);
 			}

@@ -70,16 +70,17 @@ public class UIEnvironment {
 		
 		// AMMO
 		FXUtils.initComboboxAmmo(comboAmmo);
-		if(editor.getCalibrationData().ammoData.isEmpty()) {
+		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
+			comboAmmo.getItems().add(ammoData.ammo);
+		}
+		if(comboAmmo.getItems().isEmpty()) {
 			Ammo ammo = new Ammo();
 			ammo.type = "undefined";
 			ammo.name = "No Ammunition available";
+			ammo.namePretty = "No Ammunition available";
 			comboAmmo.getItems().add(ammo);
-		} else {
-			for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-				comboAmmo.getItems().add(ammoData.ammo);
-			}
 		}
+		
 		comboAmmo.getSelectionModel().select(0);
 		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
 			@Override
