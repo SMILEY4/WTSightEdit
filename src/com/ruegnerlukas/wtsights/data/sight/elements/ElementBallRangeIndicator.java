@@ -7,12 +7,9 @@ import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutBallRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -87,7 +84,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	@Override
-	public LayoutBallRangeIndicators layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layout(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -95,12 +92,12 @@ public class ElementBallRangeIndicator extends Element {
 		layoutData.dirty = false;
 		
 		if(scaleMode == ScaleMode.VERTICAL) {
-			return layoutVertical(sightData, ammoData, canvasWidth, canvasHeight);
+			return layoutVertical(data, canvasWidth, canvasHeight);
 		} else {
 			if(circleMode) {
-				return layoutRadialCircles(sightData, calibData, ammoData, canvasWidth, canvasHeight);
+				return layoutRadialCircles(data, canvasWidth, canvasHeight);
 			} else {
-				return layoutRadialLines(sightData, calibData, ammoData, canvasWidth, canvasHeight);
+				return layoutRadialLines(data, canvasWidth, canvasHeight);
 
 			}
 		}
@@ -109,7 +106,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	
-	public LayoutBallRangeIndicators layoutVertical(SightData sightData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutVertical(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(layoutData.vCenterBounds == null || layoutData.vTextPositions == null || layoutData.vCenterBounds.length != indicators.size() ) {
 			layoutData.vMainBounds = new Rectanglef[indicators.size()];
@@ -122,30 +119,14 @@ public class ElementBallRangeIndicator extends Element {
 			}
 		}
 		
-		final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		final double lineSize = 1.0 * data.dataSight.gnrLineSize * data.dataSight.gnrFontScale * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
-		layoutData.fontSize = 25 * sightData.gnrFontScale * 0.5f * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
-		
-		// point fitting
-		List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-		fittingPoints.add(new Vector2d(0, 0));
-		
-		for(int i=0; i<ammoData.markerRanges.size(); i++) {
-			Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y/100, ammoData.markerRanges.get(i).x);
-			if(ammoData.zoomedIn) {
-				p.y /= Conversion.get().zoomInMul;
-			}
-			fittingPoints.add(p);
-		}
-		Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-		if(fittingParams == null) {
-			return null;
-		}
+		layoutData.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
 		// range correction
-		final double rangeCorrectionResultPX = SightUtils.ballisticFunction(sightData.envRangeCorrection/100.0, fittingParams);
+		final double rangeCorrectionResultPX = data.elementBallistic.function.eval(data.dataSight.envRangeCorrection);
 		final double rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvasHeight, false);
-		final double rangeCorrectionPX = move ? Conversion.get().mil2pixel(rangeCorrectionMil, canvasHeight, sightData.envZoomedIn) : 0;
+		final double rangeCorrectionPX = move ? Conversion.get().mil2pixel(rangeCorrectionMil, canvasHeight, data.dataSight.envZoomedIn) : 0;
 		
 		// draw indicators
 		for(int i=0; i<indicators.size(); i++) {
@@ -158,9 +139,9 @@ public class ElementBallRangeIndicator extends Element {
 			boolean isMajor = indicator.isMajor();
 			
 			// range fitting
-			double resultPX = SightUtils.ballisticFunction(mil/100.0, fittingParams);
+			double resultPX = data.elementBallistic.function.eval(mil);
 			double rangeMil = Conversion.get().pixel2mil(resultPX, canvasHeight, false);
-			double rangePixel = Conversion.get().mil2pixel(rangeMil, canvasHeight, sightData.envZoomedIn) * (drawUpward ? -1 : +1);
+			double rangePixel = Conversion.get().mil2pixel(rangeMil, canvasHeight, data.dataSight.envZoomedIn) * (drawUpward ? -1 : +1);
 			rangePixel -= drawUpward ? -rangeCorrectionPX : rangeCorrectionPX;
 
 			// CENTRAL BLOCK
@@ -173,7 +154,7 @@ public class ElementBallRangeIndicator extends Element {
 				double yCentral = canvasHeight/2 + rangePixel;
 				
 				// length
-				double lengthCentral = Conversion.get().screenspace2pixel(isMajor ? sizeAddLine.x : sizeAddLine.y, canvasHeight, sightData.envZoomedIn) * sightData.gnrFontScale;
+				double lengthCentral = Conversion.get().screenspace2pixel(isMajor ? sizeAddLine.x : sizeAddLine.y, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale;
 				lengthCentral = Math.max(lengthCentral, 0);
 				
 				// draw
@@ -198,32 +179,32 @@ public class ElementBallRangeIndicator extends Element {
 				mainLength = mainLength + (0.03 * size.y);
 			}
 			mainLength = mainLength + Math.abs(indicators.get(i).getExtend());
-			mainLength = mainLength * sightData.gnrFontScale;
-			mainLength = Conversion.get().screenspace2pixel(mainLength, canvasHeight, sightData.envZoomedIn);
+			mainLength = mainLength * data.dataSight.gnrFontScale;
+			mainLength = Conversion.get().screenspace2pixel(mainLength, canvasHeight, data.dataSight.envZoomedIn);
 			mainLength = Math.max(0, mainLength);
 			
 			
 			// x position
 			double mainX = position.x;
-			if(sightData.envZoomedIn) {
+			if(data.dataSight.envZoomedIn) {
 				mainX = mainX + 0.003 * (position.x / 0.1);
 			}
 			if(isMajor) {
 				mainX = mainX + textShift*size.x;
 			}
 			mainX = mainX + (indicators.get(i).getExtend()>0 ? indicators.get(i).getExtend() : 0);
-			mainX = mainX * sightData.gnrFontScale;
-			mainX = Conversion.get().screenspace2pixel(mainX, canvasHeight, sightData.envZoomedIn);
+			mainX = mainX * data.dataSight.gnrFontScale;
+			mainX = Conversion.get().screenspace2pixel(mainX, canvasHeight, data.dataSight.envZoomedIn);
 			mainX = canvasWidth/2 - mainX;
 
 			
 			// y position
 			double mainY = position.y;
-			if(sightData.envZoomedIn) {
+			if(data.dataSight.envZoomedIn) {
 				mainY = mainY + 0.004 * (position.y / 0.13817484);
 			}
-			mainY = mainY * sightData.gnrFontScale;
-			mainY = Conversion.get().screenspace2pixel(mainY, canvasHeight, sightData.envZoomedIn);
+			mainY = mainY * data.dataSight.gnrFontScale;
+			mainY = Conversion.get().screenspace2pixel(mainY, canvasHeight, data.dataSight.envZoomedIn);
 			mainY = canvasHeight/2+rangePixel + mainY;
 			
 			if(!MathUtils.isNearlyEqual(mainLength, 0)) {
@@ -234,16 +215,16 @@ public class ElementBallRangeIndicator extends Element {
 			
 			// main labels
 			if(isMajor) {
-				double distLabel = Conversion.get().screenspace2pixel(0.004, canvasHeight, sightData.envZoomedIn);
-				double textOffX = Conversion.get().screenspace2pixel(indicators.get(i).getTextX()+this.textPos.x, canvasHeight, sightData.envZoomedIn);
-				double textOffY = Conversion.get().screenspace2pixel(indicators.get(i).getTextY()+this.textPos.y, canvasHeight, sightData.envZoomedIn);
-				textOffY *= sightData.gnrFontScale;
+				double distLabel = Conversion.get().screenspace2pixel(0.004, canvasHeight, data.dataSight.envZoomedIn);
+				double textOffX = Conversion.get().screenspace2pixel(indicators.get(i).getTextX()+this.textPos.x, canvasHeight, data.dataSight.envZoomedIn);
+				double textOffY = Conversion.get().screenspace2pixel(indicators.get(i).getTextY()+this.textPos.y, canvasHeight, data.dataSight.envZoomedIn);
+				textOffY *= data.dataSight.gnrFontScale;
 				
 				if(textAlign == TextAlign.LEFT)   { }
 				if(textAlign == TextAlign.CENTER) { textOffX -= distLabel/2; }
 				if(textAlign == TextAlign.RIGHT)  { textOffX -= distLabel; }
 				
-				textOffX *= sightData.gnrFontScale;
+				textOffX *= data.dataSight.gnrFontScale;
 				
 				textPos.set(mainX+textOffX, mainY+textOffY);
 			}
@@ -256,7 +237,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 
 	
-	public LayoutBallRangeIndicators layoutRadialLines(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutRadialLines(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(layoutData.rlLines == null || layoutData.rlLines.length != indicators.size() ) {
 			layoutData.rlLines = new Vector4d[indicators.size()];
@@ -268,42 +249,26 @@ public class ElementBallRangeIndicator extends Element {
 		}
 	
 		// line size
-		final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale;
+		final double lineSize = 1.0 * data.dataSight.gnrLineSize * data.dataSight.gnrFontScale;
 		layoutData.rlLineSize = lineSize;
 		
-		layoutData.fontSize = 25 * sightData.gnrFontScale * 0.5f * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layoutData.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 
-		// point fitting
-		List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-		fittingPoints.add(new Vector2d(0, 0));
-		for(int i=0; i<ammoData.markerRanges.size(); i++) {
-			Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y/100, ammoData.markerRanges.get(i).x);
-			if(ammoData.zoomedIn) {
-				p.y /= Conversion.get().zoomInMul;
-			}
-			fittingPoints.add(p);
-		}
-		
-		Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-		if(fittingParams == null) {
-			return null;
-		}
-		
 		// origin x
 		double originX = position.x;
-		if (sightData.envZoomedIn) {
+		if (data.dataSight.envZoomedIn) {
 			originX = originX + 0.0015 * (position.x / 0.05);
 		}
-		originX = originX * sightData.gnrFontScale;
-		originX = Conversion.get().screenspace2pixel(originX, canvasHeight, sightData.envZoomedIn);
+		originX = originX * data.dataSight.gnrFontScale;
+		originX = Conversion.get().screenspace2pixel(originX, canvasHeight, data.dataSight.envZoomedIn);
 
 		// origin y
 		double originY = position.y;
-		if (sightData.envZoomedIn) {
+		if (data.dataSight.envZoomedIn) {
 			originY = originY + 0.0015 * (position.y / 0.05);
 		}
-		originY = originY * sightData.gnrFontScale;
-		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, sightData.envZoomedIn);
+		originY = originY * data.dataSight.gnrFontScale;
+		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, data.dataSight.envZoomedIn);
 	
 		layoutData.rlCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
 		
@@ -312,24 +277,24 @@ public class ElementBallRangeIndicator extends Element {
 		if(radiusUseMils) {
 			radiusMil = radialRadius;
 		} else {
-			radiusMil = Conversion.get().screenspace2mil(radialRadius, sightData.envZoomedIn);
+			radiusMil = Conversion.get().screenspace2mil(radialRadius, data.dataSight.envZoomedIn);
 		}
 		
 		
 		double radiusPX = 0;
 		if(radiusUseMils) {
-			radiusPX = Conversion.get().mil2pixel(radialRadius, canvasHeight, sightData.envZoomedIn);
+			radiusPX = Conversion.get().mil2pixel(radialRadius, canvasHeight, data.dataSight.envZoomedIn);
 		} else {
-			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight, sightData.envZoomedIn);
+			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight, data.dataSight.envZoomedIn);
 		}
 		layoutData.rlRadius = radiusPX;
 		
 		Conversion conversionUSSR = new Conversion();
-		conversionUSSR.initialize(canvasWidth, canvasHeight, calibData.vehicle.fovOut, calibData.vehicle.fovIn, Thousandth.USSR);
+		conversionUSSR.initialize(canvasWidth, canvasHeight, data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, Thousandth.USSR);
 		
 		// length
-		double length = Conversion.get().screenspace2pixel(size.x, canvasHeight, sightData.envZoomedIn);
-		length = length * sightData.gnrFontScale;
+		double length = Conversion.get().screenspace2pixel(size.x, canvasHeight, data.dataSight.envZoomedIn);
+		length = length * data.dataSight.gnrFontScale;
 		layoutData.rlRadius = layoutData.rlRadius-length/2;
 		layoutData.rlRadiusOutside = layoutData.rlRadius+length;
 		
@@ -349,12 +314,12 @@ public class ElementBallRangeIndicator extends Element {
 			dir.rotateDeg(-angleOffset);
 			
 			// angle range
-			double resultPX = SightUtils.ballisticFunction(meters/100.0, fittingParams);
+			double resultPX = data.elementBallistic.function.eval(meters);
 			double rangeMil = conversionUSSR.pixel2mil(resultPX, canvasHeight, false);
 			double rangeAngle     = ((rangeMil) / radiusMil) * radialStretch;
 
 			// angle correction
-			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(sightData.envRangeCorrection);
+			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
 			double angleCorrection = SightUtils.calcAngle_deg(rangeCorrAngleSMil, radialRadius, radialStretch);
 
 			// rotate
@@ -385,7 +350,7 @@ public class ElementBallRangeIndicator extends Element {
 			
 			// labels
 			if(isMajor) {
-				double textOffset = (Conversion.get().screenspace2pixel(indicators.get(i).getTextX()+this.textPos.x, canvasHeight, sightData.envZoomedIn)*sightData.gnrFontScale);
+				double textOffset = (Conversion.get().screenspace2pixel(indicators.get(i).getTextX()+this.textPos.x, canvasHeight, data.dataSight.envZoomedIn)*data.dataSight.gnrFontScale);
 				textPosition.set(canvasWidth/2 - originX + posEnd.x + dir.copy().setLength(textOffset).x, canvasHeight/2 - originY + posEnd.y + dir.copy().setLength(textOffset).y);
 			}
 			
@@ -397,7 +362,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	
-	public LayoutBallRangeIndicators layoutRadialCircles(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutRadialCircles(WorkingData data, double canvasWidth, double canvasHeight) {
 		if(layoutData.rcCircles == null || layoutData.rcCircles.length != indicators.size() ) {
 			layoutData.rcCircles = new Circlef[indicators.size()];
 			layoutData.rcTextPositions = new Vector2d[indicators.size()];
@@ -407,39 +372,23 @@ public class ElementBallRangeIndicator extends Element {
 			}
 		}
 
-		// point fitting
-		List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-		fittingPoints.add(new Vector2d(0, 0));
-		for (int i = 0; i < ammoData.markerRanges.size(); i++) {
-			Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y / 100,
-					ammoData.markerRanges.get(i).x);
-			if (ammoData.zoomedIn) {
-				p.y /= Conversion.get().zoomInMul;
-			}
-			fittingPoints.add(p);
-		}
-		Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-		if (fittingParams == null) {
-			return null;
-		}
-
-		layoutData.fontSize = 25 * sightData.gnrFontScale * 0.5f * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layoutData.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
 		// origin x
 		double originX = position.x;
-		if (sightData.envZoomedIn) {
+		if (data.dataSight.envZoomedIn) {
 			originX = originX + 0.0015 * (position.x / 0.05);
 		}
-		originX = originX * sightData.gnrFontScale;
-		originX = Conversion.get().screenspace2pixel(originX, canvasHeight, sightData.envZoomedIn);
+		originX = originX * data.dataSight.gnrFontScale;
+		originX = Conversion.get().screenspace2pixel(originX, canvasHeight, data.dataSight.envZoomedIn);
 
 		// origin y
 		double originY = position.y;
-		if (sightData.envZoomedIn) {
+		if (data.dataSight.envZoomedIn) {
 			originY = originY + 0.0015 * (position.y / 0.05);
 		}
-		originY = originY * sightData.gnrFontScale;
-		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, sightData.envZoomedIn);
+		originY = originY * data.dataSight.gnrFontScale;
+		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, data.dataSight.envZoomedIn);
 
 		layoutData.rcCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
 
@@ -449,20 +398,20 @@ public class ElementBallRangeIndicator extends Element {
 		if (radiusUseMils) {
 			radiusMil = radialRadius;
 		} else {
-			radiusMil = Conversion.get().screenspace2mil(radialRadius, sightData.envZoomedIn);
+			radiusMil = Conversion.get().screenspace2mil(radialRadius, data.dataSight.envZoomedIn);
 		}
 
 		double radiusPX = 0;
 		if (radiusUseMils) {
-			radiusPX = Conversion.get().mil2pixel(radialRadius, canvasHeight, sightData.envZoomedIn);
+			radiusPX = Conversion.get().mil2pixel(radialRadius, canvasHeight, data.dataSight.envZoomedIn);
 		} else {
 			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight,
-					sightData.envZoomedIn);
+					data.dataSight.envZoomedIn);
 		}
 		layoutData.rcRadius = radiusPX;
 
 		Conversion conversionUSSR = new Conversion();
-		conversionUSSR.initialize(canvasWidth, canvasHeight, calibData.vehicle.fovOut, calibData.vehicle.fovIn, Thousandth.USSR);
+		conversionUSSR.initialize(canvasWidth, canvasHeight, data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, Thousandth.USSR);
 
 		// draw indicators
 		for (int i = 0; i < indicators.size(); i++) {
@@ -478,12 +427,12 @@ public class ElementBallRangeIndicator extends Element {
 			dir.rotateDeg(-angleOffset);
 
 			// angle range
-			double resultPX = SightUtils.ballisticFunction(meters / 100.0, fittingParams);
+			double resultPX = data.elementBallistic.function.eval(meters);
 			double rangeMil = conversionUSSR.pixel2mil(resultPX, canvasHeight, false);
 			double rangeAngle = ((rangeMil) / radiusMil) * radialStretch;
 
 			// angle correction
-			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(sightData.envRangeCorrection);
+			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
 			double angleCorrection = SightUtils.calcAngle_deg(rangeCorrAngleSMil, radialRadius,
 					radialStretch);
 
@@ -498,14 +447,14 @@ public class ElementBallRangeIndicator extends Element {
 			double circleDiameter = size.y;
 			circleDiameter = circleDiameter + indicator.getExtend();
 			circleDiameter = circleDiameter * 2;
-			circleDiameter = circleDiameter * sightData.gnrFontScale;
-			circleDiameter = Conversion.get().screenspace2pixel(circleDiameter, canvasHeight, sightData.envZoomedIn);
+			circleDiameter = circleDiameter * data.dataSight.gnrFontScale;
+			circleDiameter = Conversion.get().screenspace2pixel(circleDiameter, canvasHeight, data.dataSight.envZoomedIn);
 
 			// circle width
 			double circleWidth = size.x;
 			circleWidth = circleWidth / 2;
-			circleWidth = circleWidth * sightData.gnrFontScale;
-			circleWidth = Conversion.get().screenspace2pixel(circleWidth, canvasHeight, sightData.envZoomedIn);
+			circleWidth = circleWidth * data.dataSight.gnrFontScale;
+			circleWidth = Conversion.get().screenspace2pixel(circleWidth, canvasHeight, data.dataSight.envZoomedIn);
 			layoutData.rcLineWidth = circleWidth;
 			
 			// circle
@@ -514,7 +463,7 @@ public class ElementBallRangeIndicator extends Element {
 
 			// labels
 			if (isMajor) {
-				double textOffset = (Conversion.get().screenspace2pixel(indicator.getTextX() + this.textPos.x, canvasHeight, sightData.envZoomedIn) * sightData.gnrFontScale);
+				double textOffset = (Conversion.get().screenspace2pixel(indicator.getTextX() + this.textPos.x, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale);
 				layoutData.rcTextPositions[i].set(
 						canvasWidth / 2 - originX + dir.x + dir.copy().setLength(textOffset).x,
 						canvasHeight / 2 - originY + dir.y + dir.copy().setLength(textOffset).y);
@@ -528,32 +477,32 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	
-	public LayoutBallRangeIndicators layoutLabel(SightData sightData, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutLabel(WorkingData data, double canvasWidth, double canvasHeight) {
 		
-		final double fontSize = 25.5*0.5*sightData.gnrFontScale*(sightData.envZoomedIn?Conversion.get().zoomInMul:1);
+		final double fontSize = 25.5*0.5*data.dataSight.gnrFontScale*(data.dataSight.envZoomedIn?Conversion.get().zoomInMul:1);
 		
 		Font corrFont = SightRenderer.getFont(fontSize);
 		corrHelper.setFont(corrFont);
 		corrHelper.setWrappingWidth(0);
 		corrHelper.setLineSpacing(0);
-		corrHelper.setText("Distance:"+sightData.envRangeCorrection);
+		corrHelper.setText("Distance:"+data.dataSight.envRangeCorrection);
 		
 		// x position
 		double corrX = -posCorrLabel.x;
-		if(sightData.envZoomedIn) {
+		if(data.dataSight.envZoomedIn) {
 			corrX = corrX * 1.025;
 		}
-		corrX = Conversion.get().screenspace2pixel(corrX, canvasHeight, sightData.envZoomedIn);
-		corrX = corrX * sightData.gnrFontScale;
+		corrX = Conversion.get().screenspace2pixel(corrX, canvasHeight, data.dataSight.envZoomedIn);
+		corrX = corrX * data.dataSight.gnrFontScale;
 		corrX = canvasWidth/2 - corrX;
 		
 		// y position
 		double corrY = posCorrLabel.y;
-		if(sightData.envZoomedIn) {
+		if(data.dataSight.envZoomedIn) {
 			corrY = corrY * 1.025;
 		}
-		corrY = Conversion.get().screenspace2pixel(corrY, canvasHeight, sightData.envZoomedIn);
-		corrY = corrY * sightData.gnrFontScale;
+		corrY = Conversion.get().screenspace2pixel(corrY, canvasHeight, data.dataSight.envZoomedIn);
+		corrY = corrY * data.dataSight.gnrFontScale;
 		corrY = corrY + (canvasHeight/2);
 		corrY = corrY - corrHelper.getLayoutBounds().getHeight();
 		

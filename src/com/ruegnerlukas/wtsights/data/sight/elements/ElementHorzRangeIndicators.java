@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutHorzRangeIndicators;
 import com.ruegnerlukas.wtutils.Conversion;
 
@@ -61,7 +59,7 @@ public class ElementHorzRangeIndicators extends Element {
 	
 	
 	@Override
-	public LayoutHorzRangeIndicators layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutHorzRangeIndicators layout(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -77,9 +75,9 @@ public class ElementHorzRangeIndicators extends Element {
 			}
 		}
 		
-		final double lineSize = sightData.gnrLineSize * sightData.gnrFontScale;
+		final double lineSize = data.dataSight.gnrLineSize * data.dataSight.gnrFontScale;
 		
-		layoutData.fontSize = 12.5 * sightData.gnrFontScale * (sightData.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layoutData.fontSize = 12.5 * data.dataSight.gnrFontScale * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
 		for(int i=0; i<indicators.size(); i++) {
 			
@@ -88,14 +86,14 @@ public class ElementHorzRangeIndicators extends Element {
 			final boolean isMajor = indicator.isMajor();
 			
 			// length
-			final double length = Conversion.get().mil2pixel(isMajor ? sizeMajor : sizeMinor, canvasHeight, sightData.envZoomedIn);
+			final double length = Conversion.get().mil2pixel(isMajor ? sizeMajor : sizeMinor, canvasHeight, data.dataSight.envZoomedIn);
 			
 			// x pos
-			final double x = canvasWidth/2 + Conversion.get().mil2pixel(mil, canvasHeight, sightData.envZoomedIn);
+			final double x = canvasWidth/2 + Conversion.get().mil2pixel(mil, canvasHeight, data.dataSight.envZoomedIn);
 			
 			// y pos
 			final double y = canvasHeight/2;
-			final double yLabel = y - length - Conversion.get().screenspace2pixel(0.013, canvasHeight, sightData.envZoomedIn) * sightData.gnrFontScale;
+			final double yLabel = y - length - Conversion.get().screenspace2pixel(0.013, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale;
 			
 			layoutData.bounds[i].set(x-lineSize/2, y-length, lineSize, length*2);
 			layoutData.textPositions[i].set(x, yLabel);

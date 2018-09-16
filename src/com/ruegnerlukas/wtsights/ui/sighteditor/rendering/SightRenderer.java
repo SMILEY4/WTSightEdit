@@ -9,8 +9,7 @@ import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
@@ -81,49 +80,53 @@ public class SightRenderer {
 	
 	
 	
-	public static void draw(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	public static void draw(Canvas canvas, GraphicsContext g, WorkingData data) {
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, dataSight.gnrThousandth);
+		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
 		
 		// background
-		drawBackground(canvas, g, dataSight);
+		drawBackground(canvas, g, data.dataSight);
 		
 		// centered lines
-		drawCenteredLines(canvas, g, dataSight, dataCalib, currentAmmoData);
+		drawCenteredLines(canvas, g, data);
 		
 		// rangefinder
-		if(dataSight.envShowRangeFinder) {
-			drawRangefinder(canvas, g, dataSight, dataCalib, currentAmmoData);
+		if(data.dataSight.envShowRangeFinder) {
+			drawRangefinder(canvas, g, data);
 		}
 		
 		// horz range indicators
-		drawHorzRangeIndicators(canvas, g, dataSight, dataCalib, currentAmmoData);
+		drawHorzRangeIndicators(canvas, g, data);
 		
 		// ballistic range indicators
-		if(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty() && currentAmmoData != null) {
-			drawBallisticsBlock(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementBallRangeIndicator)dataSight.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0));
+		if(data.dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).isEmpty() && data.elementBallistic != null) {
+			drawBallisticsBlock(canvas, g, data, (ElementBallRangeIndicator)data.dataSight.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0));
 		}
 		
 		// shell block indicators
-		if(currentAmmoData != null) {
-			for(Element e : dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
+		if(data.elementBallistic != null) {
+			for(Element e : data.dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 				ElementShellBlock shellBlock = (ElementShellBlock)e;
-				drawBallisticsBlock(canvas, g, dataSight, dataCalib, shellBlock.dataAmmo, shellBlock);
+				WorkingData dataBlock = new WorkingData();
+				dataBlock.dataBallistic = data.dataBallistic;
+				dataBlock.elementBallistic = shellBlock.elementBallistic;
+				dataBlock.dataSight = data.dataSight;
+				drawBallisticsBlock(canvas, g, dataBlock, shellBlock);
 			}
 		}
 		
 		// custom elements
-		for(Element e : dataSight.getElements(ElementType.CUSTOM_CIRCLE)) {
-			drawCircleObject(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementCustomCircle)e);
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_CIRCLE)) {
+			drawCircleObject(canvas, g, data, (ElementCustomCircle)e);
 		}
-		for(Element e : dataSight.getElements(ElementType.CUSTOM_LINE)) {
-			drawLineObject(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementCustomLine)e);
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_LINE)) {
+			drawLineObject(canvas, g, data, (ElementCustomLine)e);
 		}
-		for(Element e : dataSight.getElements(ElementType.CUSTOM_QUAD)) {
-			drawQuadObject(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementCustomQuad)e);
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD)) {
+			drawQuadObject(canvas, g, data, (ElementCustomQuad)e);
 		}
-		for(Element e : dataSight.getElements(ElementType.CUSTOM_TEXT)) {
-			drawTextObject(canvas, g, dataSight, dataCalib, currentAmmoData, (ElementCustomText)e);
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_TEXT)) {
+			drawTextObject(canvas, g, data, (ElementCustomText)e);
 		}
 		
 	}
@@ -143,15 +146,15 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData ammoData) {
+	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, WorkingData data) {
 		
-		ElementCentralHorzLine horzLine = (ElementCentralHorzLine)dataSight.getElements(ElementType.CENTRAL_HORZ_LINE).get(0);
-		ElementCentralVertLine vertLine = (ElementCentralVertLine)dataSight.getElements(ElementType.CENTRAL_VERT_LINE).get(0);
+		ElementCentralHorzLine horzLine = (ElementCentralHorzLine)data.dataSight.getElements(ElementType.CENTRAL_HORZ_LINE).get(0);
+		ElementCentralVertLine vertLine = (ElementCentralVertLine)data.dataSight.getElements(ElementType.CENTRAL_VERT_LINE).get(0);
 
-		Rectanglef horzBounds = horzLine.layout(dataSight, dataCalib, ammoData, canvas.getWidth(), canvas.getHeight()).bounds;
-		Rectanglef vertBounds = vertLine.layout(dataSight, dataCalib, ammoData, canvas.getWidth(), canvas.getHeight()).bounds;
+		Rectanglef horzBounds = horzLine.layout(data, canvas.getWidth(), canvas.getHeight()).bounds;
+		Rectanglef vertBounds = vertLine.layout(data, canvas.getWidth(), canvas.getHeight()).bounds;
 		
-		g.setFill(dataSight.envSightColor);
+		g.setFill(data.dataSight.envSightColor);
 		if(horzLine.drawCentralHorzLine) {
 			g.fillRect(horzBounds.x, horzBounds.y, horzBounds.width, horzBounds.height);
 		}
@@ -166,11 +169,11 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangefinder(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData ammoData) {
+	private static void drawRangefinder(Canvas canvas, GraphicsContext g, WorkingData data) {
 		
-		ElementRangefinder rangefinder = (ElementRangefinder)dataSight.getElements(ElementType.RANGEFINDER).get(0);
+		ElementRangefinder rangefinder = (ElementRangefinder)data.dataSight.getElements(ElementType.RANGEFINDER).get(0);
 		
-		LayoutRangefinder layout = rangefinder.layout(dataSight, dataCalib, ammoData, canvas.getWidth(), canvas.getHeight());
+		LayoutRangefinder layout = rangefinder.layout(data, canvas.getWidth(), canvas.getHeight());
 		Rectanglef bounds = layout.bounds;
 		Vector2d textPos = layout.textPos;
 		
@@ -179,13 +182,13 @@ public class SightRenderer {
 
 		// draw background
 		g.setFill(rangefinder.color1);
-		g.fillRect(bounds.x, bounds.y, bounds.width*(dataSight.envRFProgress/100f), bounds.height);
+		g.fillRect(bounds.x, bounds.y, bounds.width*(data.dataSight.envRFProgress/100f), bounds.height);
 		
 		g.setFill(rangefinder.color2);
-		g.fillRect(bounds.x+(bounds.width*(dataSight.envRFProgress/100f)), bounds.y, bounds.width*(1f-(dataSight.envRFProgress/100f)), bounds.height);
+		g.fillRect(bounds.x+(bounds.width*(data.dataSight.envRFProgress/100f)), bounds.y, bounds.width*(1f-(data.dataSight.envRFProgress/100f)), bounds.height);
 
 		// draw text
-		g.setFill(dataSight.envSightColor);
+		g.setFill(data.dataSight.envSightColor);
 		g.setTextAlign(TextAlignment.CENTER);
 		g.setTextBaseline(VPos.CENTER);
 		g.setFont(font);
@@ -198,14 +201,14 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData ammoData) {
+	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, WorkingData data) {
 		
-		ElementHorzRangeIndicators horRange = (ElementHorzRangeIndicators)dataSight.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
+		ElementHorzRangeIndicators horRange = (ElementHorzRangeIndicators)data.dataSight.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
 		if(horRange.indicators.isEmpty()) {
 			return;
 		}
 		
-		LayoutHorzRangeIndicators layoutData = horRange.layout(dataSight, dataCalib, ammoData, canvas.getWidth(), canvas.getHeight());
+		LayoutHorzRangeIndicators layoutData = horRange.layout(data, canvas.getWidth(), canvas.getHeight());
 		
 		for(int i=0; i<layoutData.bounds.length; i++) {
 			Rectanglef bounds = layoutData.bounds[i];
@@ -213,13 +216,13 @@ public class SightRenderer {
 			HIndicator indicator = horRange.indicators.get(i);
 			
 			// draw line
-			g.setFill(dataSight.envSightColor);
+			g.setFill(data.dataSight.envSightColor);
 			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 			
 			// draw label
 			if(indicator.isMajor()) {
 				Font font = getFont(layoutData.fontSize );
-				g.setFill(dataSight.envSightColor);
+				g.setFill(data.dataSight.envSightColor);
 				g.setTextAlign(TextAlignment.CENTER);
 				g.setTextBaseline(VPos.CENTER);
 				g.setFont(font);
@@ -234,35 +237,35 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementBallRangeIndicator block) {
+	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
 		if(block.scaleMode == ScaleMode.VERTICAL) {
-			drawBallisticsVertical(canvas, g, dataSight, dataCalib, currentAmmoData, block);
+			drawBallisticsVertical(canvas, g, data, block);
 		} else {
-			drawBallisticsRadial(canvas, g, dataSight, dataCalib, currentAmmoData, block);
+			drawBallisticsRadial(canvas, g, data, block);
 		}
 	}
 	
 	
 	
 	
-	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, SightData dataSight, ElementBallRangeIndicator block) {
+	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
 		
-		if(block.drawCorrLabel && dataSight.envRangeCorrection > 0) {
+		if(block.drawCorrLabel && data.dataSight.envRangeCorrection > 0) {
 			
-			Vector3d layout = block.layoutLabel(dataSight, canvas.getWidth(), canvas.getHeight()).corrLabel;
+			Vector3d layout = block.layoutLabel(data, canvas.getWidth(), canvas.getHeight()).corrLabel;
 
 			Font corrFont = getFont(layout.z);
 			Text corrHelper = new Text();
 			corrHelper.setFont(corrFont);
 			corrHelper.setWrappingWidth(0);
 			corrHelper.setLineSpacing(0);
-			corrHelper.setText("Distance:"+dataSight.envRangeCorrection);
+			corrHelper.setText("Distance:"+data.dataSight.envRangeCorrection);
 			
 			// draw label
 			g.setTextBaseline(VPos.CENTER);
 			g.setFont(corrFont);
 			g.setTextAlign(TextAlignment.LEFT);
-			g.fillText("Distance:"+dataSight.envRangeCorrection, layout.x, layout.y);
+			g.fillText("Distance:"+data.dataSight.envRangeCorrection, layout.x, layout.y);
 			g.setTextAlign(TextAlignment.RIGHT);
 			g.setTextBaseline(VPos.BASELINE);
 			
@@ -273,13 +276,13 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsVertical(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementBallRangeIndicator block) {
+	private static void drawBallisticsVertical(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
 		
 		if(block.indicators.isEmpty()) {
 			return;
 		}
 
-		LayoutBallRangeIndicators layout = block.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
 
 		Font bIndFont = getFont(layout.fontSize);
 		
@@ -295,17 +298,17 @@ public class SightRenderer {
 			
 			// CENTRAL BLOCK
 			if(block.drawAddLines) {
-				g.setFill(dataSight.envSightColor);
+				g.setFill(data.dataSight.envSightColor);
 				g.fillRect(boundsCenter.x, boundsCenter.y, boundsCenter.width, boundsCenter.height);
 			}
 			
 			// MAIN BLOCK
-			g.setFill(dataSight.envSightColor);
+			g.setFill(data.dataSight.envSightColor);
 			g.fillRect(boundsMain.x, boundsMain.y, boundsMain.width, boundsMain.height);
 			
 			// main labels
 			if(isMajor) {
-				g.setFill(dataSight.envSightColor);
+				g.setFill(data.dataSight.envSightColor);
 				if(block.textAlign == TextAlign.LEFT)   { g.setTextAlign(TextAlignment.LEFT); }
 				if(block.textAlign == TextAlign.CENTER) { g.setTextAlign(TextAlignment.CENTER); }
 				if(block.textAlign == TextAlign.RIGHT)  { g.setTextAlign(TextAlignment.RIGHT); }
@@ -320,7 +323,7 @@ public class SightRenderer {
 		
 		// draw range correction label
 		if(block.drawCorrLabel) {
-			drawRangeCorrectionLabel(canvas, g, dataSight, block);
+			drawRangeCorrectionLabel(canvas, g, data, block);
 		}
 		
 	}
@@ -328,22 +331,22 @@ public class SightRenderer {
 	
 	
 
-	private static void drawBallisticsRadial(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadial(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
 		
 		if(block.indicators.isEmpty()) {
 			return;
 		}
 		
 		if(block.circleMode) {
-			drawBallisticsRadialCircle(canvas, g, dataSight, dataCalib, currentAmmoData, block);
+			drawBallisticsRadialCircle(canvas, g, data, block);
 		} else {
-			drawBallisticsRadialLine(canvas, g, dataSight, dataCalib, currentAmmoData, block);
+			drawBallisticsRadialLine(canvas, g, data, block);
 		}
 		
 		
 		// draw range correction label
 		if(block.drawCorrLabel) {
-			drawRangeCorrectionLabel(canvas, g, dataSight, block);
+			drawRangeCorrectionLabel(canvas, g, data, block);
 		}
 		
 	}
@@ -352,9 +355,9 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsRadialLine(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadialLine(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
 		
-		LayoutBallRangeIndicators layout = block.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
 		
 		final double lineSize = layout.rlLineSize;
 		Font bIndFont = getFont(layout.fontSize);
@@ -369,7 +372,7 @@ public class SightRenderer {
 			boolean isMajor = indicator.isMajor();
 			
 			// draw line
-			g.setStroke(dataSight.envSightColor);
+			g.setStroke(data.dataSight.envSightColor);
 			g.setLineWidth(lineSize);
 			g.strokeLine(line.x, line.y, line.z, line.w);
 			g.setLineWidth(1);
@@ -379,7 +382,7 @@ public class SightRenderer {
 				if(block.textAlign == TextAlign.LEFT)   { g.setTextAlign(TextAlignment.LEFT); }
 				if(block.textAlign == TextAlign.CENTER) { g.setTextAlign(TextAlignment.CENTER); }
 				if(block.textAlign == TextAlign.RIGHT)  { g.setTextAlign(TextAlignment.RIGHT); }
-				g.setFill(dataSight.envSightColor);
+				g.setFill(data.dataSight.envSightColor);
 				g.setTextBaseline(VPos.CENTER);
 				g.setFont(bIndFont);
 				g.fillText(""+Math.abs(meters/100), textPos.x, textPos.y);
@@ -395,9 +398,9 @@ public class SightRenderer {
 	
 	
 
-	private static void drawBallisticsRadialCircle(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadialCircle(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
 		
-		LayoutBallRangeIndicators layout = block.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
 		
 		// font
 		Font bIndFont = getFont(layout.fontSize);
@@ -414,7 +417,7 @@ public class SightRenderer {
 			
 			// draw circle
 			g.setLineWidth(lineWidth);
-			g.setStroke(dataSight.envSightColor);
+			g.setStroke(data.dataSight.envSightColor);
 			g.strokeOval(circle.cx-circle.radius, circle.cy-circle.radius, circle.radius*2, circle.radius*2);
 			g.setLineWidth(1);
 			
@@ -424,7 +427,7 @@ public class SightRenderer {
 				if(block.textAlign == TextAlign.CENTER) { g.setTextAlign(TextAlignment.CENTER); }
 				if(block.textAlign == TextAlign.RIGHT)  { g.setTextAlign(TextAlignment.RIGHT); }
 								
-				g.setFill(dataSight.envSightColor);
+				g.setFill(data.dataSight.envSightColor);
 				g.setTextBaseline(VPos.CENTER);
 				g.setFont(bIndFont);
 				
@@ -443,9 +446,9 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawLineObject(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementCustomLine objLine) {
-		LayoutLineObject layout = objLine.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
-		g.setStroke(dataSight.envSightColor);
+	private static void drawLineObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomLine objLine) {
+		LayoutLineObject layout = objLine.layout(data, canvas.getWidth(), canvas.getHeight());
+		g.setStroke(data.dataSight.envSightColor);
 		g.setLineWidth(layout.lineSize);
 		g.strokeLine(layout.start.x, layout.start.y, layout.end.x, layout.end.y);
 		g.setLineWidth(1);
@@ -454,13 +457,13 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawTextObject(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementCustomText objText) {
+	private static void drawTextObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomText objText) {
 	
-		LayoutTextObject layout = objText.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+		LayoutTextObject layout = objText.layout(data, canvas.getWidth(), canvas.getHeight());
 		Font font = getFont(layout.fontSize );
 		
 		// draw text
-		g.setFill(dataSight.envSightColor);
+		g.setFill(data.dataSight.envSightColor);
 		g.setTextAlign( (objText.align==TextAlign.LEFT ? TextAlignment.LEFT : (objText.align==TextAlign.CENTER ? TextAlignment.CENTER : TextAlignment.RIGHT)) );
 		g.setTextBaseline(VPos.CENTER);
 		g.setFont(font);
@@ -473,11 +476,11 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCircleObject(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementCustomCircle objCircle) {
+	private static void drawCircleObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomCircle objCircle) {
 		
-		LayoutCircleObject layout = objCircle.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+		LayoutCircleObject layout = objCircle.layout(data, canvas.getWidth(), canvas.getHeight());
 		
-		g.setStroke(dataSight.envSightColor);
+		g.setStroke(data.dataSight.envSightColor);
 		g.setLineWidth(layout.lineWidth);
 		
 		if(layout.useLineSegments) {
@@ -497,15 +500,12 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawQuadObject(Canvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData, ElementCustomQuad objQuad) {
-		
-		LayoutQuadObject layout = objQuad.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
-		
-		g.setFill(dataSight.envSightColor);
+	private static void drawQuadObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomQuad objQuad) {
+		LayoutQuadObject layout = objQuad.layout(data, canvas.getWidth(), canvas.getHeight());
+		g.setFill(data.dataSight.envSightColor);
 		g.fillPolygon(
 				new double[] {layout.p0.x, layout.p1.x, layout.p2.x, layout.p3.x},
 				new double[] {layout.p0.y, layout.p1.y, layout.p2.y, layout.p3.y}, 4);
-
 	}
 	
 	

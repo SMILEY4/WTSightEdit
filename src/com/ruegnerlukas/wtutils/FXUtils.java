@@ -1,23 +1,19 @@
 package com.ruegnerlukas.wtutils;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.GenericArrayType;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
-import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
-import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -192,38 +187,130 @@ public class FXUtils {
 	
 	
 	
-	public static void initComboboxAmmo(ComboBox<Ammo> combobox) {
-		combobox.setButtonCell(new ListCell<Ammo>() {
-			@Override protected void updateItem(Ammo item, boolean empty) {
+	public static void initComboboxBallistic(ComboBox<BallisticElement> combobox) {
+		combobox.setButtonCell(new ListCell<BallisticElement>() {
+			@Override protected void updateItem(BallisticElement item, boolean empty) {
 				super.updateItem(item, empty);
 				if (item == null || empty) {
 					setText("");
 					setGraphic(null);
-				} else {
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.type), null));
+				} else if(item instanceof NullElement) {
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon("?"), null));
 					imgView.setSmooth(true);
 					imgView.setPreserveRatio(true);
 					imgView.setFitHeight(40);
 					setGraphic(imgView);
-					setText(item.namePretty);
+					setText("No ballistic data to select");
+				} else {
+					if(item.ammunition.size() == 1) {
+						Ammo ammo = item.ammunition.get(0);
+						ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(ammo.type), null));
+						imgView.setSmooth(true);
+						imgView.setPreserveRatio(true);
+						imgView.setFitHeight(40);
+						setGraphic(imgView);
+						setText(ammo.namePretty);
+					} else {
+						ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
+						imgView.setSmooth(true);
+						imgView.setPreserveRatio(true);
+						imgView.setFitHeight(40);
+						setGraphic(imgView);
+						setText(item.ammunition.get(0).parentWeapon.name);
+					}
 				}
 			}
 		});
-		combobox.setCellFactory(new Callback<ListView<Ammo>, ListCell<Ammo>>() {
-			@Override public ListCell<Ammo> call(ListView<Ammo> p) {
-				return new ListCell<Ammo>() {
-					@Override protected void updateItem(Ammo item, boolean empty) {
+		combobox.setCellFactory(new Callback<ListView<BallisticElement>, ListCell<BallisticElement>>() {
+			@Override public ListCell<BallisticElement> call(ListView<BallisticElement> p) {
+				return new ListCell<BallisticElement>() {
+					@Override protected void updateItem(BallisticElement item, boolean empty) {
 						super.updateItem(item, empty);
 						if (item == null || empty) {
 							setText("");
 							setGraphic(null);
-						} else {
-							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.type), null));
+						} else if(item instanceof NullElement) {
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon("?"), null));
 							imgView.setSmooth(true);
 							imgView.setPreserveRatio(true);
 							imgView.setFitHeight(40);
 							setGraphic(imgView);
-							setText(item.namePretty);
+							setText("No ballistic data to select");
+						} else {
+							if(item.ammunition.size() == 1) {
+								Ammo ammo = item.ammunition.get(0);
+								ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(ammo.type), null));
+								imgView.setSmooth(true);
+								imgView.setPreserveRatio(true);
+								imgView.setFitHeight(40);
+								setGraphic(imgView);
+								setText(ammo.namePretty);
+							} else {
+								ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
+								imgView.setSmooth(true);
+								imgView.setPreserveRatio(true);
+								imgView.setFitHeight(40);
+								setGraphic(imgView);
+								setText(item.ammunition.get(0).parentWeapon.name);
+							}
+						}
+					}
+				};
+			}
+		});
+	}
+	
+	
+	
+	
+	public static void initComboboxBallisticElement(ComboBox<BallisticElement> combobox) {
+		combobox.setButtonCell(new ListCell<BallisticElement>() {
+			@Override protected void updateItem(BallisticElement item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty || item.ammunition.isEmpty()) {
+					setText("");
+					setGraphic(null);
+				} else {
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					setGraphic(imgView);
+					String displayName = "";
+					for(int i=0; i<item.ammunition.size(); i++) {
+						if(i == item.ammunition.size()-1) {
+							displayName += item.ammunition.get(i).namePretty + "";
+						} else {
+							displayName += item.ammunition.get(i).namePretty + ", ";
+						}
+					}
+					setText(displayName);
+				}
+			}
+		});
+		combobox.setCellFactory(new Callback<ListView<BallisticElement>, ListCell<BallisticElement>>() {
+			@Override public ListCell<BallisticElement> call(ListView<BallisticElement> p) {
+				return new ListCell<BallisticElement>() {
+					@Override protected void updateItem(BallisticElement item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty || item.ammunition.isEmpty()) {
+							setText("");
+							setGraphic(null);
+						} else {
+							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
+							imgView.setSmooth(true);
+							imgView.setPreserveRatio(true);
+							imgView.setFitHeight(40);
+							setGraphic(imgView);
+							String displayName = "";
+							for(int i=0; i<item.ammunition.size(); i++) {
+								if(i == item.ammunition.size()-1) {
+									displayName += item.ammunition.get(i).namePretty + "";
+								} else {
+									displayName += item.ammunition.get(i).namePretty + ", ";
+								}
+							}
+							setText(displayName);
 						}
 					}
 				};

@@ -63,11 +63,11 @@ public class UICustomText implements Module {
 				if(element != null) {
 					element.useThousandth = cbUseThousandth.isSelected();
 					if(element.useThousandth) {
-						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(spinnerPosY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(spinnerPosY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
 					} else {
-						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 					}
 					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();

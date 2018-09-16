@@ -351,9 +351,9 @@ public class UIBallRangeIndicators implements Module {
 				}
 				element.radiusUseMils = rRadiusUseMils.isSelected();
 				if(element.radiusUseMils) {
-					FXUtils.initSpinner(rCircleRadius, Conversion.get().screenspace2mil(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.5, 1, null);
+					FXUtils.initSpinner(rCircleRadius, Conversion.get().screenspace2mil(element.radialRadius, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.5, 1, null);
 				} else {
-					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.001, 3, null);
+					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
 				element.layoutData.dirty = true;
 				editor.wtCanvas.repaint();

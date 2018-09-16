@@ -1,14 +1,8 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutLineObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils;
@@ -46,7 +40,7 @@ public class ElementCustomLine extends ElementCustomObject {
 	
 	
 	@Override
-	public LayoutLineObject layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutLineObject layout(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -61,15 +55,15 @@ public class ElementCustomLine extends ElementCustomObject {
 		if(movement == Movement.STATIC) {
 			
 			if(useThousandth) {
-				sxPX = Conversion.get().mil2pixel(start.x, canvasHeight, sightData.envZoomedIn);
-				syPX = Conversion.get().mil2pixel(start.y, canvasHeight, sightData.envZoomedIn);
-				exPX = Conversion.get().mil2pixel(end.x, canvasHeight, sightData.envZoomedIn);
-				eyPX = Conversion.get().mil2pixel(end.y, canvasHeight, sightData.envZoomedIn);
+				sxPX = Conversion.get().mil2pixel(start.x, canvasHeight, data.dataSight.envZoomedIn);
+				syPX = Conversion.get().mil2pixel(start.y, canvasHeight, data.dataSight.envZoomedIn);
+				exPX = Conversion.get().mil2pixel(end.x, canvasHeight, data.dataSight.envZoomedIn);
+				eyPX = Conversion.get().mil2pixel(end.y, canvasHeight, data.dataSight.envZoomedIn);
 			} else {
-				sxPX = Conversion.get().screenspace2pixel(start.x, canvasHeight, sightData.envZoomedIn);
-				syPX = Conversion.get().screenspace2pixel(start.y, canvasHeight, sightData.envZoomedIn);
-				exPX = Conversion.get().screenspace2pixel(end.x, canvasHeight, sightData.envZoomedIn);
-				eyPX = Conversion.get().screenspace2pixel(end.y, canvasHeight, sightData.envZoomedIn);
+				sxPX = Conversion.get().screenspace2pixel(start.x, canvasHeight, data.dataSight.envZoomedIn);
+				syPX = Conversion.get().screenspace2pixel(start.y, canvasHeight, data.dataSight.envZoomedIn);
+				exPX = Conversion.get().screenspace2pixel(end.x, canvasHeight, data.dataSight.envZoomedIn);
+				eyPX = Conversion.get().screenspace2pixel(end.y, canvasHeight, data.dataSight.envZoomedIn);
 			}
 			
 			
@@ -77,44 +71,31 @@ public class ElementCustomLine extends ElementCustomObject {
 			
 			double rangeCorrectionMil = 0;
 			
-			if(ammoData != null) {
-				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-				fittingPoints.add(new Vector2d(0, 0));
-				for(int i=0; i<ammoData.markerRanges.size(); i++) {
-					Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y/100, ammoData.markerRanges.get(i).x);
-					if(ammoData.zoomedIn) {
-						p.y /= Conversion.get().zoomInMul;
-					}
-					fittingPoints.add(p);
-				}
-				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-				if(fittingParams == null) {
-					return null;
-				}
-				final double rangeCorrectionResultPX = SightUtils.ballisticFunction(sightData.envRangeCorrection/100.0, fittingParams);
+			if(data.elementBallistic != null) {
+				final double rangeCorrectionResultPX = data.elementBallistic.function.eval(data.dataSight.envRangeCorrection);
 				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvasHeight, false);
 				
 			} else {
 				// found values by testing  50m = 0.6875mil
-				rangeCorrectionMil = sightData.envRangeCorrection * (0.6875/50.0);
+				rangeCorrectionMil = data.dataSight.envRangeCorrection * (0.6875/50.0);
 			}
 			
-			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvasHeight, sightData.envZoomedIn);
+			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvasHeight, data.dataSight.envZoomedIn);
 			
 			if(useThousandth) {
-				sxPX = Conversion.get().mil2pixel(start.x, canvasHeight, sightData.envZoomedIn);
-				syPX = Conversion.get().mil2pixel(start.y, canvasHeight, sightData.envZoomedIn);
-				exPX = Conversion.get().mil2pixel(end.x, canvasHeight, sightData.envZoomedIn);
-				eyPX = Conversion.get().mil2pixel(end.y, canvasHeight, sightData.envZoomedIn);
+				sxPX = Conversion.get().mil2pixel(start.x, canvasHeight, data.dataSight.envZoomedIn);
+				syPX = Conversion.get().mil2pixel(start.y, canvasHeight, data.dataSight.envZoomedIn);
+				exPX = Conversion.get().mil2pixel(end.x, canvasHeight, data.dataSight.envZoomedIn);
+				eyPX = Conversion.get().mil2pixel(end.y, canvasHeight, data.dataSight.envZoomedIn);
 			} else {
-				sxPX = Conversion.get().screenspace2pixel(start.x, canvasHeight, sightData.envZoomedIn);
-				syPX = Conversion.get().screenspace2pixel(start.y, canvasHeight, sightData.envZoomedIn);
-				exPX = Conversion.get().screenspace2pixel(end.x, canvasHeight, sightData.envZoomedIn);
-				eyPX = Conversion.get().screenspace2pixel(end.y, canvasHeight, sightData.envZoomedIn);
+				sxPX = Conversion.get().screenspace2pixel(start.x, canvasHeight, data.dataSight.envZoomedIn);
+				syPX = Conversion.get().screenspace2pixel(start.y, canvasHeight, data.dataSight.envZoomedIn);
+				exPX = Conversion.get().screenspace2pixel(end.x, canvasHeight, data.dataSight.envZoomedIn);
+				eyPX = Conversion.get().screenspace2pixel(end.y, canvasHeight, data.dataSight.envZoomedIn);
 			}
 			
 			
-			if(sightData.gnrApplyCorrectionToGun) {
+			if(data.dataSight.gnrApplyCorrectionToGun) {
 				syPX -= rangeCorrectionPX;
 				eyPX -= rangeCorrectionPX;
 			} else {
@@ -132,12 +113,12 @@ public class ElementCustomLine extends ElementCustomObject {
 			} else {
 				centerOW = center;
 			}
-			final double radius = useThousandth ? centerOW.dist(radCenter) : Conversion.get().screenspace2mil(centerOW.dist(radCenter), sightData.envZoomedIn);
+			final double radius = useThousandth ? centerOW.dist(radCenter) : Conversion.get().screenspace2mil(centerOW.dist(radCenter), data.dataSight.envZoomedIn);
 			if(MathUtils.isNearlyEqual(radius, 0)) {
 				return null;
 			}
 			
-			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(sightData.envRangeCorrection);
+			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
 			double rangeAngle = SightUtils.calcAngle_rad(rangeCorrAngleSMil, radius, speed);
 			
 			Vector2d toStart = Vector2d.createVectorAB(radCenter, start);
@@ -152,15 +133,15 @@ public class ElementCustomLine extends ElementCustomObject {
 
 			
 			if(useThousandth) {
-				sxPX = Conversion.get().mil2pixel(toStart.x, canvasHeight, sightData.envZoomedIn);
-				syPX = Conversion.get().mil2pixel(toStart.y, canvasHeight, sightData.envZoomedIn);
-				exPX = Conversion.get().mil2pixel(toEnd.x, canvasHeight, sightData.envZoomedIn);
-				eyPX = Conversion.get().mil2pixel(toEnd.y, canvasHeight, sightData.envZoomedIn);
+				sxPX = Conversion.get().mil2pixel(toStart.x, canvasHeight, data.dataSight.envZoomedIn);
+				syPX = Conversion.get().mil2pixel(toStart.y, canvasHeight, data.dataSight.envZoomedIn);
+				exPX = Conversion.get().mil2pixel(toEnd.x, canvasHeight, data.dataSight.envZoomedIn);
+				eyPX = Conversion.get().mil2pixel(toEnd.y, canvasHeight, data.dataSight.envZoomedIn);
 			} else {
-				sxPX = Conversion.get().screenspace2pixel(toStart.x, canvasHeight, sightData.envZoomedIn);
-				syPX = Conversion.get().screenspace2pixel(toStart.y, canvasHeight, sightData.envZoomedIn);
-				exPX = Conversion.get().screenspace2pixel(toEnd.x, canvasHeight, sightData.envZoomedIn);
-				eyPX = Conversion.get().screenspace2pixel(toEnd.y, canvasHeight, sightData.envZoomedIn);
+				sxPX = Conversion.get().screenspace2pixel(toStart.x, canvasHeight, data.dataSight.envZoomedIn);
+				syPX = Conversion.get().screenspace2pixel(toStart.y, canvasHeight, data.dataSight.envZoomedIn);
+				exPX = Conversion.get().screenspace2pixel(toEnd.x, canvasHeight, data.dataSight.envZoomedIn);
+				eyPX = Conversion.get().screenspace2pixel(toEnd.y, canvasHeight, data.dataSight.envZoomedIn);
 			}
 			
 		}
@@ -173,7 +154,7 @@ public class ElementCustomLine extends ElementCustomObject {
 		
 		layoutData.start.set(sxPX, syPX);
 		layoutData.end.set(exPX, eyPX);
-		layoutData.lineSize = sightData.gnrLineSize*sightData.gnrFontScale;
+		layoutData.lineSize = data.dataSight.gnrLineSize*data.dataSight.gnrFontScale;
 		return layoutData;
 	}
 	

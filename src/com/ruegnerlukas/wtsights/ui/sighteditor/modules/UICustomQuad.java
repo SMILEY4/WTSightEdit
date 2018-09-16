@@ -64,23 +64,23 @@ public class UICustomQuad implements Module {
 				if(element != null) {
 					element.useThousandth = cbUseThousandth.isSelected();
 					if(element.useThousandth) {
-						FXUtils.initSpinner(spinnerPos1X, Conversion.get().screenspace2mil(spinnerPos1X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos1Y, Conversion.get().screenspace2mil(spinnerPos1Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos2X, Conversion.get().screenspace2mil(spinnerPos2X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos2Y, Conversion.get().screenspace2mil(spinnerPos2Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos3X, Conversion.get().screenspace2mil(spinnerPos3X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos3Y, Conversion.get().screenspace2mil(spinnerPos3Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos4X, Conversion.get().screenspace2mil(spinnerPos4X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().screenspace2mil(spinnerPos4Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos1X, Conversion.get().screenspace2mil(spinnerPos1X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos1Y, Conversion.get().screenspace2mil(spinnerPos1Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos2X, Conversion.get().screenspace2mil(spinnerPos2X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos2Y, Conversion.get().screenspace2mil(spinnerPos2Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos3X, Conversion.get().screenspace2mil(spinnerPos3X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos3Y, Conversion.get().screenspace2mil(spinnerPos3Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos4X, Conversion.get().screenspace2mil(spinnerPos4X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().screenspace2mil(spinnerPos4Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
 					} else {
-						FXUtils.initSpinner(spinnerPos1X, Conversion.get().mil2screenspace(spinnerPos1X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos1Y, Conversion.get().mil2screenspace(spinnerPos1Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos2X, Conversion.get().mil2screenspace(spinnerPos2X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos2Y, Conversion.get().mil2screenspace(spinnerPos2Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos3X, Conversion.get().mil2screenspace(spinnerPos3X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos3Y, Conversion.get().mil2screenspace(spinnerPos3Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos4X, Conversion.get().mil2screenspace(spinnerPos4X.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().mil2screenspace(spinnerPos4Y.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos1X, Conversion.get().mil2screenspace(spinnerPos1X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos1Y, Conversion.get().mil2screenspace(spinnerPos1Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos2X, Conversion.get().mil2screenspace(spinnerPos2X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos2Y, Conversion.get().mil2screenspace(spinnerPos2Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos3X, Conversion.get().mil2screenspace(spinnerPos3X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos3Y, Conversion.get().mil2screenspace(spinnerPos3Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos4X, Conversion.get().mil2screenspace(spinnerPos4X.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().mil2screenspace(spinnerPos4Y.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 
 					}
 					element.layoutData.dirty = true;

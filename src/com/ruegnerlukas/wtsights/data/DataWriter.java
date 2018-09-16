@@ -3,13 +3,10 @@ package com.ruegnerlukas.wtsights.data;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -30,20 +27,129 @@ import org.w3c.dom.Element;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
-import com.ruegnerlukas.wtsights.data.sight.elements.*;
 
 public class DataWriter {
 
+	
+	public static boolean saveExternalBallisticFile(BallisticData data, File outputFile) throws Exception {
+
+		if(data == null) {
+			Logger.get().warn("Could not find ballistic data: " + data);
+			return false;
+		}
+		if(outputFile == null) {
+			Logger.get().warn("Could not find file: " + outputFile);
+			return false;
+		}
+		
+		
+		Logger.get().info("Writing ballistic-data to " + outputFile);
+		
+		
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+		Document doc = docBuilder.newDocument();
+		
+		
+		Element rootElement = doc.createElement("ballisticdata");
+		doc.appendChild(rootElement);
+		
+		Element elementVehicle = doc.createElement(data.vehicle.name);
+		rootElement.appendChild(elementVehicle);
+		
+		Element elementElements = doc.createElement("elements");
+		elementVehicle.appendChild(elementElements);
+		
+		for(BallisticElement ballElement : data.elements) {
+			
+			Element elementBall = doc.createElement("element_" + data.elements.indexOf(ballElement));
+			elementElements.appendChild(elementBall);
+			
+			Element elementAmmo = doc.createElement("ammunition");
+			elementBall.appendChild(elementAmmo);
+			String strAmmo = "";
+			for(int i=0; i<ballElement.ammunition.size(); i++) {
+				if(i == ballElement.ammunition.size()-1) {
+					strAmmo += ballElement.ammunition.get(i).name;
+				} else {
+					strAmmo += ballElement.ammunition.get(i).name + ";";
+				}
+			}
+			elementAmmo.setTextContent(strAmmo);
+			
+			if(ballElement.markerData != null) {
+				
+				Element elementMarkers = doc.createElement("markers");
+				elementBall.appendChild(elementMarkers);
+				boolean zoomedIn = false;
+				if(data.zoomedIn.containsKey(ballElement)) {
+					zoomedIn = data.zoomedIn.get(ballElement);
+				}
+				elementMarkers.setAttribute("zoomedIn", Boolean.toString(zoomedIn));
+				elementMarkers.setAttribute("ycenter", ""+ballElement.markerData.yPosCenter);
+				
+				
+				for(int i=0; i<ballElement.markerData.markers.size(); i++) {
+					Marker marker = ballElement.markerData.markers.get(i);
+					Element elementMarker = doc.createElement("marker_" + i);
+					elementMarker.setAttribute("ypos", ""+marker.yPos);
+					elementMarker.setAttribute("range", ""+marker.distMeters);
+					elementMarkers.appendChild(elementMarker);
+				}
+			}
+			
+		}
+		
+		
+		Element elementImages = doc.createElement("images");
+		elementVehicle.appendChild(elementImages);
+		
+		for(Entry<BallisticElement,BufferedImage> entry : data.images.entrySet()) {
+			Element elementImg = doc.createElement("image_element_" + data.elements.indexOf(entry.getKey()));
+			String encodedImage = endodeImage(entry.getValue(), "jpg");
+			elementImg.setAttribute("encodedData", encodedImage);
+			elementImages.appendChild(elementImg);
+		}
+		
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(outputFile);
+		
+		transformer.transform(source, result);
+		
+		Logger.get().info("External ballistic data saved");
+		return true;
+	}
+
+	
+	
 	
 	public static boolean saveExternalCalibFile(CalibrationData data, File outputFile) throws Exception {
 
@@ -65,12 +171,12 @@ public class DataWriter {
 
 		Document doc = docBuilder.newDocument();
 		
-		Element rootElement = doc.createElement("ballisticData");
+		Element rootElement = doc.createElement("calibrationdata");
 		doc.appendChild(rootElement);
 		
 		Element elementVehicle = doc.createElement(data.vehicle.name);
-		elementVehicle.setAttribute("fovOut", ""+data.vehicle.fovOut);
-		elementVehicle.setAttribute("fovIn", ""+data.vehicle.fovIn);
+//		elementVehicle.setAttribute("fovOut", ""+data.vehicle.fovOut);
+//		elementVehicle.setAttribute("fovIn", ""+data.vehicle.fovIn);
 		rootElement.appendChild(elementVehicle);
 				
 		Element elementAmmoGroup = doc.createElement("ammo");
@@ -144,14 +250,14 @@ public class DataWriter {
 	
 	
 	
-	public static boolean saveSight(SightData data, CalibrationData dataCalib, File outputFile) {
+	public static boolean saveSight(SightData data, BallisticData dataBall, File outputFile) {
 		
 		if(data == null) {
 			Logger.get().warn("Could not find sight-data: " + data);
 			return false;
 		}
-		if(dataCalib == null) {
-			Logger.get().warn("Could not find calibration-data: " + dataCalib);
+		if(dataBall == null) {
+			Logger.get().warn("Could not find ballistic-data: " + dataBall);
 			return false;
 		}
 		if(outputFile == null) {
@@ -164,7 +270,7 @@ public class DataWriter {
 			
 		// metadata
 		lines.add("// created with WTSightEdit " + Config.build_date);
-		lines.add("// vehicle = " + (dataCalib == null ? "unknown" : dataCalib.vehicle.name));
+		lines.add("// vehicle = " + (dataBall == null ? "unknown" : dataBall.vehicle.name));
 		lines.add("");
 		
 		// general
@@ -260,11 +366,21 @@ public class DataWriter {
 
 				ElementShellBlock shellBlock = (ElementShellBlock)element;
 				
-				lines.add("  //-- " + shellBlock.name + " (" + shellBlock.dataAmmo.ammo.name + ")");
+				String strAmmo = "";
+				for(int i=0; i<shellBlock.elementBallistic.ammunition.size(); i++) {
+					strAmmo += shellBlock.elementBallistic.ammunition.get(i).name;
+					if(i != shellBlock.elementBallistic.ammunition.size()-1) {
+						strAmmo += ", ";
+					}
+				}
+				
+				lines.add("  //-- " + shellBlock.name + " (" + strAmmo + ")");
 				lines.add("  bullet {");
 				
-				lines.add("    bulletType:t = \"" + shellBlock.dataAmmo.ammo.type + "\"");
-				lines.add("    speed:r = " + shellBlock.dataAmmo.ammo.speed);
+				for(Ammo ammo : shellBlock.elementBallistic.ammunition) {
+					lines.add("    bulletType:t = \"" + ammo.type + "\"");
+					lines.add("    speed:r = " + ammo.speed);
+				}
 				lines.add("    triggerGroup:t = \"" + shellBlock.triggerGroup + "\"");
 				lines.add("    thousandth:b = " + "no");
 				lines.add("    drawUpward:b = " + (shellBlock.drawUpward ? "yes" : "no") );

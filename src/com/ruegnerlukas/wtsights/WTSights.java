@@ -123,27 +123,8 @@ public class WTSights extends Application {
 			} 
 		});
 		
-		// STANDARD START
 		UIMainMenu.openNew(primaryStage);
 		
-//		JUMP TO SIGHT EDITOR
-//		CalibrationData dataCalib = DataLoader.loadExternalCalibFile(new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\calibration_pz4f2_v3.xml"));
-//		SightData dataSight = DataLoader.loadSight(new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\sight_1.blk"), dataCalib);
-//		UISightEditor.openNew(dataCalib, dataSight);
-		
-		
-//		JUMP TO CALIB.EDITOR
-//		ArrayList<Ammo> ammoList = new ArrayList<Ammo>();
-//		Ammo ammo = new Ammo();
-//		ammo.name = "ammo_75mm_pzgr_39";
-//		ammo.type = "apcbc_tank";
-//		ammo.speed = 740;
-//		ammoList.add(ammo);
-//		
-//		HashMap<Ammo,File> imageMap = new HashMap<Ammo,File>();
-//		imageMap.put(ammo, new File("C:\\Users\\LukasRuegner\\Desktop\\pz4f2\\apcbc.png"));
-//		
-//		UICalibrationEditor.openNew(Database.getVehicleByName("vehicle_germ_pzkpfw_iv_ausf_f2"), ammoList, imageMap);
 	}
 
 	

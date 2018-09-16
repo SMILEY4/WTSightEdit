@@ -11,8 +11,8 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataWriter;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
@@ -79,11 +79,7 @@ public class UISightEditor {
 	@FXML private Button btnRemoveElement;
 	@FXML private AnchorPane paneElements;
 	
-
-	// misc
-	private CalibrationData dataCalib;
-	private CalibrationAmmoData dataAmmo;
-	private SightData dataSight;
+	private WorkingData data;
 
 	private UIGeneral ctrlGeneral;
 	private UIEnvironment ctrlEnvironment;
@@ -95,9 +91,9 @@ public class UISightEditor {
 	
 	
 	
-	public static void openNew(CalibrationData dataCalib) {
+	public static void openNew(BallisticData dataBall) {
 		
-		Logger.get().info("Navigate to 'SightEditor New' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataCalib == null ? "null" : dataCalib.vehicle.name) );
+		Logger.get().info("Navigate to 'SightEditor New' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataBall == null ? "null" : dataBall.vehicle.name) );
 
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
@@ -114,14 +110,14 @@ public class UISightEditor {
 			}
 		});
 		
-		controller.create(stage, dataCalib);
+		controller.create(stage, dataBall);
 	}
 
 
 
-	public static void openNew(CalibrationData dataCalib, SightData dataSight) {
+	public static void openNew(BallisticData dataBall, SightData dataSight) {
 		
-		Logger.get().info("Navigate to 'SightEditor New' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataCalib == null ? "null" : dataCalib.vehicle.name) + "; sightData="+dataSight);
+		Logger.get().info("Navigate to 'SightEditor New' (" + Workflow.toString(Workflow.steps) + ") vehicle=" + (dataBall == null ? "null" : dataBall.vehicle.name) + "; sightData="+dataSight);
 
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
@@ -130,23 +126,24 @@ public class UISightEditor {
 		UISightEditor controller = (UISightEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
-		controller.create(stage, dataCalib, dataSight);
+		controller.create(stage, dataBall, dataSight);
 	}
 
 
 	
 
-	private void create(Stage stage, CalibrationData dataCalib) {
-		create(stage, dataCalib, new SightData(true));
+	private void create(Stage stage, BallisticData dataBall) {
+		create(stage, dataBall, new SightData(true));
 	}
 	
 	
 	
 	
-	private void create(Stage stage, CalibrationData dataCalib, SightData dataSight) {
+	private void create(Stage stage, BallisticData dataBall, SightData dataSight) {
 		this.stage = stage;
-		this.dataCalib = dataCalib;
-		this.dataSight = dataSight;
+		data = new WorkingData();
+		data.dataBallistic = dataBall;
+		data.dataSight = dataSight;
 		create();
 	}
 
@@ -161,8 +158,7 @@ public class UISightEditor {
 //				wtCanvas.repaint();
 			}
 			@Override public void onMouseDragged() {
-				InteractionHandler.mouseDrag(wtCanvas.cursorPosition, wtCanvas, dataSight, dataCalib, dataAmmo);
-				wtCanvas.repaint();
+//				wtCanvas.repaint();
 			}
 			@Override public void onMousePressed(MouseButton btn) {
 //				wtCanvas.repaint();
@@ -175,18 +171,18 @@ public class UISightEditor {
 			}
 			@Override public void onRepaint(GraphicsContext g) {
 				if(wtCanvas != null) {
-					SightRenderer.draw(wtCanvas.canvas, g, dataSight, dataCalib, getAmmoData());
+					SightRenderer.draw(wtCanvas.canvas, g, data);
 				}
 			}
 			@Override public void onRepaintOverlay(GraphicsContext g) {
 				if(wtCanvas != null && cbShowSelections.isSelected()) {
-					OverlayRenderer.draw(wtCanvas, g, dataSight, dataCalib, getAmmoData());
+					OverlayRenderer.draw(wtCanvas, g, data);
 				}
 			}
 		};
 		wtCanvas.rebuildCanvas(1920, 1080);
 		
-		labelVehicleName.setText(dataCalib.vehicle.namePretty);
+		labelVehicleName.setText(data.dataBallistic.vehicle.namePretty);
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(UISightEditor.class.getResource("/ui/sightEditor/layout_general.fxml"));
@@ -222,9 +218,9 @@ public class UISightEditor {
 		initModule(ElementType.CENTRAL_VERT_LINE, "/ui/sightEditor/layout_element_centralVertLine.fxml");
 		initModule(ElementType.CENTRAL_HORZ_LINE, "/ui/sightEditor/layout_element_centralHorzLine.fxml");
 		initModule(ElementType.HORZ_RANGE_INDICATORS, "/ui/sightEditor/layout_element_horzRangeIndicators.fxml");
-		if(dataCalib.ammoData.isEmpty()) {
-			dataSight.elements.remove(ElementType.BALLISTIC_RANGE_INDICATORS);
-			dataSight.elements.remove(ElementType.SHELL_BALLISTICS_BLOCK);
+		if(data.dataBallistic.elements.isEmpty()) {
+			data.dataSight.elements.remove(ElementType.BALLISTIC_RANGE_INDICATORS);
+			data.dataSight.elements.remove(ElementType.SHELL_BALLISTICS_BLOCK);
 		} else {
 			initModule(ElementType.BALLISTIC_RANGE_INDICATORS, "/ui/sightEditor/layout_element_ballRangeIndicators.fxml");
 			initModule(ElementType.SHELL_BALLISTICS_BLOCK, "/ui/sightEditor/layout_element_shellBlock.fxml");
@@ -266,7 +262,7 @@ public class UISightEditor {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(newValue != null) {
 					String elementName = newValue.split(";")[0];
-					for(Element e : dataSight.collectElements()) {
+					for(Element e : data.dataSight.collectElements()) {
 						if(e.name.equals(elementName)) {
 							onSelectElement(e);
 							break;
@@ -276,8 +272,7 @@ public class UISightEditor {
 			}
 		});
 		
-		for(Element e : dataSight.collectElements()) {
-			System.out.println("ADD TO LIST: " + e.getClass().getSimpleName() + " " + e.name);
+		for(Element e : data.dataSight.collectElements()) {
 			listViewElements.getItems().add(e.name + ";" + e.type);
 		}
 		
@@ -331,10 +326,10 @@ public class UISightEditor {
 	
 	@FXML
 	void onAddElement(ActionEvent event) {
-		Element element = UIElementCreate.openNew(this.stage, listViewElements.getItems(), dataCalib);
+		Element element = UIElementCreate.openNew(this.stage, listViewElements.getItems(), data);
 		if(element != null) {
 			Logger.get().info("Created element: " + element.type + "; " + element.name);
-			dataSight.addElement(element);
+			data.dataSight.addElement(element);
 			listViewElements.getItems().add(listViewElements.getItems().size(), element.name + ";" + element.type.toString());
 			listViewElements.getSelectionModel().select(listViewElements.getItems().size()-1);
 			sortList();
@@ -384,7 +379,7 @@ public class UISightEditor {
 				return;
 			}
 			
-			for(Element e : dataSight.collectElements()) {
+			for(Element e : data.dataSight.collectElements()) {
 				if(e == element) {
 					continue;
 				}
@@ -450,16 +445,16 @@ public class UISightEditor {
 	void deleteElement(String elementName, boolean isFullItem) {
 		if(isFullItem) {
 			listViewElements.getItems().remove(elementName);
-			dataSight.removeElement(elementName.split(";")[0]);
+			data.dataSight.removeElement(elementName.split(";")[0]);
 		} else {
 			for(String item : listViewElements.getItems()) {
 				if(item.split(";")[0].equals(elementName)) {
 					listViewElements.getItems().remove(item);
-					dataSight.removeElement(elementName);
+					data.dataSight.removeElement(elementName);
 					return;
 				}
 			}
-			dataSight.removeElement(elementName);
+			data.dataSight.removeElement(elementName);
 		}
 	}
 	
@@ -482,7 +477,7 @@ public class UISightEditor {
 			// disable delete button
 			btnRemoveElement.setDisable(false);
 			int typeCount = 0;
-			for(Element e : dataSight.collectElements()) {
+			for(Element e : data.dataSight.collectElements()) {
 				if(e.type == element.type) {
 					typeCount++;
 				}
@@ -508,7 +503,7 @@ public class UISightEditor {
 
 		}
 		
-		dataSight.selectedElement = element;
+		data.dataSight.selectedElement = element;
 		wtCanvas.repaint();
 		
 	}
@@ -530,7 +525,7 @@ public class UISightEditor {
 		File file = new File(fileSelected.getAbsolutePath() + ".blk");
 		
 		try {
-			if(!DataWriter.saveSight(dataSight, dataCalib, file)) {
+			if(!DataWriter.saveSight(data.dataSight, data.dataBallistic, file)) {
 				Logger.get().warn("(Alert) Sight could not be saved.");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
@@ -551,7 +546,7 @@ public class UISightEditor {
 	
 	
 	public Element getElementByName(String name) {
-		for(Element e : dataSight.collectElements()) {
+		for(Element e : data.dataSight.collectElements()) {
 			if(e.name.equals(name)) {
 				return e;
 			}
@@ -561,31 +556,8 @@ public class UISightEditor {
 	
 	
 	
-	
-	
-	public CalibrationData getCalibrationData() {
-		return dataCalib;
-	}
-	
-	
-	
-	
-	public CalibrationAmmoData getAmmoData() {
-		return dataAmmo;
-	}
-	
-	
-	
-	
-	public void setAmmoData(CalibrationAmmoData dataAmmo) {
-		this.dataAmmo = dataAmmo;
-	}
-	
-	
-	
-	
-	public SightData getSightData() {
-		return dataSight;
+	public WorkingData getData() {
+		return data;
 	}
 
 }

@@ -1,8 +1,6 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCentralHorzLine;
 
 public class ElementCentralHorzLine extends Element {
@@ -37,7 +35,7 @@ public class ElementCentralHorzLine extends Element {
 	
 	
 	@Override
-	public LayoutCentralHorzLine layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutCentralHorzLine layout(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -45,7 +43,7 @@ public class ElementCentralHorzLine extends Element {
 		layoutData.dirty = false;
 		
 		if(drawCentralHorzLine) {
-			final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale;
+			final double lineSize = 1.0 * data.dataSight.gnrLineSize * data.dataSight.gnrFontScale;
 			layoutData.bounds.set(0, canvasHeight/2 - (lineSize/2f), canvasWidth, lineSize);
 		} else {
 			layoutData.bounds.set(-100000, -100000, 0, 0);

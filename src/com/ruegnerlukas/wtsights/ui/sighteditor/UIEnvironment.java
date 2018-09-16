@@ -5,9 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -32,7 +32,7 @@ public class UIEnvironment {
 
 	private UISightEditor editor;
 
-	@FXML private ComboBox<Ammo> comboAmmo;
+	@FXML private ComboBox<BallisticElement> comboAmmo;
 	@FXML private ChoiceBox<String> choiceZoomMode;
 	
 	@FXML private CheckBox cbShowRangefinder;
@@ -69,26 +69,20 @@ public class UIEnvironment {
 	public void create() {
 		
 		// AMMO
-		FXUtils.initComboboxAmmo(comboAmmo);
-		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-			comboAmmo.getItems().add(ammoData.ammo);
-		}
+		FXUtils.initComboboxBallistic(comboAmmo);
+		comboAmmo.getItems().addAll(editor.getData().dataBallistic.elements);
 		if(comboAmmo.getItems().isEmpty()) {
-			Ammo ammo = new Ammo();
-			ammo.type = "undefined";
-			ammo.name = "No Ammunition available";
-			ammo.namePretty = "No Ammunition available";
-			comboAmmo.getItems().add(ammo);
+			comboAmmo.getItems().add(new NullElement());
 		}
 		
 		comboAmmo.getSelectionModel().select(0);
-		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
+		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BallisticElement>() {
 			@Override
-			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
-				onAmmoSelected(newValue);
+			public void changed(ObservableValue<? extends BallisticElement> observable, BallisticElement oldValue, BallisticElement newValue) {
+				onBallElementSelected(newValue);
 			}
 		});
-		onAmmoSelected(comboAmmo.getSelectionModel().getSelectedItem());
+		onBallElementSelected(comboAmmo.getSelectionModel().getSelectedItem());
 		
 		
 		
@@ -106,19 +100,19 @@ public class UIEnvironment {
 				}
 			}
 		});
-		onZoomMode(editor.getSightData().envZoomedIn);
+		onZoomMode(editor.getData().dataSight.envZoomedIn);
 		
 		
 		// RANGEFINDER
-		cbShowRangefinder.setSelected(editor.getSightData().envShowRangeFinder);
+		cbShowRangefinder.setSelected(editor.getData().dataSight.envShowRangeFinder);
 		sliderRangefinderProgress.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				onRangefinderProgress(newValue.intValue());
 			}
 		});
-		sliderRangefinderProgress.setValue(editor.getSightData().envRFProgress);
-		onRangefinderProgress(editor.getSightData().envRFProgress);
+		sliderRangefinderProgress.setValue(editor.getData().dataSight.envRFProgress);
+		onRangefinderProgress(editor.getData().dataSight.envRFProgress);
 		
 		// RANGE CORRECTION
 		sliderRangeCorrection.valueProperty().addListener(new ChangeListener<Number>() {
@@ -127,42 +121,42 @@ public class UIEnvironment {
 				onRangeCorrection(newValue.intValue());
 			}
 		});
-		sliderRangeCorrection.setValue(editor.getSightData().envRangeCorrection);
-		onRangeCorrection(editor.getSightData().envRangeCorrection);
+		sliderRangeCorrection.setValue(editor.getData().dataSight.envRangeCorrection);
+		onRangeCorrection(editor.getData().dataSight.envRangeCorrection);
 		
 		// CROSSHAIR LIGHTING
 		cbCrosshairLighting.setSelected(false);
 		
 		
 		// GRID OVERLAY
-		cbDisplayGrid.setSelected(editor.getSightData().envDisplayGrid);
+		cbDisplayGrid.setSelected(editor.getData().dataSight.envDisplayGrid);
 		cbDisplayGrid.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				editor.getSightData().envDisplayGrid = cbDisplayGrid.isSelected();
+				editor.getData().dataSight.envDisplayGrid = cbDisplayGrid.isSelected();
 				editor.wtCanvas.repaint();
 			}
 		});
 
-		FXUtils.initSpinner(spinnerGridWidth, editor.getSightData().envGridWidth, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerGridWidth, editor.getData().dataSight.envGridWidth, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-				editor.getSightData().envGridWidth = newValue;
+				editor.getData().dataSight.envGridWidth = newValue;
 				editor.wtCanvas.repaint();
 			}
 		});
-		FXUtils.initSpinner(spinnerGridHeight, editor.getSightData().envGridHeight, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerGridHeight, editor.getData().dataSight.envGridHeight, 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-				editor.getSightData().envGridHeight = newValue;
+				editor.getData().dataSight.envGridHeight = newValue;
 				editor.wtCanvas.repaint();
 			}
 		}); 
 		
 		colorGrid.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				editor.getSightData().envColorGrid = colorGrid.getValue();
+				editor.getData().dataSight.envColorGrid = colorGrid.getValue();
 				editor.wtCanvas.repaint();
 			}
 		});
-		colorGrid.setValue(editor.getSightData().envColorGrid);
+		colorGrid.setValue(editor.getData().dataSight.envColorGrid);
 		
 		
 		
@@ -198,17 +192,10 @@ public class UIEnvironment {
 
 	
 	
-	void onAmmoSelected(Ammo ammo) {
-		editor.setAmmoData(null);
-		for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
-			CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-			if(ammoData.ammo.name.equalsIgnoreCase(ammo.name)) {
-				editor.setAmmoData(ammoData);
-				break;
-			}
-		}
-		Logger.get().debug("Selected ammo: " + (editor.getAmmoData() == null ? "null" : editor.getAmmoData().ammo.name) );
-		editor.getSightData().setElementsDirty();
+	void onBallElementSelected(BallisticElement element) {
+		editor.getData().elementBallistic = element;
+		Logger.get().debug("Selected ballistic element: " + (editor.getData().elementBallistic == null ? "null" : editor.getData().elementBallistic) );
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -216,8 +203,8 @@ public class UIEnvironment {
 	
 	
 	void onZoomMode(boolean zoomedIn) {
-		editor.getSightData().envZoomedIn = zoomedIn;
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.envZoomedIn = zoomedIn;
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -226,8 +213,8 @@ public class UIEnvironment {
 	
 	@FXML
 	void onShowRangefinder(ActionEvent event) {
-		editor.getSightData().envShowRangeFinder = cbShowRangefinder.isSelected();
-		editor.getSightData().setElementsDirty(ElementType.RANGEFINDER);
+		editor.getData().dataSight.envShowRangeFinder = cbShowRangefinder.isSelected();
+		editor.getData().dataSight.setElementsDirty(ElementType.RANGEFINDER);
 		editor.wtCanvas.repaint();
 	}
 	
@@ -235,9 +222,9 @@ public class UIEnvironment {
 	
 	
 	void onRangefinderProgress(double progress) {
-		editor.getSightData().envRFProgress = progress;
+		editor.getData().dataSight.envRFProgress = progress;
 		labelValueRFProgress.setText(progress+"%");
-		editor.getSightData().setElementsDirty(ElementType.RANGEFINDER);
+		editor.getData().dataSight.setElementsDirty(ElementType.RANGEFINDER);
 		editor.wtCanvas.repaint();
 	}
 	
@@ -245,9 +232,9 @@ public class UIEnvironment {
 	
 	
 	void onRangeCorrection(int range) {
-		editor.getSightData().envRangeCorrection = range;//(range+49)/50 * 50;
+		editor.getData().dataSight.envRangeCorrection = range;//(range+49)/50 * 50;
 		labelValueRange.setText(range+"m");
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -258,9 +245,9 @@ public class UIEnvironment {
 	void onCrosshairLighting(ActionEvent event) {
 		boolean enabled = cbCrosshairLighting.isSelected();
 		if(enabled) {
-			editor.getSightData().envSightColor = new Color(1.0, 75.0/255.0, 55.0/255.0, 1.0);
+			editor.getData().dataSight.envSightColor = new Color(1.0, 75.0/255.0, 55.0/255.0, 1.0);
 		} else {
-			editor.getSightData().envSightColor = Color.BLACK;
+			editor.getData().dataSight.envSightColor = Color.BLACK;
 		}
 		editor.wtCanvas.repaint();
 	}
@@ -278,11 +265,11 @@ public class UIEnvironment {
 		File file = fc.showOpenDialog(((Button)event.getSource()).getScene().getWindow());
 		if (file != null) {
 			try {
-				editor.getSightData().envBackground = new Image(new FileInputStream(file));
+				editor.getData().dataSight.envBackground = new Image(new FileInputStream(file));
 				pathBackground.setText(file.getAbsolutePath());
 				Logger.get().info("Selected background: " + file);
-				int width = (int)editor.getSightData().envBackground.getWidth();
-				int height = (int)editor.getSightData().envBackground.getHeight();
+				int width = (int)editor.getData().dataSight.envBackground.getWidth();
+				int height = (int)editor.getData().dataSight.envBackground.getHeight();
 				
 				for(String res : choiceResolution.getItems()) {
 					int w = Integer.parseInt(res.split(" x ")[0]);
@@ -305,7 +292,7 @@ public class UIEnvironment {
 	@FXML
 	void onResetBackground(ActionEvent event) {
 		pathBackground.setText("");
-		editor.getSightData().envBackground = null;
+		editor.getData().dataSight.envBackground = null;
 		choiceResolution.setDisable(false);
 		int width = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
 		int height = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
@@ -318,7 +305,7 @@ public class UIEnvironment {
 	void onSelectResolution(int width, int height) {
 		Logger.get().info("Resolution selected: " + width  + "x" + height);
 		editor.wtCanvas.rebuildCanvas(width, height);
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.setElementsDirty();
 	}
 	
 

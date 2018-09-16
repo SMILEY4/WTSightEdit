@@ -23,6 +23,11 @@ import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
+import com.ruegnerlukas.wtsights.data.ballisticdata.MarkerData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.DefaultBallisticFuntion;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
 import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
@@ -54,6 +59,7 @@ import com.ruegnerlukas.wtsights.data.sightfile.ParamVec4;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
+import com.ruegnerlukas.wtutils.Calib2BallConverter;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
@@ -165,6 +171,7 @@ public class DataLoader {
 					Element elementAmmo = (Element)listAmmo.item(k);
 					
 					Ammo ammo = new Ammo();
+					ammo.parentWeapon = weapon;
 					weapon.ammo.add(ammo);
 					ammo.type = elementAmmo.getAttribute("type");
 					ammo.speed = Integer.parseInt(elementAmmo.getAttribute("speed"));
@@ -182,9 +189,8 @@ public class DataLoader {
 	
 	
 
-	
-	
-	public static CalibrationData loadExternalCalibFile(File file) {
+
+	public static CalibrationData loadCalibrationDataFile(File file) {
 		
 		Logger.get().info("Loading calibration-file (ext)");
 		
@@ -202,6 +208,10 @@ public class DataLoader {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(file);
 			Element root = doc.getDocumentElement();
+			if(!root.getTagName().equals("calibrationdata")) {
+				Logger.get().error("Could not parse file: File is not a calibration data file.");
+				return data;
+			}
 
 			if(XMLUtils.getChildren(root).size() == 0) {
 				return null;
@@ -272,12 +282,117 @@ public class DataLoader {
 	
 	
 	
-	public static CalibrationData loadInternalCalibFile(String name) {
-		if(name.isEmpty()) {
+	public static BallisticData loadBallisticDataFile(File file) {
+		
+		Logger.get().info("Loading ballistic-file (ext)");
+		
+		if(file == null || !file.exists()) {
+			Logger.get().error("Error loading file: " + file);
 			return null;
 		}
-		// load data
-		return null;
+		
+		BallisticData data = new BallisticData();
+		
+		try {
+		
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(file);
+			Element root = doc.getDocumentElement();
+			if(!root.getTagName().equals("ballisticdata")) {
+				if(root.getTagName().equals("calibrationdata")) {
+					CalibrationData dataCalib = loadCalibrationDataFile(file);
+					if(dataCalib != null) {
+						return Calib2BallConverter.convert(dataCalib);
+					} else {
+						Logger.get().error("Could not load file.");
+						return null;
+					}
+				} else {
+					Logger.get().error("Could not parse file: File is not a ballistic data file.");
+					return null;
+				}
+			}
+			
+			if(XMLUtils.getChildren(root).size() == 0) {
+				return null;
+			}
+			
+			Element elementVehicle = XMLUtils.getChildren(root).get(0);
+			data.vehicle = Database.getVehicleByName(elementVehicle.getTagName());
+
+			Element elementElements = XMLUtils.getElementByTagName(elementVehicle, "elements");
+			
+			int nElements = XMLUtils.getChildren(elementElements).size();
+			for(int i=0; i<nElements; i++) {
+
+				Element elementBall = null;
+				for(Element e : XMLUtils.getChildren(elementElements)) {
+					if(e.getTagName().equals("element_" + i)) {
+						elementBall = e;
+					}
+				}
+				if(elementBall == null) {
+					continue;
+				}
+				
+				Element elementAmmo = XMLUtils.getElementByTagName(elementBall, "ammunition");
+				String strAmmoList = elementAmmo.getTextContent();
+				String[] ammoNames = strAmmoList.split(";");
+				
+				BallisticElement ballElement = new BallisticElement();
+				data.elements.add(ballElement);
+				for(String name : ammoNames) {
+					search: for(Weapon weapon : data.vehicle.weaponsList) {
+						for(Ammo ammo : weapon.ammo) {
+							if(ammo.name.equals(name)) {
+								ballElement.ammunition.add(ammo);
+								break search;
+							}
+						}
+					}
+				}
+				
+				Element elementMarkers = XMLUtils.getElementByTagName(elementBall, "markers");
+				if(elementMarkers != null) {
+					MarkerData dataMarkers = new MarkerData();
+					ballElement.markerData = dataMarkers;
+					
+					if(!elementMarkers.getAttribute("zoomedIn").isEmpty()) {
+						data.zoomedIn.put(ballElement, Boolean.parseBoolean(elementMarkers.getAttribute("zoomedIn")));
+					}
+					dataMarkers.yPosCenter = Double.parseDouble(elementMarkers.getAttribute("ycenter"));
+					
+					for(Element elementMarker : XMLUtils.getChildren(elementMarkers)) {
+						int distMeters = Integer.parseInt(elementMarker.getAttribute("range"));
+						double yPos = Double.parseDouble(elementMarker.getAttribute("ypos"));
+						Marker marker = new Marker(distMeters, yPos);
+						marker.id = dataMarkers.markers.size()+1;
+						dataMarkers.markers.add(marker);
+					}
+					
+					ballElement.function = new DefaultBallisticFuntion(ballElement.markerData.markers);
+				}
+				
+			}
+			
+			Element elementImages = XMLUtils.getElementByTagName(elementVehicle, "images");
+			for(Element elementImg : XMLUtils.getChildren(elementImages)) {
+				int elementIndex = Integer.parseInt(elementImg.getTagName().split("_")[2]);
+				BallisticElement ballElement = data.elements.get(elementIndex);
+				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
+				data.images.put(ballElement, img);
+			}
+				
+		} catch (ParserConfigurationException e) {
+			Logger.get().error(e);
+		} catch (SAXException e) {
+			Logger.get().error(e);
+		} catch (IOException e) {
+			Logger.get().error(e);
+		}
+		
+		return data;
 	}
 	
 	
@@ -291,7 +406,7 @@ public class DataLoader {
 	
 	
 	
-	public static SightData loadSight(File file, CalibrationData dataCalib) {
+	public static SightData loadSight(File file, BallisticData dataBall) {
 		
 		Logger.get().info("Loading sight-file");
 		if(file == null || !file.exists()) {
@@ -681,14 +796,17 @@ public class DataLoader {
 
 								}
 
-								List<Ammo> ammoCanidates = Database.getAmmo(dataCalib.vehicle.name, bulletType, bulletSpeed);
+								List<Ammo> ammoCanidates = Database.getAmmo(dataBall.vehicle.name, bulletType, bulletSpeed);
 								select: for(Ammo ammo : ammoCanidates) {
-									for(CalibrationAmmoData dataAmmo : dataCalib.ammoData) {
-										if(dataAmmo.ammo.name.equalsIgnoreCase(ammo.name)) {
-											shellBlock.dataAmmo = dataAmmo;
-											break select;
+									for(BallisticElement element : dataBall.elements) {
+										for(Ammo ammoElement : element.ammunition) {
+											if(ammoElement.name.equalsIgnoreCase(ammo.name)) {
+												shellBlock.elementBallistic = element;
+												break select;
+											}
 										}
 									}
+									
 								}
 								
 								dataSight.addElement(shellBlock);

@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +12,16 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
-import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataLoader;
 import com.ruegnerlukas.wtsights.data.DataWriter;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
+import com.ruegnerlukas.wtsights.data.ballisticdata.MarkerData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.DefaultBallisticFuntion;
+import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.IBallisticFunction;
+import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.NullBallisticFunction;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
@@ -28,7 +30,7 @@ import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
-import com.ruegnerlukas.wtutils.SightUtils;
+import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
 
 import javafx.beans.value.ChangeListener;
@@ -68,7 +70,7 @@ public class UICalibrationEditor {
 
 	@FXML private Label labelVehicleName;
 	
-	@FXML private ComboBox<Ammo> choiceAmmo;
+	@FXML private ComboBox<BallisticElement> choiceAmmo;
 	
 	@FXML private CheckBox cbZoomedIn;
 	
@@ -78,13 +80,13 @@ public class UICalibrationEditor {
 
 	private File fileSight;
 	
-	private CalibrationData dataCalib;
-	private CalibrationAmmoData currentAmmoData;
+	private BallisticData dataBallistic;
+	private BallisticElement elementBallistic;
 	
 	@FXML private AnchorPane paneCanvas;
 	private WTCanvas wtCanvas;
 	private Image currentImage;
-	private Map<String,Image> imageCache = new HashMap<String,Image>();
+	private Map<BallisticElement,Image> imageCache = new HashMap<BallisticElement,Image>();
 	private Font font = new Font("Arial", 18);
 	
 	
@@ -127,9 +129,9 @@ public class UICalibrationEditor {
 	
 	
 	
-	public static void openNew(CalibrationData dataCalib) {
+	public static void openNew(BallisticData dataBall) {
 
-		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  data=" + dataCalib + "; vehicle="+dataCalib.vehicle.name);
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  data=" + dataBall + "; vehicle="+dataBall.vehicle.name);
 
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
@@ -139,7 +141,7 @@ public class UICalibrationEditor {
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
-		controller.create(stage, dataCalib);
+		controller.create(stage, dataBall);
 	}
 	
 	
@@ -168,38 +170,32 @@ public class UICalibrationEditor {
 		this.stage = stage;
 		this.fileSight = fileSight;
 		
-		dataCalib = new CalibrationData();
-		dataCalib.vehicle = vehicle;
+		this.dataBallistic = new BallisticData();
+		this.dataBallistic.vehicle = vehicle;
 		
 		try {
 			for(int i=0; i<ammoList.size(); i++) {
 				Ammo ammo  = ammoList.get(i);
-				
-				String imgName = "image_"+ammo.name;
+				BallisticElement e = new BallisticElement();
+				e.ammunition.add(ammo);
 				File file = imageMap.get(ammo);
 				BufferedImage img = ImageIO.read(file);
-				dataCalib.images.put(imgName, img);
-				
-				CalibrationAmmoData ammoData = new CalibrationAmmoData();
-				ammoData.ammo = ammo;
-				ammoData.imgName = imgName;
-				ammoData.markerCenter.set(img.getHeight()/2, 0);
-				dataCalib.ammoData.add(ammoData);
+				this.dataBallistic.images.put(e, img);
 			}
 			
 		} catch (IOException e) {
 			Logger.get().error(e);
 		}
 		
-		create(stage, dataCalib);
+		create();
 	}
 	
 	
 	
 	
-	public void create(Stage stage, CalibrationData dataCalib) {
+	public void create(Stage stage, BallisticData dataBallistic) {
 		this.stage = stage;
-		this.dataCalib = dataCalib;
+		this.dataBallistic = dataBallistic;
 		create();
 		
 	}
@@ -239,25 +235,22 @@ public class UICalibrationEditor {
 		};
 		
 		// NAME LABEL
-		labelVehicleName.setText(dataCalib.vehicle.namePretty);
+		labelVehicleName.setText(dataBallistic.vehicle.namePretty);
 		
 		// AMMO CHOICE
-		FXUtils.initComboboxAmmo(choiceAmmo);
-		if(dataCalib.ammoData.isEmpty()) {
-			Ammo ammo = new Ammo();
-			ammo.type = "undefined";
-			ammo.name = "No Ammunition available";
-			ammo.namePretty = "No Ammunition available";
-			choiceAmmo.getItems().add(ammo);
+		FXUtils.initComboboxBallisticElement(choiceAmmo);
+		if(dataBallistic.elements.isEmpty()) {
+			Logger.get().error("No Ballistic elements available!");
 		} else {
-			for(CalibrationAmmoData ammoData : dataCalib.ammoData) {
-				choiceAmmo.getItems().add(ammoData.ammo);
+			for(BallisticElement elementBall : dataBallistic.elements) {
+				choiceAmmo.getItems().add(elementBall);
 			}
 		}
+		
 		choiceAmmo.getSelectionModel().select(0);
-		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
+		choiceAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BallisticElement>() {
 			@Override
-			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
+			public void changed(ObservableValue<? extends BallisticElement> observable, BallisticElement oldValue, BallisticElement newValue) {
 				onAmmoSelected(newValue);
 			}
 		});
@@ -267,43 +260,34 @@ public class UICalibrationEditor {
 	
 	
 	
-	void onAmmoSelected(Ammo ammo) {
+	void onAmmoSelected(BallisticElement element) {
 		
+		Logger.get().debug("Ballistic Element '" + element + "'");
 		
-		Logger.get().debug("Select ammo '" + ammo.name + "'");
-		
-		if(ammo == null || "undefined".equalsIgnoreCase(ammo.type)) {
-			
+		if(element == null) {
 			currentImage = null;
-			currentAmmoData = null;
+			elementBallistic = null;
 			cbZoomedIn.setDisable(true);
 			wtCanvas.rebuildCanvas(1920, 1080);
 			
 		} else {
 			
-			if(imageCache.containsKey("image_"+ammo.name)) {
-				currentImage = imageCache.get("image_"+ammo.name);
+			if(imageCache.containsKey(element)) {
+				currentImage = imageCache.get(element);
 				Logger.get().debug("Image retrieved from cache");
 			} else {
-				BufferedImage bufImg = dataCalib.images.get("image_"+ammo.name);
+				BufferedImage bufImg = dataBallistic.images.get(element);
 				currentImage = SwingFXUtils.toFXImage(bufImg, null);
-				imageCache.put("image_"+ammo.name, currentImage);
+				imageCache.put(element, currentImage);
 			}
 			
-			currentAmmoData = null;
-			for(int i=0; i<dataCalib.ammoData.size(); i++) {
-				CalibrationAmmoData ammoData = dataCalib.ammoData.get(i);
-				if((ammoData.ammo.name).equalsIgnoreCase(ammo.name)) {
-					currentAmmoData = ammoData;
-					break;
-				}
-			}
+			this.elementBallistic = element;
 			
-			Logger.get().debug("AmmoData selected: " + currentAmmoData.ammo.name);
+			Logger.get().debug("Ballistic Element selected: " + this.elementBallistic);
 			
 			cbZoomedIn.setDisable(false);
-			cbZoomedIn.setSelected(currentAmmoData.zoomedIn);
-			updateRangeList();
+			cbZoomedIn.setSelected( dataBallistic.zoomedIn.containsKey(elementBallistic) ? dataBallistic.zoomedIn.get(elementBallistic) : false);
+			updateMarkerList();
 			wtCanvas.rebuildCanvas(currentImage);
 		}
 		
@@ -312,59 +296,67 @@ public class UICalibrationEditor {
 	
 	
 	
-	private void updateRangeList() {
+	private void updateMarkerList() {
+		if(this.elementBallistic == null || this.elementBallistic.markerData == null) {
+			return;
+		}
 		
-		Logger.get().debug("Updating Range List " + currentAmmoData.markerRanges);
+		Logger.get().debug("Updating Marker List - " + this.elementBallistic.markerData.markers.size());
+		
+		for(int i=0; i<this.elementBallistic.markerData.markers.size(); i++) {
+			Marker marker = this.elementBallistic.markerData.markers.get(i);
+			marker.id = i+1;
+		}
 		
 		boxRanges.getChildren().clear();
-		
 		boxRanges.getChildren().clear();
 		
-		if(currentAmmoData != null) {
+		for(int i=0; i<this.elementBallistic.markerData.markers.size(); i++) {
+			Marker marker = this.elementBallistic.markerData.markers.get(i);
 			
-			for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-				
-				Vector2i marker = currentAmmoData.markerRanges.get(i);
-				
-				HBox boxMarker = new HBox();
-				boxMarker.setMinSize(0, 31);
-				boxMarker.setPrefSize(10000, 31);
-				boxMarker.setMaxSize(10000, 31);
+			HBox boxMarker = new HBox();
+			boxMarker.setMinSize(0, 31);
+			boxMarker.setPrefSize(10000, 31);
+			boxMarker.setMaxSize(10000, 31);
 
-				Label label = new Label((i+1) + ":");
-				label.setAlignment(Pos.CENTER);
-				label.setMinSize(31, 31);
-				label.setPrefSize(31, 31);
-				label.setMaxSize(31, 31);
-				
-				Spinner<Integer> spinner = new Spinner<Integer>();
-				spinner.setMinSize(0, 31);
-				spinner.setPrefSize(10000, 31);
-				spinner.setMaxSize(10000, 31);
-				spinner.setEditable(true);
-				FXUtils.initSpinner(spinner, marker.y, 0, 3200, 200, 0, new ChangeListener<Integer>() {
-					@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-						marker.y = newValue;
-						wtCanvas.repaint();
-					}
-				});
-				
-				Button btnRemove = new Button("X");
-				btnRemove.setMinSize(31, 31);
-				btnRemove.setPrefSize(31, 31);
-				btnRemove.setMaxSize(31, 31);
-				btnRemove.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent event) {
-						deleteMarker(marker);
-					}
-				});
-				
-				boxMarker.getChildren().addAll(label, spinner, btnRemove);
-				
-				boxRanges.getChildren().add(boxMarker);
-				VBox.setVgrow(spinner, Priority.ALWAYS);
-			}
+			Label label = new Label(marker.id + ":");
+			label.setAlignment(Pos.CENTER);
+			label.setMinSize(31, 31);
+			label.setPrefSize(31, 31);
+			label.setMaxSize(31, 31);
 			
+			Spinner<Integer> spinner = new Spinner<Integer>();
+			spinner.setMinSize(0, 31);
+			spinner.setPrefSize(10000, 31);
+			spinner.setMaxSize(10000, 31);
+			spinner.setEditable(true);
+			FXUtils.initSpinner(spinner, marker.distMeters, 0, 3200, 200, 0, new ChangeListener<Integer>() {
+				@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+					marker.distMeters = newValue;
+					MarkerData dataMarker = elementBallistic.markerData;
+					if(dataMarker.markers.size() >= 3) {
+						elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+					} else {
+						elementBallistic.function = new NullBallisticFunction();
+					}
+					wtCanvas.repaint();
+				}
+			});
+			
+			Button btnRemove = new Button("X");
+			btnRemove.setMinSize(31, 31);
+			btnRemove.setPrefSize(31, 31);
+			btnRemove.setMaxSize(31, 31);
+			btnRemove.setOnAction(new EventHandler<ActionEvent>() {
+				@Override public void handle(ActionEvent event) {
+					deleteMarker(marker);
+				}
+			});
+			
+			boxMarker.getChildren().addAll(label, spinner, btnRemove);
+			
+			boxRanges.getChildren().add(boxMarker);
+			VBox.setVgrow(spinner, Priority.ALWAYS);
 		}
 		
 	}
@@ -384,78 +376,18 @@ public class UICalibrationEditor {
 			}
 			
 			
-//			if(wtCanvas.cursorVisible) {
-//				
-//				g.setStroke(Color.RED);
-//				
-//				g.strokeLine(wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y-4, wtCanvas.getWidth()/2, wtCanvas.cursorPosition.y+4);
-//			
-//				g.setLineDashes(5);
-//				g.strokeLine(-2, wtCanvas.cursorPosition.y, wtCanvas.getWidth(), wtCanvas.cursorPosition.y);
-//				g.setLineDashes(null);
-//			}
+			if(this.elementBallistic != null && this.elementBallistic.markerData != null) {
+				
+				MarkerData dataMarker = this.elementBallistic.markerData;
 
-			
-			if(currentAmmoData != null && currentImage != null) {
-				
-				List<Vector2i> allMarkers = currentAmmoData.markerRanges;
-				
-				int mc = currentAmmoData.markerCenter.x;
-				
-				double minDist = Integer.MAX_VALUE;
-				Vector2i minMarker = null;
-				Vector2i tmp = new Vector2i();
-				
-				for(Vector2i m : currentAmmoData.markerRanges) {
-					double dist = tmp.set(wtCanvas.cursorPosition.getIntX(), m.x+mc).dist(wtCanvas.cursorPosition.getIntX(), wtCanvas.cursorPosition.getIntY());
-					if(dist < minDist) {
-						minDist = dist;
-						minMarker = m;
-					}
-				}
-				
-				
-				for (Vector2i marker : allMarkers) {
-					
-					if (marker == minMarker) {
-						g.setFill(Color.YELLOW);
-						g.setStroke(Color.YELLOW);
-					} else {
-						g.setFill(Color.MEDIUMVIOLETRED);
-						g.setStroke(Color.MEDIUMVIOLETRED);
-					}
-					
-					double mx = currentImage.getWidth()/2;
-					double my = marker.x + mc;
-					
-					g.strokeLine(mx-3, my-3, mx+3, my+3);
-					g.strokeLine(mx+3, my-3, mx-3, my+3);
-					
-				}
-				
-				
-				if(currentAmmoData.markerRanges.size() > 0) {
-					
-					// ballistic range indicators
-					List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-					fittingPoints.add(new Vector2d(0, 0));
-					for(int i=0; i<currentAmmoData.markerRanges.size(); i++) {
-						Vector2d p = new Vector2d(currentAmmoData.markerRanges.get(i).y/100, currentAmmoData.markerRanges.get(i).x);
-						fittingPoints.add(p);
-					}
-					Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-					
-					if(fittingParams != null) {
-						for(int i=200; i<=2800; i+=200) {
-							double resultPX = SightUtils.ballisticFunction(i/100.0, fittingParams);
-							float x = (float) (wtCanvas.getWidth()/2) - 15;
-							float y = (float) (currentAmmoData.markerCenter.x + resultPX);
-							g.setStroke(Color.RED);
-							g.strokeLine(x-4, y, x+4, y);
-						}
-					}
-					
-					
+				// draw approx. ball. indicators
+				g.setStroke(Color.RED);
+				IBallisticFunction func = elementBallistic.function;
+				for(int d=200; d<=2800; d+=200) {
+					double p = func.eval(d);
+					float x = (float) (wtCanvas.getWidth()/2) - 20;
+					float y = (float) (dataMarker.yPosCenter + p);
+					g.strokeLine(x-6, y, x+6, y);
 				}
 				
 			}
@@ -493,44 +425,55 @@ public class UICalibrationEditor {
 		}
 		
 		
-		if(currentAmmoData != null && currentImage != null) {
+		if(this.elementBallistic != null && this.elementBallistic.markerData != null) {
 			
-			// MARKER
-			List<Vector2i> allMarkers = currentAmmoData.markerRanges;
-			
-			int mc = currentAmmoData.markerCenter.x;
-			
-			double minDist = Integer.MAX_VALUE;
-			Vector2i minMarker = null;
-			Vector2i tmp = new Vector2i();
-			
-			for(Vector2i m : currentAmmoData.markerRanges) {
-				double dist = tmp.set(wtCanvas.cursorPosition.getIntX(), m.x+mc).dist(wtCanvas.cursorPosition.getIntX(), wtCanvas.cursorPosition.getIntY());
-				if(dist < minDist) {
-					minDist = dist;
-					minMarker = m;
-				}
-			}
-			
-			for (Vector2i marker : allMarkers) {
+			if(this.elementBallistic != null && this.elementBallistic.markerData != null) {
 				
-				if (marker == minMarker) {
-					g.setFill(Color.YELLOW);
-					g.setStroke(Color.YELLOW);
-				} else {
-					g.setFill(Color.MEDIUMVIOLETRED);
-					g.setStroke(Color.MEDIUMVIOLETRED);
+				MarkerData dataMarker = this.elementBallistic.markerData;
+				
+				// find selected marker
+				double minDist = Integer.MAX_VALUE;
+				Marker minMarker = null;
+				Vector2d tmp = new Vector2d();
+				
+				for(int i=0; i<dataMarker.markers.size(); i++) {
+					Marker marker = dataMarker.markers.get(i);
+					double dist = tmp.set(wtCanvas.cursorPosition.getIntX(), marker.yPos+dataMarker.yPosCenter).dist(wtCanvas.cursorPosition.getIntX(), wtCanvas.cursorPosition.getIntY());
+					if(dist < minDist) {
+						minDist = dist;
+						minMarker = marker;
+					}
 				}
 				
-				double mx = currentImage.getWidth()/2;
-				double my = marker.x + mc;
-				Point2D p = wtCanvas.transformToOverlay(mx+6, my);
+				// draw markers
+				for(int i=0; i<dataMarker.markers.size(); i++) {
+					Marker marker = dataMarker.markers.get(i);
+					if(marker == minMarker) {
+						g.setFill(Color.YELLOW);
+						g.setStroke(Color.YELLOW);
+					} else {
+						g.setFill(Color.DEEPPINK);
+						g.setStroke(Color.DEEPPINK);			
+					}
+					
+					double scale = wtCanvas.canvas.getScaleX();
+					double mx = currentImage.getWidth()/2;
+					double my = marker.yPos + dataMarker.yPosCenter;
+					Point2D p = wtCanvas.transformToOverlay(mx, my);
+					
+					g.setFont(font);
+					g.fillText(""+marker.id, p.getX()+6*scale, p.getY());
+					
+					g.setLineWidth(Math.max(1, scale));
+					g.strokeLine(p.getX()-3*scale, p.getY()-3*scale, p.getX()+3*scale, p.getY()+3*scale);
+					g.strokeLine(p.getX()+3*scale, p.getY()-3*scale, p.getX()-3*scale, p.getY()+3*scale);
+					g.setLineWidth(1);
+					
+				}
 				
-				g.setFont(font);
-				g.strokeText(""+(allMarkers.indexOf(marker)+1), p.getX(), p.getY());
 				
 			}
-			
+		
 		}
 		
 		
@@ -540,10 +483,10 @@ public class UICalibrationEditor {
 	
 	@FXML
 	void onZoomedIn(ActionEvent event) {
-		if(currentAmmoData == null) {
+		if(elementBallistic == null) {
 			return;
 		}
-		currentAmmoData.zoomedIn = cbZoomedIn.isSelected();
+		dataBallistic.zoomedIn.put(elementBallistic, cbZoomedIn.isSelected());
 		wtCanvas.repaint();
 	}
 	
@@ -551,17 +494,33 @@ public class UICalibrationEditor {
 	
 	
 	private void onAddMarker(double y) {
-		if(currentAmmoData == null) {
+		if(this.elementBallistic == null) {
 			return;
 		}
-		int mc = currentAmmoData.markerCenter.x;
-		if(currentAmmoData.markerRanges.size() == 0) {
-			currentAmmoData.markerRanges.add(new Vector2i( (int)y-mc, 200));
-		} else {
-			currentAmmoData.markerRanges.add(new Vector2i( (int)y-mc, currentAmmoData.markerRanges.get(currentAmmoData.markerRanges.size()-1).y+200));
+		if(this.elementBallistic.markerData == null) {
+			this.elementBallistic.markerData = new MarkerData();
 		}
+		MarkerData dataMarker = this.elementBallistic.markerData;
+		double mc = dataMarker.yPosCenter;
+		
+		if(dataMarker.markers.size() == 0) {
+			Marker marker = new Marker(200, y-mc);
+			marker.id = dataMarker.markers.size()+1;
+			dataMarker.markers.add(marker);
+		} else {
+			Marker marker = new Marker(dataMarker.markers.get(dataMarker.markers.size()-1).distMeters+200, y-mc);
+			marker.id = dataMarker.markers.size()+1;
+			dataMarker.markers.add(marker);
+		}
+		
+		if(dataMarker.markers.size() >= 3) {
+			this.elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+		} else {
+			this.elementBallistic.function = new NullBallisticFunction();
+		}
+		
 		Logger.get().debug("Adding marker at y=" + (int)(y-mc) );
-		updateRangeList();
+		updateMarkerList();
 		wtCanvas.repaint();
 	}
 
@@ -569,59 +528,70 @@ public class UICalibrationEditor {
 	
 	
 	private void onDeleteMarkerRequest(double x, double y) {
-		if(currentAmmoData == null) {
+		if(this.elementBallistic == null || this.elementBallistic.markerData == null) {
 			return;
 		}
 		
-		int mc = currentAmmoData.markerCenter.x;
+		MarkerData dataMarker = this.elementBallistic.markerData;
 		
+		// find selected marker
 		double minDist = Integer.MAX_VALUE;
-		Vector2i minMarker = null;
-		Vector2i tmp = new Vector2i();
+		Marker minMarker = null;
+		Vector2d tmp = new Vector2d();
 		
-		for(Vector2i m : currentAmmoData.markerRanges) {
-			double dist = tmp.set((int)x, m.x+mc).dist((int)x, (int)y);
+		for(int i=0; i<dataMarker.markers.size(); i++) {
+			Marker marker = dataMarker.markers.get(i);
+			double dist = tmp.set(wtCanvas.cursorPosition.getIntX(), marker.yPos+dataMarker.yPosCenter).dist(x, y);
 			if(dist < minDist) {
 				minDist = dist;
-				minMarker = m;
+				minMarker = marker;
 			}
 		}
 		
 		deleteMarker(minMarker);
+		
 	}
 	
 	
 	
 	
-	private void deleteMarker(Vector2i marker) {
-		if(marker != null) {
-			currentAmmoData.markerRanges.remove(marker);
+	private void deleteMarker(Marker marker) {
+		if(marker != null && this.elementBallistic.markerData != null) {
+			MarkerData dataMarker = this.elementBallistic.markerData;
+			dataMarker.markers.remove(marker);
+			if(dataMarker.markers.size() >= 3) {
+				this.elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+			} else {
+				this.elementBallistic.function = new NullBallisticFunction();
+			}
 			Logger.get().debug("Deleted marker " + marker );
 		}
-		updateRangeList();
+		updateMarkerList();
 		wtCanvas.repaint();
 	}
 	
 	
 	
-	void onSetMarkerRange(int index, int distance) {
-		if(currentAmmoData == null) {
+	void onSetMarkerRange(int id, int distance) {
+		if(this.elementBallistic == null || this.elementBallistic.markerData == null) {
 			return;
 		}
 		
-		String ammoName = choiceAmmo.getSelectionModel().getSelectedItem().name;
+		MarkerData dataMarker = this.elementBallistic.markerData;
 		
-		CalibrationAmmoData ammoData = null;
-		for(CalibrationAmmoData d : dataCalib.ammoData) {
-			if(d.ammo.name.equalsIgnoreCase(ammoName)) {
-				ammoData = d;
-				break;
+		for(Marker m : dataMarker.markers) {
+			if(m.id == id) {
+				m.distMeters = distance;
 			}
 		}
 		
-		ammoData.markerRanges.get(index).y = distance;
+		if(dataMarker.markers.size() >= 3) {
+			this.elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+		} else {
+			this.elementBallistic.function = new NullBallisticFunction();
+		}
 		
-		Logger.get("Set marker range: index="+index + " to " + distance + "m");
+		Logger.get("Set marker range: id="+id + " to " + distance + "m");
 		
 		wtCanvas.repaint();
 	}
@@ -654,7 +624,7 @@ public class UICalibrationEditor {
 		
 		
 		try {
-			if(!DataWriter.saveExternalCalibFile(this.dataCalib, file)) {
+			if(!DataWriter.saveExternalBallisticFile(this.dataBallistic, file)) {
 				Logger.get().warn("(Alert) Ballistic Data could not be saved.");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
@@ -688,12 +658,12 @@ public class UICalibrationEditor {
 		if(this.fileSight == null) {
 			this.stage.close();
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			UISightEditor.openNew(dataCalib);
+			UISightEditor.openNew(dataBallistic);
 
 		} else {
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			SightData dataSight = DataLoader.loadSight(fileSight, dataCalib);
-			UISightEditor.openNew(dataCalib, dataSight);
+			SightData dataSight = DataLoader.loadSight(fileSight, dataBallistic);
+			UISightEditor.openNew(dataBallistic, dataSight);
 		}
 		
 	}
@@ -703,23 +673,23 @@ public class UICalibrationEditor {
 	
 	private boolean isValidMarkers() {
 		
-		for(CalibrationAmmoData ammoData : this.dataCalib.ammoData) {
-
-			if(ammoData.markerRanges.size() == 0) {
-				return false;
+		// for each element
+		for(BallisticElement element : this.dataBallistic.elements) {
+			
+			// needs markers ?
+			boolean needsMarker = false;
+			for(Ammo ammo : element.ammunition) {
+				if(ammo.parentWeapon != null && ammo.parentWeapon.triggerGroup.isOr(TriggerGroup.PRIMARY, TriggerGroup.SECONDARY, TriggerGroup.COAXIAL, TriggerGroup.MACHINEGUN)) {
+					needsMarker = true;
+					break;
+				}
 			}
 			
-			List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-			fittingPoints.add(0, new Vector2d(0, 0));
-			for(int i=0; i<ammoData.markerRanges.size(); i++) {
-				Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y/100, ammoData.markerRanges.get(i).x);
-				fittingPoints.add(p);
-			}
-
-			
-			Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-			if(fittingParams == null) {
-				return false;
+			// has markers ?
+			if(needsMarker) {
+				if(element.markerData == null || element.markerData.markers.size() < 3) {
+					return false;
+				}
 			}
 			
 		}

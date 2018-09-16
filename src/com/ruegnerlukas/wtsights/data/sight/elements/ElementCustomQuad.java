@@ -1,14 +1,8 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutQuadObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils;
@@ -48,7 +42,7 @@ public class ElementCustomQuad extends ElementCustomObject {
 	
 	
 	@Override
-	public LayoutQuadObject layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutQuadObject layout(WorkingData data, double canvasWidth, double canvasHeight) {
 
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -67,23 +61,23 @@ public class ElementCustomQuad extends ElementCustomObject {
 		if(movement == Movement.STATIC) {
 			
 			if(useThousandth) {
-				xPX1 = Conversion.get().mil2pixel(pos1.x, canvasHeight, sightData.envZoomedIn);
-				yPX1 = Conversion.get().mil2pixel(pos1.y, canvasHeight, sightData.envZoomedIn);
-				xPX2 = Conversion.get().mil2pixel(pos2.x, canvasHeight, sightData.envZoomedIn);
-				yPX2 = Conversion.get().mil2pixel(pos2.y, canvasHeight, sightData.envZoomedIn);
-				xPX3 = Conversion.get().mil2pixel(pos3.x, canvasHeight, sightData.envZoomedIn);
-				yPX3 = Conversion.get().mil2pixel(pos3.y, canvasHeight, sightData.envZoomedIn);
-				xPX4 = Conversion.get().mil2pixel(pos4.x, canvasHeight, sightData.envZoomedIn);
-				yPX4 = Conversion.get().mil2pixel(pos4.y, canvasHeight, sightData.envZoomedIn);
+				xPX1 = Conversion.get().mil2pixel(pos1.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX1 = Conversion.get().mil2pixel(pos1.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX2 = Conversion.get().mil2pixel(pos2.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX2 = Conversion.get().mil2pixel(pos2.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX3 = Conversion.get().mil2pixel(pos3.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX3 = Conversion.get().mil2pixel(pos3.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX4 = Conversion.get().mil2pixel(pos4.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX4 = Conversion.get().mil2pixel(pos4.y, canvasHeight, data.dataSight.envZoomedIn);
 			} else {
-				xPX1 = Conversion.get().screenspace2pixel(pos1.x, canvasHeight, sightData.envZoomedIn);
-				yPX1 = Conversion.get().screenspace2pixel(pos1.y, canvasHeight, sightData.envZoomedIn);
-				xPX2 = Conversion.get().screenspace2pixel(pos2.x, canvasHeight, sightData.envZoomedIn);
-				yPX2 = Conversion.get().screenspace2pixel(pos2.y, canvasHeight, sightData.envZoomedIn);
-				xPX3 = Conversion.get().screenspace2pixel(pos3.x, canvasHeight, sightData.envZoomedIn);
-				yPX3 = Conversion.get().screenspace2pixel(pos3.y, canvasHeight, sightData.envZoomedIn);
-				xPX4 = Conversion.get().screenspace2pixel(pos4.x, canvasHeight, sightData.envZoomedIn);
-				yPX4 = Conversion.get().screenspace2pixel(pos4.y, canvasHeight, sightData.envZoomedIn);
+				xPX1 = Conversion.get().screenspace2pixel(pos1.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX1 = Conversion.get().screenspace2pixel(pos1.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX2 = Conversion.get().screenspace2pixel(pos2.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX2 = Conversion.get().screenspace2pixel(pos2.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX3 = Conversion.get().screenspace2pixel(pos3.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX3 = Conversion.get().screenspace2pixel(pos3.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX4 = Conversion.get().screenspace2pixel(pos4.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX4 = Conversion.get().screenspace2pixel(pos4.y, canvasHeight, data.dataSight.envZoomedIn);
 			}
 			
 			
@@ -91,52 +85,39 @@ public class ElementCustomQuad extends ElementCustomObject {
 		} else if(movement == Movement.MOVE) {
 			
 			if(useThousandth) {
-				xPX1 = Conversion.get().mil2pixel(pos1.x, canvasHeight, sightData.envZoomedIn);
-				yPX1 = Conversion.get().mil2pixel(pos1.y, canvasHeight, sightData.envZoomedIn);
-				xPX2 = Conversion.get().mil2pixel(pos2.x, canvasHeight, sightData.envZoomedIn);
-				yPX2 = Conversion.get().mil2pixel(pos2.y, canvasHeight, sightData.envZoomedIn);
-				xPX3 = Conversion.get().mil2pixel(pos3.x, canvasHeight, sightData.envZoomedIn);
-				yPX3 = Conversion.get().mil2pixel(pos3.y, canvasHeight, sightData.envZoomedIn);
-				xPX4 = Conversion.get().mil2pixel(pos4.x, canvasHeight, sightData.envZoomedIn);
-				yPX4 = Conversion.get().mil2pixel(pos4.y, canvasHeight, sightData.envZoomedIn);
+				xPX1 = Conversion.get().mil2pixel(pos1.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX1 = Conversion.get().mil2pixel(pos1.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX2 = Conversion.get().mil2pixel(pos2.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX2 = Conversion.get().mil2pixel(pos2.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX3 = Conversion.get().mil2pixel(pos3.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX3 = Conversion.get().mil2pixel(pos3.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX4 = Conversion.get().mil2pixel(pos4.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX4 = Conversion.get().mil2pixel(pos4.y, canvasHeight, data.dataSight.envZoomedIn);
 			} else {
-				xPX1 = Conversion.get().screenspace2pixel(pos1.x, canvasHeight, sightData.envZoomedIn);
-				yPX1 = Conversion.get().screenspace2pixel(pos1.y, canvasHeight, sightData.envZoomedIn);
-				xPX2 = Conversion.get().screenspace2pixel(pos2.x, canvasHeight, sightData.envZoomedIn);
-				yPX2 = Conversion.get().screenspace2pixel(pos2.y, canvasHeight, sightData.envZoomedIn);
-				xPX3 = Conversion.get().screenspace2pixel(pos3.x, canvasHeight, sightData.envZoomedIn);
-				yPX3 = Conversion.get().screenspace2pixel(pos3.y, canvasHeight, sightData.envZoomedIn);
-				xPX4 = Conversion.get().screenspace2pixel(pos4.x, canvasHeight, sightData.envZoomedIn);
-				yPX4 = Conversion.get().screenspace2pixel(pos4.y, canvasHeight, sightData.envZoomedIn);
+				xPX1 = Conversion.get().screenspace2pixel(pos1.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX1 = Conversion.get().screenspace2pixel(pos1.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX2 = Conversion.get().screenspace2pixel(pos2.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX2 = Conversion.get().screenspace2pixel(pos2.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX3 = Conversion.get().screenspace2pixel(pos3.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX3 = Conversion.get().screenspace2pixel(pos3.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX4 = Conversion.get().screenspace2pixel(pos4.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX4 = Conversion.get().screenspace2pixel(pos4.y, canvasHeight, data.dataSight.envZoomedIn);
 			}
 			
 			double rangeCorrectionMil = 0;
 			
-			if(ammoData != null) {
-				List<Vector2d> fittingPoints = new ArrayList<Vector2d>();
-				fittingPoints.add(new Vector2d(0, 0));
-				for(int i=0; i<ammoData.markerRanges.size(); i++) {
-					Vector2d p = new Vector2d(ammoData.markerRanges.get(i).y/100, ammoData.markerRanges.get(i).x);
-					if(ammoData.zoomedIn) {
-						p.y /= Conversion.get().zoomInMul;
-					}
-					fittingPoints.add(p);
-				}
-				Vector3d fittingParams = SightUtils.fitBallisticFunction(fittingPoints, 1);
-				if(fittingParams == null) {
-					return null;
-				}
-				final double rangeCorrectionResultPX = SightUtils.ballisticFunction(sightData.envRangeCorrection/100.0, fittingParams);
+			if(data.elementBallistic != null) {
+				final double rangeCorrectionResultPX = data.elementBallistic.function.eval(data.dataSight.envRangeCorrection);
 				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvasHeight, false);
 				
 			} else {
 				// found values by testing  50m = 0.6875mil
-				rangeCorrectionMil = sightData.envRangeCorrection * (0.6875/50.0);
+				rangeCorrectionMil = data.dataSight.envRangeCorrection * (0.6875/50.0);
 			}
 			
-			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvasHeight, sightData.envZoomedIn);
+			final double rangeCorrectionPX = Conversion.get().mil2pixel(rangeCorrectionMil, canvasHeight, data.dataSight.envZoomedIn);
 			
-			if(sightData.gnrApplyCorrectionToGun) {
+			if(data.dataSight.gnrApplyCorrectionToGun) {
 				yPX1 -= rangeCorrectionPX;
 				yPX2 -= rangeCorrectionPX;
 				yPX3 -= rangeCorrectionPX;
@@ -157,12 +138,12 @@ public class ElementCustomQuad extends ElementCustomObject {
 			} else {
 				centerOW = center;
 			}
-			final double radius = useThousandth ? centerOW.dist(radCenter) : Conversion.get().screenspace2mil(centerOW.dist(radCenter), sightData.envZoomedIn);
+			final double radius = useThousandth ? centerOW.dist(radCenter) : Conversion.get().screenspace2mil(centerOW.dist(radCenter), data.dataSight.envZoomedIn);
 			if(MathUtils.isNearlyEqual(radius, 0)) {
 				return null;
 			}
 			
-			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(sightData.envRangeCorrection);
+			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
 			double rangeAngle = SightUtils.calcAngle_rad(rangeCorrAngleSMil, radius, speed);
 		
 			Vector2d toPos1 = Vector2d.createVectorAB(radCenter, pos1);
@@ -183,23 +164,23 @@ public class ElementCustomQuad extends ElementCustomObject {
 			}
 
 			if(useThousandth) {
-				xPX1 = Conversion.get().mil2pixel(toPos1.x, canvasHeight, sightData.envZoomedIn);
-				yPX1 = Conversion.get().mil2pixel(toPos1.y, canvasHeight, sightData.envZoomedIn);
-				xPX2 = Conversion.get().mil2pixel(toPos2.x, canvasHeight, sightData.envZoomedIn);
-				yPX2 = Conversion.get().mil2pixel(toPos2.y, canvasHeight, sightData.envZoomedIn);
-				xPX3 = Conversion.get().mil2pixel(toPos3.x, canvasHeight, sightData.envZoomedIn);
-				yPX3 = Conversion.get().mil2pixel(toPos3.y, canvasHeight, sightData.envZoomedIn);
-				xPX4 = Conversion.get().mil2pixel(toPos4.x, canvasHeight, sightData.envZoomedIn);
-				yPX4 = Conversion.get().mil2pixel(toPos4.y, canvasHeight, sightData.envZoomedIn);
+				xPX1 = Conversion.get().mil2pixel(toPos1.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX1 = Conversion.get().mil2pixel(toPos1.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX2 = Conversion.get().mil2pixel(toPos2.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX2 = Conversion.get().mil2pixel(toPos2.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX3 = Conversion.get().mil2pixel(toPos3.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX3 = Conversion.get().mil2pixel(toPos3.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX4 = Conversion.get().mil2pixel(toPos4.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX4 = Conversion.get().mil2pixel(toPos4.y, canvasHeight, data.dataSight.envZoomedIn);
 			} else {
-				xPX1 = Conversion.get().screenspace2pixel(toPos1.x, canvasHeight, sightData.envZoomedIn);
-				yPX1 = Conversion.get().screenspace2pixel(toPos1.y, canvasHeight, sightData.envZoomedIn);
-				xPX2 = Conversion.get().screenspace2pixel(toPos2.x, canvasHeight, sightData.envZoomedIn);
-				yPX2 = Conversion.get().screenspace2pixel(toPos2.y, canvasHeight, sightData.envZoomedIn);
-				xPX3 = Conversion.get().screenspace2pixel(toPos3.x, canvasHeight, sightData.envZoomedIn);
-				yPX3 = Conversion.get().screenspace2pixel(toPos3.y, canvasHeight, sightData.envZoomedIn);
-				xPX4 = Conversion.get().screenspace2pixel(toPos4.x, canvasHeight, sightData.envZoomedIn);
-				yPX4 = Conversion.get().screenspace2pixel(toPos4.y, canvasHeight, sightData.envZoomedIn);
+				xPX1 = Conversion.get().screenspace2pixel(toPos1.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX1 = Conversion.get().screenspace2pixel(toPos1.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX2 = Conversion.get().screenspace2pixel(toPos2.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX2 = Conversion.get().screenspace2pixel(toPos2.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX3 = Conversion.get().screenspace2pixel(toPos3.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX3 = Conversion.get().screenspace2pixel(toPos3.y, canvasHeight, data.dataSight.envZoomedIn);
+				xPX4 = Conversion.get().screenspace2pixel(toPos4.x, canvasHeight, data.dataSight.envZoomedIn);
+				yPX4 = Conversion.get().screenspace2pixel(toPos4.y, canvasHeight, data.dataSight.envZoomedIn);
 			}
 			
 			
