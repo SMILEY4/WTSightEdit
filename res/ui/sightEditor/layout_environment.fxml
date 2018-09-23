@@ -50,9 +50,9 @@
                         <HBox>
                            <children>
                               <Label prefWidth="1000000.0" text="Range Correction:" />
-                              <Label fx:id="labelValueRange" alignment="CENTER_RIGHT" minWidth="50.0" prefHeight="21.0" prefWidth="50.0" text="1000m" />
                            </children>
                         </HBox>
+                        <Spinner fx:id="spinnerRange" editable="true" prefWidth="1000000.0" />
                         <Slider fx:id="sliderRangeCorrection" blockIncrement="1.0" majorTickUnit="1000.0" max="4000.0" minorTickCount="4" prefWidth="1000000.0" showTickLabels="true" showTickMarks="true" />
                         <Separator prefWidth="1000000.0">
                            <padding>
