@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
@@ -56,7 +58,7 @@ public class UIElementCreate {
 	public Element createdElement;
 	
 
-	public static Element openNew(Stage owner, List<String> existingItems, CalibrationData dataCalib) {
+	public static Element openNew(Stage owner, List<String> existingItems, WorkingData data) {
 		
 		Logger.get().info("Open 'ElementCreate'");
 
@@ -90,7 +92,7 @@ public class UIElementCreate {
 		stage.setScene(scene);
 		
 		UIElementCreate controller = (UIElementCreate)loader.getController();
-		controller.create(stage, existingItems, dataCalib);
+		controller.create(stage, existingItems, data);
 		
 		stage.showAndWait();
 		
@@ -100,7 +102,7 @@ public class UIElementCreate {
 	
 	
 	
-	private void create(Stage stage, List<String> existingItems, CalibrationData dataCalib) {
+	private void create(Stage stage, List<String> existingItems, WorkingData data) {
 		
 		this.stage = stage;
 		this.existingItems = existingItems;
@@ -109,8 +111,22 @@ public class UIElementCreate {
 		
 		for(ElementType type : ElementType.values()) {
 
-			if(dataCalib.ammoData.isEmpty() && (type == ElementType.SHELL_BALLISTICS_BLOCK || type == ElementType.BALLISTIC_RANGE_INDICATORS) ) {
+			if(data.dataBallistic.elements.isEmpty() && (type == ElementType.SHELL_BALLISTICS_BLOCK || type == ElementType.BALLISTIC_RANGE_INDICATORS) ) {
 				continue;
+			}
+			
+			if(type == ElementType.SHELL_BALLISTICS_BLOCK) {
+				boolean allRockets = true;
+				for(BallisticElement element : data.dataBallistic.elements) {
+					if(!element.isRocketElement) {
+						allRockets = false;
+						break;
+					}
+				}
+				if(allRockets) {
+					continue;
+				}
+				
 			}
 			
 			int listCount = 0;

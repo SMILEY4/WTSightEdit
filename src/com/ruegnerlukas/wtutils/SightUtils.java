@@ -12,6 +12,7 @@ import org.apache.commons.math3.linear.SingularMatrixException;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 public class SightUtils {
 
@@ -89,7 +90,7 @@ public class SightUtils {
 		TORPEDOES("torpedoes"),
 		DEPTH_CHARGE("depth_charge"),
 		ROCKETS("rockets"),
-		MIN("mine"),
+		MINE("mine"),
 		SMOKE("smoke"),
 		UNKNOWN("?");
 		
@@ -107,6 +108,16 @@ public class SightUtils {
 			}
 			return UNKNOWN;
 		}
+		
+		public boolean isOr(TriggerGroup... groups) {
+			for(TriggerGroup g : groups) {
+				if(this == g) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 	}
 	
 	
@@ -255,7 +266,6 @@ public class SightUtils {
 		final double SINGULARITY_THRESHOLD_RATIO = 1.0e-5;
 		
 		
-		
 		double[][] dataA = new double[points.size()][3];
 		for(int i=0; i<points.size(); i++) {
 			dataA[i][0] = 1.0;
@@ -282,6 +292,9 @@ public class SightUtils {
 		try {
 			v = solver.solve(B);
 		} catch(SingularMatrixException e) {
+			Logger.get().error(A);
+			Logger.get().error(B);
+			Logger.get().error(e);
 			return null;
 		}
 

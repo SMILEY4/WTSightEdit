@@ -60,15 +60,15 @@ public class UICustomLine implements Module {
 				if(element != null) {
 					element.useThousandth = cbUseThousandth.isSelected();
 					if(element.useThousandth) {
-						FXUtils.initSpinner(spinnerStartX, Conversion.get().screenspace2mil(spinnerStartX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerStartY, Conversion.get().screenspace2mil(spinnerStartY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerEndX, Conversion.get().screenspace2mil(spinnerEndX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerEndY, Conversion.get().screenspace2mil(spinnerEndY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerStartX, Conversion.get().screenspace2mil(spinnerStartX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerStartY, Conversion.get().screenspace2mil(spinnerStartY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerEndX, Conversion.get().screenspace2mil(spinnerEndX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerEndY, Conversion.get().screenspace2mil(spinnerEndY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
 					} else {
-						FXUtils.initSpinner(spinnerStartX, Conversion.get().mil2screenspace(spinnerStartX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerStartY, Conversion.get().mil2screenspace(spinnerStartY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerEndX, Conversion.get().mil2screenspace(spinnerEndX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerEndY, Conversion.get().mil2screenspace(spinnerEndY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerStartX, Conversion.get().mil2screenspace(spinnerStartX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerStartY, Conversion.get().mil2screenspace(spinnerStartY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerEndX, Conversion.get().mil2screenspace(spinnerEndX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerEndY, Conversion.get().mil2screenspace(spinnerEndY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 					}
 					element.layoutData.dirty = true;
 					editor.wtCanvas.repaint();

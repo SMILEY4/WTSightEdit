@@ -3,13 +3,13 @@ package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 import java.util.Comparator;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -39,7 +39,7 @@ public class UIShellBlock implements Module {
 	private ElementShellBlock element;
 	
 
-	@FXML private ComboBox<Ammo> comboAmmo;
+	@FXML private ComboBox<BallisticElement> comboAmmo;
 	@FXML private ChoiceBox<String> choiceScaleMode;
 
 	@FXML private VBox boxVertical;
@@ -100,27 +100,23 @@ public class UIShellBlock implements Module {
 		ElementBallRangeIndicator elementDefault = new ElementBallRangeIndicator();
 		
 		// AMMO
-		FXUtils.initComboboxAmmo(comboAmmo);
-		for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-			comboAmmo.getItems().add(ammoData.ammo);
+		FXUtils.initComboboxBallistic(comboAmmo);
+		for(BallisticElement element : editor.getData().dataBallistic.elements) {
+			if(!element.isRocketElement) {
+				comboAmmo.getItems().add(element);
+			}
 		}
-		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Ammo>() {
+//		comboAmmo.getItems().addAll(editor.getData().dataBallistic.elements);
+		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BallisticElement>() {
 			@Override
-			public void changed(ObservableValue<? extends Ammo> observable, Ammo oldValue, Ammo newValue) {
-				Ammo selectedAmmo = comboAmmo.getSelectionModel().getSelectedItem();
-				if(element == null || selectedAmmo == null || "undefined".equalsIgnoreCase(selectedAmmo.type)) {
+			public void changed(ObservableValue<? extends BallisticElement> observable, BallisticElement oldValue, BallisticElement newValue) {
+				BallisticElement selected = comboAmmo.getSelectionModel().getSelectedItem();
+				if(element == null || selected == null || selected instanceof NullElement) {
 					return;
 				}
-				element.dataAmmo = null;
-				for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
-					CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-					if(ammoData.ammo.name.equalsIgnoreCase(selectedAmmo.name)) {
-						element.dataAmmo = ammoData;
-						break;
-					}
-				}
+				element.elementBallistic = selected;
 				element.setDirty();
-				Logger.get().debug("Selected ammo: " + (element.dataAmmo == null ? "null" : element.dataAmmo.ammo.name) );
+				Logger.get().debug("Selected ballistic element: " + (element.elementBallistic == null ? "null" : element.elementBallistic) );
 				editor.wtCanvas.repaint();
 			}
 		});
@@ -266,7 +262,7 @@ public class UIShellBlock implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.drawAddLines = vDrawAddLines.isSelected();
-					element.layoutData.dirty = true;
+					element.setDirty();
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -289,7 +285,7 @@ public class UIShellBlock implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
-				element.layoutData.dirty = true;
+				element.setDirty();
 				editor.wtCanvas.repaint();
 			}
 		});
@@ -384,9 +380,9 @@ public class UIShellBlock implements Module {
 				}
 				element.radiusUseMils = rRadiusUseMils.isSelected();
 				if(element.radiusUseMils) {
-					FXUtils.initSpinner(rCircleRadius, Conversion.get().screenspace2mil(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.5, 1, null);
+					FXUtils.initSpinner(rCircleRadius, Conversion.get().screenspace2mil(element.radialRadius, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.5, 1, null);
 				} else {
-					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.001, 3, null);
+					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
 				element.layoutData.dirty = true;
 				editor.wtCanvas.repaint();
@@ -541,16 +537,11 @@ public class UIShellBlock implements Module {
 		}
 		
 		if(element != null) {
-			if(element.dataAmmo == null) {
-				
-				for(CalibrationAmmoData ammoData : editor.getCalibrationData().ammoData) {
-					if(ammoData.ammo.name.equals(comboAmmo.getValue().name)) {
-						element.dataAmmo = ammoData;
-					}
-				}
+			if(element.elementBallistic == null) {
+				element.elementBallistic = comboAmmo.getValue();
 				
 			} else {
-				comboAmmo.getSelectionModel().select(element.dataAmmo.ammo);
+				comboAmmo.getSelectionModel().select(element.elementBallistic);
 			}
 			choiceScaleMode.getSelectionModel().select(element.scaleMode.toString());
 			vTextShift.getValueFactory().setValue(element.textShift);
@@ -700,12 +691,18 @@ public class UIShellBlock implements Module {
 		});
 		boxRow.getChildren().add(btnDelete);
 		
+		if(element != null) {
+			element.setDirty();
+		}
 	}
 	
 	
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
+		if(element != null) {
+			element.setDirty();
+		}
 		editor.wtCanvas.repaint();
 	}
 	
@@ -715,6 +712,7 @@ public class UIShellBlock implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
+			element.setDirty();
 			editor.wtCanvas.repaint();
 		}
 	}

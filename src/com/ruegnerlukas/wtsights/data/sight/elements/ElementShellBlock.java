@@ -1,13 +1,13 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
 public class ElementShellBlock extends ElementBallRangeIndicator {
 	
 	public TriggerGroup	triggerGroup 	= TriggerGroup.PRIMARY;	// the armament you want calculate ballistics for
-	public CalibrationAmmoData dataAmmo		= null;				// the ammunition data
+	public BallisticElement elementBallistic= null;				// the ammunition data
 	
 	
 	

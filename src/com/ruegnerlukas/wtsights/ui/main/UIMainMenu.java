@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.DataLoader;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.about.UIAbout;
@@ -82,7 +82,7 @@ public class UIMainMenu {
 
 		File fileCalib = fc.showOpenDialog(WTSights.getPrimaryStage());
 		if (fileCalib != null) {
-			CalibrationData data = DataLoader.loadExternalCalibFile(fileCalib);
+			BallisticData data = DataLoader.loadBallisticDataFile(fileCalib);
 			UICalibrationEditor.openNew(data);
 		}
 		

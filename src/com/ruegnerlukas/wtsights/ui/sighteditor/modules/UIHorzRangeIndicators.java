@@ -212,13 +212,19 @@ public class UIHorzRangeIndicators implements Module {
 			}
 		});
 		boxRow.getChildren().add(btnDelete);
-		
+	
+		if(element != null) {
+			element.setDirty();
+		}
 	}
 	
 	
 	
 	
 	void onIndicatorEdit(HIndicator indicator) {
+		if(element != null) {
+			element.setDirty();
+		}
 		editor.wtCanvas.repaint();
 	}
 	
@@ -228,6 +234,7 @@ public class UIHorzRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
+			element.setDirty();
 			editor.wtCanvas.repaint();
 		}
 	}

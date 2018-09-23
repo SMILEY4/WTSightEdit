@@ -2,9 +2,7 @@ package com.ruegnerlukas.wtsights.data.sight.elements;
 
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutRangefinder;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -48,7 +46,7 @@ public class ElementRangefinder extends Element {
 	
 	
 	@Override
-	public LayoutRangefinder layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutRangefinder layout(WorkingData data, double canvasWidth, double canvasHeight) {
 	
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -56,31 +54,31 @@ public class ElementRangefinder extends Element {
 		layoutData.dirty = false;
 		
 		double x = 0;
-		if(sightData.envZoomedIn) {
-			x = position.x * sightData.gnrFontScale * Conversion.get().zoomInMul;
+		if(data.dataSight.envZoomedIn) {
+			x = position.x * data.dataSight.gnrFontScale * Conversion.get().zoomInMul;
 		} else {
-			x = position.x * sightData.gnrFontScale;
+			x = position.x * data.dataSight.gnrFontScale;
 		}
 		
 		double y = 0;
 		if(useThousandth) {
-			y = Conversion.get().mil2pixel(position.y+3, canvasHeight, sightData.envZoomedIn) * sightData.gnrFontScale;
+			y = Conversion.get().mil2pixel(position.y+3, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale;
 			
 		} else {
-			if(sightData.envZoomedIn) {
-				y = Conversion.get().screenspace2pixel(position.y+0.002, canvasHeight, sightData.envZoomedIn) * sightData.gnrFontScale;
+			if(data.dataSight.envZoomedIn) {
+				y = Conversion.get().screenspace2pixel(position.y+0.002, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale;
 			} else {
-				y = Conversion.get().screenspace2pixel(position.y, canvasHeight, sightData.envZoomedIn) * sightData.gnrFontScale;
+				y = Conversion.get().screenspace2pixel(position.y, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale;
 			}
 		}
 		
 		x += canvasWidth/2.0;
 		y = canvasHeight/2.0 - y;
 		
-		if(sightData.envZoomedIn) {
-			layoutData.fontSize = 18.0 * sightData.gnrFontScale * textScale * Conversion.get().zoomInMul;
+		if(data.dataSight.envZoomedIn) {
+			layoutData.fontSize = 18.0 * data.dataSight.gnrFontScale * textScale * Conversion.get().zoomInMul;
 		} else {
-			layoutData.fontSize = 17.5 * sightData.gnrFontScale * textScale;
+			layoutData.fontSize = 17.5 * data.dataSight.gnrFontScale * textScale;
 		}
 		
 		Font font = SightRenderer.getFont(layoutData.fontSize);

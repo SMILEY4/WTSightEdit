@@ -74,7 +74,7 @@ public class UIRangefinder implements Module {
 				if(element == null) { return; }
 				element.useThousandth = cbUseThousandth.isSelected();
 				if(element.useThousandth) {
-					FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(element.position.y, editor.getSightData().envZoomedIn), -1000, 1000, 1, 1, new ChangeListener<Double>() {
+					FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(element.position.y, editor.getData().dataSight.envZoomedIn), -1000, 1000, 1, 1, new ChangeListener<Double>() {
 						@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 							if(element != null) {
 								element.position.y = newValue.intValue();
@@ -82,7 +82,7 @@ public class UIRangefinder implements Module {
 						}
 					});
 				} else {
-					FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(element.position.y, editor.getSightData().envZoomedIn), -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+					FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(element.position.y, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
 						@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 							if(element != null) {
 								element.position.y = newValue.intValue();

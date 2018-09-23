@@ -88,12 +88,12 @@ public class WTMiner {
 		
 		
 		// vehicles
-//		unpackBLKs(PATH_TO_BLKDIR_VEHICLES, PATH_UNPACKED_FILES_VEHICLES);
+		unpackBLKs(PATH_TO_BLKDIR_VEHICLES, PATH_UNPACKED_FILES_VEHICLES);
 		List<Vehicle> vehicles = extractDataVehicles(PATH_UNPACKED_FILES_VEHICLES);
 		saveVehiclesToFile(vehicles, PATH_TO_OUTPUT_VEHICLES);
 
 		// ground weapons
-//		unpackBLKs(PATH_TO_BLKDIR_WEAPONS, PATH_UNPACKED_FILES_WEAPONS);
+		unpackBLKs(PATH_TO_BLKDIR_WEAPONS, PATH_UNPACKED_FILES_WEAPONS);
 		List<Weapon> weapons = extractDataWeapons(PATH_UNPACKED_FILES_WEAPONS);
 		saveWeaponsToFile(weapons, PATH_TO_OUTPUT_WEAPONS);
 		

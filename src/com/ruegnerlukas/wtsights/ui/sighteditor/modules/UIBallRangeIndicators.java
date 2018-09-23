@@ -257,6 +257,7 @@ public class UIBallRangeIndicators implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
+				element.setDirty();
 				editor.wtCanvas.repaint();
 			}
 		});
@@ -351,9 +352,9 @@ public class UIBallRangeIndicators implements Module {
 				}
 				element.radiusUseMils = rRadiusUseMils.isSelected();
 				if(element.radiusUseMils) {
-					FXUtils.initSpinner(rCircleRadius, Conversion.get().screenspace2mil(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.5, 1, null);
+					FXUtils.initSpinner(rCircleRadius, Conversion.get().screenspace2mil(element.radialRadius, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.5, 1, null);
 				} else {
-					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getSightData().envZoomedIn), -1000, 1000, 0.001, 3, null);
+					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, editor.getData().dataSight.envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
 				element.layoutData.dirty = true;
 				editor.wtCanvas.repaint();
@@ -656,12 +657,19 @@ public class UIBallRangeIndicators implements Module {
 		});
 		boxRow.getChildren().add(btnDelete);
 		
+		if(element != null) {
+			element.setDirty();
+		}
+		
 	}
 	
 	
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
+		if(element != null) {
+			element.setDirty();
+		}
 		editor.wtCanvas.repaint();
 	}
 	
@@ -671,7 +679,7 @@ public class UIBallRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			element.layoutData.dirty = true;
+			element.setDirty();
 			editor.wtCanvas.repaint();
 		}
 	}
