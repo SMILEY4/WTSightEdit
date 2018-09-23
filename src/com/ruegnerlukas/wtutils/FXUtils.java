@@ -13,6 +13,7 @@ import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
 
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -50,28 +51,49 @@ public class FXUtils {
 	
 	static class StringConverterInt extends StringConverter<Integer> {
 		
+		private final Spinner<Integer> spinner;
+		
+		public StringConverterInt(Spinner<Integer> spinner) {
+			this.spinner = spinner;
+		}
+		
 		@Override
 		public String toString(Integer value) {
 			if (value == null) {
 				return "";
-				}
+			}
 			return ""+value.intValue();
 		}
 		
 		@Override
 		public Integer fromString(String value) {
+			boolean successful = true;
+			int newValue = 0;
 			try {
 				if (value == null) {
-					return 0;
+					successful = false;
+				} else {
+					value = value.trim();
+					if (value.length() < 1) {
+						successful = false;
+					} else {
+						successful = true;
+						newValue = Integer.parseInt(value);
 					}
-				value = value.trim();
-				if (value.length() < 1) {
-					return 0;
 				}
-				return Integer.parseInt(value);
 			} catch (Exception ex) {
-				return 0;
+				successful = false;
 			}
+			
+			if(successful) {
+				return newValue;
+			} else {
+				newValue = spinner.getValue();
+				spinner.getEditor().setText(""+newValue);
+				commitEditorText(spinner);
+				return newValue;
+			}
+			
 		}
 		
 	}
@@ -81,19 +103,21 @@ public class FXUtils {
 
 		private final DecimalFormat format;
 		private final double defaultValue;
+		private final Spinner<Double> spinner;
 		
 		
-		public StringConverterDouble(int decPlaces) {
-			this(decPlaces, 0.0);
+		public StringConverterDouble(int decPlaces, Spinner<Double> spinner) {
+			this(decPlaces, 0.0, spinner);
 		}
 		
-		public StringConverterDouble(int decPlaces, double defaultValue) {
+		public StringConverterDouble(int decPlaces, double defaultValue, Spinner<Double> spinner) {
 			String strDecPlaces = "";
 			for(int i=0; i<decPlaces; i++) {
 				strDecPlaces += "#";
 			}
 			format = new DecimalFormat("#" + (strDecPlaces.isEmpty() ? "" : ".") + strDecPlaces);
 			this.defaultValue = defaultValue;
+			this.spinner = spinner;
 		}
 		
 		
@@ -108,26 +132,53 @@ public class FXUtils {
 
 		@Override
 		public Double fromString(String value) {
+			boolean successful = true;
+			double newValue = 0;
 			try {
 				
 				if(value ==  null) {
-					return defaultValue;
+					successful = false;
 				} else {
 					value = value.trim();
 					if(value.length() < 1) {
-						return defaultValue;
+						successful = false;
 					} else {
-						return format.parse(value).doubleValue();
+						successful = true;
+						newValue = format.parse(value).doubleValue();
 					}
 				}
 				
 			} catch(ParseException e) {
-				return defaultValue;
+				successful = false;
 			}
+			
+			if(successful) {
+				return newValue;
+			} else {
+				newValue = spinner.getValue();
+				spinner.getEditor().setText(""+newValue);
+				commitEditorText(spinner);
+				return newValue;
+			}
+			
 		}
 		
 	}
 	
+	
+	
+	public static <T> void commitEditorText(Spinner<T> spinner) {
+	    if (!spinner.isEditable()) return;
+	    String text = spinner.getEditor().getText();
+	    SpinnerValueFactory<T> valueFactory = spinner.getValueFactory();
+	    if (valueFactory != null) {
+	        StringConverter<T> converter = valueFactory.getConverter();
+	        if (converter != null) {
+	            T value = converter.fromString(text);
+	            valueFactory.setValue(value);
+	        }
+	    }
+	}
 	
 	
 	@SuppressWarnings({ "rawtypes" })
@@ -140,14 +191,21 @@ public class FXUtils {
 	public static void initSpinner(Spinner<?> spinner, double defaultValue, double min, double max, double step, int decPlaces, boolean enableMouseWheel, ChangeListener listener) {
 		if(decPlaces <= 0) {
 			SpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory((int)min, (int)max, (int)defaultValue, (int)step);
-			valueFactory.setConverter(new StringConverterInt());
+			valueFactory.setConverter(new StringConverterInt((Spinner<Integer>)spinner));
 			spinner.setValueFactory(valueFactory);
-			
 		} else {
 			SpinnerValueFactory valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, defaultValue, step);
-			valueFactory.setConverter(new StringConverterDouble(decPlaces, defaultValue));
+			valueFactory.setConverter(new StringConverterDouble(decPlaces, defaultValue, (Spinner<Double>)spinner));
 			spinner.setValueFactory(valueFactory);
 		}
+		spinner.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if(!newValue) {
+					
+					commitEditorText(spinner);
+				}
+			}
+		});
 		if(enableMouseWheel) {
 			spinner.setOnScroll(new EventHandler<ScrollEvent>() {
 				@Override public void handle(ScrollEvent event) {
