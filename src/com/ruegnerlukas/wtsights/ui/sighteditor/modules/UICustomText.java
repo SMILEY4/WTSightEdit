@@ -12,6 +12,7 @@ import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -57,6 +58,22 @@ public class UICustomText implements Module {
 		ElementCustomText elementDefault = new ElementCustomText();
 		
 		cbUseThousandth.setSelected(elementDefault.useThousandth);
+		cbUseThousandth.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.useThousandth = cbUseThousandth.isSelected();
+					if(element.useThousandth) {
+						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(spinnerPosY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+					} else {
+						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), editor.getData().dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+					}
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
 		
 		choiceMovement.getItems().addAll(Movement.STATIC.toString(), Movement.MOVE.toString(), Movement.MOVE_RADIAL.toString());
 		choiceMovement.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -90,6 +107,17 @@ public class UICustomText implements Module {
 		});
 		
 		cbUseAutoCenter.setSelected(elementDefault.autoCenter);
+		cbUseAutoCenter.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.useThousandth = cbUseThousandth.isSelected();
+					spinnerCenterX.setDisable(element.autoCenter);
+					spinnerCenterY.setDisable(element.autoCenter);
+					element.layoutData.dirty = true;
+					editor.wtCanvas.repaint();
+				}
+			}
+		});
 		spinnerCenterX.setDisable(elementDefault.autoCenter);
 		spinnerCenterY.setDisable(elementDefault.autoCenter);
 
@@ -231,40 +259,6 @@ public class UICustomText implements Module {
 			choiceAlignment.getSelectionModel().select(element.align.toString());
 		}
 	}
-	
-	
-	
-	@FXML
-	void onUseAutoCenter(ActionEvent event) {
-		if(element != null) {
-			element.useThousandth = cbUseThousandth.isSelected();
-			spinnerCenterX.setDisable(element.autoCenter);
-			spinnerCenterY.setDisable(element.autoCenter);
-			element.layoutData.dirty = true;
-			editor.wtCanvas.repaint();
-		}
-	}
-	
-	
-	
-	@FXML
-	void onUseThousandth(ActionEvent event) {
-		if(element != null) {
-			element.useThousandth = cbUseThousandth.isSelected();
-			if(element.useThousandth) {
-				FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-				FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(spinnerPosY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-			} else {
-				FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-				FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), editor.getSightData().envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-			}
-			element.layoutData.dirty = true;
-			editor.wtCanvas.repaint();
-		}
-	}
-	
-	
-	
 	
 	
 	

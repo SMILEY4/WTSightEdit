@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataLoader;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
@@ -17,10 +17,10 @@ import com.ruegnerlukas.wtutils.FXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -160,9 +160,9 @@ public class UICalibrationSelect {
 				this.stage.close();
 				UIVehicleSelect.openNew();
 			} else {
-				CalibrationData dataCalib = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
+				BallisticData dataBall = DataLoader.loadBallisticDataFile(this.fileCalibExternal);
 				this.stage.close();
-				UISightEditor.openNew(dataCalib);
+				UISightEditor.openNew(dataBall);
 
 			}
 		}
@@ -175,10 +175,10 @@ public class UICalibrationSelect {
 				this.stage.close();
 				UIVehicleSelect.openNew(fileSight);
 			} else {
-				CalibrationData dataCalib = DataLoader.loadExternalCalibFile(this.fileCalibExternal);
-				SightData dataSight = DataLoader.loadSight(fileSight, dataCalib);
+				BallisticData dataBall = DataLoader.loadBallisticDataFile(this.fileCalibExternal);
+				SightData dataSight = DataLoader.loadSight(fileSight, dataBall);
 				this.stage.close();
-				UISightEditor.openNew(dataCalib, dataSight);
+				UISightEditor.openNew(dataBall, dataSight);
 			}
 		}
 		

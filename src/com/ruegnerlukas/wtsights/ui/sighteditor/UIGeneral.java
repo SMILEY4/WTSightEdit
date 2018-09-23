@@ -37,7 +37,7 @@ public class UIGeneral {
 		for(Thousandth t : Thousandth.values()) {
 			choiceThousandth.getItems().add(t.display);
 		}
-		choiceThousandth.getSelectionModel().select(editor.getSightData().gnrThousandth.display);
+		choiceThousandth.getSelectionModel().select(editor.getData().dataSight.gnrThousandth.display);
 		choiceThousandth.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -54,21 +54,21 @@ public class UIGeneral {
 		
 		
 		// font scale
-		FXUtils.initSpinner(fontSize, editor.getSightData().gnrFontScale, 0, 1000, 0.1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(fontSize, editor.getData().dataSight.gnrFontScale, 0, 1000, 0.1, 1, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				setFontSize(newValue.floatValue());
 			}
 		});
 		
 		// line scale
-		FXUtils.initSpinner(lineSize, editor.getSightData().gnrLineSize, 0, 1000, 0.5, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(lineSize, editor.getData().dataSight.gnrLineSize, 0, 1000, 0.5, 1, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				setLineSize(newValue.floatValue());
 			}
 		});
 		
 		// apply correction
-		cbApplyCorrection.setSelected(editor.getSightData().gnrApplyCorrectionToGun);
+		cbApplyCorrection.setSelected(editor.getData().dataSight.gnrApplyCorrectionToGun);
 	
 	}
 	
@@ -77,8 +77,8 @@ public class UIGeneral {
 	
 	@FXML
 	void onApplyCorrection(ActionEvent event) {
-		editor.getSightData().gnrApplyCorrectionToGun = cbApplyCorrection.isSelected();
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.gnrApplyCorrectionToGun = cbApplyCorrection.isSelected();
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -86,8 +86,8 @@ public class UIGeneral {
 	
 	
 	void selectThousandth(Thousandth thousandth) {
-		editor.getSightData().gnrThousandth = thousandth;
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.gnrThousandth = thousandth;
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -95,8 +95,8 @@ public class UIGeneral {
 
 	
 	void setFontSize(float size) {
-		editor.getSightData().gnrFontScale = size;
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.gnrFontScale = size;
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	
@@ -104,8 +104,8 @@ public class UIGeneral {
 	
 	
 	void setLineSize(float size) {
-		editor.getSightData().gnrLineSize = size;
-		editor.getSightData().setElementsDirty();
+		editor.getData().dataSight.gnrLineSize = size;
+		editor.getData().dataSight.setElementsDirty();
 		editor.wtCanvas.repaint();
 	}
 	

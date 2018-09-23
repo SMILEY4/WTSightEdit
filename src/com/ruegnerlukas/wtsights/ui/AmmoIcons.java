@@ -67,7 +67,8 @@ public class AmmoIcons {
 
 
 		// MAP ICONS TO NAME
-		icons.put("unknown", arrIcons[16]);
+		icons.put("unknown", arrIcons[17]);
+		icons.put("machinegun", arrIcons[16]);
 		icons.put("apcr_tank", arrIcons[4]);
 		icons.put("apds_tank", arrIcons[5]);
 		icons.put("apds_fs_long_tank", arrIcons[6]);

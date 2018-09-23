@@ -1,8 +1,6 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCentralVertLine;
 
 public class ElementCentralVertLine extends Element {
@@ -36,7 +34,7 @@ public class ElementCentralVertLine extends Element {
 	
 	
 	@Override
-	public LayoutCentralVertLine layout(SightData sightData, CalibrationData calibData, CalibrationAmmoData ammoData, double canvasWidth, double canvasHeight) {
+	public LayoutCentralVertLine layout(WorkingData data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -44,7 +42,7 @@ public class ElementCentralVertLine extends Element {
 		layoutData.dirty = false;
 		
 		if(drawCentralVertLine) {
-			final double lineSize = 1.0 * sightData.gnrLineSize * sightData.gnrFontScale;
+			final double lineSize = 1.0 * data.dataSight.gnrLineSize * data.dataSight.gnrFontScale;
 			layoutData.bounds.set(canvasWidth/2 - (lineSize/2f), 0, lineSize, canvasHeight);
 		} else {
 			layoutData.bounds.set(-100000, -100000, 0, 0);

@@ -1,6 +1,5 @@
 package com.ruegnerlukas.wtutils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
@@ -13,6 +12,7 @@ import org.apache.commons.math3.linear.SingularMatrixException;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 public class SightUtils {
 
@@ -82,33 +82,46 @@ public class SightUtils {
 	
 	
 	public static enum TriggerGroup {
-		PRIMARY,
-		SECONDARY,
-		COAXIAL,
-		MACHINEGUN,
-		SPECIAL,
-		TORPEDOES,
-		DEPTH_CHARGE,
-		ROCKETS,
-		MINE,
-		SMOKE;
+		PRIMARY("primary"),
+		SECONDARY("secondary"),
+		COAXIAL("coaxial"),
+		MACHINEGUN("machinegun"),
+		SPECIAL("special"),
+		TORPEDOES("torpedoes"),
+		DEPTH_CHARGE("depth_charge"),
+		ROCKETS("rockets"),
+		MINE("mine"),
+		SMOKE("smoke"),
+		UNKNOWN("?");
 		
+		public final String id;
 		
-		public static TriggerGroup get(String strTriggerGroup) {
-			if("primary".equalsIgnoreCase(strTriggerGroup)) 	 { return PRIMARY;		}
-			if("secondary".equalsIgnoreCase(strTriggerGroup)) 	 { return SECONDARY; 	}
-			if("coaxial".equalsIgnoreCase(strTriggerGroup)) 	 { return COAXIAL; 		}
-			if("machinegun".equalsIgnoreCase(strTriggerGroup))   { return MACHINEGUN; 	}
-			if("special".equalsIgnoreCase(strTriggerGroup)) 	 { return SPECIAL; 		}
-			if("torpedoes".equalsIgnoreCase(strTriggerGroup)) 	 { return TORPEDOES; 	}
-			if("depth_charge".equalsIgnoreCase(strTriggerGroup)) { return DEPTH_CHARGE; }
-			if("rockets".equalsIgnoreCase(strTriggerGroup)) 	 { return ROCKETS; 		}
-			if("mine".equalsIgnoreCase(strTriggerGroup)) 		 { return MINE; 		}
-			if("smoke".equalsIgnoreCase(strTriggerGroup)) 		 { return SMOKE; 		}
-			return null;
+		private TriggerGroup(String id) {
+			this.id = id;
+		}
+		
+		public static TriggerGroup get(String id) {
+			for(TriggerGroup g : TriggerGroup.values()) {
+				if(g.id.equalsIgnoreCase(id)) {
+					return g;
+				}
+			}
+			return UNKNOWN;
+		}
+		
+		public boolean isOr(TriggerGroup... groups) {
+			for(TriggerGroup g : groups) {
+				if(this == g) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 	}
+	
+	
+	
 	
 	
 	/*
@@ -253,7 +266,6 @@ public class SightUtils {
 		final double SINGULARITY_THRESHOLD_RATIO = 1.0e-5;
 		
 		
-		
 		double[][] dataA = new double[points.size()][3];
 		for(int i=0; i<points.size(); i++) {
 			dataA[i][0] = 1.0;
@@ -280,6 +292,9 @@ public class SightUtils {
 		try {
 			v = solver.solve(B);
 		} catch(SingularMatrixException e) {
+			Logger.get().error(A);
+			Logger.get().error(B);
+			Logger.get().error(e);
 			return null;
 		}
 

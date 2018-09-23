@@ -29,7 +29,7 @@
                               <Spinner fx:id="spinnerPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
-                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" onAction="#onUseThousandth" prefWidth="1000000.0" text="Use Thousandth" />
+                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Use Thousandth" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <VBox.margin>
                               <Insets />
@@ -46,9 +46,9 @@
                            </padding>
                         </Separator>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Color 1:" />
-                        <ColorPicker fx:id="colorPicker1" minWidth="0.0" onAction="#onPickColor1" prefWidth="1000000.0" />
+                        <ColorPicker fx:id="colorPicker1" minWidth="0.0" prefWidth="1000000.0" />
                         <Label minWidth="0.0" prefWidth="1000000.0" text="Color 2:" />
-                        <ColorPicker fx:id="colorPicker2" minWidth="0.0" onAction="#onPickColor2" prefWidth="1000000.0" />
+                        <ColorPicker fx:id="colorPicker2" minWidth="0.0" prefWidth="1000000.0" />
                      </children>
                   </VBox>
                </children>

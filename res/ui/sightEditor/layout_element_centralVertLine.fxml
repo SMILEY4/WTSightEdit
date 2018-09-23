@@ -17,7 +17,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <CheckBox fx:id="cbShowLine" minWidth="0.0" mnemonicParsing="false" onAction="#onShowLine" prefWidth="1000000.0" text="Draw Central Vertical Line" />
+                        <CheckBox fx:id="cbShowLine" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Central Vertical Line" />
                      </children>
                   </VBox>
                </children>

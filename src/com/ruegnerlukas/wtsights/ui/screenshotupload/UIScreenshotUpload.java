@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
@@ -17,9 +18,8 @@ import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.UICalibrationEditor;
 import com.ruegnerlukas.wtutils.FXUtils;
+import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,7 +51,7 @@ public class UIScreenshotUpload {
 	@FXML private URL location;
 
 	@FXML private Label labelTankName;
-	@FXML private ListView<Ammo> listView;
+	@FXML private ListView<BallisticElement> listView;
 
 	private File fileSight = null;
 	private Vehicle vehicle;
@@ -105,33 +105,49 @@ public class UIScreenshotUpload {
 		// VEHICLE NAME
 		labelTankName.setText(vehicle.namePretty);
 		
-		// LIST
-		ObservableList<Ammo> fxListAmmo = FXCollections.observableArrayList();
+		// ITEMS
 		for(int i=0; i<vehicle.weaponsList.size(); i++) {
 			Weapon weapon = vehicle.weaponsList.get(i);
-			if(weapon.triggerGroup.equals("torpedoes") || weapon.triggerGroup.equals("depth_charge") || weapon.triggerGroup.equals("mine") || weapon.triggerGroup.equals("smoke")) {
+			
+			// cannons
+			if(weapon.triggerGroup == TriggerGroup.PRIMARY || weapon.triggerGroup == TriggerGroup.SECONDARY) {
+				for(int j=0; j<weapon.ammo.size(); j++) {
+					Ammo ammo = weapon.ammo.get(j);
+					BallisticElement element = new BallisticElement();
+					element.ammunition.add(ammo);
+					if(element.ammunition.size() == 1) {
+						if(element.ammunition.get(0).type.contains("rocket") || element.ammunition.get(0).type.contains("atgm")) {
+							element.isRocketElement = true;
+						}
+					}
+					listView.getItems().add(element);
+				}
+			
+			// machineguns
+			} else if(weapon.triggerGroup == TriggerGroup.MACHINEGUN || weapon.triggerGroup == TriggerGroup.COAXIAL) {
+				BallisticElement element = new BallisticElement();
+				element.ammunition.addAll(weapon.ammo);
+				element.isRocketElement = false;
+				listView.getItems().add(element);
+				
+			// other
+			} else {
 				continue;
 			}
-			if(weapon.triggerGroup.equals("machinegun") || weapon.triggerGroup.equals("coaxial")) {
-				continue;
-			}
-			for(int j=0; j<weapon.ammo.size(); j++) {
-				Ammo ammo = weapon.ammo.get(j);
-				fxListAmmo.add(ammo);
-			}
+			
 		}
+
+		Logger.get().info("Loaded ammunition for " + vehicle.name + ": " + listView.getItems().size());
 		
-		Logger.get().info("Loaded ammunition for " + vehicle.name + ": " + fxListAmmo);
-		
-		listView.getItems().addAll(fxListAmmo);
-		listView.setCellFactory(new Callback<ListView<Ammo>, ListCell<Ammo>>() {
+		listView.setCellFactory(new Callback<ListView<BallisticElement>, ListCell<BallisticElement>>() {
 			@Override
-			public ListCell<Ammo> call(ListView<Ammo> param) {
+			public ListCell<BallisticElement> call(ListView<BallisticElement> param) {
 				Cell cell = new Cell();
 				cells.add(cell);
 				return cell;
 			}
 		});
+
 	}
 
 	
@@ -148,35 +164,42 @@ public class UIScreenshotUpload {
 	@FXML
 	void onNext(ActionEvent event) {
 
-		List<String> ammoNames = new ArrayList<String>();
-		List<File> imgFiles = new ArrayList<File>();
-
-		for(Cell c : cells) {
-			if(c.lastItem != null && c.fileImage != null) {
-				ammoNames.add(c.lastItem.name);
-				imgFiles.add(c.fileImage);
+		Map<BallisticElement, File> imageMap = new HashMap<BallisticElement,File>();
+		List<BallisticElement> dataList = new ArrayList<BallisticElement>();
+		
+		int nCells = 0;
+		int nShells = 0;
+		int nRockets = 0;
+		
+		for(Cell cell : cells) {
+			if(cell.data != null) {
+				nCells++;
+				BallisticElement element = cell.data;
+				File file = cell.fileImage;
+				if(cell.isRocket) {
+					nRockets++;
+					dataList.add(element);
+				} else {
+					if(file != null) {
+						nShells++;
+						dataList.add(element);
+						imageMap.put(element, file);
+					}
+				}
 			}
 		}
 		
-		boolean isValid = !ammoNames.isEmpty() && (ammoNames.size() == imgFiles.size());
+		boolean isValid = true;
 		
-		if(!isValid) {
-			boolean onlyRockets = true;
-			for(Cell c : cells) {
-				if(c.label.getText() == null || "null".equals(c.label.getText())) {
-					continue;
-				}
-				if(!c.isRocket) {
-					onlyRockets = false;
-					break;
-				}
-			}
-			if(onlyRockets) {
-				isValid = true;
-			}
+		if(nShells+nRockets == 0) {
+			isValid = false;
+		}
+		if(imageMap.size() != nShells) {
+			isValid = false;
 		}
 		
-		Logger.get().debug("onNext: " + "ammo="+ammoNames + "; imgs=" + imgFiles + "; valid=" + isValid); 
+		
+		Logger.get().debug("onNext: " + "data="+dataList + "; imgs=" + imageMap + "; valid=" + isValid); 
 		
 		if(!isValid) {
 			Logger.get().warn("(Alert) No Images selected. Select at least one image to continue.");
@@ -188,43 +211,22 @@ public class UIScreenshotUpload {
 			return;
 		}
 		
-		
-		
-		List<Ammo> ammoList = new ArrayList<Ammo>();
-		Map<Ammo, File> imageMap = new HashMap<Ammo,File>();
-		
-		for(int i=0; i<ammoNames.size(); i++) {
-			String ammoName = ammoNames.get(i);
-			File imgFile = imgFiles.get(i);
-			
-			for(Weapon w : vehicle.weaponsList) {
-				for(Ammo a : w.ammo) {
-					if(a.name.equals(ammoName)) {
-						ammoList.add(a);
-						imageMap.put(a, imgFile);
-					}
-				}
-			}
-			
-		}
-		
-		
 		if(Workflow.is(Step.CREATE_CALIBRATION, Step.SELECT_VEHICLE)) {
 			this.stage.close();
 			Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
-			UICalibrationEditor.openNew(vehicle, ammoList, imageMap);
+			UICalibrationEditor.openNew(vehicle, dataList, imageMap);
 		}
 		
 		if(Workflow.is(Step.CREATE_SIGHT, Step.SELECT_CALIBRATION, Step.SELECT_VEHICLE)) {
 			this.stage.close();
 			Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
-			UICalibrationEditor.openNew(vehicle, ammoList, imageMap);
+			UICalibrationEditor.openNew(vehicle, dataList, imageMap);
 		}
 		
-		if(Workflow.is(Step.EDIT_SIGHT, Step.SELECT_CALIBRATION, Step.SELECT_VEHICLE)) {
+		if(Workflow.is(Step.LOAD_SIGHT, Step.SELECT_CALIBRATION, Step.SELECT_VEHICLE)) {
 			this.stage.close();
 			Workflow.steps.add(Step.UPLOAD_SCREENSHOTS);
-			UICalibrationEditor.openNew(vehicle, ammoList, imageMap, fileSight);
+			UICalibrationEditor.openNew(vehicle, dataList, imageMap, fileSight);
 		}
 		
 		
@@ -235,7 +237,7 @@ public class UIScreenshotUpload {
 	
 	
 	
-	class Cell extends ListCell<Ammo> {
+	class Cell extends ListCell<BallisticElement> {
 		
 		public File fileImage;
 		public Label label = new Label("null");
@@ -245,7 +247,7 @@ public class UIScreenshotUpload {
 		private TextField textField = new TextField();
 		private Button browse = new Button("Browse");
 		private Button reset = new Button("X");
-		private Ammo lastItem;
+		private BallisticElement data;
 		
 		
 		public Cell() {
@@ -260,6 +262,7 @@ public class UIScreenshotUpload {
 		
 			reset.setMinWidth(40);
 			reset.setMaxWidth(40);
+			reset.setDisable(true);
 			
 			HBox.setMargin(label, new Insets(0, 10, 0, 0));
 			label.setMinWidth(200);
@@ -284,6 +287,7 @@ public class UIScreenshotUpload {
 						fileImage = file;
 						textField.setText(file.getAbsolutePath());
 						lastDirectory = file.getParentFile();
+						reset.setDisable(false);
 					}
 					
 					Logger.get().debug("Image selected: " + file);
@@ -296,6 +300,7 @@ public class UIScreenshotUpload {
 				public void handle(ActionEvent event) {
 					fileImage = null;
 					textField.setText("");
+					reset.setDisable(true);
 				}
 			});
 			
@@ -303,31 +308,56 @@ public class UIScreenshotUpload {
 		
 		
 		@Override
-		protected void updateItem(Ammo item, boolean empty) {
+		protected void updateItem(BallisticElement item, boolean empty) {
 			super.updateItem(item, empty);
+			this.data = item;
 			setText(null);
-			if(empty) {
-				lastItem = null;
+			
+			if(empty || item == null || item.ammunition.isEmpty()) {
 				setGraphic(null);
 			} else {
-				lastItem = item;
-				String name = item != null ? item.namePretty : "<null>";
-				String type = item != null ? item.type : "<null>";
-				label.setText(name);
-				label.setTooltip(new Tooltip("Type = " + type));
-				ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(type), null));
-				imgView.setSmooth(true);
-				imgView.setPreserveRatio(true);
-				imgView.setFitHeight(40);
-				label.setGraphic(imgView);
-				setGraphic(hbox);
-				if(type.contains("rocket") || type.contains("atgm")) {
-					setDisable(true);
-					isRocket = true;
-				} else {
-					setDisable(false);
-					isRocket = false;
+				
+				// multiple ammo
+				if(item.ammunition.size() > 1) {
+					
+					label.setText(item.ammunition.get(0).parentWeapon.name);
+					label.setTooltip(new Tooltip("TriggerGroup = " + item.ammunition.get(0).parentWeapon.triggerGroup.id));
+					
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon("machinegun"), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					label.setGraphic(imgView);
+					setGraphic(hbox);
+					
+					if(item.isRocketElement) {
+						setDisable(true);
+						isRocket = true;
+					} else {
+						setDisable(false);
+						isRocket = false;
+					}
+					
+					
+				// single ammo
+				} else if(item.ammunition.size() == 1) {
+					label.setText(item.ammunition.get(0).namePretty);
+					label.setTooltip(new Tooltip("Type = " + item.ammunition.get(0).type));
+					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
+					imgView.setSmooth(true);
+					imgView.setPreserveRatio(true);
+					imgView.setFitHeight(40);
+					label.setGraphic(imgView);
+					setGraphic(hbox);
+					if(item.isRocketElement) {
+						setDisable(true);
+						isRocket = true;
+					} else {
+						setDisable(false);
+						isRocket = false;
+					}
 				}
+				
 			}
 		}
 		

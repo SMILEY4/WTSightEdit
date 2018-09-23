@@ -5,9 +5,7 @@ import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.WorkingData;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
@@ -53,12 +51,12 @@ public class OverlayRenderer {
 	
 	
 	
-	public static void draw(WTCanvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	public static void draw(WTCanvas canvas, GraphicsContext g, WorkingData data) {
 		
-		if(dataSight.envDisplayGrid && !MathUtils.isNearlyEqual(0, dataSight.envGridWidth) && !MathUtils.isNearlyEqual(0, dataSight.envGridHeight)) {
+		if(data.dataSight.envDisplayGrid && !MathUtils.isNearlyEqual(0, data.dataSight.envGridWidth) && !MathUtils.isNearlyEqual(0, data.dataSight.envGridHeight)) {
 			
-			double pxWidth = Conversion.get().mil2pixel(dataSight.envGridWidth, canvas.getHeight(), dataSight.envZoomedIn);
-			double pxHeight = Conversion.get().mil2pixel(dataSight.envGridHeight, canvas.getHeight(), dataSight.envZoomedIn);
+			double pxWidth = Conversion.get().mil2pixel(data.dataSight.envGridWidth, canvas.getHeight(), data.dataSight.envZoomedIn);
+			double pxHeight = Conversion.get().mil2pixel(data.dataSight.envGridHeight, canvas.getHeight(), data.dataSight.envZoomedIn);
 			
 			int nx = (int) (canvas.getWidth() / pxWidth);
 			int ny = (int) (canvas.getHeight() / pxHeight);
@@ -69,46 +67,46 @@ public class OverlayRenderer {
 					double cy = y * pxHeight + canvas.getHeight()/2;
 					double cw = pxWidth;
 					double ch = pxHeight;
-					drawRect(dataSight.envColorGrid, dataSight.envColorGrid, canvas, g, cx, cy, cw, ch);
+					drawRect(data.dataSight.envColorGrid, data.dataSight.envColorGrid, canvas, g, cx, cy, cw, ch);
 				}
 			}
 			
 			
 		}
 		
-		drawElementSelection(canvas, g, dataSight, dataCalib, currentAmmoData);
+		drawElementSelection(canvas, g, data);
 	}
 	
 	
 	
-	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, SightData dataSight, CalibrationData dataCalib, CalibrationAmmoData currentAmmoData) {
+	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, WorkingData data) {
 
-		Element selectedElement = dataSight.selectedElement;
+		Element selectedElement = data.dataSight.selectedElement;
 		if(selectedElement == null) {
 			return;
 		}
 		
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), dataCalib.vehicle.fovOut, dataCalib.vehicle.fovIn, dataSight.gnrThousandth);
+		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
 		
 		
 		if(selectedElement.type == ElementType.CENTRAL_VERT_LINE) {
 			ElementCentralVertLine element = (ElementCentralVertLine)selectedElement;
-			LayoutCentralVertLine layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutCentralVertLine layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.bounds.x, layout.bounds.y, layout.bounds.width, layout.bounds.height);
 			
 			
 			
 		} else if(selectedElement.type == ElementType.CENTRAL_HORZ_LINE) {
 			ElementCentralHorzLine element = (ElementCentralHorzLine)selectedElement;
-			LayoutCentralHorzLine layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutCentralHorzLine layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.bounds.x, layout.bounds.y, layout.bounds.width, layout.bounds.height);
 			
 			
 			
 		} else if(selectedElement.type == ElementType.RANGEFINDER) {
 			ElementRangefinder element = (ElementRangefinder)selectedElement;
-			LayoutRangefinder layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutRangefinder layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.bounds.x, layout.bounds.y, layout.bounds.width, layout.bounds.height);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.bounds.x, layout.bounds.y+layout.bounds.height, 6);
 			
@@ -116,7 +114,7 @@ public class OverlayRenderer {
 			
 		} else if(selectedElement.type == ElementType.HORZ_RANGE_INDICATORS) {
 			ElementHorzRangeIndicators element = (ElementHorzRangeIndicators)selectedElement;
-			LayoutHorzRangeIndicators layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutHorzRangeIndicators layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 
 			for(int i=0; i<layout.bounds.length; i++) {
 				Rectanglef bounds = layout.bounds[i];
@@ -133,7 +131,7 @@ public class OverlayRenderer {
 			
 		} else if(selectedElement.type == ElementType.CUSTOM_LINE) {
 			ElementCustomLine element = (ElementCustomLine)selectedElement;
-			LayoutLineObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutLineObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
 			
 			Vector2d dir = Vector2d.createVectorAB(layout.start, layout.end).setLength(3);
@@ -145,7 +143,7 @@ public class OverlayRenderer {
 		
 		} else if(selectedElement.type == ElementType.CUSTOM_CIRCLE) {
 			ElementCustomCircle element = (ElementCustomCircle)selectedElement;
-			LayoutCircleObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutCircleObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			if(layout.useLineSegments) {
 				Vector2d v0 = new Vector2d(0, 1).rotateDeg(-element.segment.x).setLength(layout.circle.radius+layout.circle.radius*0.1);
 				Vector2d v1 = new Vector2d(0, 1).rotateDeg(-element.segment.y).setLength(layout.circle.radius+layout.circle.radius*0.1);
@@ -159,14 +157,14 @@ public class OverlayRenderer {
 			
 		} else if(selectedElement.type == ElementType.CUSTOM_TEXT) {
 			ElementCustomText element = (ElementCustomText)selectedElement;
-			LayoutTextObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutTextObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.pos.x, layout.pos.x, 6);
 			
 			
 			
 		} else if(selectedElement.type == ElementType.CUSTOM_QUAD) {
 			ElementCustomQuad element = (ElementCustomQuad)selectedElement;
-			LayoutQuadObject layout = element.layout(dataSight, dataCalib, currentAmmoData, canvas.getWidth(), canvas.getHeight());
+			LayoutQuadObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawQuad(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x, layout.p0.y, layout.p1.x, layout.p1.y, layout.p2.x, layout.p2.y, layout.p3.x, layout.p3.y);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x, layout.p0.y, 4);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p1.x, layout.p1.y, 4);
@@ -182,10 +180,13 @@ public class OverlayRenderer {
 		} else if(selectedElement.type == ElementType.SHELL_BALLISTICS_BLOCK || selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS) {
 			ElementBallRangeIndicator element = (ElementBallRangeIndicator)selectedElement;
 			
-			CalibrationAmmoData ammoData = selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS ? currentAmmoData : ((ElementShellBlock)selectedElement).dataAmmo;
-			LayoutBallRangeIndicators layout = element.layout(dataSight, dataCalib, ammoData, canvas.getWidth(), canvas.getHeight());
+			WorkingData dataBlock = new WorkingData();
+			dataBlock.dataSight = data.dataSight;
+			dataBlock.dataBallistic = data.dataBallistic;
+			dataBlock.elementBallistic = selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS ? data.elementBallistic : ((ElementShellBlock)selectedElement).elementBallistic;
+			LayoutBallRangeIndicators layout = element.layout(dataBlock, canvas.getWidth(), canvas.getHeight());
 			
-			if(element.drawCorrLabel && dataSight.envRangeCorrection > 0) {
+			if(element.drawCorrLabel && data.dataSight.envRangeCorrection > 0) {
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.corrLabel.x, layout.corrLabel.y, 6);
 			}
 			
@@ -196,7 +197,9 @@ public class OverlayRenderer {
 					Rectanglef centerBounds = layout.vCenterBounds[i];
 					Vector2d textPos = layout.vTextPositions[i];
 					drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainBounds.x, mainBounds.y, mainBounds.width, mainBounds.height);
-					drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, centerBounds.x, centerBounds.y, centerBounds.width, centerBounds.height);
+					if(element.drawAddLines) {
+						drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, centerBounds.x, centerBounds.y, centerBounds.width, centerBounds.height);
+					}
 					if(major) {
 						drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, textPos.x, textPos.y, 6);
 					}
@@ -222,7 +225,7 @@ public class OverlayRenderer {
 				
 				drawThinCircle(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.rlCenter.x, layout.rlCenter.y, layout.rcRadius);
 
-				for(int i=0; i<layout.rlLines.length; i++) {
+				for(int i=0; i<layout.rcCircles.length; i++) {
 					boolean major = element.indicators.get(i).isMajor();
 					Circlef circle = layout.rcCircles[i];
 					Vector2d textPos = layout.rcTextPositions[i];
