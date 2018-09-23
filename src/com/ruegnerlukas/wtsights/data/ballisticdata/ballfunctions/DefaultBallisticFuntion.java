@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
+import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtutils.SightUtils;
 
 public class DefaultBallisticFuntion implements IBallisticFunction {
@@ -15,38 +17,38 @@ public class DefaultBallisticFuntion implements IBallisticFunction {
 	
 	
 	
-	
-	public DefaultBallisticFuntion(List<Marker> markers) {
+	public static DefaultBallisticFuntion create(BallisticElement element, Vehicle vehicle, boolean zoomedIn) {
+		if(element.markerData == null) {
+			return null;
+		}
+		
+		List<Marker> markers = element.markerData.markers;
+		
 		double[] distMeters = new double[markers.size()+1];
 		double[] yPos = new double[markers.size()+1];
 		distMeters[0] = 0;
 		yPos[0] = 0;
 		for(int i=0; i<markers.size(); i++) {
 			distMeters[i+1] = markers.get(i).distMeters;
-			yPos[i+1] = markers.get(i).yPos;
+			yPos[i+1] = markers.get(i).yPos / (zoomedIn ? (vehicle.fovOut / vehicle.fovIn) : 1);
 		}
-		create(distMeters, yPos);
-	}
-	
-	
-	
-	
-	public DefaultBallisticFuntion(double[] distMeters, double[] yPos) {
-		create(distMeters, yPos);
-	}
-	
-	
-	
-	
-	
-	
-	private void create(double[] distMeters, double[] yPos) {
+
 		List<Vector2d> points = new ArrayList<Vector2d>();
 		for(int i=0; i<yPos.length; i++) {
 			points.add(new Vector2d(distMeters[i]/100.0, yPos[i]));
 		}
-		this.params = SightUtils.fitBallisticFunction(points, 1);
+		Vector3d params = SightUtils.fitBallisticFunction(points, 1);
+		
+		return new DefaultBallisticFuntion(params);
 	}
+	
+	
+	
+	private DefaultBallisticFuntion(Vector3d params) {
+		this.params = params;
+	}
+	
+	
 	
 	
 	

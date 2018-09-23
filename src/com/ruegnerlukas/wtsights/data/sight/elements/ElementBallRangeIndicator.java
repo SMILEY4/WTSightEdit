@@ -363,6 +363,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	public LayoutBallRangeIndicators layoutRadialCircles(WorkingData data, double canvasWidth, double canvasHeight) {
+		
 		if(layoutData.rcCircles == null || layoutData.rcCircles.length != indicators.size() ) {
 			layoutData.rcCircles = new Circlef[indicators.size()];
 			layoutData.rcTextPositions = new Vector2d[indicators.size()];
@@ -413,7 +414,7 @@ public class ElementBallRangeIndicator extends Element {
 		Conversion conversionUSSR = new Conversion();
 		conversionUSSR.initialize(canvasWidth, canvasHeight, data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, Thousandth.USSR);
 
-		// draw indicators
+		// calc indicators
 		for (int i = 0; i < indicators.size(); i++) {
 			BIndicator indicator = indicators.get(i);
 
@@ -433,8 +434,7 @@ public class ElementBallRangeIndicator extends Element {
 
 			// angle correction
 			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
-			double angleCorrection = SightUtils.calcAngle_deg(rangeCorrAngleSMil, radialRadius,
-					radialStretch);
+			double angleCorrection = SightUtils.calcAngle_deg(rangeCorrAngleSMil, radialRadius, radialStretch);
 
 			// rotate
 			if (drawUpward) {

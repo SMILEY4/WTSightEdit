@@ -35,6 +35,7 @@ import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutTextObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
+import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -238,6 +239,15 @@ public class SightRenderer {
 	
 	
 	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+		if(data.elementBallistic.ammunition.isEmpty()) {
+			return;
+		}
+		if(data.elementBallistic.ammunition.get(0).parentWeapon.triggerGroup.isOr(TriggerGroup.PRIMARY, TriggerGroup.SECONDARY)) {
+			if(data.elementBallistic.ammunition.get(0).type.contains("rocket") || data.elementBallistic.ammunition.get(0).type.contains("atgm")) {
+				return;
+			}
+		}
+		
 		if(block.scaleMode == ScaleMode.VERTICAL) {
 			drawBallisticsVertical(canvas, g, data, block);
 		} else {

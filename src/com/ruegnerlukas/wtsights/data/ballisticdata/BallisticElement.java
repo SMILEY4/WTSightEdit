@@ -8,7 +8,11 @@ import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.NullBallisticF
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 
 public class BallisticElement {
+	
 	public List<Ammo> ammunition = new ArrayList<Ammo>();
+	public boolean isRocketElement = false;
 	public IBallisticFunction function = new NullBallisticFunction();
 	public MarkerData markerData;
+	
+	
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataWriter;
 import com.ruegnerlukas.wtsights.data.WorkingData;
@@ -22,6 +23,7 @@ import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.OverlayRenderer;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Config;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
 
@@ -66,6 +68,8 @@ public class UISightEditor {
 	public WTCanvas wtCanvas;
 	
 	@FXML private CheckBox cbShowSelections;
+	@FXML private Label labelPosMil;
+	@FXML private Label labelPosSS;
 	
 	// ui
 	@FXML private Label labelVehicleName;
@@ -155,16 +159,16 @@ public class UISightEditor {
 		// CANVAS
 		wtCanvas = new WTCanvas(paneCanvas) {
 			@Override public void onMouseMoved() {
-//				wtCanvas.repaint();
+				setLabelsPos();
 			}
 			@Override public void onMouseDragged() {
-//				wtCanvas.repaint();
+				setLabelsPos();
 			}
 			@Override public void onMousePressed(MouseButton btn) {
-//				wtCanvas.repaint();
+				setLabelsPos();
 			}
 			@Override public void onMouseReleased(MouseButton btn) {
-//				wtCanvas.repaint();
+				setLabelsPos();
 			}
 			@Override public void onKeyReleased(KeyCode code) {
 //				wtCanvas.repaint();
@@ -304,6 +308,40 @@ public class UISightEditor {
 		}
 	}
 	
+	
+	
+	void setLabelsPos() {
+		
+		if(wtCanvas.cursorVisible) {
+			
+			Conversion.get().initialize(wtCanvas.getWidth(), wtCanvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
+			
+			Vector2d posMil = new Vector2d(wtCanvas.cursorPosition);
+			posMil.x -= wtCanvas.getWidth()/2;
+			posMil.y -= wtCanvas.getHeight()/2;
+			posMil.y *= -1;
+			posMil.x = Conversion.get().pixel2mil(posMil.x, wtCanvas.getHeight(), data.dataSight.envZoomedIn);
+			posMil.y = Conversion.get().pixel2mil(posMil.y, wtCanvas.getHeight(), data.dataSight.envZoomedIn);
+			posMil.x = ((int)(posMil.x*100)) / 100.0;
+			posMil.y = ((int)(posMil.y*100)) / 100.0;
+			labelPosMil.setText("mil: " + posMil.x + ", " + posMil.y);
+			
+			Vector2d posSS = new Vector2d(wtCanvas.cursorPosition);
+			posSS.x -= wtCanvas.getWidth()/2;
+			posSS.y -= wtCanvas.getHeight()/2;
+			posSS.y *= -1;
+			posSS.x = Conversion.get().pixel2screenspace(posSS.x, wtCanvas.getHeight(), data.dataSight.envZoomedIn);
+			posSS.y = Conversion.get().pixel2screenspace(posSS.y, wtCanvas.getHeight(), data.dataSight.envZoomedIn);
+			posSS.x = ((int)(posSS.x*1000)) / 1000.0;
+			posSS.y = ((int)(posSS.y*1000)) / 1000.0;
+			labelPosSS.setText("ss: " + posSS.x + ", " + posSS.y);
+			
+		} else {
+			labelPosMil.setText("mil: - , -");
+			labelPosSS.setText("ss: - , -");
+		}
+		
+	}
 	
 	
 	

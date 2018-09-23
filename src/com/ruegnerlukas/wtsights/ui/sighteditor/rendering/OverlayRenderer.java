@@ -197,7 +197,9 @@ public class OverlayRenderer {
 					Rectanglef centerBounds = layout.vCenterBounds[i];
 					Vector2d textPos = layout.vTextPositions[i];
 					drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainBounds.x, mainBounds.y, mainBounds.width, mainBounds.height);
-					drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, centerBounds.x, centerBounds.y, centerBounds.width, centerBounds.height);
+					if(element.drawAddLines) {
+						drawRect(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, centerBounds.x, centerBounds.y, centerBounds.width, centerBounds.height);
+					}
 					if(major) {
 						drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, textPos.x, textPos.y, 6);
 					}
@@ -223,7 +225,7 @@ public class OverlayRenderer {
 				
 				drawThinCircle(COLOR_SELECTION_3, COLOR_SELECTION_4, canvas, g, layout.rlCenter.x, layout.rlCenter.y, layout.rcRadius);
 
-				for(int i=0; i<layout.rlLines.length; i++) {
+				for(int i=0; i<layout.rcCircles.length; i++) {
 					boolean major = element.indicators.get(i).isMajor();
 					Circlef circle = layout.rcCircles[i];
 					Vector2d textPos = layout.rcTextPositions[i];

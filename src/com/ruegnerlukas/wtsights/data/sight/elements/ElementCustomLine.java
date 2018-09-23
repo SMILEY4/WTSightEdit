@@ -71,7 +71,7 @@ public class ElementCustomLine extends ElementCustomObject {
 			
 			double rangeCorrectionMil = 0;
 			
-			if(data.elementBallistic != null) {
+			if(data.elementBallistic != null && !(data.elementBallistic.ammunition.get(0).type.contains("rocket") || data.elementBallistic.ammunition.get(0).type.contains("atgm")) ) {
 				final double rangeCorrectionResultPX = data.elementBallistic.function.eval(data.dataSight.envRangeCorrection);
 				rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvasHeight, false);
 				

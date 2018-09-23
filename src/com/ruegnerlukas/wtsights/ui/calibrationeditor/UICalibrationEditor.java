@@ -23,14 +23,12 @@ import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.DefaultBallist
 import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.IBallisticFunction;
 import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.NullBallisticFunction;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.Workflow;
 import com.ruegnerlukas.wtsights.ui.Workflow.Step;
 import com.ruegnerlukas.wtsights.ui.sighteditor.UISightEditor;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
-import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
 
 import javafx.beans.value.ChangeListener;
@@ -94,9 +92,9 @@ public class UICalibrationEditor {
 	
 	
 	
-	public static void openNew(Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap, File fileSight) {
+	public static void openNew(Vehicle vehicle, List<BallisticElement> dataList, Map<BallisticElement,File> imageMap, File fileSight) {
 
-		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoList + "; sight=" + fileSight.getAbsolutePath());
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; data=" + dataList + "; sight=" + fileSight.getAbsolutePath());
 
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
@@ -106,15 +104,15 @@ public class UICalibrationEditor {
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
-		controller.create(stage, vehicle, ammoList, imageMap, fileSight);
+		controller.create(stage, vehicle, dataList, imageMap, fileSight);
 	}
 	
 	
 	
 	
-	public static void openNew(Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap) {
+	public static void openNew(Vehicle vehicle, List<BallisticElement> dataList, Map<BallisticElement,File> imageMap) {
 
-		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; ammo=" + ammoList);
+		Logger.get().info("Navigate to 'CalibrationEditor' (" + Workflow.toString(Workflow.steps) + ")  vehicle=" + (vehicle==null ? "null" : vehicle.name) + "; data=" + dataList);
 
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
@@ -124,7 +122,7 @@ public class UICalibrationEditor {
 		UICalibrationEditor controller = (UICalibrationEditor)sceneObjects[0];
 		Stage stage = (Stage)sceneObjects[1];
 		
-		controller.create(stage, vehicle, ammoList, imageMap);
+		controller.create(stage, vehicle, dataList, imageMap);
 	}
 	
 	
@@ -159,28 +157,29 @@ public class UICalibrationEditor {
 	
 	
 	
-	public void create(Stage stage, Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap) {
-		create(stage, vehicle, ammoList, imageMap, null);
+	public void create(Stage stage, Vehicle vehicle, List<BallisticElement> dataList, Map<BallisticElement,File> imageMap) {
+		create(stage, vehicle, dataList, imageMap, null);
 	}
 	
 	
 	
 	
-	public void create(Stage stage, Vehicle vehicle, List<Ammo> ammoList, Map<Ammo,File> imageMap, File fileSight) {
+	public void create(Stage stage, Vehicle vehicle, List<BallisticElement> dataList, Map<BallisticElement,File> imageMap, File fileSight) {
 		this.stage = stage;
 		this.fileSight = fileSight;
 		
 		this.dataBallistic = new BallisticData();
 		this.dataBallistic.vehicle = vehicle;
+		this.dataBallistic.elements.addAll(dataList);
 		
 		try {
-			for(int i=0; i<ammoList.size(); i++) {
-				Ammo ammo  = ammoList.get(i);
-				BallisticElement e = new BallisticElement();
-				e.ammunition.add(ammo);
-				File file = imageMap.get(ammo);
-				BufferedImage img = ImageIO.read(file);
-				this.dataBallistic.images.put(e, img);
+			for(int i=0; i<dataList.size(); i++) {
+				BallisticElement element  = dataList.get(i);
+				File file = imageMap.get(element);
+				if(file != null) {
+					BufferedImage img = ImageIO.read(file);
+					this.dataBallistic.images.put(element, img);
+				}
 			}
 			
 		} catch (IOException e) {
@@ -223,8 +222,10 @@ public class UICalibrationEditor {
 				}
 			}
 			@Override public void onKeyReleased(KeyCode code) {
-				onDeleteMarkerRequest(wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y);
-				wtCanvas.repaint();
+				if(code == KeyCode.BACK_SPACE || code == KeyCode.DELETE) {
+					onDeleteMarkerRequest(wtCanvas.cursorPosition.x, wtCanvas.cursorPosition.y);
+					wtCanvas.repaint();
+				}
 			}
 			@Override public void onRepaint(GraphicsContext g) {
 				repaintCanvas(g);
@@ -272,7 +273,10 @@ public class UICalibrationEditor {
 			
 		} else {
 			
-			if(imageCache.containsKey(element)) {
+			if(dataBallistic.images.get(element) == null) {
+				currentImage = null;
+				
+			} else if(imageCache.containsKey(element)) {
 				currentImage = imageCache.get(element);
 				Logger.get().debug("Image retrieved from cache");
 			} else {
@@ -288,7 +292,11 @@ public class UICalibrationEditor {
 			cbZoomedIn.setDisable(false);
 			cbZoomedIn.setSelected( dataBallistic.zoomedIn.containsKey(elementBallistic) ? dataBallistic.zoomedIn.get(elementBallistic) : false);
 			updateMarkerList();
-			wtCanvas.rebuildCanvas(currentImage);
+			if(currentImage != null) {
+				wtCanvas.rebuildCanvas(currentImage);
+			} else {
+				wtCanvas.rebuildCanvas(1280, 720);
+			}
 		}
 		
 	}
@@ -335,7 +343,7 @@ public class UICalibrationEditor {
 					marker.distMeters = newValue;
 					MarkerData dataMarker = elementBallistic.markerData;
 					if(dataMarker.markers.size() >= 3) {
-						elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+						elementBallistic.function = DefaultBallisticFuntion.create(elementBallistic, dataBallistic.vehicle, dataBallistic.isZoomedIn(elementBallistic));
 					} else {
 						elementBallistic.function = new NullBallisticFunction();
 					}
@@ -380,11 +388,13 @@ public class UICalibrationEditor {
 				
 				MarkerData dataMarker = this.elementBallistic.markerData;
 
+				double zoom = dataBallistic.vehicle.fovOut / dataBallistic.vehicle.fovIn;
+				
 				// draw approx. ball. indicators
 				g.setStroke(Color.RED);
 				IBallisticFunction func = elementBallistic.function;
 				for(int d=200; d<=2800; d+=200) {
-					double p = func.eval(d);
+					double p = func.eval(d) * (cbZoomedIn.isSelected() ? zoom : 1.0);
 					float x = (float) (wtCanvas.getWidth()/2) - 20;
 					float y = (float) (dataMarker.yPosCenter + p);
 					g.strokeLine(x-6, y, x+6, y);
@@ -457,7 +467,7 @@ public class UICalibrationEditor {
 					}
 					
 					double scale = wtCanvas.canvas.getScaleX();
-					double mx = currentImage.getWidth()/2;
+					double mx = currentImage != null ? currentImage.getWidth()/2 : 720/2;
 					double my = marker.yPos + dataMarker.yPosCenter;
 					Point2D p = wtCanvas.transformToOverlay(mx, my);
 					
@@ -487,6 +497,7 @@ public class UICalibrationEditor {
 			return;
 		}
 		dataBallistic.zoomedIn.put(elementBallistic, cbZoomedIn.isSelected());
+		elementBallistic.function = DefaultBallisticFuntion.create(elementBallistic, dataBallistic.vehicle, dataBallistic.isZoomedIn(elementBallistic));
 		wtCanvas.repaint();
 	}
 	
@@ -494,11 +505,12 @@ public class UICalibrationEditor {
 	
 	
 	private void onAddMarker(double y) {
-		if(this.elementBallistic == null) {
+		if(this.elementBallistic == null || this.currentImage == null) {
 			return;
 		}
 		if(this.elementBallistic.markerData == null) {
 			this.elementBallistic.markerData = new MarkerData();
+			this.elementBallistic.markerData.yPosCenter = currentImage != null ? currentImage.getHeight()/2 : 720/2;
 		}
 		MarkerData dataMarker = this.elementBallistic.markerData;
 		double mc = dataMarker.yPosCenter;
@@ -514,7 +526,7 @@ public class UICalibrationEditor {
 		}
 		
 		if(dataMarker.markers.size() >= 3) {
-			this.elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+			this.elementBallistic.function = DefaultBallisticFuntion.create(this.elementBallistic, this.dataBallistic.vehicle, this.dataBallistic.isZoomedIn(this.elementBallistic));
 		} else {
 			this.elementBallistic.function = new NullBallisticFunction();
 		}
@@ -560,7 +572,7 @@ public class UICalibrationEditor {
 			MarkerData dataMarker = this.elementBallistic.markerData;
 			dataMarker.markers.remove(marker);
 			if(dataMarker.markers.size() >= 3) {
-				this.elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+				this.elementBallistic.function = DefaultBallisticFuntion.create(this.elementBallistic, this.dataBallistic.vehicle, this.dataBallistic.isZoomedIn(this.elementBallistic));
 			} else {
 				this.elementBallistic.function = new NullBallisticFunction();
 			}
@@ -586,7 +598,7 @@ public class UICalibrationEditor {
 		}
 		
 		if(dataMarker.markers.size() >= 3) {
-			this.elementBallistic.function = new DefaultBallisticFuntion(dataMarker.markers);
+			this.elementBallistic.function = DefaultBallisticFuntion.create(this.elementBallistic, this.dataBallistic.vehicle, this.dataBallistic.isZoomedIn(this.elementBallistic));
 		} else {
 			this.elementBallistic.function = new NullBallisticFunction();
 		}
@@ -603,11 +615,11 @@ public class UICalibrationEditor {
 	void onExport(ActionEvent event) {
 		
 		if(!isValidMarkers()) {
-			Logger.get().warn("(Alert) Can not save data. At least one ammunition does not have enough markers.");
+			Logger.get().warn("(Alert) Can not save data. At least one shell does not have enough markers.");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setHeaderText(null);
-			alert.setContentText("Can not save data. At least one ammunition does not have enough markers.");
+			alert.setContentText("Can not save data. At least one shell does not have enough markers.");
 			alert.showAndWait();
 			return;
 		}
@@ -646,11 +658,11 @@ public class UICalibrationEditor {
 	void onEditSight(ActionEvent event) {
 		
 		if(!isValidMarkers()) {
-			Logger.get().warn("(Alert) Can not save data. At least one ammunition does not have enough markers.");
+			Logger.get().warn("(Alert) Can not save data. At least one shell does not have enough markers.");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setHeaderText(null);
-			alert.setContentText("Can not save data. At least one ammunition does not have enough markers.");
+			alert.setContentText("Can not save data. At least one shell does not have enough markers.");
 			alert.showAndWait();
 			return;
 		}
@@ -677,13 +689,7 @@ public class UICalibrationEditor {
 		for(BallisticElement element : this.dataBallistic.elements) {
 			
 			// needs markers ?
-			boolean needsMarker = false;
-			for(Ammo ammo : element.ammunition) {
-				if(ammo.parentWeapon != null && ammo.parentWeapon.triggerGroup.isOr(TriggerGroup.PRIMARY, TriggerGroup.SECONDARY, TriggerGroup.COAXIAL, TriggerGroup.MACHINEGUN)) {
-					needsMarker = true;
-					break;
-				}
-			}
+			boolean needsMarker = !element.isRocketElement;
 			
 			// has markers ?
 			if(needsMarker) {

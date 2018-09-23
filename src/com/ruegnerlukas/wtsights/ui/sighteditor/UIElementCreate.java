@@ -7,6 +7,8 @@ import java.util.List;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
 import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
@@ -111,6 +113,20 @@ public class UIElementCreate {
 
 			if(data.dataBallistic.elements.isEmpty() && (type == ElementType.SHELL_BALLISTICS_BLOCK || type == ElementType.BALLISTIC_RANGE_INDICATORS) ) {
 				continue;
+			}
+			
+			if(type == ElementType.SHELL_BALLISTICS_BLOCK) {
+				boolean allRockets = true;
+				for(BallisticElement element : data.dataBallistic.elements) {
+					if(!element.isRocketElement) {
+						allRockets = false;
+						break;
+					}
+				}
+				if(allRockets) {
+					continue;
+				}
+				
 			}
 			
 			int listCount = 0;

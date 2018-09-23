@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
-import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
-import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
 public class BallisticData {
 
@@ -19,21 +17,14 @@ public class BallisticData {
 	public Map<BallisticElement, Boolean> zoomedIn = new HashMap<BallisticElement, Boolean>();
 	
 	
-	
-	
-	public static BallisticData createFromVehicle(Vehicle vehicle) {
-		
-		BallisticData dataBall = new BallisticData();
-		dataBall.vehicle = vehicle;
-		
-		for(Weapon weapon : vehicle.weaponsList) {
-			if(weapon.triggerGroup.isOr(TriggerGroup.PRIMARY, TriggerGroup.SECONDARY, TriggerGroup.COAXIAL, TriggerGroup.MACHINEGUN)) {
-				
-			}
-			
+	public boolean isZoomedIn(BallisticElement element) {
+		if(zoomedIn.containsKey(element)) {
+			return zoomedIn.get(element);
+		} else {
+			return false;
 		}
-		
-		return dataBall;
 	}
+	
+	
 	
 }

@@ -101,7 +101,12 @@ public class UIShellBlock implements Module {
 		
 		// AMMO
 		FXUtils.initComboboxBallistic(comboAmmo);
-		comboAmmo.getItems().addAll(editor.getData().dataBallistic.elements);
+		for(BallisticElement element : editor.getData().dataBallistic.elements) {
+			if(!element.isRocketElement) {
+				comboAmmo.getItems().add(element);
+			}
+		}
+//		comboAmmo.getItems().addAll(editor.getData().dataBallistic.elements);
 		comboAmmo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BallisticElement>() {
 			@Override
 			public void changed(ObservableValue<? extends BallisticElement> observable, BallisticElement oldValue, BallisticElement newValue) {
@@ -257,7 +262,7 @@ public class UIShellBlock implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.drawAddLines = vDrawAddLines.isSelected();
-					element.layoutData.dirty = true;
+					element.setDirty();
 					editor.wtCanvas.repaint();
 				}
 			}
@@ -280,7 +285,7 @@ public class UIShellBlock implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
-				element.layoutData.dirty = true;
+				element.setDirty();
 				editor.wtCanvas.repaint();
 			}
 		});
@@ -686,12 +691,18 @@ public class UIShellBlock implements Module {
 		});
 		boxRow.getChildren().add(btnDelete);
 		
+		if(element != null) {
+			element.setDirty();
+		}
 	}
 	
 	
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
+		if(element != null) {
+			element.setDirty();
+		}
 		editor.wtCanvas.repaint();
 	}
 	
@@ -701,6 +712,7 @@ public class UIShellBlock implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
+			element.setDirty();
 			editor.wtCanvas.repaint();
 		}
 	}

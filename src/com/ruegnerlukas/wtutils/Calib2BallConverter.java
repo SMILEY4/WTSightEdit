@@ -24,6 +24,10 @@ public class Calib2BallConverter {
 			BallisticElement element = new BallisticElement();
 			element.ammunition.add(dataAmmo.ammo);
 			
+			if(dataAmmo.zoomedIn) {
+				dataBall.zoomedIn.put(element, dataAmmo.zoomedIn);
+			}
+			
 			if(!dataAmmo.markerRanges.isEmpty()) {
 
 				double[] distances = new double[dataAmmo.markerRanges.size()+1];
@@ -49,7 +53,7 @@ public class Calib2BallConverter {
 					element.markerData.markers.add(marker);
 				}
 
-				element.function = new DefaultBallisticFuntion(element.markerData.markers);
+				element.function = DefaultBallisticFuntion.create(element, dataBall.vehicle, dataBall.isZoomedIn(element));
 				
 			}
 			
@@ -57,10 +61,6 @@ public class Calib2BallConverter {
 			BufferedImage img = dataCalib.images.get("image_"+dataAmmo.ammo.name);
 			if(img != null) {
 				dataBall.images.put(element, img);
-			}
-			
-			if(dataAmmo.zoomedIn) {
-				dataBall.zoomedIn.put(element, dataAmmo.zoomedIn);
 			}
 			
 			dataBall.elements.add(element);

@@ -39,6 +39,7 @@ public class UIEnvironment {
 	
 	@FXML private Slider sliderRangefinderProgress;
 	@FXML private Slider sliderRangeCorrection;
+	@FXML private Spinner<Integer> spinnerRange;
 	
 	@FXML private CheckBox cbCrosshairLighting;
 	
@@ -53,7 +54,6 @@ public class UIEnvironment {
 	@FXML private ChoiceBox<String> choiceResolution;
 
 	@FXML private Label labelValueRFProgress;
-	@FXML private Label labelValueRange;
 
 	
 
@@ -115,6 +115,11 @@ public class UIEnvironment {
 		onRangefinderProgress(editor.getData().dataSight.envRFProgress);
 		
 		// RANGE CORRECTION
+		FXUtils.initSpinner(spinnerRange, 0, 0, 4000, 10, 0, true, new ChangeListener<Integer>() {
+			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+				onRangeCorrection(newValue.intValue());
+			}
+		});
 		sliderRangeCorrection.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -232,9 +237,10 @@ public class UIEnvironment {
 	
 	
 	void onRangeCorrection(int range) {
-		editor.getData().dataSight.envRangeCorrection = range;//(range+49)/50 * 50;
-		labelValueRange.setText(range+"m");
+		editor.getData().dataSight.envRangeCorrection = range;
 		editor.getData().dataSight.setElementsDirty();
+		spinnerRange.getValueFactory().setValue(editor.getData().dataSight.envRangeCorrection);
+		sliderRangeCorrection.setValue(editor.getData().dataSight.envRangeCorrection);
 		editor.wtCanvas.repaint();
 	}
 	

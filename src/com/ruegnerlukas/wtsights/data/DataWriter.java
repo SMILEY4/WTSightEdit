@@ -84,6 +84,10 @@ public class DataWriter {
 		Element elementElements = doc.createElement("elements");
 		elementVehicle.appendChild(elementElements);
 		
+		for(Entry<BallisticElement,Boolean> e : data.zoomedIn.entrySet()) {
+			System.out.println(e.getKey().ammunition.get(0) + " " + e.getValue());
+		}
+		
 		for(BallisticElement ballElement : data.elements) {
 			
 			Element elementBall = doc.createElement("element_" + data.elements.indexOf(ballElement));
@@ -269,7 +273,7 @@ public class DataWriter {
 		List<String> lines = new ArrayList<String>();
 			
 		// metadata
-		lines.add("// created with WTSightEdit " + Config.build_date);
+		lines.add("// created with WTSightEdit " + Config.build_version);
 		lines.add("// vehicle = " + (dataBall == null ? "unknown" : dataBall.vehicle.name));
 		lines.add("");
 		

@@ -43,7 +43,7 @@
                                                 </Separator>
                                                 <AnchorPane minWidth="0.0" prefHeight="173.0" prefWidth="278.0">
                                                    <children>
-                                                      <VBox fx:id="boxVertical" layoutX="89.0" spacing="5.0" style="-fx-border-color: rgba(0%, 0%, 0%, 0.25); -fx-border-radius: 3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <VBox fx:id="boxVertical" layoutX="89.0" spacing="5.0" style="-fx-border-color: rgba(0%, 0%, 0%, 0.25); -fx-border-radius: 3;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Text Shift:" />
                                                             <Spinner fx:id="vTextShift" editable="true" minWidth="0.0" prefWidth="1000000.0" />
@@ -97,7 +97,7 @@
                                                             <Insets bottom="6.0" left="3.0" right="3.0" top="6.0" />
                                                          </padding>
                                                       </VBox>
-                                                      <VBox fx:id="boxRadial" layoutX="99.0" layoutY="10.0" spacing="5.0" style="-fx-border-color: rgba(0%, 0%, 0%, 0.25); -fx-border-radius: 3;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <VBox fx:id="boxRadial" layoutX="99.0" layoutY="10.0" spacing="5.0" style="-fx-border-color: rgba(0%, 0%, 0%, 0.25); -fx-border-radius: 3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <padding>
                                                             <Insets bottom="6.0" left="3.0" right="3.0" top="6.0" />
                                                          </padding>
@@ -106,22 +106,22 @@
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
-                                                                  <Spinner fx:id="rPosX" minWidth="0.0" prefWidth="1000000.0" />
-                                                                  <Spinner fx:id="rPosY" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="rPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="rPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
                                                             <Label fx:id="rLabelSize" minWidth="0.0" prefWidth="1000000.0" text="Size / Stoke Width:" />
-                                                            <Spinner fx:id="rSize" minWidth="0.0" prefWidth="1000000.0" />
+                                                            <Spinner fx:id="rSize" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Circle Radius:" />
-                                                            <Spinner fx:id="rCircleRadius" minWidth="0.0" prefWidth="1000000.0" />
+                                                            <Spinner fx:id="rCircleRadius" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Radius:" />
                                                             <CheckBox fx:id="rRadiusUseMils" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Use Mils" />
-                                                            <Spinner fx:id="rRadius" minWidth="0.0" prefWidth="1000000.0" />
+                                                            <Spinner fx:id="rRadius" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Radial Stretch and Angle:" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
-                                                                  <Spinner fx:id="rStretch" minWidth="0.0" prefWidth="1000000.0" />
-                                                                  <Spinner fx:id="rAngle" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="rStretch" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                                                                  <Spinner fx:id="rAngle" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
                                                             <Separator minWidth="0.0" prefWidth="1000000.0">
@@ -130,7 +130,7 @@
                                                                </padding>
                                                             </Separator>
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Text Offset:" />
-                                                            <Spinner fx:id="rTextOffset" minWidth="0.0" prefWidth="1000000.0" />
+                                                            <Spinner fx:id="rTextOffset" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                             <Label minWidth="0.0" prefWidth="1000000.0" text="Text Alignment:" />
                                                             <ChoiceBox fx:id="rTextAlignment" minWidth="0.0" prefWidth="1000000.0" />
                                                          </children>

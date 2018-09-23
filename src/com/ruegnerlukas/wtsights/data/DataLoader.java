@@ -352,6 +352,11 @@ public class DataLoader {
 						}
 					}
 				}
+				if(ballElement.ammunition.size() == 1) {
+					if(ballElement.ammunition.get(0).type.contains("rocket") || ballElement.ammunition.get(0).type.contains("atgm")) {
+						ballElement.isRocketElement = true;
+					}
+				}
 				
 				Element elementMarkers = XMLUtils.getElementByTagName(elementBall, "markers");
 				if(elementMarkers != null) {
@@ -371,7 +376,14 @@ public class DataLoader {
 						dataMarkers.markers.add(marker);
 					}
 					
-					ballElement.function = new DefaultBallisticFuntion(ballElement.markerData.markers);
+					if(data.zoomedIn.containsKey(ballElement) && data.zoomedIn.get(ballElement) == true) {
+						double zoom = data.vehicle.fovOut / data.vehicle.fovIn;
+						for(Marker marker : dataMarkers.markers) {
+							marker.yPos /= zoom;
+						}
+					}
+					
+					ballElement.function = DefaultBallisticFuntion.create(ballElement, data.vehicle, data.isZoomedIn(ballElement));
 				}
 				
 			}

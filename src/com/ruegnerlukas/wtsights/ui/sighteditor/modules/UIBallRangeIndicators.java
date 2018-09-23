@@ -257,6 +257,7 @@ public class UIBallRangeIndicators implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText("Line Size");
 				}
+				element.setDirty();
 				editor.wtCanvas.repaint();
 			}
 		});
@@ -656,12 +657,19 @@ public class UIBallRangeIndicators implements Module {
 		});
 		boxRow.getChildren().add(btnDelete);
 		
+		if(element != null) {
+			element.setDirty();
+		}
+		
 	}
 	
 	
 	
 	
 	void onIndicatorEdit(BIndicator indicator) {
+		if(element != null) {
+			element.setDirty();
+		}
 		editor.wtCanvas.repaint();
 	}
 	
@@ -671,7 +679,7 @@ public class UIBallRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			element.layoutData.dirty = true;
+			element.setDirty();
 			editor.wtCanvas.repaint();
 		}
 	}

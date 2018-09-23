@@ -37,7 +37,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField editable="false" maxWidth="370.0" minWidth="0.0" prefWidth="370.0" text="https://www.youtube.com/watch?v=X465rPQ2_UQ">
+                              <TextField editable="false" maxWidth="370.0" minWidth="0.0" prefWidth="370.0" text="https://youtu.be/bRAGADRql1g">
                                  <VBox.margin>
                                     <Insets left="20.0" />
                                  </VBox.margin>
