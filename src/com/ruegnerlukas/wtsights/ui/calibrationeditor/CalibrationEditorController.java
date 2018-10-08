@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2f;
+import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
@@ -216,20 +217,32 @@ public class CalibrationEditorController implements IViewController {
 			g.setFill(Color.LIGHTGRAY);
 			g.fillRect(0, 0, wtCanvas.getWidth(), wtCanvas.getHeight());
 			
+			// background image
 			if(service.getCurrentImage() != null) {
 				g.drawImage(service.getCurrentImage(), 0, 0, wtCanvas.getWidth(), wtCanvas.getHeight());
 			}
 			
+			// center lines
+			g.setStroke(new Color(1.0, 0.0, 0.0, 0.6));
+			g.strokeLine(0, wtCanvas.getHeight()/2, wtCanvas.getWidth(), wtCanvas.getHeight()/2);
+			g.strokeLine(wtCanvas.getWidth()/2, 0, wtCanvas.getWidth()/2, wtCanvas.getHeight());
+
+			// horz indicators
+			g.setStroke(new Color(1.0, 0.0, 0.0, 0.6));
+			for(Vector3d indicator : service.getHorzRangeIndicators(wtCanvas.getWidth(), wtCanvas.getHeight())) {
+				final double length = indicator.z > 0 ? 40 : 30;
+				g.strokeLine(indicator.x, indicator.y-length/2, indicator.x, indicator.y+length/2);
+			}
 			
-			List<Vector2f> indicators = service.getApproxRangeIndicators(wtCanvas.getWidth());
+			// range indicators
 			g.setStroke(Color.RED);
+			List<Vector2f> indicators = service.getApproxRangeIndicators(wtCanvas.getWidth());
 			for(int i=0; i<indicators.size(); i++) {
 				Vector2f indicator = indicators.get(i);
 				g.strokeLine(indicator.x-6, indicator.y, indicator.x+6, indicator.y);
 			}
 			
 			repaintOverlayCanvas(wtCanvas.canvasOverlay.getGraphicsContext2D());
-			
 		}
 		
 	}

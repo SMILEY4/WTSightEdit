@@ -12,7 +12,6 @@ import org.apache.commons.math3.linear.SingularMatrixException;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 public class SightUtils {
 
@@ -292,9 +291,9 @@ public class SightUtils {
 		try {
 			v = solver.solve(B);
 		} catch(SingularMatrixException e) {
-			Logger.get().error(A);
-			Logger.get().error(B);
-			Logger.get().error(e);
+//			Logger.get().error(A);
+//			Logger.get().error(B);
+//			Logger.get().error(e);
 			return null;
 		}
 

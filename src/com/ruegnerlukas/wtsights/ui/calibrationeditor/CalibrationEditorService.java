@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2f;
+import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataLoader;
@@ -29,7 +30,9 @@ import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
+import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 import com.ruegnerlukas.wtutils.Workflow;
 import com.ruegnerlukas.wtutils.Workflow.Step;
 
@@ -64,7 +67,7 @@ public class CalibrationEditorService implements IViewService {
 				File file = imageMap.get(element);
 				if(file != null) {
 					BufferedImage img = ImageIO.read(file);
-					this.dataBallistic.images.put(element, img);
+					dataBallistic.images.put(element, img);
 				}
 			}
 			
@@ -201,6 +204,31 @@ public class CalibrationEditorService implements IViewService {
 			}
 			
 		}
+		
+		return indicators;
+	}
+	
+	
+	
+	
+	public List<Vector3d> getHorzRangeIndicators(double width, double height) {
+		
+		List<Vector3d> indicators = new ArrayList<Vector3d>();
+		
+		Conversion.get().initialize(width, height, dataBallistic.vehicle.fovOut, dataBallistic.vehicle.fovIn, Thousandth.USSR);
+		
+		for(int i=-32; i<=32; i+=4) {
+			
+			final int mil = i;
+			final boolean isMajor = mil % 8 == 0;
+			
+			final double x = width/2 + Conversion.get().mil2pixel(mil, height, this.isZoomedIn());
+			final double y = height/2;
+			
+			Vector3d pos = new Vector3d(x, y, isMajor ? +1 : -1);
+			indicators.add(pos);
+			
+		}	 
 		
 		return indicators;
 	}
