@@ -1,6 +1,6 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.ILayoutData;
 
 public abstract class Element {
@@ -14,7 +14,7 @@ public abstract class Element {
 	}
 	
 	
-	public abstract ILayoutData layout(WorkingData data, double canvasWidth, double canvasHeight);
+	public abstract ILayoutData layout(DataPackage data, double canvasWidth, double canvasHeight);
 	
 	public abstract void setDirty();
 	

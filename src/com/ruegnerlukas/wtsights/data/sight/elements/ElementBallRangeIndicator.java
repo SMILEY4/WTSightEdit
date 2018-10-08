@@ -8,7 +8,7 @@ import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutBallRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
@@ -84,7 +84,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	@Override
-	public LayoutBallRangeIndicators layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
@@ -106,7 +106,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	
-	public LayoutBallRangeIndicators layoutVertical(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutVertical(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(layoutData.vCenterBounds == null || layoutData.vTextPositions == null || layoutData.vCenterBounds.length != indicators.size() ) {
 			layoutData.vMainBounds = new Rectanglef[indicators.size()];
@@ -237,7 +237,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 
 	
-	public LayoutBallRangeIndicators layoutRadialLines(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutRadialLines(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(layoutData.rlLines == null || layoutData.rlLines.length != indicators.size() ) {
 			layoutData.rlLines = new Vector4d[indicators.size()];
@@ -362,7 +362,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	
-	public LayoutBallRangeIndicators layoutRadialCircles(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutRadialCircles(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(layoutData.rcCircles == null || layoutData.rcCircles.length != indicators.size() ) {
 			layoutData.rcCircles = new Circlef[indicators.size()];
@@ -477,7 +477,7 @@ public class ElementBallRangeIndicator extends Element {
 	
 	
 	
-	public LayoutBallRangeIndicators layoutLabel(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutBallRangeIndicators layoutLabel(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		final double fontSize = 25.5*0.5*data.dataSight.gnrFontScale*(data.dataSight.envZoomedIn?Conversion.get().zoomInMul:1);
 		

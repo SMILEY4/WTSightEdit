@@ -1,6 +1,6 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCentralHorzLine;
 
 public class ElementCentralHorzLine extends Element {
@@ -35,7 +35,7 @@ public class ElementCentralHorzLine extends Element {
 	
 	
 	@Override
-	public LayoutCentralHorzLine layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutCentralHorzLine layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;

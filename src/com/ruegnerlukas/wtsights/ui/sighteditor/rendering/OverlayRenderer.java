@@ -5,7 +5,7 @@ import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.Element;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
@@ -51,7 +51,7 @@ public class OverlayRenderer {
 	
 	
 	
-	public static void draw(WTCanvas canvas, GraphicsContext g, WorkingData data) {
+	public static void draw(WTCanvas canvas, GraphicsContext g, DataPackage data) {
 		
 		if(data.dataSight.envDisplayGrid && !MathUtils.isNearlyEqual(0, data.dataSight.envGridWidth) && !MathUtils.isNearlyEqual(0, data.dataSight.envGridHeight)) {
 			
@@ -79,7 +79,7 @@ public class OverlayRenderer {
 	
 	
 	
-	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, WorkingData data) {
+	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, DataPackage data) {
 
 		Element selectedElement = data.dataSight.selectedElement;
 		if(selectedElement == null) {
@@ -180,7 +180,7 @@ public class OverlayRenderer {
 		} else if(selectedElement.type == ElementType.SHELL_BALLISTICS_BLOCK || selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS) {
 			ElementBallRangeIndicator element = (ElementBallRangeIndicator)selectedElement;
 			
-			WorkingData dataBlock = new WorkingData();
+			DataPackage dataBlock = new DataPackage();
 			dataBlock.dataSight = data.dataSight;
 			dataBlock.dataBallistic = data.dataBallistic;
 			dataBlock.elementBallistic = selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS ? data.elementBallistic : ((ElementShellBlock)selectedElement).elementBallistic;

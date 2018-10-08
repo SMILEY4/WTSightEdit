@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutHorzRangeIndicators;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -59,7 +59,7 @@ public class ElementHorzRangeIndicators extends Element {
 	
 	
 	@Override
-	public LayoutHorzRangeIndicators layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutHorzRangeIndicators layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;

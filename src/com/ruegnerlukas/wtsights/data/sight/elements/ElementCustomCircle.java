@@ -3,7 +3,7 @@ package com.ruegnerlukas.wtsights.data.sight.elements;
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCircleObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils;
@@ -42,7 +42,7 @@ public class ElementCustomCircle extends ElementCustomObject {
 	
 	
 	@Override
-	public LayoutCircleObject layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutCircleObject layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;

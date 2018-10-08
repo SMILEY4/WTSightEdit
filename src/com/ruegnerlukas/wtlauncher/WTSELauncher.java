@@ -9,7 +9,7 @@ import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
-import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtsights.ui.main.MainMenuController;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -93,7 +93,7 @@ public class WTSELauncher extends Application {
 		
 		FXUtils.addIcons(primaryStage);
 
-		FXMLLoader loader = new FXMLLoader(UIMainMenu.class.getResource("/ui/layout_launcher.fxml"));
+		FXMLLoader loader = new FXMLLoader(MainMenuController.class.getResource("/ui/layout_launcher.fxml"));
 		Parent root = (Parent) loader.load();
 		LauncherController controller = (LauncherController)loader.getController();
 		Scene scene = new Scene(root, 470, 135, true);

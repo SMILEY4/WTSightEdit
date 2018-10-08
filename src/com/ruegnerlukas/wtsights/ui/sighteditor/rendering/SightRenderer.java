@@ -9,7 +9,7 @@ import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
@@ -81,7 +81,7 @@ public class SightRenderer {
 	
 	
 	
-	public static void draw(Canvas canvas, GraphicsContext g, WorkingData data) {
+	public static void draw(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
 		
@@ -108,7 +108,7 @@ public class SightRenderer {
 		if(data.elementBallistic != null) {
 			for(Element e : data.dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 				ElementShellBlock shellBlock = (ElementShellBlock)e;
-				WorkingData dataBlock = new WorkingData();
+				DataPackage dataBlock = new DataPackage();
 				dataBlock.dataBallistic = data.dataBallistic;
 				dataBlock.elementBallistic = shellBlock.elementBallistic;
 				dataBlock.dataSight = data.dataSight;
@@ -147,7 +147,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, WorkingData data) {
+	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		ElementCentralHorzLine horzLine = (ElementCentralHorzLine)data.dataSight.getElements(ElementType.CENTRAL_HORZ_LINE).get(0);
 		ElementCentralVertLine vertLine = (ElementCentralVertLine)data.dataSight.getElements(ElementType.CENTRAL_VERT_LINE).get(0);
@@ -170,7 +170,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangefinder(Canvas canvas, GraphicsContext g, WorkingData data) {
+	private static void drawRangefinder(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		ElementRangefinder rangefinder = (ElementRangefinder)data.dataSight.getElements(ElementType.RANGEFINDER).get(0);
 		
@@ -202,7 +202,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, WorkingData data) {
+	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		ElementHorzRangeIndicators horRange = (ElementHorzRangeIndicators)data.dataSight.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
 		if(horRange.indicators.isEmpty()) {
@@ -238,7 +238,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		if(data.elementBallistic.ammunition.isEmpty()) {
 			return;
 		}
@@ -258,7 +258,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		if(block.drawCorrLabel && data.dataSight.envRangeCorrection > 0) {
 			
@@ -286,7 +286,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsVertical(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsVertical(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		if(block.indicators.isEmpty()) {
 			return;
@@ -341,7 +341,7 @@ public class SightRenderer {
 	
 	
 
-	private static void drawBallisticsRadial(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadial(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		if(block.indicators.isEmpty()) {
 			return;
@@ -365,7 +365,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsRadialLine(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadialLine(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
 		
@@ -408,7 +408,7 @@ public class SightRenderer {
 	
 	
 
-	private static void drawBallisticsRadialCircle(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadialCircle(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
 		
@@ -456,7 +456,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawLineObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomLine objLine) {
+	private static void drawLineObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomLine objLine) {
 		LayoutLineObject layout = objLine.layout(data, canvas.getWidth(), canvas.getHeight());
 		g.setStroke(data.dataSight.envSightColor);
 		g.setLineWidth(layout.lineSize);
@@ -467,7 +467,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawTextObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomText objText) {
+	private static void drawTextObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomText objText) {
 	
 		LayoutTextObject layout = objText.layout(data, canvas.getWidth(), canvas.getHeight());
 		Font font = getFont(layout.fontSize );
@@ -486,7 +486,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCircleObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomCircle objCircle) {
+	private static void drawCircleObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomCircle objCircle) {
 		
 		LayoutCircleObject layout = objCircle.layout(data, canvas.getWidth(), canvas.getHeight());
 		
@@ -510,7 +510,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawQuadObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomQuad objQuad) {
+	private static void drawQuadObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomQuad objQuad) {
 		LayoutQuadObject layout = objQuad.layout(data, canvas.getWidth(), canvas.getHeight());
 		g.setFill(data.dataSight.envSightColor);
 		g.fillPolygon(

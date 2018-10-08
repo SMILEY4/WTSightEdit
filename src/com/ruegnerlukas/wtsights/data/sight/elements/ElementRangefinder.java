@@ -2,7 +2,7 @@ package com.ruegnerlukas.wtsights.data.sight.elements;
 
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutRangefinder;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -46,7 +46,7 @@ public class ElementRangefinder extends Element {
 	
 	
 	@Override
-	public LayoutRangefinder layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutRangefinder layout(DataPackage data, double canvasWidth, double canvasHeight) {
 	
 		if(!layoutData.dirty) {
 			return layoutData;

@@ -2,7 +2,7 @@ package com.ruegnerlukas.wtsights.data.sight.elements;
 
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutTextObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils;
@@ -42,7 +42,7 @@ public class ElementCustomText extends ElementCustomObject {
 	
 	
 	@Override
-	public LayoutTextObject layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutTextObject layout(DataPackage data, double canvasWidth, double canvasHeight) {
 
 		if(!layoutData.dirty) {
 			return layoutData;

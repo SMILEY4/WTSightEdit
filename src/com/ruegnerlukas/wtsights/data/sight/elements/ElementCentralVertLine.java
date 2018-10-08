@@ -1,6 +1,6 @@
 package com.ruegnerlukas.wtsights.data.sight.elements;
 
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCentralVertLine;
 
 public class ElementCentralVertLine extends Element {
@@ -34,7 +34,7 @@ public class ElementCentralVertLine extends Element {
 	
 	
 	@Override
-	public LayoutCentralVertLine layout(WorkingData data, double canvasWidth, double canvasHeight) {
+	public LayoutCentralVertLine layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		if(!layoutData.dirty) {
 			return layoutData;
