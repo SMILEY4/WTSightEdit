@@ -24,6 +24,15 @@ public class Conversion {
 	public double zoomInMul = 1;
 	
 	
+	// TMP
+	public void initialize(double screenWidth, double screenHeight, double fovOut, double fovIn, Thousandth thousanth, double zoomMod) {
+		final double x1 = ((fovOut*zoomMod) / 360.0) * thousanth.value;
+		final double x2 = screenWidth / x1;
+		conversionMilPx = x2 / screenHeight;
+		zoomInMul = fovOut / fovIn;
+	}
+	
+	
 	public void initialize(double screenWidth, double screenHeight, double fovOut, double fovIn, Thousandth thousanth) {
 		final double x1 = (fovOut / 360.0) * thousanth.value;
 		final double x2 = screenWidth / x1;

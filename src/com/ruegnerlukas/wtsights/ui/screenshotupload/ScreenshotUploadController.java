@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.view.IViewController;
@@ -96,9 +97,25 @@ public class ScreenshotUploadController implements IViewController {
 
 		for(Cell cell : cells) {
 			if(cell.data != null) {
-				listContentElements.add(cell.data);
-				listContentFiles.add(cell.fileImage);
+				if(cell.data.isRocketElement) {
+					listContentElements.add(cell.data);
+					listContentFiles.add(null);
+				} else {
+					if(cell.fileImage != null) {
+						listContentElements.add(cell.data);
+						listContentFiles.add(cell.fileImage);
+					}
+				}
 			}
+		}
+		
+		for(int i=0; i<listContentElements.size(); i++) {
+			BallisticElement e = listContentElements.get(i);
+			System.out.println(e + ":");
+			for(Ammo a : e.ammunition) {
+				System.out.println("    " + a.name);
+			}
+			System.out.println(" -> " + listContentFiles.get(i));
 		}
 		
 		service.next(parameters, listContentElements, listContentFiles);

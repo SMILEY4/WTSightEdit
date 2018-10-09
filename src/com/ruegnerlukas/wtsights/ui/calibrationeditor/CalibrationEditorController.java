@@ -50,6 +50,7 @@ public class CalibrationEditorController implements IViewController {
 	@FXML private Label labelVehicleName;
 	@FXML private ComboBox<BallisticElement> choiceAmmo;
 	@FXML private CheckBox cbZoomedIn;
+	@FXML private Spinner<Double> spinnerZoomMod;
 	@FXML private VBox boxRanges;
 	@FXML private Label labelInfo;
 
@@ -137,6 +138,14 @@ public class CalibrationEditorController implements IViewController {
 		});
 		onAmmoSelected(choiceAmmo.getSelectionModel().getSelectedItem());
 	
+		
+		// ZOOM MOD
+		FXUtils.initSpinner(spinnerZoomMod, service.getZoomMod(), 0, 10, 0.001, 3, true, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				service.setZoomMod(newValue.doubleValue());
+				wtCanvas.repaint();
+			}
+		});
 	}
 	
 	

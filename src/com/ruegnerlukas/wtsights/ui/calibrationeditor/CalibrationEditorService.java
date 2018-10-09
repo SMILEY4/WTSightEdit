@@ -102,6 +102,20 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	
+	public double getZoomMod() {
+		return dataBallistic.zoomMod;
+	}
+	
+	
+	
+	
+	public void setZoomMod(double zoomMod) {
+		this.dataBallistic.zoomMod = zoomMod;
+	}
+	
+	
+	
+	
 	public List<BallisticElement> getBallisticElements(boolean asCopy) {
 		if(asCopy) {
 			List<BallisticElement> elements = new ArrayList<BallisticElement>();
@@ -215,7 +229,7 @@ public class CalibrationEditorService implements IViewService {
 		
 		List<Vector3d> indicators = new ArrayList<Vector3d>();
 		
-		Conversion.get().initialize(width, height, dataBallistic.vehicle.fovOut, dataBallistic.vehicle.fovIn, Thousandth.USSR);
+		Conversion.get().initialize(width, height, dataBallistic.vehicle.fovOut, dataBallistic.vehicle.fovIn, Thousandth.USSR, dataBallistic.zoomMod);
 		
 		for(int i=-32; i<=32; i+=4) {
 			

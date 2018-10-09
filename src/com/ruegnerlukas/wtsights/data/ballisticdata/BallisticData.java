@@ -11,6 +11,7 @@ import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 public class BallisticData {
 
 	public Vehicle vehicle;
+	public double zoomMod = 1;
 	public List<BallisticElement> elements = new ArrayList<BallisticElement>();
 	
 	public Map<BallisticElement, BufferedImage> images = new HashMap<BallisticElement, BufferedImage>();

@@ -18,7 +18,7 @@ public class ScreenshotUploadLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey,Object> parameters) {
 		Logger.get().info("Loading 'ScreenshotUpload' (" + Workflow.toString(Workflow.steps) + ")");
-		FXUtils.openFXScene(View.SCREENSHOT_UPLOAD, null, "ui/screenshotupload/screenshotupload.fxml", 600, 400, "Upload Screenshots");
+		FXUtils.openFXScene(View.SCREENSHOT_UPLOAD, null, "ui/screenshotupload/screenshotupload.fxml", 650, 450, "Upload Screenshots");
 		ViewManager.getController(View.SCREENSHOT_UPLOAD).create(parameters);
 		return null;
 	}
