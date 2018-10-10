@@ -34,10 +34,10 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbShowRangefinder" mnemonicParsing="false" onAction="#onShowRangefinder" prefWidth="1000000.0" text="Show Rangefinder" />
+                        <CheckBox fx:id="cbShowRangefinder" mnemonicParsing="false" onAction="#onShowRangefinder" prefWidth="1000000.0" text="se_env_rangefinder_show" />
                         <HBox>
                            <children>
-                              <Label prefWidth="1000000.0" text="Rangefinder Progress:" />
+                              <Label prefWidth="1000000.0" text="%se_env_rangefinder_progress" />
                               <Label fx:id="labelValueRFProgress" alignment="CENTER_RIGHT" minWidth="50.0" prefHeight="21.0" prefWidth="50.0" text="100%" />
                            </children>
                         </HBox>
@@ -49,7 +49,7 @@
                         </Separator>
                         <HBox>
                            <children>
-                              <Label prefWidth="1000000.0" text="Range Correction:" />
+                              <Label prefWidth="1000000.0" text="%se_env_range_correction" />
                            </children>
                         </HBox>
                         <Spinner fx:id="spinnerRange" editable="true" prefWidth="1000000.0" />
@@ -59,13 +59,13 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbCrosshairLighting" mnemonicParsing="false" onAction="#onCrosshairLighting" prefWidth="1000000.0" text="Enable Crosshair Lighting" />
+                        <CheckBox fx:id="cbCrosshairLighting" mnemonicParsing="false" onAction="#onCrosshairLighting" prefWidth="1000000.0" text="%se_env_crosshair_light />
                         <Separator prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="15.0" top="15.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbDisplayGrid" mnemonicParsing="false" prefWidth="1000000.0" text="Display Grid Overlay" />
+                        <CheckBox fx:id="cbDisplayGrid" mnemonicParsing="false" prefWidth="1000000.0" text="%se_env_grid_show" />
                         <HBox>
                            <children>
                               <Spinner fx:id="spinnerGridWidth" editable="true" prefWidth="1000000.0" />
@@ -78,11 +78,11 @@
                               <Insets bottom="15.0" top="15.0" />
                            </padding>
                         </Separator>
-                        <Label prefWidth="1000000.0" text="Background:" />
+                        <Label prefWidth="1000000.0" text="%se_env_background_header" />
                         <HBox prefWidth="1000000.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#onBrowseBackground" prefWidth="1000000.0" text="Browse" />
-                              <Button minWidth="35.0" mnemonicParsing="false" onAction="#onResetBackground" text="X" />
+                              <Button mnemonicParsing="false" onAction="#onBrowseBackground" prefWidth="1000000.0" text="%se_env_background_browse" />
+                              <Button minWidth="35.0" mnemonicParsing="false" onAction="#onResetBackground" text="%se_env_background_reset" />
                            </children>
                         </HBox>
                         <TextField fx:id="pathBackground" editable="false" prefWidth="1000000.0" />
@@ -91,7 +91,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label prefWidth="1000000.0" text="Resolution:" />
+                        <Label prefWidth="1000000.0" text="%se_resolution_header" />
                         <ChoiceBox fx:id="choiceResolution" prefWidth="1000000.0" />
                      </children>
                   </VBox>

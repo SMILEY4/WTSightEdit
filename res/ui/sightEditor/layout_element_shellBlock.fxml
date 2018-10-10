@@ -27,7 +27,7 @@
                      <children>
                         <Accordion minWidth="0.0" prefWidth="1000000.0">
                           <panes>
-                            <TitledPane animated="false" minWidth="0.0" prefWidth="1000000.0" text="Settings">
+                            <TitledPane animated="false" minWidth="0.0" prefWidth="1000000.0" text="%se_msb_settings_header">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="1000000.0">
                                        <children>
@@ -47,30 +47,30 @@
                                                    <children>
                                                       <VBox fx:id="boxVertical" layoutX="89.0" spacing="5.0" style="-fx-border-color: rgba(0%, 0%, 0%, 0.25); -fx-border-radius: 3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Text Shift:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="se_msb_vert_text_shift" />
                                                             <Spinner fx:id="vTextShift" editable="true" minWidth="0.0" prefWidth="1000000.0" />
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Text Offset:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_vert_msb_text_offset" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
                                                                   <Spinner fx:id="vTextX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                   <Spinner fx:id="vTextY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Text Alignment:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_vert_text_alignment" />
                                                             <ChoiceBox fx:id="vTextAlignment" minWidth="0.0" prefWidth="1000000.0" />
                                                             <Separator minWidth="0.0" prefWidth="1000000.0">
                                                                <padding>
                                                                   <Insets bottom="10.0" top="10.0" />
                                                                </padding>
                                                             </Separator>
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_vert_position" />
                                                             <HBox>
                                                                <children>
                                                                   <Spinner fx:id="vPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                   <Spinner fx:id="vPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Size (Major,Minor):" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_vert_size" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
                                                                   <Spinner fx:id="vSizeMajor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
@@ -82,12 +82,12 @@
                                                                   <Insets bottom="10.0" top="10.0" />
                                                                </padding>
                                                             </Separator>
-                                                            <CheckBox fx:id="vDrawAddLines" mnemonicParsing="false" text="Draw Additional Lines">
+                                                            <CheckBox fx:id="vDrawAddLines" mnemonicParsing="false" text="%se_msb_vert_add_lines">
                                                                <padding>
                                                                   <Insets bottom="5.0" />
                                                                </padding>
                                                             </CheckBox>
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Size Additional (Major,Minor):" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_vert_add_size" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
                                                                   <Spinner fx:id="vSizeAddMajor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
@@ -105,21 +105,21 @@
                                                          </padding>
                                                          <children>
                                                             <ChoiceBox fx:id="choiceCircleMode" minWidth="0.0" prefWidth="1000000.0" />
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_position" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
                                                                   <Spinner fx:id="rPosX" minWidth="0.0" prefWidth="1000000.0" />
                                                                   <Spinner fx:id="rPosY" minWidth="0.0" prefWidth="1000000.0" />
                                                                </children>
                                                             </HBox>
-                                                            <Label fx:id="rLabelSize" minWidth="0.0" prefWidth="1000000.0" text="Size / Stoke Width:" />
+                                                            <Label fx:id="rLabelSize" minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_size_stroke_width" />
                                                             <Spinner fx:id="rSize" minWidth="0.0" prefWidth="1000000.0" />
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Circle Radius:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_circle_radius" />
                                                             <Spinner fx:id="rCircleRadius" minWidth="0.0" prefWidth="1000000.0" />
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Radius:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_radius" />
                                                             <CheckBox fx:id="rRadiusUseMils" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Use Mils" />
                                                             <Spinner fx:id="rRadius" minWidth="0.0" prefWidth="1000000.0" />
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Radial Stretch and Angle:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_stretch_angle" />
                                                             <HBox minWidth="0.0" prefWidth="1000000.0">
                                                                <children>
                                                                   <Spinner fx:id="rStretch" minWidth="0.0" prefWidth="1000000.0" />
@@ -131,9 +131,9 @@
                                                                   <Insets bottom="10.0" top="10.0" />
                                                                </padding>
                                                             </Separator>
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Text Offset:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_text_offset" />
                                                             <Spinner fx:id="rTextOffset" minWidth="0.0" prefWidth="1000000.0" />
-                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="Text Alignment:" />
+                                                            <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_rad_text_alignment" />
                                                             <ChoiceBox fx:id="rTextAlignment" minWidth="0.0" prefWidth="1000000.0" />
                                                          </children>
                                                       </VBox>
@@ -144,10 +144,10 @@
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </padding>
                                                 </Separator>
-                                                <CheckBox fx:id="cbDrawUpward" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Upward" />
-                                                <CheckBox fx:id="cbCanMove" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Can Move" />
-                                                <CheckBox fx:id="cbDrawCorrLabel" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Draw Range Correction Label" />
-                                                <Label minWidth="0.0" prefWidth="1000000.0" text="Range Correction Label" />
+                                                <CheckBox fx:id="cbDrawUpward" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_msb_draw_upward" />
+                                                <CheckBox fx:id="cbCanMove" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_msb_can_move" />
+                                                <CheckBox fx:id="cbDrawCorrLabel" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_msb_range_label_draw" />
+                                                <Label minWidth="0.0" prefWidth="1000000.0" text="%se_msb_range_label_pos" />
                                                 <HBox>
                                                    <children>
                                                       <Spinner fx:id="spinnerCorrX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
@@ -160,7 +160,7 @@
                                     </AnchorPane>
                               </content>
                             </TitledPane>
-                            <TitledPane animated="false" text="Distances">
+                            <TitledPane animated="false" text="%se_msb_distances_header">
                               <content>
                                 <AnchorPane fx:id="paneDistances" minHeight="0.0" minWidth="0.0" prefWidth="1000000.0">
                                        <children>

@@ -88,7 +88,7 @@ public class ModuleHorzRangeIndicators implements Module {
 		boxTable = new VBox();
 		FXUtils.createCustomTable(
 				paneDistanceContent, boxTable,
-				new String[]{"Mil", "Rank"},
+				new String[]{ViewManager.getResources().getString("se_mhri_table_mil"), ViewManager.getResources().getString("se_mhri_table_rank")},
 				new int[] {90, 90},
 				new EventHandler<ActionEvent>() {
 					@Override public void handle(ActionEvent event) {
@@ -181,7 +181,7 @@ public class ModuleHorzRangeIndicators implements Module {
 		cbMajor.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(element != null) {
-					boolean isMajor = "Major".equalsIgnoreCase(newValue);
+					boolean isMajor = ViewManager.getResources().getString("se_mhri_cell_major").equalsIgnoreCase(newValue);
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
 					HIndicator indicator = element.indicators.get(index);
 					indicator.setMajor(isMajor);
@@ -189,14 +189,14 @@ public class ModuleHorzRangeIndicators implements Module {
 				}
 			}
 		});
-		cbMajor.getItems().addAll("MAJOR", "minor");
+		cbMajor.getItems().addAll(ViewManager.getResources().getString("se_mhri_cell_major"), ViewManager.getResources().getString("se_mhri_cell_minor"));
 		cbMajor.getSelectionModel().select(isMajor ? 0 : 1);
 		cbMajor.setMinSize(90, 31);
 		cbMajor.setPrefSize(90, 31);
 		boxRow.getChildren().add(1, cbMajor);
 		
 		
-		Button btnDelete = new Button("X");
+		Button btnDelete = new Button(ViewManager.getResources().getString("se_mhri_cell_remove"));
 		btnDelete.setMinSize(31, 31);
 		btnDelete.setPrefSize(31, 31);
 		btnDelete.setMaxSize(31, 31);

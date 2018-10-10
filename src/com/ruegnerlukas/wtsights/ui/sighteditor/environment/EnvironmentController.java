@@ -78,12 +78,12 @@ public class EnvironmentController implements IViewController {
 		
 		
 		// ZOOM MODE
-		choiceZoomMode.getItems().add("Show Zoomed Out");
-		choiceZoomMode.getItems().add("Show Zoomed In");
+		choiceZoomMode.getItems().add(ViewManager.getResources().getString("se_env_zoomed_out"));
+		choiceZoomMode.getItems().add(ViewManager.getResources().getString("se_env_zoomed_in"));
 		choiceZoomMode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if(newValue.equalsIgnoreCase("Show Zoomed Out")) {
+				if(newValue.equalsIgnoreCase(ViewManager.getResources().getString("se_env_zoomed_out"))) {
 					service.setZoomMode(false);
 				} else {
 					service.setZoomMode(true);
@@ -227,9 +227,9 @@ public class EnvironmentController implements IViewController {
 	void onBrowseBackground(ActionEvent event) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Select Background");
-		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.jpg, *.png)", "*.jpg", "*.png"));
-		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.png)", "*.png"));
-		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.jpg)", "*.jpg"));
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("se_env_background_file_type") + " (*.jpg, *.png)", "*.jpg", "*.png"));
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("se_env_background_file_type") + " (*.png)", "*.png"));
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("se_env_background_file_type") + " (*.jpg)", "*.jpg"));
 		File file = fc.showOpenDialog(((Button)event.getSource()).getScene().getWindow());
 		if (file != null) {
 			service.setBackground(file);

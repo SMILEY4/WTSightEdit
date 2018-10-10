@@ -18,7 +18,7 @@ public class ElementCreateLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey, Object> parameters) {
 		Logger.get().info("Open 'Loading'");
-		FXUtils.openFXScene(View.ELEMENT_CREATE, stage, "ui/sighteditor/createelement/createelement.fxml", 500, 225, "Create Element", WTSights.DARK_MODE, true);
+		FXUtils.openFXScene(View.ELEMENT_CREATE, stage, "ui/sighteditor/createelement/createelement.fxml", 500, 225, ViewManager.getResources().getString("se_ce_title"), WTSights.DARK_MODE, true);
 		ViewManager.getController(View.ELEMENT_CREATE).create(parameters);
 		return null;
 	}

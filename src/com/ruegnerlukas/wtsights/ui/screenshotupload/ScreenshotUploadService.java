@@ -103,7 +103,7 @@ public class ScreenshotUploadService implements IViewService {
 		Logger.get().debug("onNext: " + "data="+dataList + "; imgs=" + imageMap + "; valid=" + isValid); 
 		
 		if(!isValid) {
-			FXUtils.showAlert("No Images selected. Select at least one image to continue.", ViewManager.getStage(View.SCREENSHOT_UPLOAD));
+			FXUtils.showAlert(ViewManager.getResources().getString("ssu_alert_missing"), ViewManager.getStage(View.SCREENSHOT_UPLOAD));
 			return;
 		}
 		

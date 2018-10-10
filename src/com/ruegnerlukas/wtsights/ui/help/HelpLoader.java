@@ -18,7 +18,7 @@ public class HelpLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey,Object> parameter) {
 		Logger.get().info("Loading 'Help'");
-		FXUtils.openFXScene(View.HELP, null, "ui/help/help.fxml", 600, 700, "Help");
+		FXUtils.openFXScene(View.HELP, null, "ui/help/help.fxml", 600, 700, ViewManager.getResources().getString("hp_help"));
 		ViewManager.getController(View.HELP).create(parameter);
 		return null;
 	}

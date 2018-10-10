@@ -37,8 +37,6 @@ import com.ruegnerlukas.wtutils.Workflow;
 import com.ruegnerlukas.wtutils.Workflow.Step;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 
@@ -375,12 +373,12 @@ public class CalibrationEditorService implements IViewService {
 	public void exportData() {
 		
 		if(!validateMarkers()) {
-			FXUtils.showAlert("Can not save data. At least one shell does not have enough markers.", ViewManager.getStage(View.CALIBRATION_EDITOR));
+			FXUtils.showAlert(ViewManager.getResources().getString("ce_alert_export_missing"), ViewManager.getStage(View.CALIBRATION_EDITOR));
 			return;
 		}
 		
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Save Ballistic Data");
+		fc.setTitle(ViewManager.getResources().getString("ce_export_title"));
 		
 		File fileSelected = fc.showSaveDialog(ViewManager.getStage(View.CALIBRATION_EDITOR));
 		if(fileSelected == null) {
@@ -391,7 +389,7 @@ public class CalibrationEditorService implements IViewService {
 		
 		try {
 			if(!DataWriter.saveExternalBallisticFile(dataBallistic, file)) {
-				FXUtils.showAlert("Ballistic Data could not be saved.", ViewManager.getStage(View.CALIBRATION_EDITOR));
+				FXUtils.showAlert(ViewManager.getResources().getString("ce_alert_export_failed"), ViewManager.getStage(View.CALIBRATION_EDITOR));
 			} else {
 				Logger.get().info("Saved Ballistic Data to " + file);
 			}
@@ -407,12 +405,7 @@ public class CalibrationEditorService implements IViewService {
 	public void editSight() {
 		
 		if(!validateMarkers()) {
-			Logger.get().warn("(Alert) Can not save data. At least one shell does not have enough markers.");
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText(null);
-			alert.setContentText("Can not save data. At least one shell does not have enough markers.");
-			alert.showAndWait();
+			FXUtils.showAlert(ViewManager.getResources().getString("ce_alert_export_missing"), ViewManager.getStage(View.CALIBRATION_EDITOR));
 			return;
 		}
 		

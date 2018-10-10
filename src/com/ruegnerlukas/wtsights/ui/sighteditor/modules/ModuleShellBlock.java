@@ -266,20 +266,20 @@ public class ModuleShellBlock implements Module {
 		
 		
 		// RADIAL
-		choiceCircleMode.getItems().addAll("Lines", "Circles");
-		choiceCircleMode.getSelectionModel().select(elementDefault.circleMode ? "Circles" : "Lines");
+		choiceCircleMode.getItems().addAll(ViewManager.getResources().getString("se_msb_circles"), ViewManager.getResources().getString("se_msb_lines"));
+		choiceCircleMode.getSelectionModel().select(elementDefault.circleMode ? ViewManager.getResources().getString("se_msb_circles") : ViewManager.getResources().getString("se_msb_lines"));
 		choiceCircleMode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(element == null) {
 					return;
 				}
-				element.circleMode = newValue.equalsIgnoreCase("Circles");
+				element.circleMode = newValue.equalsIgnoreCase(ViewManager.getResources().getString("se_msb_circles"));
 				if(element.circleMode) {
 					rCircleRadius.setDisable(false);
-					rLabelSize.setText("Stroke Width");
+					rLabelSize.setText(ViewManager.getResources().getString("se_msb_stroke_width"));
 				} else {
 					rCircleRadius.setDisable(true);
-					rLabelSize.setText("Line Size");
+					rLabelSize.setText(ViewManager.getResources().getString("se_msb_line_size"));
 				}
 				element.setDirty();
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
@@ -287,10 +287,10 @@ public class ModuleShellBlock implements Module {
 		});
 		if(elementDefault.circleMode) {
 			rCircleRadius.setDisable(false);
-			rLabelSize.setText("Stroke Width");
+			rLabelSize.setText(ViewManager.getResources().getString("se_msb_stroke_width"));
 		} else {
 			rCircleRadius.setDisable(true);
-			rLabelSize.setText("Line Size");
+			rLabelSize.setText(ViewManager.getResources().getString("se_msb_line_size"));
 		}
 		
 		FXUtils.initSpinner(rPosX, elementDefault.position.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
@@ -481,7 +481,13 @@ public class ModuleShellBlock implements Module {
 		boxTable = new VBox();
 		FXUtils.createCustomTable(
 				parent, boxTable,
-				new String[]{"Distance", "Rank", "Extend", "Text X", "Text Y"},
+				new String[]{
+						ViewManager.getResources().getString("se_msb_table_distance"),
+						ViewManager.getResources().getString("se_msb_table_rank"),
+						ViewManager.getResources().getString("se_msb_table_extend"),
+						ViewManager.getResources().getString("se_msb_table_text_x"),
+						ViewManager.getResources().getString("se_msb_table_text_y")
+				},
 				new int[] {90, 90, 90, 90, 90},
 				new EventHandler<ActionEvent>() {
 					@Override public void handle(ActionEvent event) {
@@ -551,7 +557,7 @@ public class ModuleShellBlock implements Module {
 			vDrawAddLines.setSelected(element.drawAddLines);
 			vSizeAddMajor.getValueFactory().setValue(element.sizeAddLine.x);
 			vSizeAddMinor.getValueFactory().setValue(element.sizeAddLine.y);
-			choiceCircleMode.getSelectionModel().select(element.circleMode ? "Circles" : "Lines");
+			choiceCircleMode.getSelectionModel().select(element.circleMode ? ViewManager.getResources().getString("se_msb_circles") : ViewManager.getResources().getString("se_msb_lines"));
 			rPosX.getValueFactory().setValue(element.position.x);
 			rPosY.getValueFactory().setValue(element.position.y);
 			rSize.getValueFactory().setValue(element.size.x);
@@ -651,7 +657,7 @@ public class ModuleShellBlock implements Module {
 				if(element == null) {
 					return;
 				}
-				boolean isMajor = "Major".equalsIgnoreCase(newValue);
+				boolean isMajor = ViewManager.getResources().getString("se_msb_cell_major").equalsIgnoreCase(newValue);
 				if(isMajor) {
 					spTextX.setDisable(false);
 					spTextY.setDisable(false);
@@ -665,14 +671,14 @@ public class ModuleShellBlock implements Module {
 				onIndicatorEdit(indicator);
 			}
 		});
-		cbMajor.getItems().addAll("MAJOR", "minor");
+		cbMajor.getItems().addAll(ViewManager.getResources().getString("se_msb_cell_major"), ViewManager.getResources().getString("se_msb_cell_minor"));
 		cbMajor.getSelectionModel().select(isMajor ? 0 : 1);
 		cbMajor.setMinSize(90, 31);
 		cbMajor.setPrefSize(90, 31);
 		boxRow.getChildren().add(1, cbMajor);
 		
 		
-		Button btnDelete = new Button("X");
+		Button btnDelete = new Button(ViewManager.getResources().getString("se_msb_cell_remove"));
 		btnDelete.setMinSize(31, 31);
 		btnDelete.setPrefSize(31, 31);
 		btnDelete.setMaxSize(31, 31);
@@ -713,25 +719,5 @@ public class ModuleShellBlock implements Module {
 		}
 	}
 	
-	
-	
-//	
-//	void onAmmoSelected(Ammo ammo) {
-//		if(element == null || ammo == null || "undefined".equalsIgnoreCase(ammo.type)) {
-//			return;
-//		}
-//		element.dataAmmo = null;
-//		for(int i=0; i<editor.getCalibrationData().ammoData.size(); i++) {
-//			CalibrationAmmoData ammoData = editor.getCalibrationData().ammoData.get(i);
-//			if(ammoData.ammo.name.equalsIgnoreCase(ammo.name)) {
-//				element.dataAmmo = ammoData;
-//				break;
-//			}
-//		}
-//		Logger.get().debug("Selected ammo: " + (element.dataAmmo == null ? "null" : element.dataAmmo.ammo.name) );
-//		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
-//	}
-//	
-
 }
 

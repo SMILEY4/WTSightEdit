@@ -20,6 +20,7 @@ public class GeneralLoader implements IViewLoader {
 	public Parent openNew(Stage stage, Map<ParamKey, Object> parameters) {
 		try {
 			FXMLLoader loader = new FXMLLoader(GeneralLoader.class.getResource("general.fxml"));
+			loader.setResources(ViewManager.getResources());
 			Parent root = (Parent) loader.load();
 			ViewManager.setController(View.SEM_GENERAL, loader.getController());
 			AnchorPane.setTopAnchor(root, 0.0);

@@ -18,23 +18,22 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <CheckBox fx:id="cbCreateNew" mnemonicParsing="false" onAction="#onCreateNew" text="Create new Ballistic Data">
+            <CheckBox fx:id="cbCreateNew" mnemonicParsing="false" onAction="#onCreateNew" text="%cs_create_new">
                <tooltip>
-                  <Tooltip text="Create a new Calibration instead of using an existing file" />
+                  <Tooltip text="%cs_create_new_tt" />
                </tooltip></CheckBox>
             <VBox fx:id="vboxSelectCalibration" spacing="5.0">
                <children>
-                  <CheckBox disable="true" mnemonicParsing="false" prefWidth="10000.0" selected="true" text="External Calibration" visible="false" />
                   <ComboBox fx:id="comboInternalCalibration" disable="true" prefWidth="10000.0" visible="false" />
                   <HBox fx:id="hboxExternal" prefWidth="10000.0">
                      <children>
                         <TextField fx:id="textfieldPath" editable="false" prefWidth="10000.0">
                            <tooltip>
-                              <Tooltip text="The path of the selected file" />
+                              <Tooltip text="%cs_path_tt" />
                            </tooltip></TextField>
-                        <Button minWidth="70.0" mnemonicParsing="false" onAction="#onBrowse" prefWidth="70.0" text="Browse">
+                        <Button minWidth="70.0" mnemonicParsing="false" onAction="#onBrowse" prefWidth="70.0" text="%cs_browse">
                            <tooltip>
-                              <Tooltip text="Browse files" />
+                              <Tooltip text="%cs_browse_files" />
                            </tooltip></Button>
                      </children>
                   </HBox>
@@ -53,8 +52,8 @@
             </Separator>
             <HBox alignment="TOP_RIGHT" prefWidth="100000.0" spacing="5.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="70.0" text="Cancel" />
-                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="70.0" text="Next" />
+                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="70.0" text="%cs_cancel" />
+                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="70.0" text="%cs_next" />
                </children>
             </HBox>
          </children>

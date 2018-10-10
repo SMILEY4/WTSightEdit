@@ -18,7 +18,7 @@ public class MainMenuLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey,Object> parameters) {
 		Logger.get().info("Loading 'MainMenu'");
-		FXUtils.openFXScene(View.MAIN_MENU, stage, "ui/main/mainMenu.fxml", 500, 600, "WT Sight Editor");
+		FXUtils.openFXScene(View.MAIN_MENU, stage, "ui/main/mainMenu.fxml", 500, 600, ViewManager.getResources().getString("mm_title"));
 		ViewManager.getController(View.MAIN_MENU).create(parameters);
 		return null;
 	}

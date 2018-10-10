@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -27,16 +28,23 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbZoomedIn" mnemonicParsing="false" onAction="#onZoomedIn" prefWidth="100000.0" text="Zoomed In">
+                        <CheckBox fx:id="cbZoomedIn" mnemonicParsing="false" onAction="#onZoomedIn" prefWidth="100000.0" text="%ce_zoomed_in">
                            <tooltip>
-                              <Tooltip text="Whether or not the selected background image is zoomed in" />
+                              <Tooltip text="%ce_zoomed_in_tt" />
                            </tooltip></CheckBox>
                         <Separator prefWidth="10000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minHeight="45.0" prefWidth="100000.0" text="Distances of marked ranges:" wrapText="true" />
+                        <Label prefWidth="100000.0" text="Zoom Modifier" wrapText="true" />
+                        <Spinner fx:id="spinnerZoomMod" minWidth="0.0" prefWidth="100000.0" />
+                        <Separator prefWidth="10000.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <Label minHeight="45.0" prefWidth="100000.0" text="%ce_marked_ranges" wrapText="true" />
                         <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" prefWidth="10000.0">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0">
@@ -57,13 +65,13 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Button mnemonicParsing="false" onAction="#onExport" prefWidth="1000.0" text="Export">
+                        <Button mnemonicParsing="false" onAction="#onExport" prefWidth="1000.0" text="%ce_export">
                            <tooltip>
-                              <Tooltip text="Save this calibration as a file." />
+                              <Tooltip text="%ce_export_tt" />
                            </tooltip></Button>
-                        <Button mnemonicParsing="false" onAction="#onEditSight" prefWidth="1000.0" text="Edit Sight">
+                        <Button mnemonicParsing="false" onAction="#onEditSight" prefWidth="1000.0" text="%ce_edit_sight">
                            <tooltip>
-                              <Tooltip text="Create a custom sight without saving this calibration to a file." />
+                              <Tooltip text="%ce_edit_sight_tt" />
                            </tooltip></Button>
                      </children>
                      <padding>

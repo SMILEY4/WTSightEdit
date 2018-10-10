@@ -2,6 +2,8 @@ package com.ruegnerlukas.wtlauncher;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtlauncher.Updater.InstallStatus;
@@ -9,18 +11,20 @@ import com.ruegnerlukas.wtlauncher.Updater.SearchStatus;
 import com.ruegnerlukas.wtutils.Config;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 public class LauncherController {
 
 
 	LauncherController thisController;
+	
+	@FXML private ResourceBundle resources;
+	@FXML private URL location;
 	
 	@FXML private AnchorPane paneSearch;
 	@FXML private AnchorPane paneSelect;
@@ -67,9 +71,9 @@ public class LauncherController {
 					paneSearch.setOpacity(0.0);
 					
 					this.latestVersion = latestVersion;
-					labelUpdateInfo.setText("New version found: " + latestVersion + ". Current version: " + localVersion + ".");
+					labelUpdateInfo.setText( resources.getString("lc_update_found_msg".replaceAll("{current}", localVersion).replaceAll("{new}", latestVersion)) );
 				} else {
-					labelUpdateInfo.setText("Already up-to-date.");
+					labelUpdateInfo.setText( resources.getString("lc_update_not_found_msg".replaceAll("{current}", localVersion).replaceAll("{new}", latestVersion)) );
 					startApplication();
 					return;
 				}
@@ -106,7 +110,7 @@ public class LauncherController {
 			paneSelect.setOpacity(0.0);
 			paneUpdate.setOpacity(1.0);
 			
-			labelUpdateStatus.setText("Updating to version " + latestVersion + ".");
+			labelUpdateStatus.setText( resources.getString("lc_updating_msg".replaceAll("{current}", Config.build_version).replaceAll("{new}", latestVersion)) );
 			Updater.installUpdate(thisController);
 	}	
 

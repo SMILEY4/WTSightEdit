@@ -20,6 +20,7 @@ public class EnvironmentLoader implements IViewLoader {
 	public Parent openNew(Stage stage, Map<ParamKey, Object> parameters) {
 		try {
 			FXMLLoader loader = new FXMLLoader(EnvironmentLoader.class.getResource("environment.fxml"));
+			loader.setResources(ViewManager.getResources());
 			Parent root = (Parent) loader.load();
 			ViewManager.setController(View.SEM_ENVIRONMENT, loader.getController());
 			AnchorPane.setTopAnchor(root, 0.0);

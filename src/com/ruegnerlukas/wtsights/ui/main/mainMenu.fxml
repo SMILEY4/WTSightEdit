@@ -32,47 +32,47 @@
                   <Insets bottom="20.0" top="20.0" />
                </padding>
             </Separator>
-            <Button mnemonicParsing="false" onAction="#onNewSight" prefWidth="300.0" text="Create New Sight">
+            <Button mnemonicParsing="false" onAction="#onNewSight" prefWidth="300.0" text="%mm_sight_tank_create">
                <tooltip>
-                  <Tooltip text="Create a new custom sight." />
+                  <Tooltip text="%mm_sight_tank_create_tt" />
                </tooltip></Button>
-            <Button mnemonicParsing="false" onAction="#onLoadSight" prefWidth="300.0" text="Load Sight">
+            <Button mnemonicParsing="false" onAction="#onLoadSight" prefWidth="300.0" text="%mm_sight_tank_load">
                <tooltip>
-                  <Tooltip text="Load and edit an existing sight." />
-               </tooltip></Button>
-            <Separator prefWidth="200.0">
-               <padding>
-                  <Insets bottom="20.0" top="20.0" />
-               </padding>
-            </Separator>
-            <Button mnemonicParsing="false" onAction="#onNewCalibration" prefWidth="300.0" text="Create Ballistic Data">
-               <tooltip>
-                  <Tooltip text="Create a new Calibration file. A Calibration file is used to calculate the correct bullet trajectories." wrapText="true" />
-               </tooltip></Button>
-            <Button mnemonicParsing="false" onAction="#onLoadCalibration" prefWidth="300.0" text="Load Ballistic Data">
-               <tooltip>
-                  <Tooltip text="Load and edit an existing calibration file." />
+                  <Tooltip text="%mm_sight_tank_load_tt" />
                </tooltip></Button>
             <Separator prefWidth="200.0">
                <padding>
                   <Insets bottom="20.0" top="20.0" />
                </padding>
             </Separator>
-            <Button mnemonicParsing="false" onAction="#onAbout" prefWidth="300.0" text="About">
+            <Button mnemonicParsing="false" onAction="#onNewCalibration" prefWidth="300.0" text="%mm_sight_tank_metadata_create">
                <tooltip>
-                  <Tooltip text="About WTSightEdit" />
+                  <Tooltip text="%mm_sight_tank_metadata_create_tt" wrapText="true" />
                </tooltip></Button>
-            <Button mnemonicParsing="false" onAction="#onHelp" prefWidth="300.0" text="Help">
+            <Button mnemonicParsing="false" onAction="#onLoadCalibration" prefWidth="300.0" text="%mm_sight_tank_metadata_load">
                <tooltip>
-                  <Tooltip text="Help" />
+                  <Tooltip text="%mm_sight_tank_metadata_load_tt" />
                </tooltip></Button>
             <Separator prefWidth="200.0">
                <padding>
                   <Insets bottom="20.0" top="20.0" />
                </padding>
             </Separator>
-            <Label prefWidth="300.0" text="Settings" />
-            <CheckBox fx:id="cbSettingDark" mnemonicParsing="false" onAction="#onSettingDark" prefWidth="300.0" text="Dark Theme" />
+            <Button mnemonicParsing="false" onAction="#onAbout" prefWidth="300.0" text="%mm_about">
+               <tooltip>
+                  <Tooltip text="%mm_about_tt" />
+               </tooltip></Button>
+            <Button mnemonicParsing="false" onAction="#onHelp" prefWidth="300.0" text="%mm_help">
+               <tooltip>
+                  <Tooltip text="%mm_help_tt" />
+               </tooltip></Button>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </Separator>
+            <Label prefWidth="300.0" text="%mm_settings" />
+            <CheckBox fx:id="cbSettingDark" mnemonicParsing="false" onAction="#onSettingDark" prefWidth="300.0" text="%mm_settings_dark_theme" />
          </children>
       </VBox>
    </children>

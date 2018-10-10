@@ -27,7 +27,7 @@ public class CalibrationEditorLoader implements IViewLoader {
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
 		
-		FXUtils.openFXScene(View.CALIBRATION_EDITOR, null, "ui/calibrationeditor/calibration"+(styleDark?"_dark":"")+".fxml", width, height, "Create Ballistic Data");
+		FXUtils.openFXScene(View.CALIBRATION_EDITOR, null, "ui/calibrationeditor/calibration"+(styleDark?"_dark":"")+".fxml", width, height, ViewManager.getResources().getString("ce_title"));
 		ViewManager.getController(View.CALIBRATION_EDITOR).create(parameters);
 		return null;
 	}

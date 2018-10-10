@@ -442,6 +442,7 @@ public class FXUtils {
 		}
 
 		FXMLLoader loader = new FXMLLoader(WTSights.class.getResource(pathFXML));
+		loader.setResources(ViewManager.getResources());
 		Parent root = null;
 		try {
 			root = (Parent) loader.load();
@@ -487,7 +488,7 @@ public class FXUtils {
 	
 	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void tableViewDisableReorder(TableView table, TableColumn... columns) {
 		table.getColumns().addListener(new ListChangeListener() {
 			public boolean suspended;

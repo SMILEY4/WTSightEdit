@@ -18,7 +18,7 @@ public class VehicleSelectLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey,Object> parameters) {
 		Logger.get().info("Loading 'VehicleSelect' (" + Workflow.toString(Workflow.steps) + ")");
-		FXUtils.openFXScene(View.VEHICLE_SELECT, null, "ui/vehicleselection/vehicleselect.fxml", 600, 200, "Select Vehicle");
+		FXUtils.openFXScene(View.VEHICLE_SELECT, null, "ui/vehicleselection/vehicleselect.fxml", 600, 200, ViewManager.getResources().getString("vs_title"));
 		ViewManager.getController(View.VEHICLE_SELECT).create(parameters);
 		return null;
 	}

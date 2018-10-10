@@ -24,7 +24,7 @@ public class SightEditorLoader implements IViewLoader {
 		Logger.get().info("Loading 'SightEditor' (" + Workflow.toString(Workflow.steps) + ")");
 		int width = Config.app_window_size.x;
 		int height = Config.app_window_size.y;
-		FXUtils.openFXScene(View.SIGHT_EDITOR, null, "ui/sighteditor/sighteditor.fxml", width, height, "Edit Sight");
+		FXUtils.openFXScene(View.SIGHT_EDITOR, null, "ui/sighteditor/sighteditor.fxml", width, height, ViewManager.getResources().getString("se_title"));
 		((Stage)ViewManager.getStage(View.SIGHT_EDITOR)).setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override public void handle(WindowEvent event) {
 				SightEditorController controller = (SightEditorController) ViewManager.getController(View.SIGHT_EDITOR);

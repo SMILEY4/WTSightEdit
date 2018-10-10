@@ -15,22 +15,22 @@
    <children>
       <VBox fillWidth="false" layoutX="272.0" layoutY="153.0" prefHeight="291.0" prefWidth="600.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label prefWidth="100000.0" text="Select Vehicle:" />
+            <Label prefWidth="100000.0" text="%vs_header" />
             <HBox>
                <children>
-                  <TextField fx:id="textfieldFilter" onAction="#onFilter" prefWidth="100000.0" promptText="Filter vehicle list ">
+                  <TextField fx:id="textfieldFilter" onAction="#onFilter" prefWidth="100000.0" promptText="vs_filter_prompt">
                      <tooltip>
                         <Tooltip text="Type filter text" />
                      </tooltip></TextField>
-                  <Button minWidth="60.0" mnemonicParsing="false" onAction="#onFilter" prefWidth="60.0" text="Filter">
+                  <Button minWidth="60.0" mnemonicParsing="false" onAction="#onFilter" prefWidth="60.0" text="%vs_filter">
                      <tooltip>
-                        <Tooltip text="Filter vehicle list" />
+                        <Tooltip text="%vs_filter_tt" />
                      </tooltip></Button>
                </children>
             </HBox>
             <ComboBox fx:id="comboVehicles" prefHeight="31.0" prefWidth="10000.0">
                <tooltip>
-                  <Tooltip text="The list of available vehicles" />
+                  <Tooltip text="%vs_vehicle_list_tt" />
                </tooltip></ComboBox>
             <Separator prefWidth="10000.0" visible="false">
                <padding>
@@ -39,8 +39,8 @@
             </Separator>
             <HBox alignment="TOP_RIGHT" prefWidth="100000.0" spacing="5.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="100.0" text="Cancel" />
-                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="100.0" text="Next" />
+                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="100.0" text="%vs_cancel" />
+                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="100.0" text="%vs_next" />
                </children>
             </HBox>
          </children>

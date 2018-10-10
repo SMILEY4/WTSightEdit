@@ -10,6 +10,7 @@ import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.ui.main.MainMenuController;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -94,10 +95,11 @@ public class WTSELauncher extends Application {
 		FXUtils.addIcons(primaryStage);
 
 		FXMLLoader loader = new FXMLLoader(MainMenuController.class.getResource("/ui/layout_launcher.fxml"));
+		loader.setResources(ViewManager.getResources());
 		Parent root = (Parent) loader.load();
 		LauncherController controller = (LauncherController)loader.getController();
 		Scene scene = new Scene(root, 470, 135, true);
-		primaryStage.setTitle("WT Sight Editor");
+		primaryStage.setTitle(ViewManager.getResources().getString("lc_title"));
 		primaryStage.setScene(scene);
 		
 		controller.start();

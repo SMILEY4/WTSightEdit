@@ -42,7 +42,7 @@ public class VehicleSelectService implements IViewService {
 	public void next(Map<ParamKey,Object> parameters, Vehicle vehicle) {
 
 		if(vehicle == null) {
-			FXUtils.showAlert("No vehicle selected. Select vehicle to continue.", ViewManager.getStage(View.VEHICLE_SELECT));
+			FXUtils.showAlert(ViewManager.getResources().getString("vs_alert_mssing"), ViewManager.getStage(View.VEHICLE_SELECT));
 			return;
 		}
 

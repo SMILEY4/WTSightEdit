@@ -18,9 +18,9 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <Label prefWidth="1000000.0" text="Element Type:" />
+            <Label prefWidth="1000000.0" text="%se_ce_element_type" />
             <ComboBox fx:id="choiceType" prefWidth="1000000.0" />
-            <Label prefWidth="1000000.0" text="Element Name:">
+            <Label prefWidth="1000000.0" text="%se_ce_element_name">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -29,8 +29,8 @@
             <Pane prefHeight="1000000.0" prefWidth="1000000.0" />
             <HBox alignment="CENTER_RIGHT" prefWidth="1000000.0" spacing="5.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="70.0" text="Cancel" />
-                  <Button mnemonicParsing="false" onAction="#onDone" prefWidth="70.0" text="Done" />
+                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="70.0" text="%se_ce_cancel" />
+                  <Button mnemonicParsing="false" onAction="#onDone" prefWidth="70.0" text="%se_ce_done" />
                </children>
             </HBox>
          </children>

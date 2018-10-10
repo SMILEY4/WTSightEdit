@@ -19,9 +19,9 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Size Major:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mhri_size_major" />
                         <Spinner fx:id="spinnerSizeMajor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Size Minor:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mhri_size_minor" />
                         <Spinner fx:id="spinnerSizeMinor" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <VBox.margin>

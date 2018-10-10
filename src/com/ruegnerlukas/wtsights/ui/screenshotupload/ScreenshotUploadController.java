@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.view.IViewController;
@@ -109,15 +108,6 @@ public class ScreenshotUploadController implements IViewController {
 			}
 		}
 		
-		for(int i=0; i<listContentElements.size(); i++) {
-			BallisticElement e = listContentElements.get(i);
-			System.out.println(e + ":");
-			for(Ammo a : e.ammunition) {
-				System.out.println("    " + a.name);
-			}
-			System.out.println(" -> " + listContentFiles.get(i));
-		}
-		
 		service.next(parameters, listContentElements, listContentFiles);
 	}
 
@@ -133,8 +123,8 @@ public class ScreenshotUploadController implements IViewController {
 		
 		private HBox hbox = new HBox();
 		private TextField textField = new TextField();
-		private Button browse = new Button("Browse");
-		private Button reset = new Button("X");
+		private Button browse = new Button(ViewManager.getResources().getString("ssu_browse"));
+		private Button reset = new Button(ViewManager.getResources().getString("ssu_reset"));
 		private BallisticElement data;
 		
 		
@@ -166,9 +156,9 @@ public class ScreenshotUploadController implements IViewController {
 					if(lastDirectory != null) {
 						fc.setInitialDirectory(lastDirectory);
 					}
-					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.jpg, *.png)", "*.jpg", "*.png"));
-					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.png)", "*.png"));
-					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image (*.jpg)", "*.jpg"));
+					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg, *.png)", "*.jpg", "*.png"));
+					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.png)", "*.png"));
+					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg)", "*.jpg"));
 					
 					File file = fc.showOpenDialog(source.getScene().getWindow());
 					if (file != null) {
@@ -209,7 +199,7 @@ public class ScreenshotUploadController implements IViewController {
 				if(item.ammunition.size() > 1) {
 					
 					label.setText(item.ammunition.get(0).parentWeapon.name);
-					label.setTooltip(new Tooltip("TriggerGroup = " + item.ammunition.get(0).parentWeapon.triggerGroup.id));
+					label.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_triggergroup_tt") + item.ammunition.get(0).parentWeapon.triggerGroup.id));
 					
 					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon("machinegun"), null));
 					imgView.setSmooth(true);
@@ -228,7 +218,7 @@ public class ScreenshotUploadController implements IViewController {
 				// single ammo
 				} else if(item.ammunition.size() == 1) {
 					label.setText(item.ammunition.get(0).namePretty);
-					label.setTooltip(new Tooltip("Type = " + item.ammunition.get(0).type));
+					label.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_shelltype_tt") + item.ammunition.get(0).type));
 					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
 					imgView.setSmooth(true);
 					imgView.setPreserveRatio(true);

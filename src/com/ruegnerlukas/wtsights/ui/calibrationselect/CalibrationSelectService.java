@@ -36,8 +36,8 @@ public class CalibrationSelectService implements IViewService {
 	
 	public void browse() {
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Open Calibration Data");
-		fc.getExtensionFilters().add(new ExtensionFilter("Calibration File (*.xml)", "*.xml"));
+		fc.setTitle(ViewManager.getResources().getString("cs_browse_title"));
+		fc.getExtensionFilters().add(new ExtensionFilter(ViewManager.getResources().getString("cs_browse_file_tye") + " (*.xml)", "*.xml"));
 		
 		File file = fc.showOpenDialog(ViewManager.getStage(View.CALIBRATION_SELECT));
 		
@@ -53,7 +53,7 @@ public class CalibrationSelectService implements IViewService {
 	public void next(Map<ParamKey,Object> parameters) {
 		
 		if(!createNew && this.fileCalibration == null) {
-			FXUtils.showAlert("No Ballistic Data selected. Select Ballistic Data to continue.", ViewManager.getStage(View.CALIBRATION_SELECT));
+			FXUtils.showAlert(ViewManager.getResources().getString("cs_alert_missing"), ViewManager.getStage(View.CALIBRATION_SELECT));
 			return;
 		}
 		

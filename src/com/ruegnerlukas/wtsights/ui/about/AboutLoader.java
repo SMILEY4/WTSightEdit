@@ -18,7 +18,7 @@ public class AboutLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey,Object> parameters) {
 		Logger.get().info("Loading 'About'");
-		FXUtils.openFXScene(View.ABOUT, null, "ui/about/about.fxml", 600, 700, "About WT Sight Editor");
+		FXUtils.openFXScene(View.ABOUT, null, "ui/about/about.fxml", 600, 700, ViewManager.getResources().getString("ab_title"));
 		ViewManager.getController(View.ABOUT).create(parameters);
 		return null;
 	}

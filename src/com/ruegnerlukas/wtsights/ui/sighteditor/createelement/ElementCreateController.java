@@ -133,15 +133,15 @@ public class ElementCreateController implements IViewController {
 				service.finish(choiceType.getValue(), finalName);
 			}
 			if(validationCode == 1) {
-				FXUtils.showAlert("Error: Name is null.", ViewManager.getStage(View.ELEMENT_CREATE));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_ce_alert_name_null"), ViewManager.getStage(View.ELEMENT_CREATE));
 				return;
 			}
 			if(validationCode == 2) {
-				FXUtils.showAlert("The name of the element can not be empty.", ViewManager.getStage(View.ELEMENT_CREATE));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_ce_alert_name_empty"), ViewManager.getStage(View.ELEMENT_CREATE));
 				return;
 			}
 			if(validationCode == 3) {
-				FXUtils.showAlert("The name of the element must be unique.", ViewManager.getStage(View.ELEMENT_CREATE));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_ce_alert_name_duplicate"), ViewManager.getStage(View.ELEMENT_CREATE));
 				return;
 			}
 			

@@ -8,6 +8,7 @@ import com.ruegnerlukas.wtsights.ui.calibrationselect.CalibrationSelectLoader;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.CalibrationSelectService;
 import com.ruegnerlukas.wtsights.ui.help.HelpLoader;
 import com.ruegnerlukas.wtsights.ui.help.HelpService;
+import com.ruegnerlukas.wtsights.ui.language.DefaultResourceBundle;
 import com.ruegnerlukas.wtsights.ui.main.MainMenuLoader;
 import com.ruegnerlukas.wtsights.ui.main.MainMenuService;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.ScreenshotUploadLoader;
@@ -57,6 +58,9 @@ public class ViewManager {
 	}
 	
 	
+	private static DefaultResourceBundle resources = new DefaultResourceBundle();
+	
+	
 	public static enum ParamKey {
 		FILE_SIGHT,
 		SIGHT_DATA,
@@ -69,6 +73,12 @@ public class ViewManager {
 		;
 	}
 	
+	
+	
+	
+	public static DefaultResourceBundle getResources() {
+		return resources;
+	}
 	
 	
 	

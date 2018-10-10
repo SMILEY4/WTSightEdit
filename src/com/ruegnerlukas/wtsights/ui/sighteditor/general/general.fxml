@@ -21,23 +21,23 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <Label minWidth="0.0" prefWidth="261.0" text="Thousandth:" />
+                        <Label minWidth="0.0" prefWidth="261.0" text="%se_gen_thousandth_header" />
                         <ComboBox fx:id="comboThousandth" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Font Size Scale:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_gen_font_size" />
                         <Spinner fx:id="fontSize" editable="true" minWidth="0.0" prefWidth="1000000.0" />
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Line Size Scale:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_gen_line_size" />
                         <Spinner fx:id="lineSize" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbApplyCorrection" minWidth="0.0" mnemonicParsing="false" onAction="#onApplyCorrection" prefWidth="1000000.0" text="Apply Correction to Gun" />
+                        <CheckBox fx:id="cbApplyCorrection" minWidth="0.0" mnemonicParsing="false" onAction="#onApplyCorrection" prefWidth="1000000.0" text="%se_gen_apply_correction" />
                      </children>
                   </VBox>
                </children>

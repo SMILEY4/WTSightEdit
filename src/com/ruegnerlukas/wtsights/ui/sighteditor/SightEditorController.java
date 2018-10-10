@@ -201,6 +201,7 @@ public class SightEditorController implements IViewController {
 	void initModule(ElementType type, String path) {
 		try {
 			FXMLLoader loader = new FXMLLoader(SightEditorController.class.getResource(path));
+			loader.setResources(ViewManager.getResources());
 			Parent root = (Parent) loader.load();
 			paneGeneral.getChildren().add(root);
 			Module ctrl = (Module) loader.getController();
@@ -311,7 +312,7 @@ public class SightEditorController implements IViewController {
 		}
 		TextInputDialog dialog = new TextInputDialog(element.name);
 		dialog.getDialogPane().setMinWidth(400);
-		dialog.setTitle("Rename Element (" + element.type.defaultName + ")");
+		dialog.setTitle(ViewManager.getResources().getString("se_elements_rename_dialog").replaceAll("{elementname}", element.type.defaultName));
 
 		Optional<String> result = dialog.showAndWait();
 		if(result.isPresent()) {
@@ -330,15 +331,15 @@ public class SightEditorController implements IViewController {
 				wtCanvas.repaint();
 			}
 			if(validationCode == 1) {
-				FXUtils.showAlert("Error: Name is null.", ViewManager.getStage(View.SIGHT_EDITOR));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_elements_rename_null"), ViewManager.getStage(View.SIGHT_EDITOR));
 				return;
 			}
 			if(validationCode == 2) {
-				FXUtils.showAlert("The name of the element can not be empty.", ViewManager.getStage(View.SIGHT_EDITOR));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_elements_rename_empty"), ViewManager.getStage(View.SIGHT_EDITOR));
 				return;
 			}
 			if(validationCode == 3) {
-				FXUtils.showAlert("The name of the element must be unique.", ViewManager.getStage(View.SIGHT_EDITOR));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_elements_rename_duplicate"), ViewManager.getStage(View.SIGHT_EDITOR));
 				return;
 			}
 			
@@ -358,12 +359,12 @@ public class SightEditorController implements IViewController {
 		
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.initOwner(ViewManager.getStage(View.SIGHT_EDITOR));
-		alert.setTitle("Delete Element");
-		alert.setHeaderText("You are about to delete the element \"" + element.name + "\".");
-		alert.setContentText("Do you want to delete this element ?");
+		alert.setTitle(ViewManager.getResources().getString("se_elements_delete_dialog_title"));
+		alert.setHeaderText(ViewManager.getResources().getString("se_elements_delete_dialog_header") + " \"" + element.name + "\".");
+		alert.setContentText(ViewManager.getResources().getString("se_elements_delete_dialog_content"));
 		
-		ButtonType buttonDelete = new ButtonType("Delete", ButtonData.OK_DONE);
-		ButtonType buttonCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+		ButtonType buttonDelete = new ButtonType(ViewManager.getResources().getString("se_elements_delete_dialog_delete"), ButtonData.OK_DONE);
+		ButtonType buttonCancel = new ButtonType(ViewManager.getResources().getString("se_elements_delete_dialog_cancel"), ButtonData.CANCEL_CLOSE);
 		alert.getButtonTypes().setAll(buttonDelete, buttonCancel);
 		
 		Optional<ButtonType> result = alert.showAndWait();

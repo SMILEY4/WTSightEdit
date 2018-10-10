@@ -18,7 +18,7 @@
                   <HBox alignment="TOP_RIGHT" />
                   <HBox alignment="TOP_RIGHT">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onSkipSearch" prefWidth="100.0" text="Skip" />
+                        <Button mnemonicParsing="false" onAction="#onSkipSearch" prefWidth="100.0" text="%lc_skip_search" />
                      </children>
                   </HBox>
                </children>
@@ -29,11 +29,11 @@
          <children>
             <VBox alignment="CENTER_LEFT" layoutY="-80.0" prefHeight="134.0" prefWidth="469.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <Label fx:id="labelUpdateInfo" text="New version found: 0.8.2. Current version: 0.7.1" wrapText="true" />
+                  <Label fx:id="labelUpdateInfo" text="%lc_update_found_msg" wrapText="true" />
                   <HBox alignment="TOP_RIGHT" spacing="5.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onSkipUpdate" prefWidth="100.0" text="Skip" />
-                        <Button mnemonicParsing="false" onAction="#onUpdate" prefWidth="100.0" text="Update" />
+                        <Button mnemonicParsing="false" onAction="#onSkipUpdate" prefWidth="100.0" text="%lc_skip_update" />
+                        <Button mnemonicParsing="false" onAction="#onUpdate" prefWidth="100.0" text="%lc_skip_update" />
                      </children>
                   </HBox>
                </children>
@@ -44,7 +44,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-18.0" prefHeight="134.0" prefWidth="469.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <Label fx:id="labelUpdateStatus" text="Updating to version 0.8.1 ..." />
+                  <Label fx:id="labelUpdateStatus" text="%lc_updating_msg" />
                   <ProgressBar prefWidth="10000.0" />
                </children>
             </VBox>

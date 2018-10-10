@@ -19,7 +19,7 @@ public class CalibrationSelectLoader implements IViewLoader {
 	@Override
 	public Parent openNew(Stage stage, Map<ParamKey,Object> parameters) {
 		Logger.get().info("Loading 'CalibrationSelect' (" + Workflow.toString(Workflow.steps) + ")");
-		FXUtils.openFXScene(View.CALIBRATION_SELECT, null, "ui/calibrationselect/calibrationSelect.fxml", 600, 230, "Select Ballistic Data");
+		FXUtils.openFXScene(View.CALIBRATION_SELECT, null, "ui/calibrationselect/calibrationSelect.fxml", 600, 230, ViewManager.getResources().getString("cs_title"));
 		ViewManager.getController(View.CALIBRATION_SELECT).create(parameters);
 		return null;
 	}

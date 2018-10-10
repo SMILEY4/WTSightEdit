@@ -15,7 +15,7 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <Label fx:id="labelTankName" prefWidth="1000000.0" text="Selected tank name:">
+            <Label fx:id="labelTankName" prefWidth="1000000.0" text="%ssu_selected_tank">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -23,8 +23,8 @@
             <ListView fx:id="listView" minWidth="0.0" prefHeight="100000.0" prefWidth="100000.0" VBox.vgrow="ALWAYS" />
             <HBox alignment="TOP_RIGHT" prefWidth="100000.0" spacing="5.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="102.0" text="Cancel" />
-                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="100.0" text="Next" />
+                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="102.0" text="%ssu_cancel" />
+                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="100.0" text="%ssu_next" />
                </children>
             </HBox>
          </children>

@@ -21,7 +21,7 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                            <children>
-                              <Label text="How to create a custom tank sight ?">
+                              <Label text="%hp_how_to">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -29,7 +29,7 @@
                                     <Insets left="15.0" top="15.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="A video walkthrough can be found at:" wrapText="true">
+                              <Label text="%hp_video" wrapText="true">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -37,12 +37,12 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField editable="false" maxWidth="370.0" minWidth="0.0" prefWidth="370.0" text="https://youtu.be/bRAGADRql1g">
+                              <TextField editable="false" maxWidth="370.0" minWidth="0.0" prefWidth="370.0" text="%hp_video_url">
                                  <VBox.margin>
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Label text="Found a bug, want to give feedback or ask a question ?">
+                              <Label text="%hp_feedback_title">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -50,7 +50,7 @@
                                     <Insets left="15.0" top="30.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Write me a message on reddit (smiley_4_) or leave a comment under my last reddit post." wrapText="true">
+                              <Label text="%hp_feedback_body" wrapText="true">
                                  <font>
                                     <Font size="16.0" />
                                  </font>

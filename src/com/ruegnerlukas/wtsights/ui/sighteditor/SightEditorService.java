@@ -159,7 +159,7 @@ public class SightEditorService implements IViewService {
 	public void export() {
 		
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Save Sight");
+		fc.setTitle(ViewManager.getResources().getString("se_export_title"));
 		
 		File fileSelected = fc.showSaveDialog(ViewManager.getStage(View.SIGHT_EDITOR));
 		if(fileSelected == null) {
@@ -170,7 +170,7 @@ public class SightEditorService implements IViewService {
 		
 		try {
 			if(!DataWriter.saveSight(data.dataSight, data.dataBallistic, file)) {
-				FXUtils.showAlert("Sight could not be saved.", ViewManager.getStage(View.SIGHT_EDITOR));
+				FXUtils.showAlert(ViewManager.getResources().getString("se_alert_export_failed"), ViewManager.getStage(View.SIGHT_EDITOR));
 			} else {
 				Logger.get().info("Saved sight to " + file);
 			}
