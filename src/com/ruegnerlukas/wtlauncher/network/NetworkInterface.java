@@ -1,7 +1,6 @@
 package com.ruegnerlukas.wtlauncher.network;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.ruegnerlukas.wtlauncher.githubApi.Release;

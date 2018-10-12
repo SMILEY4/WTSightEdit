@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.ruegnerlukas.wtsights.data.sightfile.Block;
 import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamBool;
 import com.ruegnerlukas.wtsights.data.sightfile.ParamFloat;
 import com.ruegnerlukas.wtsights.data.sightfile.ParamText;
 import com.ruegnerlukas.wtsights.data.sightfile.ParamVec2;

@@ -106,7 +106,6 @@ public class FXUtils {
 	static class StringConverterDouble extends StringConverter<Double> {
 
 		private final DecimalFormat format;
-		private final double defaultValue;
 		private final Spinner<Double> spinner;
 		
 		
@@ -120,7 +119,6 @@ public class FXUtils {
 				strDecPlaces += "#";
 			}
 			format = new DecimalFormat("#" + (strDecPlaces.isEmpty() ? "" : ".") + strDecPlaces);
-			this.defaultValue = defaultValue;
 			this.spinner = spinner;
 		}
 		

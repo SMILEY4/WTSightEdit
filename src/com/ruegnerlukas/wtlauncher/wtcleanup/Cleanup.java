@@ -99,7 +99,7 @@ public class Cleanup {
 			Logger.get().info("Run new launcher: " + fileLauncherDest.getAbsolutePath());
 			ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileLauncherDest.getAbsolutePath());
 			try {
-				Process proc = builder.start();
+				builder.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

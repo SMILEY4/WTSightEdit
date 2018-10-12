@@ -154,7 +154,7 @@ public class LauncherController {
 		ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileApp.getAbsolutePath());
 		
 		try {
-			Process proc = builder.start();
+			builder.start();
 			Platform.exit();
 			System.exit(0);
 			

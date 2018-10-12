@@ -8,12 +8,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.MalformedJsonException;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 public class FileMerger {
@@ -38,9 +36,6 @@ public class FileMerger {
 			// merge files
 			try {
 				
-				String versionOld = rootElementOld.getAsJsonObject().get("info").getAsJsonObject().get("build_version").getAsString();
-				String versionNew = rootElementNew.getAsJsonObject().get("info").getAsJsonObject().get("build_version").getAsString();
-
 				JsonObject objUserOld = rootElementOld.getAsJsonObject().get("user").getAsJsonObject();
 				JsonObject objUserNew = rootElementNew.getAsJsonObject().get("user").getAsJsonObject();
 				JsonObject objDefaultNew = rootElementNew.getAsJsonObject().get("default").getAsJsonObject();
