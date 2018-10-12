@@ -329,6 +329,7 @@ public class FXUtils {
 		combobox.setButtonCell(new ListCell<BallisticElement>() {
 			@Override protected void updateItem(BallisticElement item, boolean empty) {
 				super.updateItem(item, empty);
+				
 				if (item == null || empty || item.ammunition.isEmpty()) {
 					setText("");
 					setGraphic(null);

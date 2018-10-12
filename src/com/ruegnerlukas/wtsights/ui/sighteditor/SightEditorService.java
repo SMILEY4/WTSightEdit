@@ -115,9 +115,10 @@ public class SightEditorService implements IViewService {
 	public Vector2d getCursorPosMil(Vector2d cursorPosPX, double canvasWidth, double canvasHeight) {
 		
 		Conversion.get().initialize(
-				canvasWidth, canvasHeight,
-				data.dataBallistic.vehicle.fovOut,
-				data.dataBallistic.vehicle.fovIn,
+				canvasWidth,
+				canvasHeight,
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
 				data.dataSight.gnrThousandth);
 		
 		Vector2d posMil = new Vector2d(cursorPosPX);
@@ -137,9 +138,10 @@ public class SightEditorService implements IViewService {
 	public Vector2d getCursorPosSS(Vector2d cursorPosPX, double canvasWidth, double canvasHeight) {
 		
 		Conversion.get().initialize(
-				canvasWidth, canvasHeight,
-				data.dataBallistic.vehicle.fovOut,
-				data.dataBallistic.vehicle.fovIn,
+				canvasWidth,
+				canvasHeight,
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
 				data.dataSight.gnrThousandth);
 		
 		Vector2d posSS = new Vector2d(cursorPosPX);

@@ -87,7 +87,12 @@ public class OverlayRenderer {
 		}
 		
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
+		Conversion.get().initialize(
+				canvas.getWidth(),
+				canvas.getHeight(),
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
+				data.dataSight.gnrThousandth);
 		
 		
 		if(selectedElement.type == ElementType.CENTRAL_VERT_LINE) {

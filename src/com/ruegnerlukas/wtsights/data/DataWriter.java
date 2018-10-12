@@ -25,13 +25,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
@@ -80,13 +77,11 @@ public class DataWriter {
 		
 		Element elementVehicle = doc.createElement(data.vehicle.name);
 		rootElement.appendChild(elementVehicle);
-		
+		elementVehicle.setAttribute("zoomModOut", Double.toString(data.zoomModOut));
+		elementVehicle.setAttribute("zoomModIn", Double.toString(data.zoomModIn));
+
 		Element elementElements = doc.createElement("elements");
 		elementVehicle.appendChild(elementElements);
-		
-		for(Entry<BallisticElement,Boolean> e : data.zoomedIn.entrySet()) {
-			System.out.println(e.getKey().ammunition.get(0) + " " + e.getValue());
-		}
 		
 		for(BallisticElement ballElement : data.elements) {
 			
@@ -132,9 +127,21 @@ public class DataWriter {
 		Element elementImages = doc.createElement("images");
 		elementVehicle.appendChild(elementImages);
 		
-		for(Entry<BallisticElement,BufferedImage> entry : data.images.entrySet()) {
+		for(Entry<BallisticElement,BufferedImage> entry : data.imagesBallistic.entrySet()) {
 			Element elementImg = doc.createElement("image_element_" + data.elements.indexOf(entry.getKey()));
 			String encodedImage = endodeImage(entry.getValue(), "jpg");
+			elementImg.setAttribute("encodedData", encodedImage);
+			elementImages.appendChild(elementImg);
+		}
+		if(data.imagesZoom.containsKey(true)) {
+			Element elementImg = doc.createElement("image_element_zoomModIn");
+			String encodedImage = endodeImage(data.imagesZoom.get(true), "jpg");
+			elementImg.setAttribute("encodedData", encodedImage);
+			elementImages.appendChild(elementImg);
+		}
+		if(data.imagesZoom.containsKey(false)) {
+			Element elementImg = doc.createElement("image_element_zoomModOut");
+			String encodedImage = endodeImage(data.imagesZoom.get(true), "jpg");
 			elementImg.setAttribute("encodedData", encodedImage);
 			elementImages.appendChild(elementImg);
 		}
@@ -152,89 +159,6 @@ public class DataWriter {
 		return true;
 	}
 
-	
-	
-	
-	public static boolean saveExternalCalibFile(CalibrationData data, File outputFile) throws Exception {
-
-		if(data == null) {
-			Logger.get().warn("Could not find calibration data: " + data);
-			return false;
-		}
-		if(outputFile == null) {
-			Logger.get().warn("Could not find file: " + outputFile);
-			return false;
-		}
-		
-		
-		Logger.get().info("Writing calibration-file to " + outputFile);
-		
-		
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-		Document doc = docBuilder.newDocument();
-		
-		Element rootElement = doc.createElement("calibrationdata");
-		doc.appendChild(rootElement);
-		
-		Element elementVehicle = doc.createElement(data.vehicle.name);
-//		elementVehicle.setAttribute("fovOut", ""+data.vehicle.fovOut);
-//		elementVehicle.setAttribute("fovIn", ""+data.vehicle.fovIn);
-		rootElement.appendChild(elementVehicle);
-				
-		Element elementAmmoGroup = doc.createElement("ammo");
-		elementVehicle.appendChild(elementAmmoGroup);
-		
-		// ammo data
-		for(CalibrationAmmoData ammoData : data.ammoData) {
-			
-			String ammoName =  ammoData.ammo.name;
-			
-			Element elementAmmo = doc.createElement(ammoName);
-			elementAmmoGroup.appendChild(elementAmmo);
-					
-			elementAmmo.setAttribute("zoomedIn", ammoData.zoomedIn ? "true" : "false");
-			elementAmmo.setAttribute("imageName", ammoData.imgName);
-			elementAmmo.setAttribute("markerCenter", ammoData.markerCenter.x + "," + ammoData.markerCenter.y);
-
-			Element elementMarkerRanges = doc.createElement("markerRanges");
-			elementAmmo.appendChild(elementMarkerRanges);
-			
-			int i = 0;
-			for(Vector2i m : ammoData.markerRanges) {
-				elementMarkerRanges.setAttribute("marker_" + (i++), m.x + ", " + m.y);
-			}
-			
-		}
-		
-		
-		// images
-		Element elementImageRoot = doc.createElement("images");
-		elementVehicle.appendChild(elementImageRoot);
-		
-		for(Entry<String,BufferedImage> entry : data.images.entrySet()) {
-			String imageName = entry.getKey();
-			Element elementImage = doc.createElement(imageName);
-			elementImageRoot.appendChild(elementImage);
-			String encodedImage = endodeImage(entry.getValue(), "jpg");
-			elementImage.setAttribute("encodedData", encodedImage);
-		}
-		
-		
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(outputFile);
-		
-		transformer.transform(source, result);
-		
-		Logger.get().info("External calibration file saved");
-		return true;
-	}
-	
 	
 	
 	

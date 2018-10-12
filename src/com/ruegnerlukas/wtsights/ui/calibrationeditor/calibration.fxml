@@ -21,30 +21,48 @@
                <children>
                   <VBox maxWidth="150.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0" spacing="5.0" style="-fx-background-color: linear-gradient(#e3e3e3, #d0d0d0); -fx-border-color: linear-gradient(#bfbfbf, #d6d6d6);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="labelVehicleName" prefWidth="100000.0" text="vehicle_name" />
-                        <ComboBox fx:id="choiceAmmo" prefWidth="10000.0" />
+                        <Label fx:id="labelVehicleName" minWidth="0.0" prefWidth="100000.0" text="vehicle_name" />
+                        <ComboBox fx:id="choiceImage" minWidth="0.0" prefWidth="10000.0" />
                         <Separator prefWidth="10000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbZoomedIn" mnemonicParsing="false" onAction="#onZoomedIn" prefWidth="100000.0" text="%ce_zoomed_in">
+                        <CheckBox fx:id="cbZoomedIn" minWidth="0.0" mnemonicParsing="false" onAction="#onZoomedIn" prefWidth="100000.0" text="%ce_zoomed_in">
                            <tooltip>
                               <Tooltip text="%ce_zoomed_in_tt" />
                            </tooltip></CheckBox>
-                        <Separator prefWidth="10000.0">
+                        <Separator minWidth="0.0" prefWidth="10000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label prefWidth="100000.0" text="Zoom Modifier" wrapText="true" />
-                        <Spinner fx:id="spinnerZoomMod" minWidth="0.0" prefWidth="100000.0" />
-                        <Separator prefWidth="10000.0">
+                        <Label minWidth="0.0" prefWidth="100000.0" text="%ce_zoom_mod_out">
+                           <tooltip>
+                              <Tooltip text="%ce_zoom_mod_out_tt" />
+                           </tooltip>
+                        </Label>
+                        <Spinner fx:id="spinnerZoomModOut" editable="true" minWidth="0.0" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="%ce_zoom_mod_out_tt" />
+                           </tooltip>
+                        </Spinner>
+                        <Label minWidth="0.0" prefWidth="100000.0" text="%ce_zoom_mod_in">
+                           <tooltip>
+                              <Tooltip text="%ce_zoom_mod_in_tt" />
+                           </tooltip>
+                        </Label>
+                        <Spinner fx:id="spinnerZoomModIn" editable="true" minWidth="0.0" prefWidth="100000.0">
+                           <tooltip>
+                              <Tooltip text="%ce_zoom_mod_in_tt" />
+                           </tooltip>
+                        </Spinner>
+                        <Separator minWidth="0.0" prefWidth="10000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minHeight="45.0" prefWidth="100000.0" text="%ce_marked_ranges" wrapText="true" />
+                        <Label minHeight="45.0" minWidth="0.0" prefWidth="100000.0" text="%ce_marked_ranges" wrapText="true" />
                         <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" prefWidth="10000.0">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0">
@@ -54,7 +72,7 @@
                               </AnchorPane>
                           </content>
                         </ScrollPane>
-                        <Separator prefWidth="10000.0">
+                        <Separator minWidth="0.0" prefWidth="10000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>

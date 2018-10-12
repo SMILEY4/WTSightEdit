@@ -290,7 +290,12 @@ public class ElementBallRangeIndicator extends Element {
 		layoutData.rlRadius = radiusPX;
 		
 		Conversion conversionUSSR = new Conversion();
-		conversionUSSR.initialize(canvasWidth, canvasHeight, data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, Thousandth.USSR);
+		conversionUSSR.initialize(
+				canvasWidth,
+				canvasHeight,
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
+				Thousandth.USSR);
 		
 		// length
 		double length = Conversion.get().screenspace2pixel(size.x, canvasHeight, data.dataSight.envZoomedIn);
@@ -412,8 +417,15 @@ public class ElementBallRangeIndicator extends Element {
 		layoutData.rcRadius = radiusPX;
 
 		Conversion conversionUSSR = new Conversion();
-		conversionUSSR.initialize(canvasWidth, canvasHeight, data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, Thousandth.USSR);
+		conversionUSSR.initialize(
+				canvasWidth,
+				canvasHeight,
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
+				Thousandth.USSR);
 
+		
+		
 		// calc indicators
 		for (int i = 0; i < indicators.size(); i++) {
 			BIndicator indicator = indicators.get(i);

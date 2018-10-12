@@ -52,8 +52,14 @@ public class DefaultResourceBundle extends ResourceBundle {
 
 		// CALIBRATION EDITOR
 		map.put("ce_title", 			"Create Ballistic Data");
-		map.put("ce_zoomed_in", 		"Zoomed In");
+		map.put("ce_img_zoomed_in", 	"Sight Zoomed In");
+		map.put("ce_img_zoomed_out", 	"Sight Zoomed Out");
+		map.put("ce_zoomed_in", 		"Is zoomed in");
 		map.put("ce_zoomed_in_tt", 		"Whether or not the selected background image is zoomed in.");
+		map.put("ce_zoom_mod_out",		"Zoom (Out) Multiplier");
+		map.put("ce_zoom_mod_in",		"Zoom (In) Multiplier");
+		map.put("ce_zoom_mod_out_tt",	"Multiplies the zoom by this value. Can be used if the zoom of the ingame sight is different from the one in the editor.");
+		map.put("ce_zoom_mod_in_tt",	"Multiplies the zoom by this value. Can be used if the zoom of the ingame sight is different from the one in the editor.");
 		map.put("ce_marked_ranges", 	"Distances of marked ranges:");
 		map.put("ce_export", 			"Export");
 		map.put("ce_export_tt", 		"Save this calibration as a file.");
@@ -80,6 +86,10 @@ public class DefaultResourceBundle extends ResourceBundle {
 		// SCREENSHOT UPLOAD
 		map.put("ssu_title", 			"Upload Screenshots");
 		map.put("ssu_selected_tank", 	"Selected tank name:");
+		map.put("ssu_zoomed_in", 		"Zoomed In");
+		map.put("ssu_zoomed_in_tt", 	"An image of a zoomed in sight. Not mandatory, but can be used if the zoom of the ingame sight is different from the one in the editor.");
+		map.put("ssu_zoomed_out", 		"Zoomed Out");
+		map.put("ssu_zoomed_out_tt", 	"An image of the normal sight. Not mandatory, but can be used if the zoom of the ingame sight is different from the one in the editor.");
 		map.put("ssu_browse", 			"Browse");
 		map.put("ssu_reset", 			"X");
 		map.put("ssu_file_type_img", 	"Image");

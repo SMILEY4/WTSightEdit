@@ -83,7 +83,12 @@ public class SightRenderer {
 	
 	public static void draw(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
+		Conversion.get().initialize(
+				canvas.getWidth(),
+				canvas.getHeight(),
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
+				data.dataSight.gnrThousandth);
 		
 		// background
 		drawBackground(canvas, g, data.dataSight);

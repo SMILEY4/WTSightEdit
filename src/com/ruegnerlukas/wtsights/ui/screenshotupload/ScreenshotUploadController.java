@@ -2,7 +2,6 @@ package com.ruegnerlukas.wtsights.ui.screenshotupload;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -24,16 +23,14 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 
 public class ScreenshotUploadController implements IViewController {
 
@@ -43,11 +40,10 @@ public class ScreenshotUploadController implements IViewController {
 	@FXML private URL location;
 
 	@FXML private Label labelTankName;
-	@FXML private ListView<BallisticElement> listView;
-
-	private List<Cell> cells = new ArrayList<Cell>();
+	@FXML private VBox boxList;
+	
 	private File lastDirectory = null;
-
+	
 	private ScreenshotUploadService service;
 	private Map<ParamKey,Object> parameters;
 	
@@ -60,23 +56,203 @@ public class ScreenshotUploadController implements IViewController {
 		
 		this.parameters = parameters;
 		this.service = (ScreenshotUploadService) ViewManager.getService(View.SCREENSHOT_UPLOAD);
+		this.service.init();
 		Vehicle vehicle = (Vehicle) parameters.get(ParamKey.SELECTED_VEHICLE);
 		
 		labelTankName.setText(vehicle.namePretty);
-		listView.getItems().addAll(service.getListOfElements(vehicle));
-		Logger.get().info("Loaded ammunition for " + vehicle.name + ": " + listView.getItems().size());
 		
-		listView.setCellFactory(new Callback<ListView<BallisticElement>, ListCell<BallisticElement>>() {
-			@Override
-			public ListCell<BallisticElement> call(ListView<BallisticElement> param) {
-				Cell cell = new Cell();
-				cells.add(cell);
-				return cell;
-			}
-		});
+		List<BallisticElement> elements = service.getListOfElements(vehicle);
+		Logger.get().info("Loaded ammunition for " + vehicle.name + ": " + elements.size());
+
+		boxList.getChildren().clear();
+		
+		HBox boxZI = buildBox(true);
+		boxList.getChildren().add(boxZI);
+		
+		HBox boxZO = buildBox(false);
+		boxList.getChildren().add(boxZO);
+		
+		HBox boxSeperator = new HBox();
+		boxSeperator.setMinSize(0, 10);
+		boxSeperator.setPrefSize(100000, 10);
+		boxSeperator.setMaxSize(100000, 10);
+		boxList.getChildren().add(boxSeperator);
+		
+		for(BallisticElement element : elements) {
+			HBox box = buildBox(element);
+			boxList.getChildren().add(box);
+		}
 
 	}
 
+	
+	
+	
+	private HBox buildBox(BallisticElement element) {
+		
+		HBox box = buildBaseBox();
+		
+		Label labelName = (Label) box.getChildren().get(0);
+		TextField fieldPath = (TextField) box.getChildren().get(1);
+		Button btnBrowse = (Button) box.getChildren().get(2);
+		Button btnReset = (Button) box.getChildren().get(3);
+		
+		if(element.ammunition.size() > 1) {
+			labelName.setText(element.ammunition.get(0).parentWeapon.name);
+			labelName.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_triggergroup_tt") + element.ammunition.get(0).parentWeapon.triggerGroup.id));
+			ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon("machinegun"), null));
+			imgView.setSmooth(true);
+			imgView.setPreserveRatio(true);
+			imgView.setFitHeight(40);
+			labelName.setGraphic(imgView);
+			if(element.isRocketElement) {
+				box.setDisable(true);
+			} else {
+				box.setDisable(false);
+			}
+		} else if(element.ammunition.size() == 1) {
+			labelName.setText(element.ammunition.get(0).namePretty);
+			labelName.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_shelltype_tt") + element.ammunition.get(0).type));
+			ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(element.ammunition.get(0).type), null));
+			imgView.setSmooth(true);
+			imgView.setPreserveRatio(true);
+			imgView.setFitHeight(40);
+			labelName.setGraphic(imgView);
+			if(element.isRocketElement) {
+				box.setDisable(true);
+			} else {
+				box.setDisable(false);
+			}
+		}
+		
+		btnBrowse.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				FileChooser fc = new FileChooser();
+				if(lastDirectory != null) {
+					fc.setInitialDirectory(lastDirectory);
+				}
+				fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg, *.png)", "*.jpg", "*.png"));
+				fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.png)", "*.png"));
+				fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg)", "*.jpg"));
+				
+				File file = fc.showOpenDialog(ViewManager.getScene(View.SCREENSHOT_UPLOAD).getWindow());
+				if (file != null) {
+					service.selectImage(file, element);
+					fieldPath.setText(file.getAbsolutePath());
+					lastDirectory = file.getParentFile();
+					btnReset.setDisable(false);
+				}
+				
+				Logger.get().debug("Image selected: " + file);
+			}
+		});
+		
+		btnReset.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				service.selectImage(null, element);
+				fieldPath.setText("");
+				btnReset.setDisable(true);
+			}
+		});
+		
+		return box;
+	}
+	
+	
+	
+	
+	private HBox buildBox(boolean zoomedIn) {
+		
+		HBox box = buildBaseBox();
+		Label labelName = (Label) box.getChildren().get(0);
+		TextField fieldPath = (TextField) box.getChildren().get(1);
+		Button btnBrowse = (Button) box.getChildren().get(2);
+		Button btnReset = (Button) box.getChildren().get(3);
+		
+		labelName.setPadding(new Insets(0, 10, 0, 0));
+		if(zoomedIn) {
+			labelName.setText(ViewManager.getResources().getString("ssu_zoomed_in"));
+			labelName.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_zoomed_in_tt")));
+		} else {
+			labelName.setText(ViewManager.getResources().getString("ssu_zoomed_out"));
+			labelName.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_zoomed_out_tt")));
+		}
+		
+		btnBrowse.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				FileChooser fc = new FileChooser();
+				if(lastDirectory != null) {
+					fc.setInitialDirectory(lastDirectory);
+				}
+				fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg, *.png)", "*.jpg", "*.png"));
+				fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.png)", "*.png"));
+				fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg)", "*.jpg"));
+				
+				File file = fc.showOpenDialog(ViewManager.getScene(View.SCREENSHOT_UPLOAD).getWindow());
+				if (file != null) {
+					service.selectImage(file, zoomedIn);
+					fieldPath.setText(file.getAbsolutePath());
+					lastDirectory = file.getParentFile();
+					btnReset.setDisable(false);
+				}
+				
+				Logger.get().debug("Image selected for zoomedIn=" + zoomedIn +": " + file);
+			}
+		});
+		
+		btnReset.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				service.selectImage(null, zoomedIn);
+				fieldPath.setText("");
+				btnReset.setDisable(true);
+			}
+		});
+		
+		return box;
+	}
+	
+	
+	
+	
+	private HBox buildBaseBox() {
+		
+		HBox box = new HBox();
+		box.setAlignment(Pos.CENTER_LEFT);
+		box.setSpacing(2);
+		box.setPadding(new Insets(2, 2, 2, 2));
+		box.setMinSize(HBox.USE_COMPUTED_SIZE, 42);
+		box.setPrefSize(100000, 42);
+		box.setMaxSize(HBox.USE_COMPUTED_SIZE, 42);
+
+		Label labelName = new Label("error");
+		labelName.setAlignment(Pos.CENTER_RIGHT);
+		labelName.setContentDisplay(ContentDisplay.RIGHT);
+		labelName.setMinSize(200, 42);
+		labelName.setPrefSize(200, 42);
+		labelName.setMaxSize(200, 42);
+		
+		TextField fieldPath = new TextField("");
+		fieldPath.setMinSize(20, 31);
+		fieldPath.setPrefSize(100000, 31);
+		fieldPath.setMaxSize(100000, 31);
+		fieldPath.setEditable(false);
+		
+		Button btnBrowse = new Button(ViewManager.getResources().getString("ssu_browse"));
+		btnBrowse.setMinSize(70, 31);
+		btnBrowse.setPrefSize(70, 31);
+		btnBrowse.setMaxSize(70, 31);
+		
+		Button btnReset = new Button(ViewManager.getResources().getString("ssu_reset"));
+		btnReset.setMinSize(42, 31);
+		btnReset.setPrefSize(42, 31);
+		btnReset.setMaxSize(42, 31);
+		btnReset.setDisable(true);
+		
+		box.getChildren().addAll(labelName, fieldPath, btnBrowse, btnReset);
+		
+		return box;
+	}
+	
 	
 	
 	
@@ -90,152 +266,8 @@ public class ScreenshotUploadController implements IViewController {
 
 	@FXML
 	void onNext(ActionEvent event) {
-
-		List<BallisticElement> listContentElements = new ArrayList<BallisticElement>();
-		List<File> listContentFiles = new ArrayList<File>();
-
-		for(Cell cell : cells) {
-			if(cell.data != null) {
-				if(cell.data.isRocketElement) {
-					listContentElements.add(cell.data);
-					listContentFiles.add(null);
-				} else {
-					if(cell.fileImage != null) {
-						listContentElements.add(cell.data);
-						listContentFiles.add(cell.fileImage);
-					}
-				}
-			}
-		}
-		
-		service.next(parameters, listContentElements, listContentFiles);
+		service.next(parameters);
 	}
 
-	
-	
-	
-	
-	
-	class Cell extends ListCell<BallisticElement> {
-		
-		public File fileImage;
-		public Label label = new Label("null");
-		
-		private HBox hbox = new HBox();
-		private TextField textField = new TextField();
-		private Button browse = new Button(ViewManager.getResources().getString("ssu_browse"));
-		private Button reset = new Button(ViewManager.getResources().getString("ssu_reset"));
-		private BallisticElement data;
-		
-		
-		public Cell() {
-			super();
-
-			hbox.getChildren().addAll(label, textField, browse, reset);
-			hbox.setPrefHeight(40+2);
-			hbox.setAlignment(Pos.CENTER_LEFT);
-			
-			HBox.setHgrow(textField, Priority.ALWAYS);
-			textField.setEditable(false);
-		
-			reset.setMinWidth(40);
-			reset.setMaxWidth(40);
-			reset.setDisable(true);
-			
-			HBox.setMargin(label, new Insets(0, 10, 0, 0));
-			label.setMinWidth(200);
-			
-			
-			browse.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-
-					Button source = (Button)event.getSource();
-					
-					FileChooser fc = new FileChooser();
-					if(lastDirectory != null) {
-						fc.setInitialDirectory(lastDirectory);
-					}
-					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg, *.png)", "*.jpg", "*.png"));
-					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.png)", "*.png"));
-					fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("ssu_file_type_img") + " (*.jpg)", "*.jpg"));
-					
-					File file = fc.showOpenDialog(source.getScene().getWindow());
-					if (file != null) {
-						fileImage = file;
-						textField.setText(file.getAbsolutePath());
-						lastDirectory = file.getParentFile();
-						reset.setDisable(false);
-					}
-					
-					Logger.get().debug("Image selected: " + file);
-					
-				}
-			});
-			
-			reset.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					fileImage = null;
-					textField.setText("");
-					reset.setDisable(true);
-				}
-			});
-			
-		}
-		
-		
-		@Override
-		protected void updateItem(BallisticElement item, boolean empty) {
-			super.updateItem(item, empty);
-			this.data = item;
-			setText(null);
-			
-			if(empty || item == null || item.ammunition.isEmpty()) {
-				setGraphic(null);
-			} else {
-				
-				// multiple ammo
-				if(item.ammunition.size() > 1) {
-					
-					label.setText(item.ammunition.get(0).parentWeapon.name);
-					label.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_triggergroup_tt") + item.ammunition.get(0).parentWeapon.triggerGroup.id));
-					
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon("machinegun"), null));
-					imgView.setSmooth(true);
-					imgView.setPreserveRatio(true);
-					imgView.setFitHeight(40);
-					label.setGraphic(imgView);
-					setGraphic(hbox);
-					
-					if(item.isRocketElement) {
-						setDisable(true);
-					} else {
-						setDisable(false);
-					}
-					
-					
-				// single ammo
-				} else if(item.ammunition.size() == 1) {
-					label.setText(item.ammunition.get(0).namePretty);
-					label.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_shelltype_tt") + item.ammunition.get(0).type));
-					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(item.ammunition.get(0).type), null));
-					imgView.setSmooth(true);
-					imgView.setPreserveRatio(true);
-					imgView.setFitHeight(40);
-					label.setGraphic(imgView);
-					setGraphic(hbox);
-					if(item.isRocketElement) {
-						setDisable(true);
-					} else {
-						setDisable(false);
-					}
-				}
-				
-			}
-		}
-		
-	}
-	
 
 }

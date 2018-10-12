@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
@@ -45,28 +46,37 @@ import javafx.stage.FileChooser;
 public class CalibrationEditorService implements IViewService {
 
 	private File fileSight;
-	private Map<BallisticElement,Image> imageCache = new HashMap<BallisticElement,Image>();
-	private Image currentImage;
-	private BallisticElement currentElement;
+	private Map<Object,Image> imageCache = new HashMap<Object,Image>();
 	private BallisticData dataBallistic;
+
+	private Object currentObject;
+	private Image currentImage;
 	
 	
 	
 	
-	public void initNewBallisticData(Vehicle vehicle, List<BallisticElement> dataList, Map<BallisticElement,File> imageMap) {
+	public void initNewBallisticData(Vehicle vehicle, Map<BallisticElement,File> imagesBallistic, File[] imagesZoom) {
 		
 		BallisticData dataBallistic = new BallisticData();
 		dataBallistic.vehicle = vehicle;
-		dataBallistic.elements.addAll(dataList);
+		dataBallistic.elements.addAll(imagesBallistic.keySet());
 		
 		try {
-			for(int i=0; i<dataList.size(); i++) {
-				BallisticElement element  = dataList.get(i);
-				File file = imageMap.get(element);
+			for(Entry<BallisticElement,File> entry : imagesBallistic.entrySet()) {
+				BallisticElement element  = entry.getKey();
+				File file = entry.getValue();
 				if(file != null) {
 					BufferedImage img = ImageIO.read(file);
-					dataBallistic.images.put(element, img);
+					dataBallistic.imagesBallistic.put(element, img);
 				}
+			}
+			if(imagesZoom[0] != null) { // zoomed in
+				BufferedImage img = ImageIO.read(imagesZoom[0]);
+				dataBallistic.imagesZoom.put(true, img);
+			}
+			if(imagesZoom[1] != null) { // zoomed out
+				BufferedImage img = ImageIO.read(imagesZoom[1]);
+				dataBallistic.imagesZoom.put(false, img);
 			}
 			
 		} catch (IOException e) {
@@ -100,20 +110,6 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	
-	public double getZoomMod() {
-		return dataBallistic.zoomMod;
-	}
-	
-	
-	
-	
-	public void setZoomMod(double zoomMod) {
-		this.dataBallistic.zoomMod = zoomMod;
-	}
-	
-	
-	
-	
 	public List<BallisticElement> getBallisticElements(boolean asCopy) {
 		if(asCopy) {
 			List<BallisticElement> elements = new ArrayList<BallisticElement>();
@@ -126,72 +122,124 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	
+	public List<Object> getSelectableObjects() {
+		List<Object> objects = new ArrayList<Object>();
+		objects.addAll(dataBallistic.elements);
+		objects.addAll(dataBallistic.imagesZoom.keySet());
+		return objects;
+	}
 	
-	public void selectElement(BallisticElement element) {
+	
+	
+	public void selectElement(Object obj) {
 		
-		if(element == null) {
+		if(obj == null) {
 			currentImage = null;
-			currentElement = null;
+			currentObject = null;
 			
-		} else {
+			
+		} else if(obj instanceof BallisticElement) {
+			BallisticElement element = (BallisticElement)obj;
 			
 			// get current image
-			if(dataBallistic.images.get(element) == null) {
+			if(dataBallistic.imagesBallistic.get(element) == null) {
 				currentImage = null;
 			} else if(imageCache.containsKey(element)) {
 				currentImage = imageCache.get(element);
 				Logger.get().debug("Image retrieved from cache");
 			} else {
-				BufferedImage bufImg = dataBallistic.images.get(element);
+				BufferedImage bufImg = dataBallistic.imagesBallistic.get(element);
 				currentImage = SwingFXUtils.toFXImage(bufImg, null);
 				imageCache.put(element, currentImage);
 			}
+			this.currentObject = element;
 			
-			this.currentElement = element;
+			Logger.get().debug("Ballistic Element selected: " + this.currentObject);
+		
 			
-			Logger.get().debug("Ballistic Element selected: " + this.currentElement);
+		} else if(obj instanceof Boolean) {
+			boolean zoomedIn = (Boolean) obj;
+
+			// get current image
+			if(dataBallistic.imagesZoom.get(zoomedIn) == null) {
+				currentImage = null;
+			} else if(imageCache.containsKey(obj)) {
+				currentImage = imageCache.get(obj);
+				Logger.get().debug("Image retrieved from cache");
+			} else {
+				BufferedImage bufImg = dataBallistic.imagesZoom.get(obj);
+				currentImage = SwingFXUtils.toFXImage(bufImg, null);
+				imageCache.put(obj, currentImage);
+			}
+			this.currentObject = obj;
+			
+			Logger.get().debug("zoomed image selected: " + zoomedIn);
 		}
 		
+	}
+	
+	
+	
+	
+	public void setZoomModifier(double value, boolean zoomedIn) {
+		if(zoomedIn) {
+			dataBallistic.zoomModIn = value;
+		} else {
+			dataBallistic.zoomModOut = value;
+		}
 	}
 
 	
 	
+	public double getZoomModifier(boolean zoomedIn) {
+		if(zoomedIn) {
+			return dataBallistic.zoomModIn;
+		} else {
+			return dataBallistic.zoomModOut;
+		}
+	}
+	
 	
 	public List<Marker> getMarkers(boolean asCopy) {
 		
-		
-		if( this.currentElement != null && this.currentElement.markerData != null ) {
-		
-			for(int i=0; i<this.currentElement.markerData.markers.size(); i++) {
-				Marker marker = this.currentElement.markerData.markers.get(i);
-				marker.id = i+1;
-			}
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
 			
-			if(asCopy) {
-				List<Marker> markers = new ArrayList<Marker>();
-				markers.addAll(this.currentElement.markerData.markers);
-				return markers;
-			} else {
-				return this.currentElement.markerData.markers;
+			if( currentElement != null && currentElement.markerData != null ) {
+				
+				for(int i=0; i<currentElement.markerData.markers.size(); i++) {
+					Marker marker = currentElement.markerData.markers.get(i);
+					marker.id = i+1;
+				}
+				
+				if(asCopy) {
+					List<Marker> markers = new ArrayList<Marker>();
+					markers.addAll(currentElement.markerData.markers);
+					return markers;
+				} else {
+					return currentElement.markerData.markers;
+				}
+
 			}
-			
-		} else {
-			return new ArrayList<Marker>();
 		}
-		
+	
+		return new ArrayList<Marker>();
 	}
 	
 	
 	
 	
 	public void editMarkerRange(Marker marker, int distMeters) {
-		if(currentElement != null) {
-			marker.distMeters = distMeters;
-			MarkerData dataMarker = currentElement.markerData;
-			if(dataMarker.markers.size() >= 3) {
-				currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
-			} else {
-				currentElement.function = new NullBallisticFunction();
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+			if(currentElement != null) {
+				marker.distMeters = distMeters;
+				MarkerData dataMarker = currentElement.markerData;
+				if(dataMarker.markers.size() >= 3) {
+					currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
+				} else {
+					currentElement.function = new NullBallisticFunction();
+				}
 			}
 		}
 	}
@@ -203,18 +251,22 @@ public class CalibrationEditorService implements IViewService {
 		
 		List<Vector2f> indicators = new ArrayList<Vector2f>();
 		
-		if(currentElement != null && currentElement.markerData != null) {
-			MarkerData dataMarker = currentElement.markerData;
-			double zoom = dataBallistic.vehicle.fovOut / dataBallistic.vehicle.fovIn;
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
 			
-			IBallisticFunction func = currentElement.function;
-			for(int d=200; d<=2800; d+=200) {
-				double p = func.eval(d) * (isZoomedIn() ? zoom : 1.0);
-				float x = (float) (canvasWidth/2) - 20;
-				float y = (float) (dataMarker.yPosCenter + p);
-				indicators.add(new Vector2f(x,y));
+			if(currentElement.markerData != null) {
+				MarkerData dataMarker = currentElement.markerData;
+				double zoom = dataBallistic.vehicle.fovOut / dataBallistic.vehicle.fovIn;
+				
+				IBallisticFunction func = currentElement.function;
+				for(int d=200; d<=2800; d+=200) {
+					double p = func.eval(d) * (isZoomedIn() ? zoom : 1.0);
+					float x = (float) (canvasWidth/2) - 20;
+					float y = (float) (dataMarker.yPosCenter + p);
+					indicators.add(new Vector2f(x,y));
+				}
+				
 			}
-			
 		}
 		
 		return indicators;
@@ -227,7 +279,12 @@ public class CalibrationEditorService implements IViewService {
 		
 		List<Vector3d> indicators = new ArrayList<Vector3d>();
 		
-		Conversion.get().initialize(width, height, dataBallistic.vehicle.fovOut, dataBallistic.vehicle.fovIn, Thousandth.USSR, dataBallistic.zoomMod);
+		Conversion.get().initialize(
+				width,
+				height,
+				dataBallistic.vehicle.fovOut*dataBallistic.zoomModOut,
+				dataBallistic.vehicle.fovIn*dataBallistic.zoomModIn,
+				Thousandth.USSR);
 		
 		for(int i=-32; i<=32; i+=4) {
 			
@@ -249,12 +306,14 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	public List<Marker> getMarkers() {
-		if(currentElement != null && currentElement.markerData != null) {
-			MarkerData dataMarker = currentElement.markerData;
-			return dataMarker.markers;
-		} else {
-			return new ArrayList<Marker>();
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+			if(currentElement != null && currentElement.markerData != null) {
+				MarkerData dataMarker = currentElement.markerData;
+				return dataMarker.markers;
+			}
 		}
+		return new ArrayList<Marker>();
 	}
 	
 	
@@ -262,44 +321,52 @@ public class CalibrationEditorService implements IViewService {
 	
 	public Marker getSelectedMarker(int cursorX, int cursorY) {
 		
-		if(currentElement != null && currentElement.markerData != null) {
-			
-			MarkerData dataMarker = currentElement.markerData;
-			
-			double minDist = Integer.MAX_VALUE;
-			Marker minMarker = null;
-			
-			Vector2d tmp = new Vector2d();
-			for(int i=0; i<dataMarker.markers.size(); i++) {
-				Marker marker = dataMarker.markers.get(i);
-				double dist = tmp.set(cursorX, marker.yPos+dataMarker.yPosCenter).dist(cursorX, cursorY);
-				if(dist < minDist) {
-					minDist = dist;
-					minMarker = marker;
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+
+			if(currentElement.markerData != null) {
+				
+				MarkerData dataMarker = currentElement.markerData;
+				
+				double minDist = Integer.MAX_VALUE;
+				Marker minMarker = null;
+				
+				Vector2d tmp = new Vector2d();
+				for(int i=0; i<dataMarker.markers.size(); i++) {
+					Marker marker = dataMarker.markers.get(i);
+					double dist = tmp.set(cursorX, marker.yPos+dataMarker.yPosCenter).dist(cursorX, cursorY);
+					if(dist < minDist) {
+						minDist = dist;
+						minMarker = marker;
+					}
 				}
+				
+				return minMarker;
+				
 			}
-			
-			return minMarker;
-			
-		} else {
-			return null;
 		}
 		
+		return null;
 	}
 	
 	
 	
 	
 	public double getCenterMarkerY() {
-		if(currentElement != null && currentElement.markerData != null) {
-			return currentElement.markerData.yPosCenter;
-		} else {
-			if(currentImage != null) {
-				return currentImage.getHeight()/2;
+		
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+
+			if(currentElement != null && currentElement.markerData != null) {
+				return currentElement.markerData.yPosCenter;
 			} else {
-				return 720/2;
+				if(currentImage != null) {
+					return currentImage.getHeight()/2;
+				}
 			}
 		}
+		
+		return 720/2;
 	}
 	
 	
@@ -307,34 +374,34 @@ public class CalibrationEditorService implements IViewService {
 	
 	public void addMarker(double y) {
 		
-		if(currentElement == null || currentImage == null) {
-			return;
-		}
-		
-		// get marker data (create new if neccessary)
-		if(this.currentElement.markerData == null) {
-			currentElement.markerData = new MarkerData();
-			currentElement.markerData.yPosCenter = currentImage != null ? currentImage.getHeight()/2 : 720/2;
-		}
-		MarkerData dataMarker = currentElement.markerData;
-		double mc = dataMarker.yPosCenter;
-		
-		// add new marker
-		if(dataMarker.markers.size() == 0) {
-			Marker marker = new Marker(200, y-mc);
-			marker.id = dataMarker.markers.size()+1;
-			dataMarker.markers.add(marker);
-		} else {
-			Marker marker = new Marker(dataMarker.markers.get(dataMarker.markers.size()-1).distMeters+200, y-mc);
-			marker.id = dataMarker.markers.size()+1;
-			dataMarker.markers.add(marker);
-		}
-		
-		// update function
-		if(dataMarker.markers.size() >= 3) {
-			currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
-		} else {
-			currentElement.function = new NullBallisticFunction();
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement && currentImage != null) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+
+			// get marker data (create new if neccessary)
+			if(currentElement.markerData == null) {
+				currentElement.markerData = new MarkerData();
+				currentElement.markerData.yPosCenter = currentImage != null ? currentImage.getHeight()/2 : 720/2;
+			}
+			MarkerData dataMarker = currentElement.markerData;
+			double mc = dataMarker.yPosCenter;
+			
+			// add new marker
+			if(dataMarker.markers.size() == 0) {
+				Marker marker = new Marker(200, y-mc);
+				marker.id = dataMarker.markers.size()+1;
+				dataMarker.markers.add(marker);
+			} else {
+				Marker marker = new Marker(dataMarker.markers.get(dataMarker.markers.size()-1).distMeters+200, y-mc);
+				marker.id = dataMarker.markers.size()+1;
+				dataMarker.markers.add(marker);
+			}
+			
+			// update function
+			if(dataMarker.markers.size() >= 3) {
+				currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
+			} else {
+				currentElement.function = new NullBallisticFunction();
+			}
 		}
 		
 	}
@@ -354,15 +421,18 @@ public class CalibrationEditorService implements IViewService {
 	
 	public void deleteMarker(Marker marker) {
 		
-		if(marker != null) {
-			MarkerData dataMarker = currentElement.markerData;
-			dataMarker.markers.remove(marker);
-			if(dataMarker.markers.size() >= 3) {
-				currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
-			} else {
-				currentElement.function = new NullBallisticFunction();
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement && currentImage != null) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+			if(marker != null) {
+				MarkerData dataMarker = currentElement.markerData;
+				dataMarker.markers.remove(marker);
+				if(dataMarker.markers.size() >= 3) {
+					currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
+				} else {
+					currentElement.function = new NullBallisticFunction();
+				}
+				Logger.get().debug("Deleted marker " + marker);
 			}
-			Logger.get().debug("Deleted marker " + marker);
 		}
 		
 	}
@@ -443,9 +513,12 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	public void setZoomedIn(boolean zoomedIn) {
-		if(currentElement != null) {
-			dataBallistic.zoomedIn.put(currentElement, zoomedIn);
-			currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement && currentImage != null) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+			if(currentElement != null) {
+				dataBallistic.zoomedIn.put(currentElement, zoomedIn);
+				currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
+			}
 		}
 	}
 	
@@ -453,7 +526,16 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	public boolean isZoomedIn() {
-		return dataBallistic.zoomedIn.containsKey(currentElement) ? dataBallistic.zoomedIn.get(currentElement) : false;
+		if(this.currentObject != null && currentImage != null) {
+			if(this.currentObject instanceof BallisticElement) {
+				BallisticElement currentElement = (BallisticElement) currentObject;
+				return dataBallistic.zoomedIn.containsKey(currentElement) ? dataBallistic.zoomedIn.get(currentElement) : false;
+			} else {
+				return (Boolean)currentObject;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 	

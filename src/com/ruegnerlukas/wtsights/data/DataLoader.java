@@ -320,6 +320,8 @@ public class DataLoader {
 			
 			Element elementVehicle = XMLUtils.getChildren(root).get(0);
 			data.vehicle = Database.getVehicleByName(elementVehicle.getTagName());
+			data.zoomModOut = elementVehicle.hasAttribute("zoomModOut") ? Double.parseDouble(elementVehicle.getAttribute("zoomModOut")) : 1.0;
+			data.zoomModIn = elementVehicle.hasAttribute("zoomModIn") ? Double.parseDouble(elementVehicle.getAttribute("zoomModIn")) : 1.0;
 
 			Element elementElements = XMLUtils.getElementByTagName(elementVehicle, "elements");
 			
@@ -390,10 +392,23 @@ public class DataLoader {
 			
 			Element elementImages = XMLUtils.getElementByTagName(elementVehicle, "images");
 			for(Element elementImg : XMLUtils.getChildren(elementImages)) {
+				if(elementImg.getTagName().startsWith("image_element_zoomMod")) {
+					continue;
+				}
 				int elementIndex = Integer.parseInt(elementImg.getTagName().split("_")[2]);
 				BallisticElement ballElement = data.elements.get(elementIndex);
 				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
-				data.images.put(ballElement, img);
+				data.imagesBallistic.put(ballElement, img);
+			}
+			if(XMLUtils.getElementByTagName(elementImages, "image_element_zoomModIn") != null) {
+				Element elementImg = XMLUtils.getElementByTagName(elementImages, "image_element_zoomModIn");
+				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
+				data.imagesZoom.put(true, img);
+			}
+			if(XMLUtils.getElementByTagName(elementImages, "image_element_zoomModOut") != null) {
+				Element elementImg = XMLUtils.getElementByTagName(elementImages, "image_element_zoomModOut");
+				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
+				data.imagesZoom.put(false, img);
 			}
 				
 		} catch (ParserConfigurationException e) {
