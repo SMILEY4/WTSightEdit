@@ -118,7 +118,8 @@ public class ElementCustomCircleOutline extends ElementCustomObject {
 					yPX -= rangeCorrectionPX;
 				} else {
 					yPX += rangeCorrectionPX;
-				}			
+				}
+				
 				
 			} else if(movement == Movement.MOVE_RADIAL) {
 
@@ -144,7 +145,7 @@ public class ElementCustomCircleOutline extends ElementCustomObject {
 				if(MathUtils.isNearlyEqual(toCenter.length2(), 0)) {
 					toCenter.set(position);
 				} else {
-					toCenter.rotateDeg(-angle).rotateRad(rangeAngle);
+					toCenter.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
 				}
 				
 				if(useThousandth) {

@@ -137,7 +137,7 @@ public class ElementCustomText extends ElementCustomObject {
 				if(MathUtils.isNearlyEqual(toCenter.length2(), 0)) {
 					toCenter.set(position);
 				} else {
-					toCenter.rotateDeg(-angle).rotateRad(rangeAngle);
+					toCenter.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
 				}
 
 				if(useThousandth) {

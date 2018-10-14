@@ -150,6 +150,7 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 					yPX4 += rangeCorrectionPX;
 				}
 				
+				
 			} else if(movement == Movement.MOVE_RADIAL) {
 
 				Vector2d centerOW = new Vector2d();
@@ -182,10 +183,10 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 					toPos3.set(pos3);
 					toPos4.set(pos4);
 				} else {
-					toPos1.rotateDeg(-angle).rotateRad(rangeAngle);
-					toPos2.rotateDeg(-angle).rotateRad(rangeAngle);
-					toPos3.rotateDeg(-angle).rotateRad(rangeAngle);
-					toPos4.rotateDeg(-angle).rotateRad(rangeAngle);
+					toPos1.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
+					toPos2.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
+					toPos3.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
+					toPos4.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
 				}
 
 				if(useThousandth) {

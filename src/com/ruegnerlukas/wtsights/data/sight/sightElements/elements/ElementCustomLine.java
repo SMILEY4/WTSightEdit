@@ -150,8 +150,8 @@ public class ElementCustomLine extends ElementCustomObject {
 					toStart.set(start);
 					toEnd.set(end);
 				} else {
-					toStart.rotateDeg(-angle).rotateRad(rangeAngle);
-					toEnd.rotateDeg(-angle).rotateRad(rangeAngle);
+					toStart.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
+					toEnd.rotateDeg(-angle).rotateRad(rangeAngle).add(radCenter);
 				}
 
 				
