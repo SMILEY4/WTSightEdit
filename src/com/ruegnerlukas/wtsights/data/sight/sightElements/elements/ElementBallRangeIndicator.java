@@ -10,8 +10,8 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementSingle;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutBallRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -324,7 +324,7 @@ public class ElementBallRangeIndicator extends ElementSingle {
 			double rangeAngle     = ((rangeMil) / radiusMil) * radialStretch;
 
 			// angle correction
-			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
+			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection, data.dataSight.gnrThousandth);
 			double angleCorrection = SightUtils.calcAngle_deg(rangeCorrAngleSMil, radialRadius, radialStretch);
 
 			// rotate
@@ -447,7 +447,7 @@ public class ElementBallRangeIndicator extends ElementSingle {
 			double rangeAngle = ((rangeMil) / radiusMil) * radialStretch;
 
 			// angle correction
-			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
+			double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection, data.dataSight.gnrThousandth);
 			double angleCorrection = SightUtils.calcAngle_deg(rangeCorrAngleSMil, radialRadius, radialStretch);
 
 			// rotate

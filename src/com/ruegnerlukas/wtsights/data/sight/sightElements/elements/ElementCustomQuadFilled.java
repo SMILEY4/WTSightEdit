@@ -165,7 +165,7 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 					return null;
 				}
 				
-				double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection);
+				double rangeCorrAngleSMil = SightUtils.rangeCorrection_meters2sovmil(data.dataSight.envRangeCorrection, data.dataSight.gnrThousandth);
 				double rangeAngle = SightUtils.calcAngle_rad(rangeCorrAngleSMil, radius, speed);
 			
 				if(!data.dataSight.gnrApplyCorrectionToGun) {

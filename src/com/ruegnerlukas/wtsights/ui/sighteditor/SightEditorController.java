@@ -45,6 +45,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -82,6 +83,10 @@ public class SightEditorController implements IViewController {
 
 	private SightEditorService service;
 	
+	// debug conversion meters->mil
+	@FXML private Spinner<Double> spinnerConvMMil;
+	public static double convMMil = 0.095;
+	
 	
 	
 	
@@ -90,6 +95,16 @@ public class SightEditorController implements IViewController {
 		service = (SightEditorService) ViewManager.getService(View.SIGHT_EDITOR);
 		service.initDataPackage((BallisticData)parameters.get(ParamKey.BALLISTIC_DATA), (SightData)parameters.get(ParamKey.SIGHT_DATA));
 	
+		// debug conversion meters->mil
+		spinnerConvMMil.setVisible(false);
+		FXUtils.initSpinner(spinnerConvMMil, convMMil, 0, 99, 0.0005, 5, true, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				convMMil = newValue.doubleValue();
+				service.getDataPackage().dataSight.setElementsDirty();
+				wtCanvas.repaint();
+			}
+		});
+		
 		// CANVAS
 		wtCanvas = new WTCanvas(paneCanvas) {
 			@Override public void onMouseMoved() {

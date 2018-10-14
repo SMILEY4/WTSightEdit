@@ -12,6 +12,7 @@ import org.apache.commons.math3.linear.SingularMatrixException;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
+import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 
 public class SightUtils {
 
@@ -215,8 +216,17 @@ public class SightUtils {
 	
 	
 	
-	public static double rangeCorrection_meters2sovmil(double meters) {
-		return (meters/10) * (0.0888011 + 0.00000677078*meters + 0.00000000064418*meters*meters);
+	public static double rangeCorrection_meters2sovmil(double meters, Thousandth thousandth) {
+		if(thousandth == Thousandth.USSR) {
+			return (meters/10) * (0.0888011 + 0.00000677078*meters + 0.00000000064418*meters*meters);
+		}
+		if(thousandth == Thousandth.NATO) {
+			return (meters/10) * (0.0939267 + 0.00000821035*meters + 0.00000000034603*meters*meters);
+		}
+		if(thousandth == Thousandth.REAL) {
+			return (meters/10) * (0.0932388 + 0.00000596443*meters + 0.0000000009914*meters*meters);
+		}
+		return (meters/10) * SightEditorController.convMMil;
 	}
 	
 	

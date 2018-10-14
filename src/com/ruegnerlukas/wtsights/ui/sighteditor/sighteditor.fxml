@@ -79,6 +79,7 @@
                            </padding>
                            <children>
                               <CheckBox fx:id="cbShowSelections" minWidth="140.0" mnemonicParsing="false" prefWidth="140.0" selected="true" text="%se_selections_show" />
+                              <Spinner fx:id="spinnerConvMMil" minWidth="200.0" />
                               <Pane minWidth="0.0" prefWidth="100000.0" />
                               <Label fx:id="labelPosMil" maxWidth="130.0" minWidth="130.0" text="mil: -99.99, -88,88" />
                               <Label fx:id="labelPosSS" maxWidth="130.0" minWidth="130.0" text="ss: -0,999, -0,888" />
