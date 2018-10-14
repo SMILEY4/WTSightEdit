@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -54,7 +54,7 @@ public class ModuleHorzRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMajor = newValue.floatValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -65,7 +65,7 @@ public class ModuleHorzRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMinor = newValue.floatValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -96,7 +96,7 @@ public class ModuleHorzRangeIndicators implements Module {
 							HIndicator indicator = new HIndicator(0, true);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true);
-							element.layoutData.dirty = true;
+							element.setDirty(true);
 							((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 						}
 					}
@@ -212,7 +212,7 @@ public class ModuleHorzRangeIndicators implements Module {
 		boxRow.getChildren().add(btnDelete);
 	
 		if(element != null) {
-			element.setDirty();
+			element.setDirty(true);
 		}
 	}
 	
@@ -221,7 +221,7 @@ public class ModuleHorzRangeIndicators implements Module {
 	
 	void onIndicatorEdit(HIndicator indicator) {
 		if(element != null) {
-			element.setDirty();
+			element.setDirty(true);
 		}
 		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
@@ -232,7 +232,7 @@ public class ModuleHorzRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			element.setDirty();
+			element.setDirty(true);
 			((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 		}
 	}

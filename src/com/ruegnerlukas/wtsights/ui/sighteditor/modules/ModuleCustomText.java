@@ -1,10 +1,10 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -65,7 +65,7 @@ public class ModuleCustomText implements Module {
 						FXUtils.initSpinner(spinnerPosX, Conversion.get().screenspace2mil(spinnerPosX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
 						FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 					}
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -85,7 +85,7 @@ public class ModuleCustomText implements Module {
 					cbUseAutoCenter.setDisable(element.movement != Movement.MOVE_RADIAL);
 					spinnerCenterX.setDisable(elementDefault.autoCenter);
 					spinnerCenterY.setDisable(elementDefault.autoCenter);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -96,7 +96,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.angle = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -109,7 +109,7 @@ public class ModuleCustomText implements Module {
 					element.useThousandth = cbUseThousandth.isSelected();
 					spinnerCenterX.setDisable(element.autoCenter);
 					spinnerCenterY.setDisable(element.autoCenter);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -121,7 +121,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -130,7 +130,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -139,7 +139,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -148,7 +148,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -157,7 +157,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -168,7 +168,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -177,7 +177,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -186,7 +186,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -198,7 +198,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(element != null) {
 					element.align = TextAlign.get(newValue);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -210,7 +210,7 @@ public class ModuleCustomText implements Module {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(element != null) {
 					element.text = newValue;
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}

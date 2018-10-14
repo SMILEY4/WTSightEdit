@@ -171,7 +171,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mbri_stroke_width",			"Stroke Width:");
 		map.put("se_mbri_line_size",			"Size:");
 		map.put("se_mbri_circle_radius",		"Circle Radius:");
-		map.put("se_mbri_circle_radius",		"Radius:");
+		map.put("se_mbri_radius",				"Radius:");
 		map.put("se_mbri_use_mils",				"Use Mils:");
 		map.put("se_mbri_stretch_angle",		"Radial Stretch and Angle:");
 		map.put("se_mbri_text_offset_radial",	"Text Offset:");
@@ -215,18 +215,30 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcl_move_speed",			"Move Speed:");
 		map.put("se_mcl_pos_start",				"Position Start:");
 		map.put("se_mcl_pos_end",				"Position End:");
-		// custom quad
-		map.put("se_mcq_use_thousandth",		"Use Thousandth");
-		map.put("se_mcq_movement",				"Movement:");
-		map.put("se_mcq_angle",					"Angle:");
-		map.put("se_mcq_center",				"Center:");
-		map.put("se_mcq_auto_center",			"Use Auto-Center:");
-		map.put("se_mcq_origin",				"Origin:");
-		map.put("se_mcq_move_speed",			"Move Speed:");
-		map.put("se_mcq_position_1",			"Position 1:");
-		map.put("se_mcq_position_2",			"Position 2:");
-		map.put("se_mcq_position_3",			"Position 3:");
-		map.put("se_mcq_position_4",			"Position 4:");
+		// custom quad filled
+		map.put("se_mcqf_use_thousandth",		"Use Thousandth");
+		map.put("se_mcqf_movement",				"Movement:");
+		map.put("se_mcqf_angle",					"Angle:");
+		map.put("se_mcqf_center",				"Center:");
+		map.put("se_mcqf_auto_center",			"Use Auto-Center:");
+		map.put("se_mcqf_origin",				"Origin:");
+		map.put("se_mcqf_move_speed",			"Move Speed:");
+		map.put("se_mcqf_position_1",			"Position 1:");
+		map.put("se_mcqf_position_2",			"Position 2:");
+		map.put("se_mcqf_position_3",			"Position 3:");
+		map.put("se_mcqf_position_4",			"Position 4:");
+		// custom quad outline
+		map.put("se_mcqo_use_thousandth",		"Use Thousandth");
+		map.put("se_mcqo_movement",				"Movement:");
+		map.put("se_mcqo_angle",					"Angle:");
+		map.put("se_mcqo_center",				"Center:");
+		map.put("se_mcqo_auto_center",			"Use Auto-Center:");
+		map.put("se_mcqo_origin",				"Origin:");
+		map.put("se_mcqo_move_speed",			"Move Speed:");
+		map.put("se_mcqo_position_1",			"Position 1:");
+		map.put("se_mcqo_position_2",			"Position 2:");
+		map.put("se_mcqo_position_3",			"Position 3:");
+		map.put("se_mcqo_position_4",			"Position 4:");
 		// custom text
 		map.put("se_mct_use_thousandth",		"Use Thousandth");
 		map.put("se_mct_movement",				"Movement:");
@@ -287,6 +299,24 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_msb_cell_minor",				"minor");
 		map.put("se_msb_cell_remove",				"X");
 		
+		// ELEMENT TYPES
+		map.put("et_central_horzline",				"Central Horizontal Line");
+		map.put("et_central_vert_line",				"Central Vertical Line");
+		map.put("et_rangefinder",					"Rangefinder");
+		map.put("et_horz_range_indicators",			"Horzizontal Range Indicators");
+		map.put("et_ballistic_range_indicators",	"Ballistic Range Indicators");
+		map.put("et_shell_ballistic_block",			"Shell Ballistics Block");
+		map.put("et_custom_line",					"Custom Line");
+		map.put("et_custom_text",					"Custom Text");
+		map.put("et_custom_circle_outline",			"Custom Circle (Outline)");
+		map.put("et_custom_circle_filled",			"Custom Circle (Filled)");
+		map.put("et_custom_quad_outline",			"Custom Quad (Outline)");
+		map.put("et_custom_quad_filled",			"Custom Quad (Filled)");
+		map.put("et_custom_rect_filled",			"Custom Rectangle (Filled)");
+		map.put("et_custom_rect_outline",			"Custom Rectangle (Outline)");
+		map.put("et_custom_poly_filled",			"Custom Polygon (Filled)");
+		map.put("et_custom_poly_outline",			"Custom Polygon (Outline)");
+
 		// LAUNCHER
 		map.put("lc_title",				"WT Sight Editor");
 		map.put("lc_skip_search",		"Skip");

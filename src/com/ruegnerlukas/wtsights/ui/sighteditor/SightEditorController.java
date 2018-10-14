@@ -13,8 +13,8 @@ import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.sighteditor.createelement.ElementCreateService;
 import com.ruegnerlukas.wtsights.ui.sighteditor.modules.Module;
@@ -150,8 +150,9 @@ public class SightEditorController implements IViewController {
 			initModule(ElementType.SHELL_BALLISTICS_BLOCK, "/ui/sightEditor/layout_element_shellBlock.fxml");
 		}
 		initModule(ElementType.CUSTOM_LINE, "/ui/sightEditor/layout_element_custom_line.fxml");
-		initModule(ElementType.CUSTOM_CIRCLE, "/ui/sightEditor/layout_element_custom_circle.fxml");
-		initModule(ElementType.CUSTOM_QUAD, "/ui/sightEditor/layout_element_custom_quad.fxml");
+		initModule(ElementType.CUSTOM_CIRCLE_OUTLINE, "/ui/sightEditor/layout_element_custom_circle.fxml");
+		initModule(ElementType.CUSTOM_QUAD_FILLED, "/ui/sightEditor/layout_element_custom_quad_filled.fxml");
+//		initModule(ElementType.CUSTOM_QUAD_OUTLINE, "/ui/sightEditor/layout_element_custom_quad_outline.fxml");
 		initModule(ElementType.CUSTOM_TEXT, "/ui/sightEditor/layout_element_custom_text.fxml");
 
 		// ELEMENTS LIST
@@ -260,6 +261,7 @@ public class SightEditorController implements IViewController {
 			// display module of selected element
 			Module module = mapElementControllers.get(element.type);
 			Parent root = mapElementPanels.get(element.type);
+			System.out.println("ON SELECT  " + module + "  " + root);
 			if( module != null && root != null) {
 				root.setVisible(true);
 				paneElements.getChildren().add(root);

@@ -1,10 +1,10 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -20,9 +20,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 
-public class ModuleCustomQuad implements Module {
+public class ModuleCustomQuadFilled implements Module {
 
-	private ElementCustomQuad element;
+	private ElementCustomQuadFilled element;
 
 	@FXML private CheckBox cbUseThousandth;
 	@FXML private ChoiceBox<String> choiceMovement;
@@ -52,7 +52,7 @@ public class ModuleCustomQuad implements Module {
 	public void create(DataPackage data) {
 		
 		// get element with default values
-		ElementCustomQuad elementDefault = new ElementCustomQuad();
+		ElementCustomQuadFilled elementDefault = new ElementCustomQuadFilled();
 		
 		cbUseThousandth.setSelected(elementDefault.useThousandth);
 		cbUseThousandth.setOnAction(new EventHandler<ActionEvent>() {
@@ -79,7 +79,7 @@ public class ModuleCustomQuad implements Module {
 						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().mil2screenspace(spinnerPos4Y.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 
 					}
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -99,7 +99,7 @@ public class ModuleCustomQuad implements Module {
 					cbUseAutoCenter.setDisable(element.movement != Movement.MOVE_RADIAL);
 					spinnerCenterX.setDisable(elementDefault.autoCenter);
 					spinnerCenterY.setDisable(elementDefault.autoCenter);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -110,7 +110,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.angle = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -123,7 +123,7 @@ public class ModuleCustomQuad implements Module {
 					element.useThousandth = cbUseThousandth.isSelected();
 					spinnerCenterX.setDisable(element.autoCenter);
 					spinnerCenterY.setDisable(element.autoCenter);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -135,7 +135,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -144,7 +144,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -153,7 +153,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -162,7 +162,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -171,7 +171,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -183,7 +183,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos1.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -192,7 +192,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos1.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -203,7 +203,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos2.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -212,7 +212,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos2.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -223,7 +223,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos3.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -232,7 +232,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos3.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -243,7 +243,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos4.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -252,7 +252,7 @@ public class ModuleCustomQuad implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.pos4.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -267,10 +267,10 @@ public class ModuleCustomQuad implements Module {
 	
 	
 	public void setElement(Element e) {
-		if(e == null || e.type != ElementType.CUSTOM_QUAD) {
+		if(e == null || e.type != ElementType.CUSTOM_QUAD_FILLED) {
 			this.element = null;
 		} else {
-			this.element = (ElementCustomQuad)e;
+			this.element = (ElementCustomQuadFilled)e;
 		}
 		if(this.element != null) {
 			cbUseThousandth.setSelected(element.useThousandth);

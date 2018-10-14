@@ -1,9 +1,9 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -32,7 +32,7 @@ public class ModuleCentralVerticalLine implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element == null) { return; }
 				element.drawCentralVertLine = cbShowLine.isSelected();
-				element.layoutData.dirty = true;
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});

@@ -33,7 +33,7 @@
                            </tooltip></TextField>
                         <Button minWidth="70.0" mnemonicParsing="false" onAction="#onBrowse" prefWidth="70.0" text="%cs_browse">
                            <tooltip>
-                              <Tooltip text="%cs_browse_files" />
+                              <Tooltip text="%cs_browse_tt" />
                            </tooltip></Button>
                      </children>
                   </HBox>

@@ -3,6 +3,7 @@ package com.ruegnerlukas.wtutils;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Map;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
@@ -11,6 +12,7 @@ import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
@@ -423,21 +425,24 @@ public class FXUtils {
 	
 	
 	
-	public static void openFXScene(View view, Stage stage, String pathFXML, double width, double height, String title) {
-		openFXScene(view, stage, pathFXML, width, height, title, "dark".equals(Config.app_style), false);
+	public static void openFXScene(View view, Stage parent, String pathFXML, double width, double height, String title) {
+		openFXScene(view, parent, pathFXML, width, height, title, "dark".equals(Config.app_style), false, null);
 	}
 	
-	public static void openFXScene(View view, Stage stage, String pathFXML, double width, double height, String title, boolean styleDark) {
-		openFXScene(view, stage, pathFXML, width, height, title, styleDark, false);
+	public static void openFXScene(View view, Stage parent, String pathFXML, double width, double height, String title, boolean styleDark) {
+		openFXScene(view, parent, pathFXML, width, height, title, styleDark, false, null);
 	}
 	
-	public static void openFXScene(View view, Stage stage, String pathFXML, double width, double height, String title, boolean styleDark, boolean wait) {
+	public static void openFXScene(View view, Stage parent, String pathFXML, double width, double height, String title, boolean styleDark, boolean wait, Map<ParamKey,Object> parameters) {
 		
-		if(stage == null) {
-			stage = new Stage();
-			stage.initModality(Modality.WINDOW_MODAL);
+		Stage stage = new Stage();
+		stage.initModality(Modality.WINDOW_MODAL);
+		FXUtils.addIcons(stage);
+		
+		if(parent == null) {
 			stage.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(stage);
+		} else {
+			stage.initOwner(parent);
 		}
 
 		FXMLLoader loader = new FXMLLoader(WTSights.class.getResource(pathFXML));
@@ -450,7 +455,6 @@ public class FXUtils {
 			return;
 		}
 
-		
 		Scene scene = new Scene(root, width, height, true, SceneAntialiasing.BALANCED);
 		if(styleDark) {
 			if(WTSights.DEV_MODE) {
@@ -463,15 +467,21 @@ public class FXUtils {
 		}
 		stage.setTitle(title);
 		stage.setScene(scene);
+		
+		ViewManager.setController(view, loader.getController());
+		ViewManager.setScene(view, stage.getScene());
+		ViewManager.setStage(view, stage);
+		
+		if(parameters != null) {
+			ViewManager.getController(view).create(parameters);
+		}
+		
 		if(wait) {
 			stage.showAndWait();
 		} else {
 			stage.show();
 		}
 		
-		ViewManager.setController(view, loader.getController());
-		ViewManager.setScene(view, stage.getScene());
-		ViewManager.setStage(view, stage);
 
 	}
 	

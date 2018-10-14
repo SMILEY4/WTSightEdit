@@ -1,9 +1,9 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -47,7 +47,7 @@ public class ModuleRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					element.position.x = newValue.intValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -58,7 +58,7 @@ public class ModuleRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -87,7 +87,7 @@ public class ModuleRangefinder implements Module {
 						}
 					});
 				}
-				element.layoutData.dirty = true;
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
@@ -97,7 +97,7 @@ public class ModuleRangefinder implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textScale = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -109,7 +109,7 @@ public class ModuleRangefinder implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element == null) { return; }
 				element.color1 = new Color((int)(colorPicker1.getValue().getRed()), (int)(colorPicker1.getValue().getGreen()), (int)(colorPicker1.getValue().getBlue()), (int)(colorPicker1.getValue().getOpacity()));
-				element.layoutData.dirty = true;
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
@@ -119,7 +119,7 @@ public class ModuleRangefinder implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element == null) { return; }
 				element.color2 = new Color((int)(colorPicker2.getValue().getRed()), (int)(colorPicker2.getValue().getGreen()), (int)(colorPicker2.getValue().getBlue()), (int)(colorPicker2.getValue().getOpacity()));
-				element.layoutData.dirty = true;
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});

@@ -5,18 +5,18 @@ import java.util.List;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -54,6 +54,7 @@ public class ElementCreateService implements IViewService {
 		List<ElementType> types = new ArrayList<ElementType>();
 		
 		for(ElementType type : ElementType.values()) {
+			System.out.println(type + ":");
 			
 			if(data.dataBallistic.elements.isEmpty() && (type == ElementType.SHELL_BALLISTICS_BLOCK || type == ElementType.BALLISTIC_RANGE_INDICATORS) ) {
 				continue;
@@ -88,6 +89,7 @@ public class ElementCreateService implements IViewService {
 			
 		}
 		
+		
 		return types;
 	}
 	
@@ -110,14 +112,14 @@ public class ElementCreateService implements IViewService {
 				if(type == ElementType.CENTRAL_VERT_LINE) {
 					createdElement = new ElementCentralVertLine(name);
 				}
-				if(type == ElementType.CUSTOM_CIRCLE) {
-					createdElement = new ElementCustomCircle(name);
+				if(type == ElementType.CUSTOM_CIRCLE_OUTLINE) {
+					createdElement = new ElementCustomCircleOutline(name);
 				}
 				if(type == ElementType.CUSTOM_LINE) {
 					createdElement = new ElementCustomLine(name);
 				}
-				if(type == ElementType.CUSTOM_QUAD) {
-					createdElement = new ElementCustomQuad(name);
+				if(type == ElementType.CUSTOM_QUAD_FILLED) {
+					createdElement = new ElementCustomQuadFilled(name);
 				}
 				if(type == ElementType.CUSTOM_TEXT) {
 					createdElement = new ElementCustomText(name);
@@ -131,6 +133,10 @@ public class ElementCreateService implements IViewService {
 				if(type == ElementType.SHELL_BALLISTICS_BLOCK) {
 					createdElement = new ElementShellBlock(name);
 				}
+				
+//				if(type == ElementType.CUSTOM_QUAD_OUTLINE) {
+//					createdElement = new ElementCustomQuadOutline(name);
+//				}
 				
 			}
 		}

@@ -31,12 +31,11 @@ public class WTSights extends Application {
 	private static Stage primaryStage;
 	
 	public static boolean DEV_MODE = false;
-	public static final boolean DARK_MODE = false;
 	
 	public static boolean wasStartedInsideData;
 
 	
-	
+			
 	public static void main(String[] args) {
 		
 		for(String arg : args) {

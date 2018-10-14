@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -119,7 +119,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 					boxRadial.setDisable(false);
 					boxRadial.setVisible(true);
 				}
-				element.layoutData.dirty = true;
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
@@ -129,7 +129,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textShift = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -138,7 +138,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -147,7 +147,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -156,7 +156,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -165,7 +165,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -174,7 +174,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -183,7 +183,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -192,7 +192,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -201,7 +201,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -215,7 +215,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -226,7 +226,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.drawAddLines = vDrawAddLines.isSelected();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -249,7 +249,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 					rCircleRadius.setDisable(true);
 					rLabelSize.setText(ViewManager.getResources().getString("se_mbri_line_size"));
 				}
-				element.setDirty();
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
@@ -265,7 +265,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -274,7 +274,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -283,7 +283,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -292,7 +292,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -301,7 +301,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -310,7 +310,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialAngle = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -319,7 +319,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialStretch = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -330,7 +330,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -348,7 +348,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				} else {
 					FXUtils.initSpinner(rCircleRadius, Conversion.get().mil2screenspace(element.radialRadius, data.dataSight.envZoomedIn), -1000, 1000, 0.001, 3, null);
 				}
-				element.layoutData.dirty = true;
+				element.setDirty(true);
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
@@ -361,7 +361,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 					if(newValue.equals(TextAlign.LEFT.toString())) 	 { element.textAlign = TextAlign.LEFT;   }
 					if(newValue.equals(TextAlign.CENTER.toString())) { element.textAlign = TextAlign.CENTER; }
 					if(newValue.equals(TextAlign.RIGHT.toString()))  { element.textAlign = TextAlign.RIGHT;  }
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -372,7 +372,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 				if(element != null) {
 					element.drawUpward = cbDrawUpward.isSelected();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -383,7 +383,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 				if(element != null) {
 					element.move = cbCanMove.isSelected();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -394,7 +394,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 				if(element != null) {
 					element.drawCorrLabel = cbDrawCorrLabel.isSelected();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -406,7 +406,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -415,7 +415,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -464,7 +464,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 							BIndicator indicator = new BIndicator(0, true, 0, 0, 0);
 							element.indicators.add(indicator);
 							addTableRow(boxTable, 0, true, 0, 0, 0);
-							element.layoutData.dirty = true;
+							element.setDirty(true);
 							((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 						}
 					}
@@ -657,7 +657,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 		boxRow.getChildren().add(btnDelete);
 		
 		if(element != null) {
-			element.setDirty();
+			element.setDirty(true);
 		}
 		
 	}
@@ -667,7 +667,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 	
 	void onIndicatorEdit(BIndicator indicator) {
 		if(element != null) {
-			element.setDirty();
+			element.setDirty(true);
 		}
 		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
@@ -678,7 +678,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 	void onTableDelete(int index) {
 		if(element != null) {
 			element.indicators.remove(index);
-			element.setDirty();
+			element.setDirty(true);
 			((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 		}
 	}

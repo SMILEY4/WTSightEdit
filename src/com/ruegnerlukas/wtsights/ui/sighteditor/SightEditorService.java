@@ -9,7 +9,7 @@ import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.DataWriter;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;

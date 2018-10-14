@@ -33,18 +33,18 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.data.sightfile.BLKSightParser;
 import com.ruegnerlukas.wtsights.data.sightfile.Block;
 import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
@@ -992,8 +992,8 @@ public class DataLoader {
 						switch(eCircles.name) {
 							case "circle": {
 							
-								ElementCustomCircle objCircle = new ElementCustomCircle();
-								objCircle.name = "circle_" + (dataSight.getElements(ElementType.CUSTOM_CIRCLE).size()+1);
+								ElementCustomCircleOutline objCircle = new ElementCustomCircleOutline();
+								objCircle.name = "circle_" + (dataSight.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE).size()+1);
 								if(eCircles.metadata != null) {
 									objCircle.name = eCircles.metadata;
 								}
@@ -1064,8 +1064,8 @@ public class DataLoader {
 						switch(eQuads.name) {
 							case "quad": {
 								
-								ElementCustomQuad objQuad = new ElementCustomQuad();
-								objQuad.name = "quad_" + (dataSight.getElements(ElementType.CUSTOM_QUAD).size()+1);
+								ElementCustomQuadFilled objQuad = new ElementCustomQuadFilled();
+								objQuad.name = "quad_" + (dataSight.getElements(ElementType.CUSTOM_QUAD_FILLED).size()+1);
 								if(eQuads.metadata != null) {
 									objQuad.name = eQuads.metadata;
 								}

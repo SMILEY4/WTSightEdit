@@ -10,7 +10,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 
 import javafx.scene.image.Image;

@@ -1,4 +1,4 @@
-package com.ruegnerlukas.wtsights.data.sight.elements;
+package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,9 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutBallRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementSingle;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutBallRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils;
@@ -21,7 +23,7 @@ import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class ElementBallRangeIndicator extends Element {
+public class ElementBallRangeIndicator extends ElementSingle {
 
 	
 	public boolean 		drawUpward 		= false;						// flip the scale and movement direction.
@@ -43,21 +45,22 @@ public class ElementBallRangeIndicator extends Element {
 	public boolean		radiusUseMils	= true;							// whether to use mils or screenspace for radialRadius
 	public List<BIndicator> indicators = new ArrayList<BIndicator>();
 	
-	public LayoutBallRangeIndicators layoutData = new LayoutBallRangeIndicators();
 	private Text corrHelper = new Text();
 	
+	
+	
+	public ElementBallRangeIndicator() {
+		this(ElementType.BALLISTIC_RANGE_INDICATORS.defaultName);
+	}
 	
 	
 	public ElementBallRangeIndicator(String name) {
 		super(name, ElementType.BALLISTIC_RANGE_INDICATORS);
 		resetIndicators();
+		this.setLayout(new LayoutBallRangeIndicators());
 	}
 	
 	
-	public ElementBallRangeIndicator() {
-		super(ElementType.BALLISTIC_RANGE_INDICATORS.defaultName, ElementType.BALLISTIC_RANGE_INDICATORS);
-		resetIndicators();
-	}
 	
 	
 	
@@ -75,53 +78,48 @@ public class ElementBallRangeIndicator extends Element {
 
 	
 	
-	
-	@Override
-	public void setDirty() {
-		this.layoutData.dirty = true;
-	}
-	
-	
-	
 	@Override
 	public LayoutBallRangeIndicators layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
-		if(!layoutData.dirty) {
-			return layoutData;
-		}
-		layoutData.dirty = false;
+		LayoutBallRangeIndicators layout = (LayoutBallRangeIndicators)getLayout();
 		
-		if(scaleMode == ScaleMode.VERTICAL) {
-			return layoutVertical(data, canvasWidth, canvasHeight);
-		} else {
-			if(circleMode) {
-				return layoutRadialCircles(data, canvasWidth, canvasHeight);
+		if(isDirty()) {
+			setDirty(false);
+			if(scaleMode == ScaleMode.VERTICAL) {
+				return layoutVertical(data, canvasWidth, canvasHeight);
 			} else {
-				return layoutRadialLines(data, canvasWidth, canvasHeight);
-
+				if(circleMode) {
+					return layoutRadialCircles(data, canvasWidth, canvasHeight);
+				} else {
+					return layoutRadialLines(data, canvasWidth, canvasHeight);
+				}
 			}
 		}
+		
+		return layout;
 	}
 	
 	
 	
 	
-	public LayoutBallRangeIndicators layoutVertical(DataPackage data, double canvasWidth, double canvasHeight) {
+	private LayoutBallRangeIndicators layoutVertical(DataPackage data, double canvasWidth, double canvasHeight) {
 		
-		if(layoutData.vCenterBounds == null || layoutData.vTextPositions == null || layoutData.vCenterBounds.length != indicators.size() ) {
-			layoutData.vMainBounds = new Rectanglef[indicators.size()];
-			layoutData.vCenterBounds = new Rectanglef[indicators.size()];
-			layoutData.vTextPositions = new Vector2d[indicators.size()];
+		LayoutBallRangeIndicators layout = (LayoutBallRangeIndicators)getLayout();
+		
+		if(layout.vCenterBounds == null || layout.vTextPositions == null || layout.vCenterBounds.length != indicators.size() ) {
+			layout.vMainBounds = new Rectanglef[indicators.size()];
+			layout.vCenterBounds = new Rectanglef[indicators.size()];
+			layout.vTextPositions = new Vector2d[indicators.size()];
 			for(int i=0; i<indicators.size(); i++) {
-				layoutData.vMainBounds[i] = new Rectanglef();
-				layoutData.vCenterBounds[i] = new Rectanglef();
-				layoutData.vTextPositions[i] = new Vector2d();
+				layout.vMainBounds[i] = new Rectanglef();
+				layout.vCenterBounds[i] = new Rectanglef();
+				layout.vTextPositions[i] = new Vector2d();
 			}
 		}
 		
 		final double lineSize = 1.0 * data.dataSight.gnrLineSize * data.dataSight.gnrFontScale * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
-		layoutData.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layout.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
 		// range correction
 		final double rangeCorrectionResultPX = data.elementBallistic.function.eval(data.dataSight.envRangeCorrection);
@@ -131,9 +129,9 @@ public class ElementBallRangeIndicator extends Element {
 		// draw indicators
 		for(int i=0; i<indicators.size(); i++) {
 			BIndicator indicator = indicators.get(i);
-			Rectanglef boundsMain = layoutData.vMainBounds[i];
-			Rectanglef boundsCenter = layoutData.vCenterBounds[i];
-			Vector2d textPos = layoutData.vTextPositions[i];
+			Rectanglef boundsMain = layout.vMainBounds[i];
+			Rectanglef boundsCenter = layout.vCenterBounds[i];
+			Vector2d textPos = layout.vTextPositions[i];
 			
 			int mil = indicator.getDistance();
 			boolean isMajor = indicator.isMajor();
@@ -231,28 +229,30 @@ public class ElementBallRangeIndicator extends Element {
 			
 		}
 		
-		return layoutData;
+		return layout;
 	}
 	
 	
 
 	
-	public LayoutBallRangeIndicators layoutRadialLines(DataPackage data, double canvasWidth, double canvasHeight) {
+	private LayoutBallRangeIndicators layoutRadialLines(DataPackage data, double canvasWidth, double canvasHeight) {
 		
-		if(layoutData.rlLines == null || layoutData.rlLines.length != indicators.size() ) {
-			layoutData.rlLines = new Vector4d[indicators.size()];
-			layoutData.rlTextPositions = new Vector2d[indicators.size()];
+		LayoutBallRangeIndicators layout = (LayoutBallRangeIndicators)getLayout();
+		
+		if(layout.rlLines == null || layout.rlLines.length != indicators.size() ) {
+			layout.rlLines = new Vector4d[indicators.size()];
+			layout.rlTextPositions = new Vector2d[indicators.size()];
 			for(int i=0; i<indicators.size(); i++) {
-				layoutData.rlLines[i] = new Vector4d();
-				layoutData.rlTextPositions[i] = new Vector2d();
+				layout.rlLines[i] = new Vector4d();
+				layout.rlTextPositions[i] = new Vector2d();
 			}
 		}
 	
 		// line size
 		final double lineSize = 1.0 * data.dataSight.gnrLineSize * data.dataSight.gnrFontScale;
-		layoutData.rlLineSize = lineSize;
+		layout.rlLineSize = lineSize;
 		
-		layoutData.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layout.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 
 		// origin x
 		double originX = position.x;
@@ -270,7 +270,7 @@ public class ElementBallRangeIndicator extends Element {
 		originY = originY * data.dataSight.gnrFontScale;
 		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, data.dataSight.envZoomedIn);
 	
-		layoutData.rlCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
+		layout.rlCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
 		
 		// radius
 		double radiusMil = 0;
@@ -287,7 +287,7 @@ public class ElementBallRangeIndicator extends Element {
 		} else {
 			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight, data.dataSight.envZoomedIn);
 		}
-		layoutData.rlRadius = radiusPX;
+		layout.rlRadius = radiusPX;
 		
 		Conversion conversionUSSR = new Conversion();
 		conversionUSSR.initialize(
@@ -300,13 +300,13 @@ public class ElementBallRangeIndicator extends Element {
 		// length
 		double length = Conversion.get().screenspace2pixel(size.x, canvasHeight, data.dataSight.envZoomedIn);
 		length = length * data.dataSight.gnrFontScale;
-		layoutData.rlRadius = layoutData.rlRadius-length/2;
-		layoutData.rlRadiusOutside = layoutData.rlRadius+length;
+		layout.rlRadius = layout.rlRadius-length/2;
+		layout.rlRadiusOutside = layout.rlRadius+length;
 		
 		// draw indicators
 		for(int i=0; i<indicators.size(); i++) {
-			Vector4d line = layoutData.rlLines[i];
-			Vector2d textPosition = layoutData.rlTextPositions[i];
+			Vector4d line = layout.rlLines[i];
+			Vector2d textPosition = layout.rlTextPositions[i];
 			BIndicator indicator = indicators.get(i);
 			
 			
@@ -361,24 +361,26 @@ public class ElementBallRangeIndicator extends Element {
 			
 		}
 		
-		return layoutData;
+		return layout;
 	}
 	
 	
 	
 	
-	public LayoutBallRangeIndicators layoutRadialCircles(DataPackage data, double canvasWidth, double canvasHeight) {
+	private LayoutBallRangeIndicators layoutRadialCircles(DataPackage data, double canvasWidth, double canvasHeight) {
 		
-		if(layoutData.rcCircles == null || layoutData.rcCircles.length != indicators.size() ) {
-			layoutData.rcCircles = new Circlef[indicators.size()];
-			layoutData.rcTextPositions = new Vector2d[indicators.size()];
+		LayoutBallRangeIndicators layout = (LayoutBallRangeIndicators)getLayout();
+		
+		if(layout.rcCircles == null || layout.rcCircles.length != indicators.size() ) {
+			layout.rcCircles = new Circlef[indicators.size()];
+			layout.rcTextPositions = new Vector2d[indicators.size()];
 			for(int i=0; i<indicators.size(); i++) {
-				layoutData.rcCircles[i] = new Circlef();
-				layoutData.rcTextPositions[i] = new Vector2d();
+				layout.rcCircles[i] = new Circlef();
+				layout.rcTextPositions[i] = new Vector2d();
 			}
 		}
 
-		layoutData.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
+		layout.fontSize = 25 * data.dataSight.gnrFontScale * 0.5f * (data.dataSight.envZoomedIn ? Conversion.get().zoomInMul : 1);
 		
 		// origin x
 		double originX = position.x;
@@ -396,7 +398,7 @@ public class ElementBallRangeIndicator extends Element {
 		originY = originY * data.dataSight.gnrFontScale;
 		originY = Conversion.get().screenspace2pixel(originY, canvasHeight, data.dataSight.envZoomedIn);
 
-		layoutData.rcCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
+		layout.rcCenter.set(canvasWidth/2 - originX, canvasHeight/2 - originY);
 
 		
 		// radius
@@ -414,7 +416,7 @@ public class ElementBallRangeIndicator extends Element {
 			radiusPX = Conversion.get().screenspace2pixel(radialRadius, canvasHeight,
 					data.dataSight.envZoomedIn);
 		}
-		layoutData.rcRadius = radiusPX;
+		layout.rcRadius = radiusPX;
 
 		Conversion conversionUSSR = new Conversion();
 		conversionUSSR.initialize(
@@ -467,29 +469,31 @@ public class ElementBallRangeIndicator extends Element {
 			circleWidth = circleWidth / 2;
 			circleWidth = circleWidth * data.dataSight.gnrFontScale;
 			circleWidth = Conversion.get().screenspace2pixel(circleWidth, canvasHeight, data.dataSight.envZoomedIn);
-			layoutData.rcLineWidth = circleWidth;
+			layout.rcLineWidth = circleWidth;
 			
 			// circle
-			layoutData.rcCircles[i].set(canvasWidth / 2 - originX + dir.x, canvasHeight / 2 - originY + dir.y, circleDiameter/2);
+			layout.rcCircles[i].set(canvasWidth / 2 - originX + dir.x, canvasHeight / 2 - originY + dir.y, circleDiameter/2);
 			
 
 			// labels
 			if (isMajor) {
 				double textOffset = (Conversion.get().screenspace2pixel(indicator.getTextX() + this.textPos.x, canvasHeight, data.dataSight.envZoomedIn) * data.dataSight.gnrFontScale);
-				layoutData.rcTextPositions[i].set(
+				layout.rcTextPositions[i].set(
 						canvasWidth / 2 - originX + dir.x + dir.copy().setLength(textOffset).x,
 						canvasHeight / 2 - originY + dir.y + dir.copy().setLength(textOffset).y);
 			}
 
 		}
 		
-		return layoutData;
+		return layout;
 	}
 	
 	
 	
 	
 	public LayoutBallRangeIndicators layoutLabel(DataPackage data, double canvasWidth, double canvasHeight) {
+		
+		LayoutBallRangeIndicators layout = (LayoutBallRangeIndicators)getLayout();
 		
 		final double fontSize = 25.5*0.5*data.dataSight.gnrFontScale*(data.dataSight.envZoomedIn?Conversion.get().zoomInMul:1);
 		
@@ -518,9 +522,9 @@ public class ElementBallRangeIndicator extends Element {
 		corrY = corrY + (canvasHeight/2);
 		corrY = corrY - corrHelper.getLayoutBounds().getHeight();
 		
-		layoutData.corrLabel.set(corrX, corrY, fontSize);
+		layout.corrLabel.set(corrX, corrY, fontSize);
 		
-		return layoutData;
+		return layout;
 	}
 	
 	

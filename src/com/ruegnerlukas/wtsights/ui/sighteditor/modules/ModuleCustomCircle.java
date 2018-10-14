@@ -1,10 +1,10 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -22,7 +22,7 @@ import javafx.scene.control.Spinner;
 
 public class ModuleCustomCircle implements Module {
 
-	private ElementCustomCircle element;
+	private ElementCustomCircleOutline element;
 
 	@FXML private CheckBox cbUseThousandth;
 	@FXML private ChoiceBox<String> choiceMovement;
@@ -49,7 +49,7 @@ public class ModuleCustomCircle implements Module {
 	public void create(DataPackage data) {
 		
 		// get element with default values
-		ElementCustomCircle elementDefault = new ElementCustomCircle();
+		ElementCustomCircleOutline elementDefault = new ElementCustomCircleOutline();
 		
 		cbUseThousandth.setSelected(elementDefault.useThousandth);
 		cbUseThousandth.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,7 +65,7 @@ public class ModuleCustomCircle implements Module {
 						FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(spinnerPosY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
 						FXUtils.initSpinner(spinnerDiameter, Conversion.get().mil2screenspace(spinnerDiameter.getValue(), data.dataSight.envZoomedIn), 0, Integer.MAX_VALUE, 0.01, 2, null);
 					}
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -85,7 +85,7 @@ public class ModuleCustomCircle implements Module {
 					cbUseAutoCenter.setDisable(element.movement != Movement.MOVE_RADIAL);
 					spinnerCenterX.setDisable(elementDefault.autoCenter);
 					spinnerCenterY.setDisable(elementDefault.autoCenter);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -96,7 +96,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.angle = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -109,7 +109,7 @@ public class ModuleCustomCircle implements Module {
 					element.useThousandth = cbUseThousandth.isSelected();
 					spinnerCenterX.setDisable(element.autoCenter);
 					spinnerCenterY.setDisable(element.autoCenter);
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -121,7 +121,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -130,7 +130,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -139,7 +139,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -148,7 +148,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -157,7 +157,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -168,7 +168,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -177,7 +177,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -186,7 +186,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.segment.x = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -195,7 +195,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.segment.y = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -204,7 +204,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -213,7 +213,7 @@ public class ModuleCustomCircle implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.diameter = newValue.doubleValue();
-					element.layoutData.dirty = true;
+					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
 			}
@@ -226,10 +226,10 @@ public class ModuleCustomCircle implements Module {
 	
 	
 	public void setElement(Element e) {
-		if(e == null || e.type != ElementType.CUSTOM_CIRCLE) {
+		if(e == null || e.type != ElementType.CUSTOM_CIRCLE_OUTLINE) {
 			this.element = null;
 		} else {
-			this.element = (ElementCustomCircle)e;
+			this.element = (ElementCustomCircleOutline)e;
 		}
 		if(this.element != null) {
 			cbUseThousandth.setSelected(element.useThousandth);

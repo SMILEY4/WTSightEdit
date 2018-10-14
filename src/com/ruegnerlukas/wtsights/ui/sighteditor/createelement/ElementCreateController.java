@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.view.IViewController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
@@ -46,15 +46,17 @@ public class ElementCreateController implements IViewController {
 		
 		service.init(existingElements, data);
 		
+		System.out.println("CONTROLLER CREATE");
 		List<ElementType> availableTypes = service.getAvailableTypes();
 
 		choiceType.setButtonCell(new ListCell<ElementType>() {
 			@Override protected void updateItem(ElementType item, boolean empty) {
 				super.updateItem(item, empty);
-				setText(item.defaultName);
 				if (item == null || empty) {
 					setGraphic(null);
+					setText("");
 				} else {
+					setText(item.defaultName);
 					ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(item.iconIndex), null));
 					imgView.setSmooth(true);
 					imgView.setPreserveRatio(true);
@@ -70,10 +72,11 @@ public class ElementCreateController implements IViewController {
 				return new ListCell<ElementType>() {
 					@Override protected void updateItem(ElementType item, boolean empty) {
 						super.updateItem(item, empty);
-						setText(item.defaultName);
 						if (item == null || empty) {
 							setGraphic(null);
+							setText("");
 						} else {
+							setText(item.defaultName);
 							ImageView imgView = new ImageView(SwingFXUtils.toFXImage(ElementIcons.getIcon(item.iconIndex), null));
 							imgView.setSmooth(true);
 							imgView.setPreserveRatio(true);

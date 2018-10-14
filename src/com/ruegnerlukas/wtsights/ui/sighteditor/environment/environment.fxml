@@ -59,7 +59,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbCrosshairLighting" mnemonicParsing="false" onAction="#onCrosshairLighting" prefWidth="1000000.0" text="%se_env_crosshair_light />
+                        <CheckBox fx:id="cbCrosshairLighting" mnemonicParsing="false" onAction="#onCrosshairLighting" prefWidth="1000000.0" text="%se_env_crosshair_light" />
                         <Separator prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="15.0" top="15.0" />
@@ -91,7 +91,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label prefWidth="1000000.0" text="%se_resolution_header" />
+                        <Label prefWidth="1000000.0" text="%se_env_resolution_header" />
                         <ChoiceBox fx:id="choiceResolution" prefWidth="1000000.0" />
                      </children>
                   </VBox>

@@ -1,9 +1,9 @@
-package com.ruegnerlukas.wtsights.data.sight.elements.layouts;
+package com.ruegnerlukas.wtsights.data.sight.sightElements.layouts;
 
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 
-public class LayoutCircleObject implements ILayoutData {
+public class LayoutCircleOutlineObject extends LayoutCustomObject {
 
 	public double lineWidth;
 
@@ -11,6 +11,4 @@ public class LayoutCircleObject implements ILayoutData {
 	public Circlef circle = new Circlef();
 	public Vector4d[] lines;
 	
-	public boolean dirty = true;
-
 }

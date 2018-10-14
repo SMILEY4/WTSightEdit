@@ -32,18 +32,18 @@ import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
@@ -290,7 +290,7 @@ public class DataWriter {
 			lines.add("// shell ballistics blocks");
 			lines.add("ballistics {");
 			
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 
 				ElementShellBlock shellBlock = (ElementShellBlock)element;
 				
@@ -360,7 +360,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_LINE).isEmpty()) {
 			lines.add("// lines");
 			lines.add("drawLines {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_LINE)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_LINE)) {
 				ElementCustomLine lineObj = (ElementCustomLine)element;
 				lines.add("  //-- " + lineObj.name);
 				lines.add("  line {");
@@ -387,7 +387,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_TEXT).isEmpty()) {
 			lines.add("// text");
 			lines.add("drawTexts {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_TEXT)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_TEXT)) {
 				ElementCustomText textObj = (ElementCustomText)element;
 				lines.add("  //-- " +  textObj.name);
 				lines.add("  text {");
@@ -414,11 +414,11 @@ public class DataWriter {
 		}
 		
 		// circles
-		if(!data.getElements(ElementType.CUSTOM_CIRCLE).isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE).isEmpty()) {
 			lines.add("// circles");
 			lines.add("drawCircles {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_CIRCLE)) {
-				ElementCustomCircle circleObj = (ElementCustomCircle)element;
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
+				ElementCustomCircleOutline circleObj = (ElementCustomCircleOutline)element;
 				lines.add("  //-- " + circleObj.name);
 				lines.add("  circle {");
 				lines.add("    thousandth:b = " + (circleObj.useThousandth ? "yes" : "no") );
@@ -445,11 +445,11 @@ public class DataWriter {
 		
 		
 		// quads
-		if(!data.getElements(ElementType.CUSTOM_QUAD).isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_QUAD_FILLED).isEmpty()) {
 			lines.add("// quads");
 			lines.add("drawQuads {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_QUAD)) {
-				ElementCustomQuad quadObj = (ElementCustomQuad)element;
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
+				ElementCustomQuadFilled quadObj = (ElementCustomQuadFilled)element;
 				lines.add("  //-- " + quadObj.name);
 				lines.add("  quad {");
 				lines.add("    thousandth:b = " + (quadObj.useThousandth ? "yes" : "no") );

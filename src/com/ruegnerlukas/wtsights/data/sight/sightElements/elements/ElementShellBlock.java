@@ -1,7 +1,8 @@
-package com.ruegnerlukas.wtsights.data.sight.elements;
+package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
 public class ElementShellBlock extends ElementBallRangeIndicator {
