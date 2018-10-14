@@ -192,7 +192,7 @@ public class DataLoader {
 
 	public static CalibrationData loadCalibrationDataFile(File file) {
 		
-		Logger.get().info("Loading calibration-file (ext)");
+		Logger.get().info("Loading sight-metadata-file (ext)");
 		
 		if(file == null || !file.exists()) {
 			Logger.get().error("Error loading file: " + file);
@@ -209,7 +209,7 @@ public class DataLoader {
 			Document doc = builder.parse(file);
 			Element root = doc.getDocumentElement();
 			if(!root.getTagName().equals("calibrationdata")) {
-				Logger.get().error("Could not parse file: File is not a calibration data file.");
+				Logger.get().error("Could not parse file: File is not a metadata file.");
 				return data;
 			}
 

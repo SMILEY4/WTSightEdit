@@ -1,5 +1,6 @@
 package com.ruegnerlukas.wtsights.ui.view;
 
+import com.ruegnerlukas.wtsights.language.DefaultResourceBundle;
 import com.ruegnerlukas.wtsights.ui.about.AboutLoader;
 import com.ruegnerlukas.wtsights.ui.about.AboutService;
 import com.ruegnerlukas.wtsights.ui.calibrationeditor.CalibrationEditorLoader;
@@ -8,7 +9,6 @@ import com.ruegnerlukas.wtsights.ui.calibrationselect.CalibrationSelectLoader;
 import com.ruegnerlukas.wtsights.ui.calibrationselect.CalibrationSelectService;
 import com.ruegnerlukas.wtsights.ui.help.HelpLoader;
 import com.ruegnerlukas.wtsights.ui.help.HelpService;
-import com.ruegnerlukas.wtsights.ui.language.DefaultResourceBundle;
 import com.ruegnerlukas.wtsights.ui.main.MainMenuLoader;
 import com.ruegnerlukas.wtsights.ui.main.MainMenuService;
 import com.ruegnerlukas.wtsights.ui.screenshotupload.ScreenshotUploadLoader;

@@ -1,4 +1,4 @@
-package com.ruegnerlukas.wtsights.ui.language;
+package com.ruegnerlukas.wtsights.language;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -22,10 +22,10 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("mm_sight_tank_create_tt", 			"Create a new custom tank-sight.");
 		map.put("mm_sight_tank_load", 				"Load Sight");
 		map.put("mm_sight_tank_load_tt", 			"Load and edit an existing tank-sight.");
-		map.put("mm_sight_tank_metadata_create", 	"Create Ballistic Data");
-		map.put("mm_sight_tank_metadata_create_tt", "Create a new Calibration file. A Calibration file is used to calculate the correct bullet trajectories.");
-		map.put("mm_sight_tank_metadata_load", 		"Load Ballistic Data");
-		map.put("mm_sight_tank_metadata_load_tt", 	"Load and edit an existing calibration file.");
+		map.put("mm_sight_tank_metadata_create", 	"Create Sight Metadata");
+		map.put("mm_sight_tank_metadata_create_tt", "Create a new Sight Metadata file. A Metadata file is used to store information about the sight, for example data to calculate the correct bullet trajectories.");
+		map.put("mm_sight_tank_metadata_load", 		"Load Sight Metadata");
+		map.put("mm_sight_tank_metadata_load_tt", 	"Load and edit an existing Metadata file.");
 		map.put("mm_about", 						"About");
 		map.put("mm_about_tt", 						"About WTSightEdit");
 		map.put("mm_help", 							"Help");
@@ -51,7 +51,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("hp_feedback_body", 	"		Write me a message on reddit (smiley_4_) or leave a comment under my last reddit post.");
 
 		// CALIBRATION EDITOR
-		map.put("ce_title", 			"Create Ballistic Data");
+		map.put("ce_title", 			"Create Sight Metadata");
 		map.put("ce_img_zoomed_in", 	"Sight Zoomed In");
 		map.put("ce_img_zoomed_out", 	"Sight Zoomed Out");
 		map.put("ce_zoomed_in", 		"Is zoomed in");
@@ -62,26 +62,26 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("ce_zoom_mod_in_tt",	"Multiplies the zoom by this value. Can be used if the zoom of the ingame sight is different from the one in the editor.");
 		map.put("ce_marked_ranges", 	"Distances of marked ranges:");
 		map.put("ce_export", 			"Export");
-		map.put("ce_export_tt", 		"Save this calibration as a file.");
+		map.put("ce_export_tt", 		"Save this Sight Metadata as a file.");
 		map.put("ce_edit_sight", 		"Edit Sight");
-		map.put("ce_edit_sight_tt",		"Create a custom sight without saving this calibration to a file.");
-		map.put("ce_export_title", 		"Save Ballistic Data");
+		map.put("ce_edit_sight_tt",		"Create a custom sight without saving this metadata to a file.");
+		map.put("ce_export_title", 		"Save Sight Metadata");
 		map.put("ce_alert_export_missing","Can not save data. At least one shell does not have enough markers.");
-		map.put("ce_alert_export_failed","Save Ballistic Data");
+		map.put("ce_alert_export_failed","Save Sight Metadata");
 
 		
 		// CALIBRATION SELECT
-		map.put("cs_title", 			"Select Ballistic Data");
-		map.put("cs_create_new", 		"Create new Ballistic Data");
-		map.put("cs_create_new_tt", 	"Create a new Calibration instead of using an existing file.");
+		map.put("cs_title", 			"Select Sight Metadata");
+		map.put("cs_create_new", 		"Create new Sight Metadata");
+		map.put("cs_create_new_tt", 	"Create a new Sight Metadata instead of using an existing file.");
 		map.put("cs_path_tt", 			"The path of the selected file.");
 		map.put("cs_browse", 			"Browse");
 		map.put("cs_browse_tt", 		"Browse files.");
-		map.put("cs_browse_title", 		"Open Calibration Data");
-		map.put("cs_browse_file_tye", 	"Calibration File");
+		map.put("cs_browse_title", 		"Open Sight Metadata");
+		map.put("cs_browse_file_tye", 	"Sight Metadata");
 		map.put("cs_next", 				"Next");
 		map.put("cs_cancel", 			"Cancel");
-		map.put("cs_alert_missing", 	"No Ballistic Data selected. Select Ballistic Data to continue.");
+		map.put("cs_alert_missing", 	"No Sight Metadata selected. Select Sight Metadata to continue.");
 
 		// SCREENSHOT UPLOAD
 		map.put("ssu_title", 			"Upload Screenshots");
@@ -218,7 +218,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		// custom quad filled
 		map.put("se_mcqf_use_thousandth",		"Use Thousandth");
 		map.put("se_mcqf_movement",				"Movement:");
-		map.put("se_mcqf_angle",					"Angle:");
+		map.put("se_mcqf_angle",				"Angle:");
 		map.put("se_mcqf_center",				"Center:");
 		map.put("se_mcqf_auto_center",			"Use Auto-Center:");
 		map.put("se_mcqf_origin",				"Origin:");
@@ -230,7 +230,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		// custom quad outline
 		map.put("se_mcqo_use_thousandth",		"Use Thousandth");
 		map.put("se_mcqo_movement",				"Movement:");
-		map.put("se_mcqo_angle",					"Angle:");
+		map.put("se_mcqo_angle",				"Angle:");
 		map.put("se_mcqo_center",				"Center:");
 		map.put("se_mcqo_auto_center",			"Use Auto-Center:");
 		map.put("se_mcqo_origin",				"Origin:");
