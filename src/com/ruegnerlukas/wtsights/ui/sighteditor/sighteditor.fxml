@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController">
+   <children>
+      <SplitPane dividerPositions="0.25039123630672927" layoutX="336.0" layoutY="108.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="labelVehicleName" alignment="CENTER" layoutX="123.0" layoutY="185.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" text="vehicle_name" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TabPane layoutX="79.0" layoutY="159.0" prefWidth="316.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                    <tabs>
+                      <Tab text="General">
+                        <content>
+                          <AnchorPane fx:id="paneGeneral" minWidth="0.0" prefHeight="10000.0" prefWidth="10000.0" />
+                        </content>
+                      </Tab>
+                      <Tab text="Elements">
+                        <content>
+                          <AnchorPane prefHeight="10000.0" prefWidth="10000.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.36349693251533743" minHeight="0.0" minWidth="0.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                             <children>
+                                                <ListView fx:id="listViewElements" layoutX="67.0" minHeight="0.0" minWidth="0.0" prefHeight="1000000.0" prefWidth="1000000.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <HBox layoutY="202.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                                   <children>
+                                                      <Button fx:id="btnAddElement" mnemonicParsing="false" onAction="#onAddElement" prefWidth="100000.0" text="%se_elements_add">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnRenameElement" mnemonicParsing="false" onAction="#onRenameElement" prefWidth="100000.0" text="%se_elements_delete" />
+                                                      <Button fx:id="btnRemoveElement" mnemonicParsing="false" onAction="#onRemoveElement" prefWidth="100000.0" text="%se_elements_rename">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane fx:id="paneElements" minHeight="0.0" minWidth="0.0" />
+                                      </items>
+                                    </SplitPane>
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Environment">
+                        <content>
+                          <AnchorPane fx:id="paneEnvironment" minWidth="0.0" prefHeight="10000.0" prefWidth="10000.0" />
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+                  <Button layoutX="82.0" layoutY="687.0" maxHeight="31.0" minHeight="31.0" minWidth="0.0" mnemonicParsing="false" onAction="#onExport" prefHeight="31.0" prefWidth="10000.0" text="%se_export" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <AnchorPane maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="1000000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="-34.0" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="10000.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+                           </padding>
+                           <children>
+                              <CheckBox fx:id="cbShowSelections" minWidth="140.0" mnemonicParsing="false" prefWidth="140.0" selected="true" text="%se_selections_show" />
+                              <Spinner fx:id="spinnerConvMMil" minWidth="200.0" />
+                              <Pane minWidth="0.0" prefWidth="100000.0" />
+                              <Label fx:id="labelPosMil" maxWidth="130.0" minWidth="130.0" text="mil: -99.99, -88,88" />
+                              <Label fx:id="labelPosSS" maxWidth="130.0" minWidth="130.0" text="ss: -0,999, -0,888" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="paneCanvas" layoutX="217.0" layoutY="99.0" prefHeight="718.0" prefWidth="893.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

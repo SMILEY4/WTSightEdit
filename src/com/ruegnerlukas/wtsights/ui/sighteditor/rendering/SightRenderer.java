@@ -9,29 +9,29 @@ import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
+import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutBallRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCircleObject;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutLineObject;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutQuadObject;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutTextObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutBallRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCircleOutlineObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutLineObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadFilledObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutTextObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
@@ -81,9 +81,14 @@ public class SightRenderer {
 	
 	
 	
-	public static void draw(Canvas canvas, GraphicsContext g, WorkingData data) {
+	public static void draw(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
+		Conversion.get().initialize(
+				canvas.getWidth(),
+				canvas.getHeight(),
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
+				data.dataSight.gnrThousandth);
 		
 		// background
 		drawBackground(canvas, g, data.dataSight);
@@ -108,7 +113,7 @@ public class SightRenderer {
 		if(data.elementBallistic != null) {
 			for(Element e : data.dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 				ElementShellBlock shellBlock = (ElementShellBlock)e;
-				WorkingData dataBlock = new WorkingData();
+				DataPackage dataBlock = new DataPackage();
 				dataBlock.dataBallistic = data.dataBallistic;
 				dataBlock.elementBallistic = shellBlock.elementBallistic;
 				dataBlock.dataSight = data.dataSight;
@@ -117,18 +122,26 @@ public class SightRenderer {
 		}
 		
 		// custom elements
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_CIRCLE)) {
-			drawCircleObject(canvas, g, data, (ElementCustomCircle)e);
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
+			drawCircleObject(canvas, g, data, (ElementCustomCircleOutline)e);
 		}
 		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_LINE)) {
 			drawLineObject(canvas, g, data, (ElementCustomLine)e);
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD)) {
-			drawQuadObject(canvas, g, data, (ElementCustomQuad)e);
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
+			drawQuadObject(canvas, g, data, (ElementCustomQuadFilled)e);
 		}
 		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_TEXT)) {
 			drawTextObject(canvas, g, data, (ElementCustomText)e);
 		}
+		
+//		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
+//			ElementMulti eMulti = (ElementMulti)e;
+//			eMulti.layout(data, canvas.getWidth(), canvas.getHeight());
+//			for(ElementSingle subElement : eMulti.getSubElements()) {
+//				drawLineObject(canvas, g, data, (ElementCustomLine)subElement);
+//			}
+//		}
 		
 	}
 
@@ -147,7 +160,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, WorkingData data) {
+	private static void drawCenteredLines(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		ElementCentralHorzLine horzLine = (ElementCentralHorzLine)data.dataSight.getElements(ElementType.CENTRAL_HORZ_LINE).get(0);
 		ElementCentralVertLine vertLine = (ElementCentralVertLine)data.dataSight.getElements(ElementType.CENTRAL_VERT_LINE).get(0);
@@ -170,11 +183,15 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangefinder(Canvas canvas, GraphicsContext g, WorkingData data) {
+	private static void drawRangefinder(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		ElementRangefinder rangefinder = (ElementRangefinder)data.dataSight.getElements(ElementType.RANGEFINDER).get(0);
 		
 		LayoutRangefinder layout = rangefinder.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
+		
 		Rectanglef bounds = layout.bounds;
 		Vector2d textPos = layout.textPos;
 		
@@ -202,18 +219,21 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, WorkingData data) {
+	private static void drawHorzRangeIndicators(Canvas canvas, GraphicsContext g, DataPackage data) {
 		
 		ElementHorzRangeIndicators horRange = (ElementHorzRangeIndicators)data.dataSight.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
 		if(horRange.indicators.isEmpty()) {
 			return;
 		}
 		
-		LayoutHorzRangeIndicators layoutData = horRange.layout(data, canvas.getWidth(), canvas.getHeight());
+		LayoutHorzRangeIndicators layout = horRange.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
 		
-		for(int i=0; i<layoutData.bounds.length; i++) {
-			Rectanglef bounds = layoutData.bounds[i];
-			Vector2d textPos = layoutData.textPositions[i];
+		for(int i=0; i<layout.bounds.length; i++) {
+			Rectanglef bounds = layout.bounds[i];
+			Vector2d textPos = layout.textPositions[i];
 			HIndicator indicator = horRange.indicators.get(i);
 			
 			// draw line
@@ -222,7 +242,7 @@ public class SightRenderer {
 			
 			// draw label
 			if(indicator.isMajor()) {
-				Font font = getFont(layoutData.fontSize );
+				Font font = getFont(layout.fontSize );
 				g.setFill(data.dataSight.envSightColor);
 				g.setTextAlign(TextAlignment.CENTER);
 				g.setTextBaseline(VPos.CENTER);
@@ -238,7 +258,7 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsBlock(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		if(data.elementBallistic.ammunition.isEmpty()) {
 			return;
 		}
@@ -258,12 +278,15 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawRangeCorrectionLabel(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		if(block.drawCorrLabel && data.dataSight.envRangeCorrection > 0) {
 			
 			Vector3d layout = block.layoutLabel(data, canvas.getWidth(), canvas.getHeight()).corrLabel;
-
+			if(layout == null) {
+				return;
+			}
+			
 			Font corrFont = getFont(layout.z);
 			Text corrHelper = new Text();
 			corrHelper.setFont(corrFont);
@@ -286,14 +309,17 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsVertical(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsVertical(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		if(block.indicators.isEmpty()) {
 			return;
 		}
 
 		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
-
+		if(layout == null) {
+			return;
+		}
+		
 		Font bIndFont = getFont(layout.fontSize);
 		
 		// draw indicators
@@ -341,7 +367,7 @@ public class SightRenderer {
 	
 	
 
-	private static void drawBallisticsRadial(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadial(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		if(block.indicators.isEmpty()) {
 			return;
@@ -365,9 +391,12 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawBallisticsRadialLine(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadialLine(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
 		
 		final double lineSize = layout.rlLineSize;
 		Font bIndFont = getFont(layout.fontSize);
@@ -382,10 +411,12 @@ public class SightRenderer {
 			boolean isMajor = indicator.isMajor();
 			
 			// draw line
-			g.setStroke(data.dataSight.envSightColor);
-			g.setLineWidth(lineSize);
-			g.strokeLine(line.x, line.y, line.z, line.w);
-			g.setLineWidth(1);
+			if( !(MathUtils.isNearlyEqual(line.x, line.z) && MathUtils.isNearlyEqual(line.y, line.w)) ) {
+				g.setStroke(data.dataSight.envSightColor);
+				g.setLineWidth(lineSize);
+				g.strokeLine(line.x, line.y, line.z, line.w);
+				g.setLineWidth(1);
+			}
 			
 			// draw labels
 			if(isMajor) {
@@ -408,9 +439,12 @@ public class SightRenderer {
 	
 	
 
-	private static void drawBallisticsRadialCircle(Canvas canvas, GraphicsContext g, WorkingData data, ElementBallRangeIndicator block) {
+	private static void drawBallisticsRadialCircle(Canvas canvas, GraphicsContext g, DataPackage data, ElementBallRangeIndicator block) {
 		
 		LayoutBallRangeIndicators layout = block.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
 		
 		// font
 		Font bIndFont = getFont(layout.fontSize);
@@ -456,20 +490,31 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawLineObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomLine objLine) {
+	private static void drawLineObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomLine objLine) {
 		LayoutLineObject layout = objLine.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
+		
 		g.setStroke(data.dataSight.envSightColor);
-		g.setLineWidth(layout.lineSize);
-		g.strokeLine(layout.start.x, layout.start.y, layout.end.x, layout.end.y);
-		g.setLineWidth(1);
+		if( !(MathUtils.isNearlyEqual(layout.start.x, layout.end.x) && MathUtils.isNearlyEqual(layout.start.y, layout.end.y)) ) {
+			g.setLineWidth(layout.lineSize);
+			g.strokeLine(layout.start.x, layout.start.y, layout.end.x, layout.end.y);
+			g.setLineWidth(1);
+		}
+
 	}
 	
 	
 	
 	
-	private static void drawTextObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomText objText) {
+	private static void drawTextObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomText objText) {
 	
 		LayoutTextObject layout = objText.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
+		
 		Font font = getFont(layout.fontSize );
 		
 		// draw text
@@ -486,9 +531,12 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawCircleObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomCircle objCircle) {
+	private static void drawCircleObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomCircleOutline objCircle) {
 		
-		LayoutCircleObject layout = objCircle.layout(data, canvas.getWidth(), canvas.getHeight());
+		LayoutCircleOutlineObject layout = objCircle.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
 		
 		g.setStroke(data.dataSight.envSightColor);
 		g.setLineWidth(layout.lineWidth);
@@ -496,7 +544,9 @@ public class SightRenderer {
 		if(layout.useLineSegments) {
 			for (int i=0; i<layout.lines.length; i++) {
 				Vector4d line = layout.lines[i];
-				g.strokeLine(line.x, line.y, line.z, line.w);
+				if( !(MathUtils.isNearlyEqual(line.x, line.z) && MathUtils.isNearlyEqual(line.y, line.w)) ) {
+					g.strokeLine(line.x, line.y, line.z, line.w);
+				}
 			}
 			
 		} else {
@@ -510,8 +560,12 @@ public class SightRenderer {
 	
 	
 	
-	private static void drawQuadObject(Canvas canvas, GraphicsContext g, WorkingData data, ElementCustomQuad objQuad) {
-		LayoutQuadObject layout = objQuad.layout(data, canvas.getWidth(), canvas.getHeight());
+	private static void drawQuadObject(Canvas canvas, GraphicsContext g, DataPackage data, ElementCustomQuadFilled objQuad) {
+		LayoutQuadFilledObject layout = objQuad.layout(data, canvas.getWidth(), canvas.getHeight());
+		if(layout == null) {
+			return;
+		}
+		
 		g.setFill(data.dataSight.envSightColor);
 		g.fillPolygon(
 				new double[] {layout.p0.x, layout.p1.x, layout.p2.x, layout.p3.x},

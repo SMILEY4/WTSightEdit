@@ -3,6 +3,7 @@ package com.ruegnerlukas.wtutils;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Map;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
@@ -10,7 +11,10 @@ import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
-import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
+import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +27,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -102,7 +108,6 @@ public class FXUtils {
 	static class StringConverterDouble extends StringConverter<Double> {
 
 		private final DecimalFormat format;
-		private final double defaultValue;
 		private final Spinner<Double> spinner;
 		
 		
@@ -116,7 +121,6 @@ public class FXUtils {
 				strDecPlaces += "#";
 			}
 			format = new DecimalFormat("#" + (strDecPlaces.isEmpty() ? "" : ".") + strDecPlaces);
-			this.defaultValue = defaultValue;
 			this.spinner = spinner;
 		}
 		
@@ -325,6 +329,7 @@ public class FXUtils {
 		combobox.setButtonCell(new ListCell<BallisticElement>() {
 			@Override protected void updateItem(BallisticElement item, boolean empty) {
 				super.updateItem(item, empty);
+				
 				if (item == null || empty || item.ammunition.isEmpty()) {
 					setText("");
 					setGraphic(null);
@@ -378,6 +383,39 @@ public class FXUtils {
 	
 	
 	
+	public static void initComboboxThousandth(ComboBox<Thousandth> combobox) {
+		combobox.setButtonCell(new ListCell<Thousandth>() {
+			@Override protected void updateItem(Thousandth item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+					setGraphic(null);
+				} else {
+					setText(item.display);
+					setGraphic(null);
+				}
+			}
+		});
+		combobox.setCellFactory(new Callback<ListView<Thousandth>, ListCell<Thousandth>>() {
+			@Override public ListCell<Thousandth> call(ListView<Thousandth> p) {
+				return new ListCell<Thousandth>() {
+					@Override protected void updateItem(Thousandth item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty) {
+							setText("");
+							setGraphic(null);
+						} else {
+							setText(item.display);
+							setGraphic(null);
+						}
+					}
+				};
+			}
+		});
+	}
+	
+	
+	
 	
 	public static void addIcons(Stage stage) {
 		stage.getIcons().add(new Image("/icons/wtseIcon256.png"));
@@ -387,33 +425,36 @@ public class FXUtils {
 	
 	
 	
-	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title) {
-		return openFXScene(stage, pathFXML, width, height, title, "dark".equals(Config.app_style), false);
+	public static void openFXScene(View view, Stage parent, String pathFXML, double width, double height, String title) {
+		openFXScene(view, parent, pathFXML, width, height, title, "dark".equals(Config.app_style), false, null);
 	}
 	
-	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title, boolean styleDark) {
-		return openFXScene(stage, pathFXML, width, height, title, styleDark, false);
+	public static void openFXScene(View view, Stage parent, String pathFXML, double width, double height, String title, boolean styleDark) {
+		openFXScene(view, parent, pathFXML, width, height, title, styleDark, false, null);
 	}
 	
-	public static Object[] openFXScene(Stage stage, String pathFXML, double width, double height, String title, boolean styleDark, boolean wait) {
+	public static void openFXScene(View view, Stage parent, String pathFXML, double width, double height, String title, boolean styleDark, boolean wait, Map<ParamKey,Object> parameters) {
 		
-		if(stage == null) {
-			stage = new Stage();
-			stage.initModality(Modality.WINDOW_MODAL);
+		Stage stage = new Stage();
+		stage.initModality(Modality.WINDOW_MODAL);
+		FXUtils.addIcons(stage);
+		
+		if(parent == null) {
 			stage.initOwner(WTSights.getPrimaryStage());
-			FXUtils.addIcons(stage);
+		} else {
+			stage.initOwner(parent);
 		}
 
-		FXMLLoader loader = new FXMLLoader(UIMainMenu.class.getResource(pathFXML));
+		FXMLLoader loader = new FXMLLoader(WTSights.class.getResource(pathFXML));
+		loader.setResources(ViewManager.getResources());
 		Parent root = null;
 		try {
 			root = (Parent) loader.load();
 		} catch (IOException e) {
 			Logger.get().error("Error loading fxmlScene: " + pathFXML, e);
-			return null;
+			return;
 		}
 
-		
 		Scene scene = new Scene(root, width, height, true, SceneAntialiasing.BALANCED);
 		if(styleDark) {
 			if(WTSights.DEV_MODE) {
@@ -426,19 +467,37 @@ public class FXUtils {
 		}
 		stage.setTitle(title);
 		stage.setScene(scene);
+		
+		ViewManager.setController(view, loader.getController());
+		ViewManager.setScene(view, stage.getScene());
+		ViewManager.setStage(view, stage);
+		
+		if(parameters != null) {
+			ViewManager.getController(view).create(parameters);
+		}
+		
 		if(wait) {
 			stage.showAndWait();
 		} else {
 			stage.show();
 		}
 		
-		return new Object[]{loader.getController(), stage};
+
+	}
+	
+	
+	
+	public static void closeFXScene(View view) {
+		Stage stage = ViewManager.getStage(view);
+		if(stage != null) {
+			stage.close();
+		}
 	}
 	
 	
 	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void tableViewDisableReorder(TableView table, TableColumn... columns) {
 		table.getColumns().addListener(new ListChangeListener() {
 			public boolean suspended;
@@ -510,6 +569,22 @@ public class FXUtils {
 		boxTable.getChildren().add(btnNew);
 	}
 	
+	
+	
+	
+	public static void showAlert(String alertTxt) {
+		showAlert(alertTxt, WTSights.getPrimaryStage());
+	}
+	
+	public static void showAlert(String alertTxt, Stage owner) {
+		Logger.get().warn("(Alert) " + alertTxt);
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.initOwner(owner);
+		alert.setHeaderText(null);
+		alert.setContentText(alertTxt);
+		alert.showAndWait();
+	}
 	
 	
 }

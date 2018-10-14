@@ -60,7 +60,7 @@ public class Calib2BallConverter {
 			
 			BufferedImage img = dataCalib.images.get("image_"+dataAmmo.ammo.name);
 			if(img != null) {
-				dataBall.images.put(element, img);
+				dataBall.imagesBallistic.put(element, img);
 			}
 			
 			dataBall.elements.add(element);

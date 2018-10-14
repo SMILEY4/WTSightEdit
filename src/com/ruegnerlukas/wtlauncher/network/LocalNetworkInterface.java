@@ -11,8 +11,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtlauncher.githubApi.APIRelease;
-import com.ruegnerlukas.wtlauncher.githubApi.Asset;
-import com.ruegnerlukas.wtlauncher.githubApi.GitHubAPI;
 import com.ruegnerlukas.wtlauncher.githubApi.Release;
 
 public class LocalNetworkInterface implements NetworkInterface {
@@ -50,7 +48,6 @@ public class LocalNetworkInterface implements NetworkInterface {
 	@Override
 	public void download(File fileUpdateDir, Release release) throws IOException {
 
-		Asset asset = release.assets.get(0);
 		fileUpdateDir.mkdirs();
 		
 		ZipInputStream zipIn = new ZipInputStream(new FileInputStream(new File("C:\\Users\\LukasRuegner\\Desktop\\WTSightEdit_071.zip")));

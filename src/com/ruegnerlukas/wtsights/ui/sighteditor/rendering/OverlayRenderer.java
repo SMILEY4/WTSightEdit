@@ -5,28 +5,29 @@ import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
-import com.ruegnerlukas.wtsights.data.WorkingData;
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutBallRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutCircleObject;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutLineObject;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutQuadObject;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.layouts.LayoutTextObject;
+import com.ruegnerlukas.wtsights.data.DataPackage;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutBallRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCircleOutlineObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutLineObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadFilledObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutTextObject;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.canvas.WTCanvas;
@@ -51,7 +52,7 @@ public class OverlayRenderer {
 	
 	
 	
-	public static void draw(WTCanvas canvas, GraphicsContext g, WorkingData data) {
+	public static void draw(WTCanvas canvas, GraphicsContext g, DataPackage data) {
 		
 		if(data.dataSight.envDisplayGrid && !MathUtils.isNearlyEqual(0, data.dataSight.envGridWidth) && !MathUtils.isNearlyEqual(0, data.dataSight.envGridHeight)) {
 			
@@ -79,7 +80,7 @@ public class OverlayRenderer {
 	
 	
 	
-	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, WorkingData data) {
+	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, DataPackage data) {
 
 		Element selectedElement = data.dataSight.selectedElement;
 		if(selectedElement == null) {
@@ -87,7 +88,12 @@ public class OverlayRenderer {
 		}
 		
 		
-		Conversion.get().initialize(canvas.getWidth(), canvas.getHeight(), data.dataBallistic.vehicle.fovOut, data.dataBallistic.vehicle.fovIn, data.dataSight.gnrThousandth);
+		Conversion.get().initialize(
+				canvas.getWidth(),
+				canvas.getHeight(),
+				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
+				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
+				data.dataSight.gnrThousandth);
 		
 		
 		if(selectedElement.type == ElementType.CENTRAL_VERT_LINE) {
@@ -139,11 +145,16 @@ public class OverlayRenderer {
 			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x-dir.x, layout.start.y-dir.y, "S");
 			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.end.x+dir.x, layout.end.y+dir.y, "E");
 
+			if(element.movement == Movement.MOVE_RADIAL) {
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.center.x, layout.center.y, 6);
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.radCenter.x, layout.radCenter.y, 6);
+			}
+			
 			
 		
-		} else if(selectedElement.type == ElementType.CUSTOM_CIRCLE) {
-			ElementCustomCircle element = (ElementCustomCircle)selectedElement;
-			LayoutCircleObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
+		} else if(selectedElement.type == ElementType.CUSTOM_CIRCLE_OUTLINE) {
+			ElementCustomCircleOutline element = (ElementCustomCircleOutline)selectedElement;
+			LayoutCircleOutlineObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			if(layout.useLineSegments) {
 				Vector2d v0 = new Vector2d(0, 1).rotateDeg(-element.segment.x).setLength(layout.circle.radius+layout.circle.radius*0.1);
 				Vector2d v1 = new Vector2d(0, 1).rotateDeg(-element.segment.y).setLength(layout.circle.radius+layout.circle.radius*0.1);
@@ -153,6 +164,11 @@ public class OverlayRenderer {
 			drawCircle(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, layout.circle.radius, layout.lineWidth);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.circle.cx, layout.circle.cy, 6);
 			
+			if(element.movement == Movement.MOVE_RADIAL) {
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.center.x, layout.center.y, 6);
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.radCenter.x, layout.radCenter.y, 6);
+			}
+			
 			
 			
 		} else if(selectedElement.type == ElementType.CUSTOM_TEXT) {
@@ -160,11 +176,16 @@ public class OverlayRenderer {
 			LayoutTextObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.pos.x, layout.pos.x, 6);
 			
+			if(element.movement == Movement.MOVE_RADIAL) {
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.center.x, layout.center.y, 6);
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.radCenter.x, layout.radCenter.y, 6);
+			}
 			
 			
-		} else if(selectedElement.type == ElementType.CUSTOM_QUAD) {
-			ElementCustomQuad element = (ElementCustomQuad)selectedElement;
-			LayoutQuadObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
+			
+		} else if(selectedElement.type == ElementType.CUSTOM_QUAD_FILLED) {
+			ElementCustomQuadFilled element = (ElementCustomQuadFilled)selectedElement;
+			LayoutQuadFilledObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
 			drawQuad(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x, layout.p0.y, layout.p1.x, layout.p1.y, layout.p2.x, layout.p2.y, layout.p3.x, layout.p3.y);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x, layout.p0.y, 4);
 			drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p1.x, layout.p1.y, 4);
@@ -175,12 +196,17 @@ public class OverlayRenderer {
 			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p2.x+5, layout.p2.y+5, "3");
 			drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p3.x+5, layout.p3.y+5, "4");
 
+			if(element.movement == Movement.MOVE_RADIAL) {
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.center.x, layout.center.y, 6);
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.radCenter.x, layout.radCenter.y, 6);
+			}
+			
 			
 			
 		} else if(selectedElement.type == ElementType.SHELL_BALLISTICS_BLOCK || selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS) {
 			ElementBallRangeIndicator element = (ElementBallRangeIndicator)selectedElement;
 			
-			WorkingData dataBlock = new WorkingData();
+			DataPackage dataBlock = new DataPackage();
 			dataBlock.dataSight = data.dataSight;
 			dataBlock.dataBallistic = data.dataBallistic;
 			dataBlock.elementBallistic = selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS ? data.elementBallistic : ((ElementShellBlock)selectedElement).elementBallistic;
@@ -342,6 +368,10 @@ public class OverlayRenderer {
 
 	private static void drawLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1, double lineSize) {
 		
+		if( !(MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1)) ) {
+			return;
+		}
+		
 		Point2D p0 = canvas.transformToOverlay(x0, y0);
 		Point2D p1 = canvas.transformToOverlay(x1, y1);
 		
@@ -386,6 +416,10 @@ public class OverlayRenderer {
 	
 	
 	private static void drawThinLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1) {
+		
+		if( !(MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1)) ) {
+			return;
+		}
 		
 		Point2D p0 = canvas.transformToOverlay(x0, y0);
 		Point2D p1 = canvas.transformToOverlay(x1, y1);
@@ -484,6 +518,8 @@ public class OverlayRenderer {
 	
 	
 	private static void drawCross(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x, double y, double radius) {
+		
+		radius = Math.max(radius, 0.01);
 		
 		Point2D p = canvas.transformToOverlay(x, y);
 		double cx = p.getX();

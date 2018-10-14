@@ -33,18 +33,18 @@ import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.data.sightfile.BLKSightParser;
 import com.ruegnerlukas.wtsights.data.sightfile.Block;
 import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
@@ -192,7 +192,7 @@ public class DataLoader {
 
 	public static CalibrationData loadCalibrationDataFile(File file) {
 		
-		Logger.get().info("Loading calibration-file (ext)");
+		Logger.get().info("Loading sight-metadata-file (ext)");
 		
 		if(file == null || !file.exists()) {
 			Logger.get().error("Error loading file: " + file);
@@ -209,7 +209,7 @@ public class DataLoader {
 			Document doc = builder.parse(file);
 			Element root = doc.getDocumentElement();
 			if(!root.getTagName().equals("calibrationdata")) {
-				Logger.get().error("Could not parse file: File is not a calibration data file.");
+				Logger.get().error("Could not parse file: File is not a metadata file.");
 				return data;
 			}
 
@@ -320,6 +320,8 @@ public class DataLoader {
 			
 			Element elementVehicle = XMLUtils.getChildren(root).get(0);
 			data.vehicle = Database.getVehicleByName(elementVehicle.getTagName());
+			data.zoomModOut = elementVehicle.hasAttribute("zoomModOut") ? Double.parseDouble(elementVehicle.getAttribute("zoomModOut")) : 1.0;
+			data.zoomModIn = elementVehicle.hasAttribute("zoomModIn") ? Double.parseDouble(elementVehicle.getAttribute("zoomModIn")) : 1.0;
 
 			Element elementElements = XMLUtils.getElementByTagName(elementVehicle, "elements");
 			
@@ -390,10 +392,23 @@ public class DataLoader {
 			
 			Element elementImages = XMLUtils.getElementByTagName(elementVehicle, "images");
 			for(Element elementImg : XMLUtils.getChildren(elementImages)) {
+				if(elementImg.getTagName().startsWith("image_element_zoomMod")) {
+					continue;
+				}
 				int elementIndex = Integer.parseInt(elementImg.getTagName().split("_")[2]);
 				BallisticElement ballElement = data.elements.get(elementIndex);
 				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
-				data.images.put(ballElement, img);
+				data.imagesBallistic.put(ballElement, img);
+			}
+			if(XMLUtils.getElementByTagName(elementImages, "image_element_zoomModIn") != null) {
+				Element elementImg = XMLUtils.getElementByTagName(elementImages, "image_element_zoomModIn");
+				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
+				data.imagesZoom.put(true, img);
+			}
+			if(XMLUtils.getElementByTagName(elementImages, "image_element_zoomModOut") != null) {
+				Element elementImg = XMLUtils.getElementByTagName(elementImages, "image_element_zoomModOut");
+				BufferedImage img = decodeImage(elementImg.getAttribute("encodedData"));
+				data.imagesZoom.put(false, img);
 			}
 				
 		} catch (ParserConfigurationException e) {
@@ -977,8 +992,8 @@ public class DataLoader {
 						switch(eCircles.name) {
 							case "circle": {
 							
-								ElementCustomCircle objCircle = new ElementCustomCircle();
-								objCircle.name = "circle_" + (dataSight.getElements(ElementType.CUSTOM_CIRCLE).size()+1);
+								ElementCustomCircleOutline objCircle = new ElementCustomCircleOutline();
+								objCircle.name = "circle_" + (dataSight.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE).size()+1);
 								if(eCircles.metadata != null) {
 									objCircle.name = eCircles.metadata;
 								}
@@ -1049,8 +1064,8 @@ public class DataLoader {
 						switch(eQuads.name) {
 							case "quad": {
 								
-								ElementCustomQuad objQuad = new ElementCustomQuad();
-								objQuad.name = "quad_" + (dataSight.getElements(ElementType.CUSTOM_QUAD).size()+1);
+								ElementCustomQuadFilled objQuad = new ElementCustomQuadFilled();
+								objQuad.name = "quad_" + (dataSight.getElements(ElementType.CUSTOM_QUAD_FILLED).size()+1);
 								if(eQuads.metadata != null) {
 									objQuad.name = eQuads.metadata;
 								}

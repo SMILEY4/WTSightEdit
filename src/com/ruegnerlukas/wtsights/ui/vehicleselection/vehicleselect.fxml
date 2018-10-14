@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.vehicleselection.VehicleSelectController">
+   <children>
+      <VBox fillWidth="false" layoutX="272.0" layoutY="153.0" prefHeight="291.0" prefWidth="600.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label prefWidth="100000.0" text="%vs_header" />
+            <HBox>
+               <children>
+                  <TextField fx:id="textfieldFilter" onAction="#onFilter" prefWidth="100000.0" promptText="vs_filter_prompt">
+                     <tooltip>
+                        <Tooltip text="Type filter text" />
+                     </tooltip></TextField>
+                  <Button minWidth="60.0" mnemonicParsing="false" onAction="#onFilter" prefWidth="60.0" text="%vs_filter">
+                     <tooltip>
+                        <Tooltip text="%vs_filter_tt" />
+                     </tooltip></Button>
+               </children>
+            </HBox>
+            <ComboBox fx:id="comboVehicles" prefHeight="31.0" prefWidth="10000.0">
+               <tooltip>
+                  <Tooltip text="%vs_vehicle_list_tt" />
+               </tooltip></ComboBox>
+            <Separator prefWidth="10000.0" visible="false">
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </Separator>
+            <HBox alignment="TOP_RIGHT" prefWidth="100000.0" spacing="5.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="100.0" text="%vs_cancel" />
+                  <Button mnemonicParsing="false" onAction="#onNext" prefWidth="100.0" text="%vs_next" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

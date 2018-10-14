@@ -25,28 +25,25 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomCircle;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomObject.Movement;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomQuad;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
@@ -80,13 +77,11 @@ public class DataWriter {
 		
 		Element elementVehicle = doc.createElement(data.vehicle.name);
 		rootElement.appendChild(elementVehicle);
-		
+		elementVehicle.setAttribute("zoomModOut", Double.toString(data.zoomModOut));
+		elementVehicle.setAttribute("zoomModIn", Double.toString(data.zoomModIn));
+
 		Element elementElements = doc.createElement("elements");
 		elementVehicle.appendChild(elementElements);
-		
-		for(Entry<BallisticElement,Boolean> e : data.zoomedIn.entrySet()) {
-			System.out.println(e.getKey().ammunition.get(0) + " " + e.getValue());
-		}
 		
 		for(BallisticElement ballElement : data.elements) {
 			
@@ -132,9 +127,21 @@ public class DataWriter {
 		Element elementImages = doc.createElement("images");
 		elementVehicle.appendChild(elementImages);
 		
-		for(Entry<BallisticElement,BufferedImage> entry : data.images.entrySet()) {
+		for(Entry<BallisticElement,BufferedImage> entry : data.imagesBallistic.entrySet()) {
 			Element elementImg = doc.createElement("image_element_" + data.elements.indexOf(entry.getKey()));
 			String encodedImage = endodeImage(entry.getValue(), "jpg");
+			elementImg.setAttribute("encodedData", encodedImage);
+			elementImages.appendChild(elementImg);
+		}
+		if(data.imagesZoom.containsKey(true)) {
+			Element elementImg = doc.createElement("image_element_zoomModIn");
+			String encodedImage = endodeImage(data.imagesZoom.get(true), "jpg");
+			elementImg.setAttribute("encodedData", encodedImage);
+			elementImages.appendChild(elementImg);
+		}
+		if(data.imagesZoom.containsKey(false)) {
+			Element elementImg = doc.createElement("image_element_zoomModOut");
+			String encodedImage = endodeImage(data.imagesZoom.get(true), "jpg");
 			elementImg.setAttribute("encodedData", encodedImage);
 			elementImages.appendChild(elementImg);
 		}
@@ -152,89 +159,6 @@ public class DataWriter {
 		return true;
 	}
 
-	
-	
-	
-	public static boolean saveExternalCalibFile(CalibrationData data, File outputFile) throws Exception {
-
-		if(data == null) {
-			Logger.get().warn("Could not find calibration data: " + data);
-			return false;
-		}
-		if(outputFile == null) {
-			Logger.get().warn("Could not find file: " + outputFile);
-			return false;
-		}
-		
-		
-		Logger.get().info("Writing calibration-file to " + outputFile);
-		
-		
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-		Document doc = docBuilder.newDocument();
-		
-		Element rootElement = doc.createElement("calibrationdata");
-		doc.appendChild(rootElement);
-		
-		Element elementVehicle = doc.createElement(data.vehicle.name);
-//		elementVehicle.setAttribute("fovOut", ""+data.vehicle.fovOut);
-//		elementVehicle.setAttribute("fovIn", ""+data.vehicle.fovIn);
-		rootElement.appendChild(elementVehicle);
-				
-		Element elementAmmoGroup = doc.createElement("ammo");
-		elementVehicle.appendChild(elementAmmoGroup);
-		
-		// ammo data
-		for(CalibrationAmmoData ammoData : data.ammoData) {
-			
-			String ammoName =  ammoData.ammo.name;
-			
-			Element elementAmmo = doc.createElement(ammoName);
-			elementAmmoGroup.appendChild(elementAmmo);
-					
-			elementAmmo.setAttribute("zoomedIn", ammoData.zoomedIn ? "true" : "false");
-			elementAmmo.setAttribute("imageName", ammoData.imgName);
-			elementAmmo.setAttribute("markerCenter", ammoData.markerCenter.x + "," + ammoData.markerCenter.y);
-
-			Element elementMarkerRanges = doc.createElement("markerRanges");
-			elementAmmo.appendChild(elementMarkerRanges);
-			
-			int i = 0;
-			for(Vector2i m : ammoData.markerRanges) {
-				elementMarkerRanges.setAttribute("marker_" + (i++), m.x + ", " + m.y);
-			}
-			
-		}
-		
-		
-		// images
-		Element elementImageRoot = doc.createElement("images");
-		elementVehicle.appendChild(elementImageRoot);
-		
-		for(Entry<String,BufferedImage> entry : data.images.entrySet()) {
-			String imageName = entry.getKey();
-			Element elementImage = doc.createElement(imageName);
-			elementImageRoot.appendChild(elementImage);
-			String encodedImage = endodeImage(entry.getValue(), "jpg");
-			elementImage.setAttribute("encodedData", encodedImage);
-		}
-		
-		
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(outputFile);
-		
-		transformer.transform(source, result);
-		
-		Logger.get().info("External calibration file saved");
-		return true;
-	}
-	
 	
 	
 	
@@ -366,7 +290,7 @@ public class DataWriter {
 			lines.add("// shell ballistics blocks");
 			lines.add("ballistics {");
 			
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 
 				ElementShellBlock shellBlock = (ElementShellBlock)element;
 				
@@ -436,7 +360,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_LINE).isEmpty()) {
 			lines.add("// lines");
 			lines.add("drawLines {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_LINE)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_LINE)) {
 				ElementCustomLine lineObj = (ElementCustomLine)element;
 				lines.add("  //-- " + lineObj.name);
 				lines.add("  line {");
@@ -463,7 +387,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_TEXT).isEmpty()) {
 			lines.add("// text");
 			lines.add("drawTexts {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_TEXT)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_TEXT)) {
 				ElementCustomText textObj = (ElementCustomText)element;
 				lines.add("  //-- " +  textObj.name);
 				lines.add("  text {");
@@ -490,11 +414,11 @@ public class DataWriter {
 		}
 		
 		// circles
-		if(!data.getElements(ElementType.CUSTOM_CIRCLE).isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE).isEmpty()) {
 			lines.add("// circles");
 			lines.add("drawCircles {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_CIRCLE)) {
-				ElementCustomCircle circleObj = (ElementCustomCircle)element;
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
+				ElementCustomCircleOutline circleObj = (ElementCustomCircleOutline)element;
 				lines.add("  //-- " + circleObj.name);
 				lines.add("  circle {");
 				lines.add("    thousandth:b = " + (circleObj.useThousandth ? "yes" : "no") );
@@ -521,11 +445,11 @@ public class DataWriter {
 		
 		
 		// quads
-		if(!data.getElements(ElementType.CUSTOM_QUAD).isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_QUAD_FILLED).isEmpty()) {
 			lines.add("// quads");
 			lines.add("drawQuads {");
-			for(com.ruegnerlukas.wtsights.data.sight.elements.Element element : data.getElements(ElementType.CUSTOM_QUAD)) {
-				ElementCustomQuad quadObj = (ElementCustomQuad)element;
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
+				ElementCustomQuadFilled quadObj = (ElementCustomQuadFilled)element;
 				lines.add("  //-- " + quadObj.name);
 				lines.add("  quad {");
 				lines.add("    thousandth:b = " + (quadObj.useThousandth ? "yes" : "no") );

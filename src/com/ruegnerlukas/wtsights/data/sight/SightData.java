@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.ruegnerlukas.wtsights.data.sight.elements.Element;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.elements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 
@@ -23,7 +23,6 @@ public class SightData {
 	
 	
 	// temp
-	
 	
 	// general
 	public Thousandth 	gnrThousandth 			= Thousandth.USSR;
@@ -122,6 +121,14 @@ public class SightData {
 	
 	
 	
+	public boolean removeElement(Element element) {
+		for(Entry<ElementType,List<Element>> entry : elements.entrySet()) {
+			return entry.getValue().remove(element);
+		}
+		return false;
+	}
+	
+	
 	public boolean removeElement(String name) {
 		for(Entry<ElementType,List<Element>> entry : elements.entrySet()) {
 			for(Element element : entry.getValue()) {
@@ -151,7 +158,7 @@ public class SightData {
 	public void setElementsDirty() {
 		for(Entry<ElementType,List<Element>> entry : elements.entrySet()) {
 			for(Element e : entry.getValue()) {
-				e.setDirty();
+				e.setDirty(true);
 			}
 		}
 	}
@@ -159,7 +166,7 @@ public class SightData {
 	
 	public void setElementsDirty(ElementType type) {
 		for(Element e : elements.get(type)) {
-			e.setDirty();
+			e.setDirty(true);
 		}
 	}
 	

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="607.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.modules.UIRangefinder">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="607.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.modules.ModuleRangefinder">
    <children>
       <ScrollPane fitToWidth="true" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
@@ -22,14 +22,14 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Position:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mrf_position" />
                         <HBox minWidth="0.0" prefWidth="1000000.0">
                            <children>
                               <Spinner fx:id="spinnerPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                               <Spinner fx:id="spinnerPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
-                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="Use Thousandth" />
+                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mrf_use_thousandth" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <VBox.margin>
                               <Insets />
@@ -38,16 +38,16 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Text Scale:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mrf_text_scale" />
                         <Spinner fx:id="spinnerTextScale" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator minWidth="0.0" prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Color 1:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mrf_color_1" />
                         <ColorPicker fx:id="colorPicker1" minWidth="0.0" prefWidth="1000000.0" />
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="Color 2:" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mrf_color_2" />
                         <ColorPicker fx:id="colorPicker2" minWidth="0.0" prefWidth="1000000.0" />
                      </children>
                   </VBox>

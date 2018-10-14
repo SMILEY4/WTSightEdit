@@ -17,7 +17,7 @@ public class DefaultBallisticFuntion implements IBallisticFunction {
 	
 	
 	
-	public static DefaultBallisticFuntion create(BallisticElement element, Vehicle vehicle, boolean zoomedIn) {
+	public static IBallisticFunction create(BallisticElement element, Vehicle vehicle, boolean zoomedIn) {
 		if(element.markerData == null) {
 			return null;
 		}
@@ -38,8 +38,12 @@ public class DefaultBallisticFuntion implements IBallisticFunction {
 			points.add(new Vector2d(distMeters[i]/100.0, yPos[i]));
 		}
 		Vector3d params = SightUtils.fitBallisticFunction(points, 1);
+		if(params == null) {
+			return new NullBallisticFunction();
+		} else {
+			return new DefaultBallisticFuntion(params);
+		}
 		
-		return new DefaultBallisticFuntion(params);
 	}
 	
 	

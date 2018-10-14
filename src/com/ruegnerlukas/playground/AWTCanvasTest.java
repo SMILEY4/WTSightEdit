@@ -8,7 +8,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtsights.ui.main.MainMenuController;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
@@ -34,7 +34,7 @@ public class AWTCanvasTest extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 	
-		FXMLLoader loader = new FXMLLoader(UIMainMenu.class.getResource("/ui/layout_awtcanvastest.fxml"));
+		FXMLLoader loader = new FXMLLoader(MainMenuController.class.getResource("/ui/layout_awtcanvastest.fxml"));
 		Parent root = (Parent) loader.load();
 		AWTCanvasTest controller = (AWTCanvasTest)loader.getController();
 		Scene scene = new Scene(root, 500, 500, true);
@@ -94,6 +94,7 @@ public class AWTCanvasTest extends Application {
 			@Override public void run() {
 				
 				final JPanel panel = new JPanel() {
+					private static final long serialVersionUID = 1L;
 					@Override public void paintComponent(Graphics g) {
 						super.paintComponent(g);
 						g.setColor(Color.WHITE);

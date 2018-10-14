@@ -1,34 +1,18 @@
 package com.ruegnerlukas.wtlauncher;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import com.ruegnerlukas.simpleutils.JarLocation;
-import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtlauncher.githubApi.APIRelease;
-import com.ruegnerlukas.wtlauncher.githubApi.Asset;
 import com.ruegnerlukas.wtlauncher.githubApi.Release;
 import com.ruegnerlukas.wtlauncher.network.DefaultNetworkInterface;
-import com.ruegnerlukas.wtlauncher.network.LocalNetworkInterface;
 import com.ruegnerlukas.wtlauncher.network.NetworkInterface;
 import com.ruegnerlukas.wtutils.Config;
-
-import javafx.application.Platform;
 
 public class Updater {
 
@@ -254,7 +238,7 @@ public class Updater {
 							}
 							
 							try {
-								Process proc = builder.start();
+								builder.start();
 								controller.onInstallUpdateDone(InstallStatus.DONE);
 
 							} catch (IOException e) {

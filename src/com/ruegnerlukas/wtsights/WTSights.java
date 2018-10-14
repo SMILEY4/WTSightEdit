@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.SystemUtils;
+import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.filter.FilterLevel;
@@ -13,7 +14,9 @@ import com.ruegnerlukas.simpleutils.logging.target.LogFileTarget;
 import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.ui.AmmoIcons;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
-import com.ruegnerlukas.wtsights.ui.main.UIMainMenu;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
+import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
 
@@ -28,12 +31,11 @@ public class WTSights extends Application {
 	private static Stage primaryStage;
 	
 	public static boolean DEV_MODE = false;
-	public static final boolean DARK_MODE = false;
 	
 	public static boolean wasStartedInsideData;
 
 	
-	
+			
 	public static void main(String[] args) {
 		
 		for(String arg : args) {
@@ -91,8 +93,6 @@ public class WTSights extends Application {
 		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() +" "+ SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
 		
 		
-		Config.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
-		
 		launch(args);
 	}
 	
@@ -101,6 +101,9 @@ public class WTSights extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		
+		Config.load(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/config.json"));
 		
 		WTSights.primaryStage = primaryStage;
 		
@@ -123,8 +126,8 @@ public class WTSights extends Application {
 			} 
 		});
 		
-		UIMainMenu.openNew(primaryStage);
 		
+		ViewManager.getLoader(View.MAIN_MENU).openNew(primaryStage, new MapBuilder<ParamKey,Object>().get());
 	}
 
 	

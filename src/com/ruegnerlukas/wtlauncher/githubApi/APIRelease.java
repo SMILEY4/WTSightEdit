@@ -8,7 +8,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.ruegnerlukas.simpleutils.PrettyJSON;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 public class APIRelease {
