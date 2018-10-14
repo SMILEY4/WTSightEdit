@@ -11,10 +11,10 @@ import com.ruegnerlukas.wtutils.SightUtils;
 public class ElementCustomQuadFilled extends ElementCustomObject {
 
 	
-	public Vector2d pos1 = new Vector2d(-0.1, -0.1);
-	public Vector2d pos2 = new Vector2d(+0.1, -0.1);
-	public Vector2d pos3 = new Vector2d(+0.1, +0.1);
-	public Vector2d pos4 = new Vector2d(-0.1, +0.1);
+	public Vector2d pos1 = new Vector2d(+0.1, -0.1);
+	public Vector2d pos2 = new Vector2d(+0.2, -0.1);
+	public Vector2d pos3 = new Vector2d(+0.2, +0.1);
+	public Vector2d pos4 = new Vector2d(+0.1, +0.1);
 	
 	
 	

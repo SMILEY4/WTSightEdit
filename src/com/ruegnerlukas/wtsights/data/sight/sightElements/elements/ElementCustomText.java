@@ -13,7 +13,7 @@ public class ElementCustomText extends ElementCustomObject {
 
 	
 	public String 		text 		= "text";
-	public Vector2d 	position 	= new Vector2d(0,0);
+	public Vector2d 	position 	= new Vector2d(0.1,0);
 	public double 		size 		= 1;
 	public TextAlign 	align 		= TextAlign.LEFT;
 	

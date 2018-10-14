@@ -12,7 +12,7 @@ import com.ruegnerlukas.wtutils.SightUtils;
 public class ElementCustomCircleOutline extends ElementCustomObject {
 
 	
-	public Vector2d 	position 	= new Vector2d(0,0);
+	public Vector2d 	position 	= new Vector2d(0.1,0);
 	public double 		diameter 	= 0.1;
 	public Vector2d 	segment 	= new Vector2d(0, 360);
 	public double 		size 		= 1;

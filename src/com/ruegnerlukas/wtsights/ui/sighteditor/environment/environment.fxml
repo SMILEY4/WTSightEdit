@@ -34,7 +34,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <CheckBox fx:id="cbShowRangefinder" mnemonicParsing="false" onAction="#onShowRangefinder" prefWidth="1000000.0" text="se_env_rangefinder_show" />
+                        <CheckBox fx:id="cbShowRangefinder" mnemonicParsing="false" onAction="#onShowRangefinder" prefWidth="1000000.0" text="%se_env_rangefinder_show" />
                         <HBox>
                            <children>
                               <Label prefWidth="1000000.0" text="%se_env_rangefinder_progress" />
