@@ -55,8 +55,7 @@ public class ScreenshotUploadController implements IViewController {
 	public void create(Map<ParamKey,Object> parameters) {
 		
 		this.parameters = parameters;
-		this.service = (ScreenshotUploadService) ViewManager.getService(View.SCREENSHOT_UPLOAD);
-		this.service.init();
+		this.service = (ScreenshotUploadService) ViewManager.getService(View.SCREENSHOT_UPLOAD, true);
 		Vehicle vehicle = (Vehicle) parameters.get(ParamKey.SELECTED_VEHICLE);
 		
 		labelTankName.setText(vehicle.namePretty);

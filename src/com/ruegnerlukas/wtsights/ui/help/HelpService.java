@@ -4,4 +4,8 @@ import com.ruegnerlukas.wtsights.ui.view.IViewService;
 
 public class HelpService implements IViewService {
 
+	@Override
+	public void initService() {
+	}
+	
 }

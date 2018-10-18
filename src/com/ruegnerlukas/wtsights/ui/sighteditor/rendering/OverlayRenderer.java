@@ -14,6 +14,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentra
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
@@ -26,6 +27,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCircleOu
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutLineObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadFilledObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadOutlineObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutTextObject;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -83,6 +85,7 @@ public class OverlayRenderer {
 	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, DataPackage data) {
 
 		Element selectedElement = data.dataSight.selectedElement;
+		
 		if(selectedElement == null) {
 			return;
 		}
@@ -182,7 +185,6 @@ public class OverlayRenderer {
 			}
 			
 			
-			
 		} else if(selectedElement.type == ElementType.CUSTOM_QUAD_FILLED) {
 			ElementCustomQuadFilled element = (ElementCustomQuadFilled)selectedElement;
 			LayoutQuadFilledObject layout = element.layout(data, canvas.getWidth(), canvas.getHeight());
@@ -199,6 +201,26 @@ public class OverlayRenderer {
 			if(element.movement == Movement.MOVE_RADIAL) {
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.center.x, layout.center.y, 6);
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.radCenter.x, layout.radCenter.y, 6);
+			}
+			
+			
+		} else if(selectedElement.type == ElementType.CUSTOM_QUAD_OUTLINE) {
+			ElementCustomQuadOutline element = (ElementCustomQuadOutline)selectedElement;
+			element.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(int i=0; i<element.getSubElements().size(); i++) {
+				ElementCustomLine lineObject = (ElementCustomLine)element.getSubElements().get(i);
+				LayoutLineObject layout = lineObject.layout(data, canvas.getWidth(), canvas.getHeight());
+				if(layout != null) {
+					drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
+					drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, 4);
+					drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x+5, layout.start.y+5, ""+(i+1));
+				}
+			}
+			
+			if(element.movement == Movement.MOVE_RADIAL) {
+				LayoutQuadOutlineObject mainLayout = (LayoutQuadOutlineObject)element.getMainLayout();
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x, mainLayout.center.y, 6);
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x, mainLayout.radCenter.y, 6);
 			}
 			
 			
@@ -368,7 +390,9 @@ public class OverlayRenderer {
 
 	private static void drawLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1, double lineSize) {
 		
-		if( !(MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1)) ) {
+
+		
+		if( (MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1)) ) {
 			return;
 		}
 		
@@ -379,6 +403,8 @@ public class OverlayRenderer {
 		double py0 = ((int)p0.getY())+0.5;
 		double px1 = ((int)p1.getX())+0.5;
 		double py1 = ((int)p1.getY())+0.5;
+		
+
 		
 		Vector2d.setVectorAB(px0, py0, px1, py1, dir);
 		cap.set(dir).setLength(lineSize*canvas.canvas.getScaleX()/2);
@@ -409,6 +435,7 @@ public class OverlayRenderer {
 		g.setLineDashOffset(offset+5);
 		g.strokeLine(c.x, c.y, d.x, d.y);
 		g.strokeLine(b.x, b.y, d.x, d.y);
+		
 		
 	}
 

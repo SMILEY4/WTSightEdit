@@ -13,6 +13,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentra
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
@@ -41,6 +42,15 @@ public class ElementCreateService implements IViewService {
 	
 	
 	
+	@Override
+	public void initService() {
+		existingElements = null;
+		data = null;
+	}
+	
+	
+	
+	
 	public void init(List<Element> existingElements, DataPackage data) {
 		this.existingElements = existingElements;
 		this.data = data;
@@ -54,7 +64,9 @@ public class ElementCreateService implements IViewService {
 		List<ElementType> types = new ArrayList<ElementType>();
 		
 		for(ElementType type : ElementType.values()) {
-			System.out.println(type + ":");
+			if(type == ElementType.CUSTOM_QUAD_OUTLINE) { // TEMP: block quad outline from current release
+				continue;
+			}
 			
 			if(data.dataBallistic.elements.isEmpty() && (type == ElementType.SHELL_BALLISTICS_BLOCK || type == ElementType.BALLISTIC_RANGE_INDICATORS) ) {
 				continue;
@@ -133,10 +145,9 @@ public class ElementCreateService implements IViewService {
 				if(type == ElementType.SHELL_BALLISTICS_BLOCK) {
 					createdElement = new ElementShellBlock(name);
 				}
-				
-//				if(type == ElementType.CUSTOM_QUAD_OUTLINE) {
-//					createdElement = new ElementCustomQuadOutline(name);
-//				}
+				if(type == ElementType.CUSTOM_QUAD_OUTLINE) {
+					createdElement = new ElementCustomQuadOutline(name);
+				}
 				
 			}
 		}

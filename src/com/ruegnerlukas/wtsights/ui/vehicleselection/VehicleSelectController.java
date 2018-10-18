@@ -41,7 +41,7 @@ public class VehicleSelectController implements IViewController {
 	public void create(Map<ParamKey,Object> parameters) {
 		
 		this.parameters = parameters;
-		this.service = (VehicleSelectService)ViewManager.getService(View.VEHICLE_SELECT);
+		this.service = (VehicleSelectService)ViewManager.getService(View.VEHICLE_SELECT, true);
 		
 		comboVehicles.setButtonCell(new ListCell<Vehicle>() {
 			@Override protected void updateItem(Vehicle item, boolean empty) {

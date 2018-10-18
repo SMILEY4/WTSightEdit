@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.IViewController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
@@ -31,7 +32,7 @@ public class GeneralController implements IViewController {
 
 	@Override
 	public void create(Map<ParamKey,Object> parameters) {
-		service = (GeneralService) ViewManager.getService(View.SEM_GENERAL);
+		service = (GeneralService) ViewManager.getService(View.SEM_GENERAL, true);
 		service.setDataPackage((DataPackage)parameters.get(ParamKey.DATA_PACKAGE));
 	
 		// THOUSANDTH
@@ -47,14 +48,14 @@ public class GeneralController implements IViewController {
 		comboThousandth.getSelectionModel().select(service.getThousandth());
 
 		// font scale
-		FXUtils.initSpinner(fontSize, service.getFontScale(), 0, 1000, 0.1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(fontSize, service.getFontScale(), 0, 1000, StepSizes.STEP_SCALE, StepSizes.DECPLACES_SCALE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				service.setFontScale(newValue.doubleValue());
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();			}
 		});
 		
 		// line scale
-		FXUtils.initSpinner(lineSize, service.getLineSize(), 0, 1000, 0.5, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(lineSize, service.getLineSize(), 0, 1000, StepSizes.STEP_SCALE, StepSizes.DECPLACES_SCALE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				service.setLineSize(newValue.doubleValue());
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();			}

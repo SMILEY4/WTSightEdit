@@ -105,8 +105,9 @@ public class ViewManager {
 	
 	
 	
-	public static IViewService getService(View view) {
+	public static IViewService getService(View view, boolean initService) {
 		if(view != null) {
+			view.service.initService();
 			return view.service;
 		} else {
 			return null;

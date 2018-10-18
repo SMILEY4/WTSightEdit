@@ -8,7 +8,7 @@ import com.ruegnerlukas.wtsights.data.DataPackage;
 public abstract class ElementMulti extends Element {
 
 	private List<ElementSingle> subElements = new ArrayList<ElementSingle>();
-	
+	private ILayoutData mainLayoutData;
 	
 	
 	
@@ -44,6 +44,20 @@ public abstract class ElementMulti extends Element {
 	
 	public List<ElementSingle> getSubElements() {
 		return subElements;
+	}
+	
+	
+	
+	
+	protected void setMainLayout(ILayoutData layoutData) {
+		this.mainLayoutData = layoutData;
+	}
+	
+	
+	
+	
+	public ILayoutData getMainLayout() {
+		return this.mainLayoutData;
 	}
 	
 	

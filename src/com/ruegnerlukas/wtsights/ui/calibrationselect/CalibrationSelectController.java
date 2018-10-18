@@ -36,7 +36,7 @@ public class CalibrationSelectController implements IViewController {
 	@Override
 	public void create(Map<ParamKey,Object> parameters) {
 		this.parameters = parameters;
-		this.service = (CalibrationSelectService) ViewManager.getService(View.CALIBRATION_SELECT);
+		this.service = (CalibrationSelectService) ViewManager.getService(View.CALIBRATION_SELECT, true);
 		cbCreateNew.setSelected(false);
 	}
 

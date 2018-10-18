@@ -5,6 +5,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -43,7 +44,7 @@ public class ModuleRangefinder implements Module {
 		ElementRangefinder elementDefault = new ElementRangefinder();
 		
 		// xpos
-		FXUtils.initSpinner(spinnerPosX, elementDefault.position.x, -1000, 1000, 1, 0, new ChangeListener<Integer>() {
+		FXUtils.initSpinner(spinnerPosX, elementDefault.position.x, -1000, 1000, StepSizes.STEP_PIXEL, StepSizes.DECPLACES_PIXEL, new ChangeListener<Integer>() {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					element.position.x = newValue.intValue();
@@ -54,7 +55,7 @@ public class ModuleRangefinder implements Module {
 		});
 		
 		// ypos
-		FXUtils.initSpinner(spinnerPosY, elementDefault.position.y, -1000, 1000, 1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerPosY, elementDefault.position.y, -1000, 1000, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
@@ -71,7 +72,7 @@ public class ModuleRangefinder implements Module {
 				if(element == null) { return; }
 				element.useThousandth = cbUseThousandth.isSelected();
 				if(element.useThousandth) {
-					FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(element.position.y, data.dataSight.envZoomedIn), -1000, 1000, 1, 1, new ChangeListener<Double>() {
+					FXUtils.initSpinner(spinnerPosY, Conversion.get().screenspace2mil(element.position.y, data.dataSight.envZoomedIn), -1000, 1000, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, new ChangeListener<Double>() {
 						@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 							if(element != null) {
 								element.position.y = newValue.intValue();
@@ -79,7 +80,7 @@ public class ModuleRangefinder implements Module {
 						}
 					});
 				} else {
-					FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(element.position.y, data.dataSight.envZoomedIn), -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+					FXUtils.initSpinner(spinnerPosY, Conversion.get().mil2screenspace(element.position.y, data.dataSight.envZoomedIn), -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 						@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 							if(element != null) {
 								element.position.y = newValue.intValue();
@@ -93,7 +94,7 @@ public class ModuleRangefinder implements Module {
 		});
 
 		// text scale
-		FXUtils.initSpinner(spinnerTextScale, elementDefault.textScale, 0, 1000, 0.1, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerTextScale, elementDefault.textScale, 0, 1000, StepSizes.STEP_SCALE, StepSizes.DECPLACES_SCALE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textScale = newValue.doubleValue();

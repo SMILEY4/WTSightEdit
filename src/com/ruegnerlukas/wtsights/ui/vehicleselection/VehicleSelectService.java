@@ -19,6 +19,13 @@ public class VehicleSelectService implements IViewService {
 	
 	
 	
+	@Override
+	public void initService() {
+	}
+	
+	
+	
+	
 	public List<Vehicle> applyFilter(String filter, List<Vehicle> vehiclesIn) {
 		
 		if(filter.isEmpty()) {

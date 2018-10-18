@@ -8,6 +8,14 @@ import com.ruegnerlukas.wtutils.Config;
 
 public class AboutService implements IViewService {
 
+	
+	@Override
+	public void initService() {
+	}
+	
+	
+	
+	
 	public String getText(ResourceBundle resources) {
 		
 		final String text = 

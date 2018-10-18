@@ -108,7 +108,7 @@ public class ElementCustomCircleOutline extends ElementCustomObject {
 					rangeCorrectionMil = Conversion.get().pixel2mil(rangeCorrectionResultPX, canvasHeight, false);
 					
 				} else {
-					// found values by testing  50m = 0.6875mil
+					// found values by testing    50m = 0.6875mil
 					rangeCorrectionMil = data.dataSight.envRangeCorrection * (0.6875/50.0);
 				}
 				
@@ -129,7 +129,14 @@ public class ElementCustomCircleOutline extends ElementCustomObject {
 				} else {
 					centerOW = center;
 				}
-				final double radius = useThousandth ? centerOW.dist(radCenter) : Conversion.get().screenspace2mil(centerOW.dist(radCenter), data.dataSight.envZoomedIn);
+				
+				double radius;
+				if(useThousandth) {
+					radius = centerOW.dist(radCenter);
+				} else {
+					radius = Conversion.get().screenspace2mil(centerOW.dist(radCenter), false);
+				}
+				
 				if(MathUtils.isNearlyEqual(radius, 0)) {
 					return null;
 				}

@@ -160,7 +160,13 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 					centerOW = center;
 				}
 				
-				final double radius = useThousandth ? centerOW.dist(radCenter) : Conversion.get().screenspace2mil(centerOW.dist(radCenter), data.dataSight.envZoomedIn);
+				double radius;
+				if(useThousandth) {
+					radius = centerOW.dist(radCenter);
+				} else {
+					radius = Conversion.get().screenspace2mil(centerOW.dist(radCenter), false);
+				}
+				
 				if(MathUtils.isNearlyEqual(radius, 0)) {
 					return null;
 				}

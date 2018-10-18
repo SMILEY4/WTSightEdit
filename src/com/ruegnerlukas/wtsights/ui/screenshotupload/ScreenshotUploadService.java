@@ -30,7 +30,8 @@ public class ScreenshotUploadService implements IViewService {
 	
 	
 	
-	public void init() {
+	@Override
+	public void initService() {
 		fileZoomedIn = null;
 		fileZoomedOut = null;
 		images.clear();

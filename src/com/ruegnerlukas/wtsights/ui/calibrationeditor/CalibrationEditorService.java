@@ -55,6 +55,18 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	
+	@Override
+	public void initService() {
+		fileSight = null;
+		imageCache.clear();
+		dataBallistic = null;
+		currentObject = null;
+		currentImage = null;
+	}
+	
+	
+	
+	
 	public void initNewBallisticData(Vehicle vehicle, Map<BallisticElement,File> imagesBallistic, File[] imagesZoom) {
 		
 		BallisticData dataBallistic = new BallisticData();
@@ -229,24 +241,6 @@ public class CalibrationEditorService implements IViewService {
 	
 	
 	
-	public void editMarkerRange(Marker marker, int distMeters) {
-		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
-			BallisticElement currentElement = (BallisticElement) currentObject;
-			if(currentElement != null) {
-				marker.distMeters = distMeters;
-				MarkerData dataMarker = currentElement.markerData;
-				if(dataMarker.markers.size() >= 3) {
-					currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
-				} else {
-					currentElement.function = new NullBallisticFunction();
-				}
-			}
-		}
-	}
-	
-	
-	
-	
 	public List<Vector2f> getApproxRangeIndicators(double canvasWidth) {
 		
 		List<Vector2f> indicators = new ArrayList<Vector2f>();
@@ -397,13 +391,22 @@ public class CalibrationEditorService implements IViewService {
 			}
 			
 			// update function
-			if(dataMarker.markers.size() >= 3) {
-				currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
-			} else {
-				currentElement.function = new NullBallisticFunction();
-			}
+			currentElement.function = createFunctionFromMarkers(currentElement);
 		}
 		
+	}
+	
+	
+	
+	
+	public void editMarkerRange(Marker marker, int distMeters) {
+		if(this.currentObject != null && this.currentObject instanceof BallisticElement) {
+			BallisticElement currentElement = (BallisticElement) currentObject;
+			if(currentElement != null) {
+				marker.distMeters = distMeters;
+				currentElement.function = createFunctionFromMarkers(currentElement);
+			}
+		}
 	}
 	
 	
@@ -426,15 +429,23 @@ public class CalibrationEditorService implements IViewService {
 			if(marker != null) {
 				MarkerData dataMarker = currentElement.markerData;
 				dataMarker.markers.remove(marker);
-				if(dataMarker.markers.size() >= 3) {
-					currentElement.function = DefaultBallisticFuntion.create(currentElement, dataBallistic.vehicle, isZoomedIn());
-				} else {
-					currentElement.function = new NullBallisticFunction();
-				}
+				currentElement.function = createFunctionFromMarkers(currentElement);
 				Logger.get().debug("Deleted marker " + marker);
 			}
 		}
 		
+	}
+	
+	
+	
+	
+	public IBallisticFunction createFunctionFromMarkers(BallisticElement element) {
+		MarkerData dataMarker = element.markerData;
+		if(dataMarker != null && dataMarker.markers.size() >= 3) {
+			return DefaultBallisticFuntion.create(element, dataBallistic.vehicle, isZoomedIn());
+		} else {
+			return new NullBallisticFunction();
+		}
 	}
 	
 	

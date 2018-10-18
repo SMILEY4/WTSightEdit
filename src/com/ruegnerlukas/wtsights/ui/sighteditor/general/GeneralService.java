@@ -11,7 +11,15 @@ public class GeneralService implements IViewService {
 
 
 
+	
+	@Override
+	public void initService() {
+		data = null;
+	}
+	
 
+	
+	
 	public void setDataPackage(DataPackage data) {
 		this.data = data;
 	}

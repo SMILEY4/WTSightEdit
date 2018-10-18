@@ -14,6 +14,8 @@ import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementMulti;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementSingle;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
@@ -135,13 +137,13 @@ public class SightRenderer {
 			drawTextObject(canvas, g, data, (ElementCustomText)e);
 		}
 		
-//		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
-//			ElementMulti eMulti = (ElementMulti)e;
-//			eMulti.layout(data, canvas.getWidth(), canvas.getHeight());
-//			for(ElementSingle subElement : eMulti.getSubElements()) {
-//				drawLineObject(canvas, g, data, (ElementCustomLine)subElement);
-//			}
-//		}
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
+			ElementMulti eMulti = (ElementMulti)e;
+			eMulti.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(ElementSingle subElement : eMulti.getSubElements()) {
+				drawLineObject(canvas, g, data, (ElementCustomLine)subElement);
+			}
+		}
 		
 	}
 
