@@ -42,7 +42,7 @@ public class ElementCreateController implements IViewController {
 		
 		@SuppressWarnings("unchecked") List<Element> existingElements = (List<Element>)parameters.get(ParamKey.LIST_SIGHT_ELEMENTS);
 		DataPackage data = (DataPackage) parameters.get(ParamKey.DATA_PACKAGE);
-		service = (ElementCreateService) ViewManager.getService(View.ELEMENT_CREATE);
+		service = (ElementCreateService) ViewManager.getService(View.ELEMENT_CREATE, true);
 		
 		service.init(existingElements, data);
 		

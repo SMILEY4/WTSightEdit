@@ -27,6 +27,14 @@ public class SightEditorService implements IViewService {
 	
 	
 	
+	@Override
+	public void initService() {
+		data = null;
+	}
+	
+	
+	
+	
 	public void initDataPackage(BallisticData dataBall, SightData dataSight) {
 		data = new DataPackage();
 		data.dataBallistic = dataBall;

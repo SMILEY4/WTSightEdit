@@ -23,7 +23,6 @@ public class BallisticData {
 	
 	
 	
-	
 	public boolean isZoomedIn(BallisticElement element) {
 		if(zoomedIn.containsKey(element)) {
 			return zoomedIn.get(element);

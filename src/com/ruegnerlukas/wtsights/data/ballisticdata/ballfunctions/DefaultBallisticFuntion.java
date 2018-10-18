@@ -62,5 +62,8 @@ public class DefaultBallisticFuntion implements IBallisticFunction {
 		return SightUtils.ballisticFunction(distanceMeters/100.0, params);
 	}
 
+
+
+
 	
 }

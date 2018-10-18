@@ -22,8 +22,16 @@ public class EnvironmentService implements IViewService {
 	private DataPackage data;
 
 
+	
+	
+	@Override
+	public void initService() {
+		data = null;
+	}
 
 
+	
+	
 	public void setDataPackage(DataPackage data) {
 		this.data = data;
 	}

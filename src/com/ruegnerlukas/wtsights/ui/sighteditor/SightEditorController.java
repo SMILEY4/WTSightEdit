@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
@@ -92,7 +93,7 @@ public class SightEditorController implements IViewController {
 	
 	@Override
 	public void create(Map<ParamKey,Object> parameters) {
-		service = (SightEditorService) ViewManager.getService(View.SIGHT_EDITOR);
+		service = (SightEditorService) ViewManager.getService(View.SIGHT_EDITOR, true);
 		service.initDataPackage((BallisticData)parameters.get(ParamKey.BALLISTIC_DATA), (SightData)parameters.get(ParamKey.SIGHT_DATA));
 	
 		// debug conversion meters->mil
@@ -167,7 +168,7 @@ public class SightEditorController implements IViewController {
 		initModule(ElementType.CUSTOM_LINE, "/ui/sightEditor/layout_element_custom_line.fxml");
 		initModule(ElementType.CUSTOM_CIRCLE_OUTLINE, "/ui/sightEditor/layout_element_custom_circle.fxml");
 		initModule(ElementType.CUSTOM_QUAD_FILLED, "/ui/sightEditor/layout_element_custom_quad_filled.fxml");
-//		initModule(ElementType.CUSTOM_QUAD_OUTLINE, "/ui/sightEditor/layout_element_custom_quad_outline.fxml");
+		initModule(ElementType.CUSTOM_QUAD_OUTLINE, "/ui/sightEditor/layout_element_custom_quad_outline.fxml");
 		initModule(ElementType.CUSTOM_TEXT, "/ui/sightEditor/layout_element_custom_text.fxml");
 
 		// ELEMENTS LIST
@@ -329,7 +330,7 @@ public class SightEditorController implements IViewController {
 		}
 		TextInputDialog dialog = new TextInputDialog(element.name);
 		dialog.getDialogPane().setMinWidth(400);
-		dialog.setTitle(ViewManager.getResources().getString("se_elements_rename_dialog").replaceAll("{elementname}", element.type.defaultName));
+		dialog.setTitle(ViewManager.getResources().getString("se_elements_rename_dialog").replaceAll(Pattern.quote("{elementname}"), element.type.defaultName));
 
 		Optional<String> result = dialog.showAndWait();
 		if(result.isPresent()) {

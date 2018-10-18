@@ -24,7 +24,7 @@ public class AboutController implements IViewController {
 	
 	@Override
 	public void create(Map<ParamKey,Object> parameters) {
-		AboutService service = (AboutService) ViewManager.getService(View.ABOUT);
+		AboutService service = (AboutService) ViewManager.getService(View.ABOUT, true);
 		textArea.setText(service.getText(resources));
 	}
 	

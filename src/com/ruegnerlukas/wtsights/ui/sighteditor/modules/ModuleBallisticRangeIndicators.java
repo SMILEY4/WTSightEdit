@@ -8,6 +8,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -134,7 +135,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vTextX, elementDefault.textPos.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vTextX, elementDefault.textPos.x, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
@@ -143,7 +144,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vTextY, elementDefault.textPos.y, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vTextY, elementDefault.textPos.y, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.y = newValue.doubleValue();
@@ -152,7 +153,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vPosX, elementDefault.position.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vPosX, elementDefault.position.x, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
@@ -161,7 +162,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vPosY, elementDefault.position.y, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vPosY, elementDefault.position.y, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
@@ -170,7 +171,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMajor, elementDefault.size.x, 0, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.x = newValue.doubleValue();
@@ -179,7 +180,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeMinor, elementDefault.size.y, 0, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE,  new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.size.y = newValue.doubleValue();
@@ -188,7 +189,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMajor, elementDefault.sizeAddLine.x, 0, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.x = newValue.doubleValue();
@@ -197,7 +198,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, 0, 1000, 0.005, 3, new ChangeListener<Double>() {
+		FXUtils.initSpinner(vSizeAddMinor, elementDefault.sizeAddLine.y, 0, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeAddLine.y = newValue.doubleValue();
@@ -261,7 +262,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 			rLabelSize.setText(ViewManager.getResources().getString("se_mbri_line_size"));
 		}
 		
-		FXUtils.initSpinner(rPosX, elementDefault.position.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rPosX, elementDefault.position.x, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.x = newValue.doubleValue();
@@ -270,7 +271,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rPosY, elementDefault.position.y, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rPosY, elementDefault.position.y, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.position.y = newValue.doubleValue();
@@ -297,7 +298,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? 0.5 : 0.001), (elementDefault.radiusUseMils ? 1 : 3), new ChangeListener<Double>() {
+		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.radiusUseMils ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
@@ -306,7 +307,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rAngle, elementDefault.radialAngle, -1000, 1000, 1, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rAngle, elementDefault.radialAngle, -1000, 1000, StepSizes.STEP_ANGLE, StepSizes.DECPLACES_ANGLE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialAngle = newValue.doubleValue();
@@ -326,7 +327,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 		});
 		
 		
-		FXUtils.initSpinner(rTextOffset, elementDefault.textPos.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(rTextOffset, elementDefault.textPos.x, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.textPos.x = newValue.doubleValue();
@@ -402,7 +403,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 		
 		
 		
-		FXUtils.initSpinner(spinnerCorrX, elementDefault.posCorrLabel.x, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerCorrX, elementDefault.posCorrLabel.x, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.x = newValue.doubleValue();
@@ -411,7 +412,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerCorrY, elementDefault.posCorrLabel.y, -1000, 1000, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerCorrY, elementDefault.posCorrLabel.y, -1000, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.posCorrLabel.y = newValue.doubleValue();
@@ -449,7 +450,6 @@ public class ModuleBallisticRangeIndicators implements Module {
 		boxTable = new VBox();
 		FXUtils.createCustomTable(
 				parent, boxTable,
-//				new String[]{"Distance", "Rank", "Extend", "Text X", "Text Y"},
 				new String[]{
 						ViewManager.getResources().getString("se_mbri_table_distance"),
 						ViewManager.getResources().getString("se_mbri_table_rank"),
@@ -552,7 +552,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 	
 		Spinner<Integer> spDistance = new Spinner<Integer>();
 		spDistance.setEditable(true);
-		FXUtils.initSpinner(spDistance, distance, 0, 9000, 100, 0, false, new ChangeListener<Integer>() {
+		FXUtils.initSpinner(spDistance, distance, 0, 9000, StepSizes.STEP_RANGEMETER100, StepSizes.DECPLACES_RANGEMETER, false, new ChangeListener<Integer>() {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
@@ -568,7 +568,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 		
 		Spinner<Double> spExtend = new Spinner<Double>();
 		spExtend.setEditable(true);
-		FXUtils.initSpinner(spExtend, extend, -999, 999, 0.005, 3, false, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spExtend, extend, -999, 999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, false, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
@@ -584,7 +584,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 		
 		Spinner<Double> spTextX = new Spinner<Double>();
 		spTextX.setEditable(true);
-		FXUtils.initSpinner(spTextX, textX, -999, 999, 0.005, 3, false, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spTextX, textX, -999, 999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, false, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;
@@ -600,7 +600,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 	
 		Spinner<Double> spTextY = new Spinner<Double>();
 		spTextY.setEditable(true);
-		FXUtils.initSpinner(spTextY, textY, -999, 999, 0.005, 3, false, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spTextY, textY, -999, 999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, false, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;

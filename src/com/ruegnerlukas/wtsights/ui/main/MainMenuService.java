@@ -22,6 +22,13 @@ import javafx.stage.FileChooser.ExtensionFilter;
 public class MainMenuService implements IViewService {
 
 
+	@Override
+	public void initService() {
+	}
+	
+	
+	
+	
 	public void createBallisticData() {
 		Workflow.steps.clear();
 		Workflow.steps.add(Step.CREATE_CALIBRATION);

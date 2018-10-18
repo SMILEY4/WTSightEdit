@@ -7,6 +7,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.IViewController;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
@@ -59,7 +60,7 @@ public class EnvironmentController implements IViewController {
 	@Override
 	public void create(Map<ParamKey, Object> parameters) {
 		
-		service = (EnvironmentService) ViewManager.getService(View.SEM_ENVIRONMENT);
+		service = (EnvironmentService) ViewManager.getService(View.SEM_ENVIRONMENT, true);
 		service.setDataPackage((DataPackage)parameters.get(ParamKey.DATA_PACKAGE));
 		
 		
@@ -107,7 +108,7 @@ public class EnvironmentController implements IViewController {
 		
 		
 		// RANGE CORRECTION
-		FXUtils.initSpinner(spinnerRange, 0, 0, 4000, 10, 0, true, new ChangeListener<Integer>() {
+		FXUtils.initSpinner(spinnerRange, 0, 0, 4000, StepSizes.STEP_RANGEMETER10, StepSizes.DECPLACES_RANGEMETER, true, new ChangeListener<Integer>() {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				onRangeCorrection(newValue.intValue());
 			}
@@ -135,13 +136,13 @@ public class EnvironmentController implements IViewController {
 			}
 		});
 
-		FXUtils.initSpinner(spinnerGridWidth, service.getGridWidth(), 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerGridWidth, service.getGridWidth(), 2, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, true, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				service.setGridWidth(newValue.doubleValue());
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
-		FXUtils.initSpinner(spinnerGridHeight, service.getGridHeight(), 2, 9999, 0.5, 1, true, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerGridHeight, service.getGridHeight(), 2, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, true, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				service.setGridHeight(newValue.doubleValue());
 				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();

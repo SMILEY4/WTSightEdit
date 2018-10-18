@@ -82,7 +82,7 @@ public class ElementBallRangeIndicator extends ElementSingle {
 	public LayoutBallRangeIndicators layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		LayoutBallRangeIndicators layout = (LayoutBallRangeIndicators)getLayout();
-		
+
 		if(isDirty()) {
 			setDirty(false);
 			if(scaleMode == ScaleMode.VERTICAL) {
@@ -133,11 +133,11 @@ public class ElementBallRangeIndicator extends ElementSingle {
 			Rectanglef boundsCenter = layout.vCenterBounds[i];
 			Vector2d textPos = layout.vTextPositions[i];
 			
-			int mil = indicator.getDistance();
+			int distance = indicator.getDistance();
 			boolean isMajor = indicator.isMajor();
 			
 			// range fitting
-			double resultPX = data.elementBallistic.function.eval(mil);
+			double resultPX = data.elementBallistic.function.eval(distance);
 			double rangeMil = Conversion.get().pixel2mil(resultPX, canvasHeight, false);
 			double rangePixel = Conversion.get().mil2pixel(rangeMil, canvasHeight, data.dataSight.envZoomedIn) * (drawUpward ? -1 : +1);
 			rangePixel -= drawUpward ? -rangeCorrectionPX : rangeCorrectionPX;

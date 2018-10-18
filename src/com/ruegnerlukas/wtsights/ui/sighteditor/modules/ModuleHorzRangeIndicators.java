@@ -8,6 +8,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.FXUtils;
@@ -50,7 +51,7 @@ public class ModuleHorzRangeIndicators implements Module {
 		ElementHorzRangeIndicators elementDefault = new ElementHorzRangeIndicators();
 		
 		// size major
-		FXUtils.initSpinner(spinnerSizeMajor, elementDefault.sizeMajor, 0, 1000, 0.5, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerSizeMajor, elementDefault.sizeMajor, 0, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMajor = newValue.floatValue();
@@ -61,7 +62,7 @@ public class ModuleHorzRangeIndicators implements Module {
 		});
 		
 		// size minor
-		FXUtils.initSpinner(spinnerSizeMinor, elementDefault.sizeMinor, 0, 1000, 0.5, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerSizeMinor, elementDefault.sizeMinor, 0, 1000, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.sizeMinor = newValue.floatValue();
@@ -163,7 +164,7 @@ public class ModuleHorzRangeIndicators implements Module {
 	
 		Spinner<Integer> spMils = new Spinner<Integer>();
 		spMils.setEditable(true);
-		FXUtils.initSpinner(spMils, distance, -99, 99, 1, 0, false, new ChangeListener<Integer>() {
+		FXUtils.initSpinner(spMils, distance, -99, 99, StepSizes.STEP_RANGEMIL, StepSizes.DECPLACES_RANGEMIL, false, new ChangeListener<Integer>() {
 			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				if(element != null) {
 					int index = boxTable.getChildren().indexOf(boxRow) - 1;

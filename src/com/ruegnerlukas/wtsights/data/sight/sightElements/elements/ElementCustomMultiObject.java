@@ -10,8 +10,8 @@ public abstract class ElementCustomMultiObject extends ElementMulti {
 	public Movement 	movement 		= Movement.STATIC;
 	public double 		angle			= 0;
 	public boolean 		autoCenter		= true;
-	public Vector2d		center			= new Vector2d(0,0);
-	public Vector2d		radCenter		= new Vector2d(0,0);
+	public Vector2d		center			= new Vector2d(0,0);	// by default: the center of weight
+	public Vector2d		radCenter		= new Vector2d(0,0);	// the origin of the rotation
 	public double		speed			= 1;
 	
 	

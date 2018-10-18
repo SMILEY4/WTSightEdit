@@ -126,7 +126,6 @@ public class WTSights extends Application {
 			} 
 		});
 		
-		
 		ViewManager.getLoader(View.MAIN_MENU).openNew(primaryStage, new MapBuilder<ParamKey,Object>().get());
 	}
 

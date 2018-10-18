@@ -27,6 +27,15 @@ public class CalibrationSelectService implements IViewService {
 	
 	
 	
+	@Override
+	public void initService() {
+		createNew = false;
+		fileCalibration = null;
+	}
+	
+	
+	
+	
 	public void selectCreateNew(boolean createNew) {
 		this.createNew = createNew;
 	}

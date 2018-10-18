@@ -33,7 +33,7 @@ public class MainMenuController implements IViewController {
 
 
 	public void create(Map<ParamKey,Object> parameters) {
-		this.service = (MainMenuService) ViewManager.getService(View.MAIN_MENU);
+		this.service = (MainMenuService) ViewManager.getService(View.MAIN_MENU, true);
 		labelVersion.setText("Version " + Config.build_version);
 		cbSettingDark.setSelected("dark".equals(Config.app_style)); // themes: "default", "dark"
 	}

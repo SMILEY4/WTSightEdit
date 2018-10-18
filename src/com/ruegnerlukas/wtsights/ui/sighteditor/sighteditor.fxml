@@ -43,8 +43,8 @@
                                                             <Insets />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnRenameElement" mnemonicParsing="false" onAction="#onRenameElement" prefWidth="100000.0" text="%se_elements_delete" />
-                                                      <Button fx:id="btnRemoveElement" mnemonicParsing="false" onAction="#onRemoveElement" prefWidth="100000.0" text="%se_elements_rename">
+                                                      <Button fx:id="btnRenameElement" mnemonicParsing="false" onAction="#onRenameElement" prefWidth="100000.0" text="%se_elements_rename" />
+                                                      <Button fx:id="btnRemoveElement" mnemonicParsing="false" onAction="#onRemoveElement" prefWidth="100000.0" text="%se_elements_delete">
                                                          <HBox.margin>
                                                             <Insets />
                                                          </HBox.margin>

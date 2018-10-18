@@ -378,13 +378,6 @@ public class DataLoader {
 						dataMarkers.markers.add(marker);
 					}
 					
-					if(data.zoomedIn.containsKey(ballElement) && data.zoomedIn.get(ballElement) == true) {
-						double zoom = data.vehicle.fovOut / data.vehicle.fovIn;
-						for(Marker marker : dataMarkers.markers) {
-							marker.yPos /= zoom;
-						}
-					}
-					
 					ballElement.function = DefaultBallisticFuntion.create(ballElement, data.vehicle, data.isZoomedIn(ballElement));
 				}
 				

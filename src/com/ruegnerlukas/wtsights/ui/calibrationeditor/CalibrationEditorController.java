@@ -76,8 +76,8 @@ public class CalibrationEditorController implements IViewController {
 	@Override
 	public void create(Map<ParamKey,Object> parameters) {
 		
-		this.service = (CalibrationEditorService) ViewManager.getService(View.CALIBRATION_EDITOR);
-	
+		this.service = (CalibrationEditorService) ViewManager.getService(View.CALIBRATION_EDITOR, true);
+		
 		// file sight
 		if(parameters.containsKey(ParamKey.FILE_SIGHT)) {
 			service.initFileSight((File) parameters.get(ParamKey.FILE_SIGHT));

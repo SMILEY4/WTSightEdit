@@ -6,6 +6,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.Conversion;
@@ -54,15 +55,19 @@ public class ModuleCustomLine implements Module {
 				if(element != null) {
 					element.useThousandth = cbUseThousandth.isSelected();
 					if(element.useThousandth) {
-						FXUtils.initSpinner(spinnerStartX, Conversion.get().screenspace2mil(spinnerStartX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerStartY, Conversion.get().screenspace2mil(spinnerStartY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerEndX, Conversion.get().screenspace2mil(spinnerEndX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
-						FXUtils.initSpinner(spinnerEndY, Conversion.get().screenspace2mil(spinnerEndY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.5, 1, null);
+						FXUtils.initSpinner(spinnerStartX, Conversion.get().screenspace2mil(spinnerStartX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerStartY, Conversion.get().screenspace2mil(spinnerStartY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerEndX, Conversion.get().screenspace2mil(spinnerEndX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerEndY, Conversion.get().screenspace2mil(spinnerEndY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerOriginX, Conversion.get().screenspace2mil(spinnerOriginX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerOriginY, Conversion.get().screenspace2mil(spinnerOriginY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 					} else {
-						FXUtils.initSpinner(spinnerStartX, Conversion.get().mil2screenspace(spinnerStartX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerStartY, Conversion.get().mil2screenspace(spinnerStartY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerEndX, Conversion.get().mil2screenspace(spinnerEndX.getValue(),data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
-						FXUtils.initSpinner(spinnerEndY, Conversion.get().mil2screenspace(spinnerEndY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, 0.01, 2, null);
+						FXUtils.initSpinner(spinnerOriginX, Conversion.get().mil2screenspace(spinnerOriginX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerOriginY, Conversion.get().mil2screenspace(spinnerOriginY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerStartX, Conversion.get().mil2screenspace(spinnerStartX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerStartY, Conversion.get().mil2screenspace(spinnerStartY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerEndX, Conversion.get().mil2screenspace(spinnerEndX.getValue(),data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerEndY, Conversion.get().mil2screenspace(spinnerEndY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 					}
 					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
@@ -91,7 +96,7 @@ public class ModuleCustomLine implements Module {
 		});
 		choiceMovement.getSelectionModel().select(elementDefault.movement.toString());
 		
-		FXUtils.initSpinner(spinnerAngle, elementDefault.angle, -360, 360, 0.5, 1, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerAngle, elementDefault.angle, -360, 360, StepSizes.STEP_ANGLE, StepSizes.DECPLACES_ANGLE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.angle = newValue.doubleValue();
@@ -105,7 +110,7 @@ public class ModuleCustomLine implements Module {
 		cbUseAutoCenter.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
-					element.useThousandth = cbUseThousandth.isSelected();
+					element.autoCenter = cbUseAutoCenter.isSelected();
 					spinnerCenterX.setDisable(element.autoCenter);
 					spinnerCenterY.setDisable(element.autoCenter);
 					element.setDirty(true);
@@ -116,7 +121,7 @@ public class ModuleCustomLine implements Module {
 		spinnerCenterX.setDisable(elementDefault.autoCenter);
 		spinnerCenterY.setDisable(elementDefault.autoCenter);
 
-		FXUtils.initSpinner(spinnerCenterX, elementDefault.center.x, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerCenterX, elementDefault.center.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.x = newValue.doubleValue();
@@ -125,7 +130,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerCenterY, elementDefault.center.y, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerCenterY, elementDefault.center.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.center.y = newValue.doubleValue();
@@ -134,7 +139,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerOriginX, elementDefault.radCenter.x, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerOriginX, elementDefault.radCenter.x, -9999, 9999, (elementDefault.useThousandth ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.x = newValue.doubleValue();
@@ -143,7 +148,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerOriginY, elementDefault.radCenter.y, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerOriginY, elementDefault.radCenter.y, -9999, 9999, (elementDefault.useThousandth ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radCenter.y = newValue.doubleValue();
@@ -152,7 +157,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerSpeed, elementDefault.speed, 0, 9999, 0.05, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerSpeed, elementDefault.speed, 0, 9999, StepSizes.STEP_SPEED, StepSizes.DECPLACES_SPEED, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
@@ -164,7 +169,7 @@ public class ModuleCustomLine implements Module {
 		
 		
 		
-		FXUtils.initSpinner(spinnerStartX, elementDefault.start.x, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerStartX, elementDefault.start.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.start.x = newValue.doubleValue();
@@ -173,7 +178,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerStartY, elementDefault.start.y, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerStartY, elementDefault.start.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.start.y = newValue.doubleValue();
@@ -182,7 +187,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerEndX, elementDefault.end.x, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerEndX, elementDefault.end.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.end.x = newValue.doubleValue();
@@ -191,7 +196,7 @@ public class ModuleCustomLine implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerEndY, elementDefault.end.y, -9999, 9999, 0.01, 2, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerEndY, elementDefault.end.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.end.y = newValue.doubleValue();
