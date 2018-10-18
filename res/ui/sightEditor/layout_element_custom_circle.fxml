@@ -37,7 +37,7 @@
                         </Separator>
                         <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_angle" />
                         <Spinner fx:id="spinnerAngle" editable="true" minWidth="0.0" prefWidth="1000000.0" />
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="se_mcc_center" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_center" />
                         <CheckBox fx:id="cbUseAutoCenter" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mcc_auto_center" />
                         <HBox>
                            <children>

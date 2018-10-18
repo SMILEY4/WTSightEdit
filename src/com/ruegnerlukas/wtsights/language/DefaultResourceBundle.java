@@ -318,13 +318,13 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("et_custom_poly_outline",			"Custom Polygon (Outline)");
 
 		// LAUNCHER
-		map.put("lc_title",				"WT Sight Editor");
-		map.put("lc_skip_search",		"Skip");
-		map.put("lc_skip_update",		"Skip");
-		map.put("lc_skip_update",		"Update");
-		map.put("lc_update_found_msg",	"New version found: {new}. Current version: {current}");
-		map.put("lc_update_not_found_msg","Already up-to-date. ({current})");
-		map.put("lc_updating_msg",		"Updating to version {new} ...");
+//		map.put("lc_title",				"WT Sight Editor");
+//		map.put("lc_skip_search",		"Skip");
+//		map.put("lc_skip_update",		"Skip");
+//		map.put("lc_skip_update",		"Update");
+//		map.put("lc_update_found_msg",	"New version found: {new}. Current version: {current}");
+//		map.put("lc_update_not_found_msg","Already up-to-date. ({current})");
+//		map.put("lc_updating_msg",		"Updating to version {new} ...");
 
 		
 		
