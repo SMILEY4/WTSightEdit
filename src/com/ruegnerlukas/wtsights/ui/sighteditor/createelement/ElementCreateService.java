@@ -12,6 +12,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentra
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
@@ -64,9 +65,6 @@ public class ElementCreateService implements IViewService {
 		List<ElementType> types = new ArrayList<ElementType>();
 		
 		for(ElementType type : ElementType.values()) {
-			if(type == ElementType.CUSTOM_QUAD_OUTLINE) { // TEMP: block quad outline from current release
-				continue;
-			}
 			
 			if(data.dataBallistic.elements.isEmpty() && (type == ElementType.SHELL_BALLISTICS_BLOCK || type == ElementType.BALLISTIC_RANGE_INDICATORS) ) {
 				continue;
@@ -147,6 +145,9 @@ public class ElementCreateService implements IViewService {
 				}
 				if(type == ElementType.CUSTOM_QUAD_OUTLINE) {
 					createdElement = new ElementCustomQuadOutline(name);
+				}
+				if(type == ElementType.CUSTOM_POLY_OUTLINE) {
+					createdElement = new ElementCustomPolygonOutline(name);
 				}
 				
 			}

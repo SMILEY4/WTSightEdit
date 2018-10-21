@@ -13,6 +13,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentra
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
@@ -26,6 +27,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCentralV
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCircleOutlineObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutLineObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutPolygonOutlineObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadFilledObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadOutlineObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutRangefinder;
@@ -223,6 +225,25 @@ public class OverlayRenderer {
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x, mainLayout.radCenter.y, 6);
 			}
 			
+			
+		} else if(selectedElement.type == ElementType.CUSTOM_POLY_OUTLINE) {
+			ElementCustomPolygonOutline element = (ElementCustomPolygonOutline)selectedElement;
+			element.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(int i=0; i<element.getSubElements().size(); i++) {
+				ElementCustomLine lineObject = (ElementCustomLine)element.getSubElements().get(i);
+				LayoutLineObject layout = lineObject.layout(data, canvas.getWidth(), canvas.getHeight());
+				if(layout != null) {
+					drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
+					drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, 4);
+					drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x+5, layout.start.y+5, ""+(i+1));
+				}
+			}
+			
+			if(element.movement == Movement.MOVE_RADIAL) {
+				LayoutPolygonOutlineObject mainLayout = (LayoutPolygonOutlineObject)element.getMainLayout();
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x, mainLayout.center.y, 6);
+				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x, mainLayout.radCenter.y, 6);
+			}
 			
 			
 		} else if(selectedElement.type == ElementType.SHELL_BALLISTICS_BLOCK || selectedElement.type == ElementType.BALLISTIC_RANGE_INDICATORS) {

@@ -1,7 +1,7 @@
 package com.ruegnerlukas.wtsights.data.sight.sightElements.layouts;
 
-public class LayoutQuadOutlineObject extends LayoutCustomMultiObject {
-	
+public class LayoutPolygonOutlineObject extends LayoutCustomMultiObject {
+
 	private boolean dirty = true;
 
 	@Override

@@ -239,6 +239,17 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcqo_position_2",			"Position 2:");
 		map.put("se_mcqo_position_3",			"Position 3:");
 		map.put("se_mcqo_position_4",			"Position 4:");
+		// custom polygon outline
+		map.put("se_mcpo_use_thousandth",		"Use Thousandth");
+		map.put("se_mcpo_movement",				"Movement:");
+		map.put("se_mcpo_angle",				"Angle:");
+		map.put("se_mcpo_center",				"Center:");
+		map.put("se_mcpo_auto_center",			"Use Auto-Center:");
+		map.put("se_mcpo_origin",				"Origin:");
+		map.put("se_mcpo_move_speed",			"Move Speed:");
+		map.put("se_mcpo_vertices_title",		"Vertices:");
+		map.put("se_mcpo_add_vertex",			"Add Vertex");
+		map.put("se_mcpo_remove_vertex",		"X");
 		// custom text
 		map.put("se_mct_use_thousandth",		"Use Thousandth");
 		map.put("se_mct_movement",				"Movement:");

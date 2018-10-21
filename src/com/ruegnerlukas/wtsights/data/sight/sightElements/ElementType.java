@@ -19,7 +19,7 @@ public enum ElementType {
 //	CUSTOM_CIRCLE_FILLED		(ViewManager.getResources().getString("et_custom_circle_filled"),		7, 0, 9999),
 //	CUSTOM_RECT_OUTLINE			(ViewManager.getResources().getString("et_custom_rect_outline"),		8, 0, 9999),
 //	CUSTOM_RECT_FILLED			(ViewManager.getResources().getString("et_custom_rect_filled"),			8, 0, 9999),
-//	CUSTOM_POLY_OUTLINE			(ViewManager.getResources().getString("et_custom_poly_outline"),		8, 0, 9999),
+	CUSTOM_POLY_OUTLINE			(ViewManager.getResources().getString("et_custom_poly_outline"),		8, 0, 9999),
 //	CUSTOM_POLY_FILLED			(ViewManager.getResources().getString("et_custom_poly_filled"),			8, 0, 9999),
 	;
 
