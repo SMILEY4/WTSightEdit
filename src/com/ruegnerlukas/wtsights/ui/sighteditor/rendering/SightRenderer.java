@@ -150,7 +150,7 @@ public class SightRenderer {
 				drawLineObject(canvas, g, data, eLine);
 			}
 		}
-		
+
 	}
 
 	

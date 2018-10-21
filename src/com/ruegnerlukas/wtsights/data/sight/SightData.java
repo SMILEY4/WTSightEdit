@@ -123,7 +123,9 @@ public class SightData {
 	
 	public boolean removeElement(Element element) {
 		for(Entry<ElementType,List<Element>> entry : elements.entrySet()) {
-			return entry.getValue().remove(element);
+			if(entry.getValue().remove(element)) {
+				return true;
+			}
 		}
 		return false;
 	}
