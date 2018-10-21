@@ -15,6 +15,7 @@ public abstract class Element {
 	protected Element(String name, ElementType type) {
 		this.name = name;
 		this.type = type;
+		setDirty(true);
 	}
 
 	

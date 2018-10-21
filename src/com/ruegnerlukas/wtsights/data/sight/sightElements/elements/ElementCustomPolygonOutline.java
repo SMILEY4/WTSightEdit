@@ -37,6 +37,20 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 
 	
 	
+	public void setVertices(Vector2d... vertices) {
+		this.vertices.clear();
+		this.lines.clear();
+		if(vertices != null) {
+			this.lines.clear();
+			for(int i=0; i<vertices.length; i++) {
+				Vector2d vertex = vertices[i];
+				addVertex(vertex);
+			}
+		}
+	}
+	
+	
+	
 	public void setVertices(List<Vector2d> vertices) {
 		this.vertices.clear();
 		this.lines.clear();
@@ -69,6 +83,7 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 	public List<Vector2d> getVertices() {
 		return Collections.unmodifiableList(vertices);
 	}
+	
 	
 	
 	
@@ -176,6 +191,8 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 				double speedMod = radius_line / radius_master;
 				
 				line.speed = speed * speedMod;
+				
+				line.setDirty(true);
 				line.layout(data, canvasWidth, canvasHeight);
 			}
 		}

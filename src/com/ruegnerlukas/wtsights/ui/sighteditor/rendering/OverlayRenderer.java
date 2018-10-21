@@ -209,8 +209,8 @@ public class OverlayRenderer {
 		} else if(selectedElement.type == ElementType.CUSTOM_QUAD_OUTLINE) {
 			ElementCustomQuadOutline element = (ElementCustomQuadOutline)selectedElement;
 			element.layout(data, canvas.getWidth(), canvas.getHeight());
-			for(int i=0; i<element.getSubElements().size(); i++) {
-				ElementCustomLine lineObject = (ElementCustomLine)element.getSubElements().get(i);
+			for(int i=0; i<element.getLines().size(); i++) {
+				ElementCustomLine lineObject = element.getLines().get(i);
 				LayoutLineObject layout = lineObject.layout(data, canvas.getWidth(), canvas.getHeight());
 				if(layout != null) {
 					drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
@@ -220,7 +220,7 @@ public class OverlayRenderer {
 			}
 			
 			if(element.movement == Movement.MOVE_RADIAL) {
-				LayoutQuadOutlineObject mainLayout = (LayoutQuadOutlineObject)element.getMainLayout();
+				LayoutQuadOutlineObject mainLayout = (LayoutQuadOutlineObject)element.getLayout();
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x, mainLayout.center.y, 6);
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x, mainLayout.radCenter.y, 6);
 			}

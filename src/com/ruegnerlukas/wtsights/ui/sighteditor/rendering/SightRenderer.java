@@ -146,8 +146,7 @@ public class SightRenderer {
 		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
 			ElementCustomQuadOutline eQuad = (ElementCustomQuadOutline)e;
 			eQuad.layout(data, canvas.getWidth(), canvas.getHeight());
-			for(ElementSingle subElement : eQuad.getSubElements()) {
-				ElementCustomLine eLine = (ElementCustomLine)subElement;
+			for(ElementCustomLine eLine : eQuad.getLines()) {
 				drawLineObject(canvas, g, data, eLine);
 			}
 		}

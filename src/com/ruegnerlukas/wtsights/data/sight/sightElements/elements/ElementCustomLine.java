@@ -37,7 +37,6 @@ public class ElementCustomLine extends ElementCustomObject {
 		if(isDirty()) {
 			setDirty(false);
 			
-			
 			if(movement == Movement.MOVE_RADIAL) {
 				if(autoCenter) {
 					layout.center.set(0).add(start).add(end).scale(0.5f);

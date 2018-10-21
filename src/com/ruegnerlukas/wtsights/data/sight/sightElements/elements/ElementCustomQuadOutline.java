@@ -1,9 +1,12 @@
 package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
+import java.util.List;
+
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ILayoutData;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutPolygonOutlineObject;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadOutlineObject;
 
 public class ElementCustomQuadOutline extends ElementCustomObject {
@@ -31,18 +34,38 @@ public class ElementCustomQuadOutline extends ElementCustomObject {
 
 	
 	
+	
+	
+	
+	public List<ElementCustomLine> getLines() {
+		return polygon.getLines();
+	}
+	
+	
 
+	
 	@Override
 	public ILayoutData layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
 		LayoutQuadOutlineObject layout = (LayoutQuadOutlineObject)getLayout();
-		
+
 		if(isDirty()) {
 			setDirty(false);
 			
+			polygon.useThousandth = useThousandth;
+			polygon.movement = movement;
+			polygon.angle = angle;
+			polygon.autoCenter = autoCenter;
+			polygon.radCenter = radCenter;
+			polygon.speed = speed;
+			
+			polygon.setVertices(pos1, pos2, pos3, pos4);
 			polygon.setDirty(true);
 			polygon.layout(data, canvasWidth, canvasHeight);
 			
+			layout.center.set( ((LayoutPolygonOutlineObject)polygon.getLayout()).center );
+			layout.radCenter.set( ((LayoutPolygonOutlineObject)polygon.getLayout()).radCenter );
+
 		}
 		
 		return layout;
