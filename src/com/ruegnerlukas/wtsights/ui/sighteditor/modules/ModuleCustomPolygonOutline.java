@@ -185,7 +185,7 @@ public class ModuleCustomPolygonOutline implements Module {
 	
 	@FXML
 	void onAddVertex(ActionEvent event) {
-		vertices.add(new Vertex(0.1, 0.1));
+		vertices.add(new Vertex(0, 0));
 		updateVertexList();
 	}
 	

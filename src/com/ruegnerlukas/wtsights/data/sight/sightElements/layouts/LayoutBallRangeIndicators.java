@@ -35,17 +35,4 @@ public class LayoutBallRangeIndicators implements ILayoutData {
 	public Circlef[] rcCircles = null;
 	public Vector2d[] rcTextPositions = null;
 
-	private boolean dirty = true;
-
-	@Override
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
-	}
-	
-	
 }

@@ -1,17 +1,5 @@
 package com.ruegnerlukas.wtsights.data.sight.sightElements.layouts;
 
-public class LayoutQuadOutlineObject extends LayoutCustomMultiObject {
+public class LayoutQuadOutlineObject extends LayoutCustomObject {
 	
-	private boolean dirty = true;
-
-	@Override
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
-	}
-
 }

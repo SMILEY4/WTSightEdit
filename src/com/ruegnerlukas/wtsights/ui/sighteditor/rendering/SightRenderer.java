@@ -14,7 +14,6 @@ import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementSingle;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
@@ -137,18 +136,17 @@ public class SightRenderer {
 		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_TEXT)) {
 			drawTextObject(canvas, g, data, (ElementCustomText)e);
 		}
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_POLY_OUTLINE)) {
+			ElementCustomPolygonOutline ePoly = (ElementCustomPolygonOutline)e;
+			ePoly.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(ElementCustomLine eLine : ePoly.getLines()) {
+				drawLineObject(canvas, g, data, eLine);
+			}
+		}
 		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
 			ElementCustomQuadOutline eQuad = (ElementCustomQuadOutline)e;
 			eQuad.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(ElementSingle subElement : eQuad.getSubElements()) {
-				ElementCustomLine eLine = (ElementCustomLine)subElement;
-				drawLineObject(canvas, g, data, eLine);
-			}
-		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_POLY_OUTLINE)) {
-			ElementCustomPolygonOutline ePoly = (ElementCustomPolygonOutline)e;
-			ePoly.layout(data, canvas.getWidth(), canvas.getHeight());
-			for(ElementSingle subElement : ePoly.getSubElements()) {
 				ElementCustomLine eLine = (ElementCustomLine)subElement;
 				drawLineObject(canvas, g, data, eLine);
 			}
