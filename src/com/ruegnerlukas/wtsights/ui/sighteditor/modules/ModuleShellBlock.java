@@ -329,7 +329,7 @@ public class ModuleShellBlock implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.radiusUseMils ? StepSizes.DECPLACES_RANGEMIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
+		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.radiusUseMils ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
