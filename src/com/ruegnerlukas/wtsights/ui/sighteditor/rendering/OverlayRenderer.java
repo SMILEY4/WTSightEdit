@@ -243,25 +243,35 @@ public class OverlayRenderer {
 			if(element.movement == Movement.MOVE_RADIAL) {
 				LayoutPolygonOutlineObject mainLayout = (LayoutPolygonOutlineObject)element.getLayout();
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x, mainLayout.center.y, 6);
+				drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x+5, mainLayout.center.y+5, "C");
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x, mainLayout.radCenter.y, 6);
+				drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x+5, mainLayout.radCenter.y+5, "o");
 			}
 			
 			
 		} else if(selectedElement.type == ElementType.CUSTOM_POLY_FILLED) {
 			ElementCustomPolygonFilled element = (ElementCustomPolygonFilled)selectedElement;
 			element.layout(data, canvas.getWidth(), canvas.getHeight());
-			for(int i=0; i<element.getQuads().size(); i++) {
-				ElementCustomQuadFilled quadObject = element.getQuads().get(i);
-				LayoutQuadFilledObject layout = quadObject.layout(data, canvas.getWidth(), canvas.getHeight());
+			
+			ElementCustomPolygonOutline outline = new ElementCustomPolygonOutline("notanelement");
+			outline.setVertices(element.getVertices());
+			outline.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(int i=0; i<outline.getLines().size(); i++) {
+				ElementCustomLine lineObject = outline.getLines().get(i);
+				LayoutLineObject layout = lineObject.layout(data, canvas.getWidth(), canvas.getHeight());
 				if(layout != null) {
-					drawQuad(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x, layout.p0.y, layout.p1.x, layout.p1.y, layout.p2.x, layout.p2.y, layout.p3.x, layout.p3.y);
-					drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.center.x, layout.center.y, 3);
+					drawThinLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y);
+					drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, 4);
+					drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x+5, layout.start.y+5, ""+(i+1));
 				}
 			}
+			
 			if(element.movement == Movement.MOVE_RADIAL) {
 				LayoutPolygonFilledObject mainLayout = (LayoutPolygonFilledObject)element.getLayout();
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x, mainLayout.center.y, 6);
+				drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.center.x+5, mainLayout.center.y+5, "C");
 				drawCross(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x, mainLayout.radCenter.y, 6);
+				drawText(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, mainLayout.radCenter.x+5, mainLayout.radCenter.y+5, "o");
 			}
 			
 			
@@ -484,7 +494,7 @@ public class OverlayRenderer {
 	
 	private static void drawThinLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1) {
 		
-		if( !(MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1)) ) {
+		if( MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1) ) {
 			return;
 		}
 		
