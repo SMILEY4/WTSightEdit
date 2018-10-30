@@ -37,6 +37,7 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 
 		LayoutQuadFilledObject layout = (LayoutQuadFilledObject)getLayout();
 		
+		
 		if(isDirty()) {
 			setDirty(false);
 			
@@ -168,6 +169,7 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 				}
 				
 				if(MathUtils.isNearlyEqual(radius, 0)) {
+					System.out.println(name + " radius is zero");
 					return null;
 				}
 				

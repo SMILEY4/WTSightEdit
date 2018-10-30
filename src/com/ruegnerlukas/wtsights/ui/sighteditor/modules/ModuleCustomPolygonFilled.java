@@ -7,7 +7,7 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
 import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
@@ -29,9 +29,9 @@ import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class ModuleCustomPolygonOutline implements Module {
+public class ModuleCustomPolygonFilled implements Module {
 
-	private ElementCustomPolygonOutline element;
+	private ElementCustomPolygonFilled element;
 
 	@FXML private CheckBox cbUseThousandth;
 	@FXML private ChoiceBox<String> choiceMovement;
@@ -55,7 +55,7 @@ public class ModuleCustomPolygonOutline implements Module {
 	public void create(DataPackage data) {
 		
 		// get element with default values
-		ElementCustomPolygonOutline elementDefault = new ElementCustomPolygonOutline();
+		ElementCustomPolygonFilled elementDefault = new ElementCustomPolygonFilled();
 		
 		cbUseThousandth.setSelected(elementDefault.useThousandth);
 		cbUseThousandth.setOnAction(new EventHandler<ActionEvent>() {
@@ -194,7 +194,7 @@ public class ModuleCustomPolygonOutline implements Module {
 	
 	private void updateVertexList() {
 		
-		ElementCustomPolygonOutline element = this.element == null ? new ElementCustomPolygonOutline() : this.element;
+		ElementCustomPolygonFilled element = this.element == null ? new ElementCustomPolygonFilled() : this.element;
 		
 		boxVertices.getChildren().clear();
 		List<Vector2d> vecList = new ArrayList<Vector2d>();
@@ -215,7 +215,7 @@ public class ModuleCustomPolygonOutline implements Module {
 	
 	
 	
-	private HBox buildVertexBox(ElementCustomPolygonOutline element, Vertex vertex) {
+	private HBox buildVertexBox(ElementCustomPolygonFilled element, Vertex vertex) {
 		
 		HBox box = new HBox();
 		box.setMinSize(0, 32);
@@ -287,10 +287,10 @@ public class ModuleCustomPolygonOutline implements Module {
 	
 	
 	public void setElement(Element e) {
-		if(e == null || e.type != ElementType.CUSTOM_POLY_OUTLINE) {
+		if(e == null || e.type != ElementType.CUSTOM_POLY_FILLED) {
 			this.element = null;
 		} else {
-			this.element = (ElementCustomPolygonOutline)e;
+			this.element = (ElementCustomPolygonFilled)e;
 		}
 		if(this.element != null) {
 			cbUseThousandth.setSelected(element.useThousandth);
@@ -335,4 +335,3 @@ public class ModuleCustomPolygonOutline implements Module {
 	}
 	
 }
-

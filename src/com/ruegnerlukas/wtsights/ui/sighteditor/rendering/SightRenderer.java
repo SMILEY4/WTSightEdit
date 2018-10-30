@@ -20,6 +20,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentra
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
@@ -141,6 +142,13 @@ public class SightRenderer {
 			ePoly.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(ElementCustomLine eLine : ePoly.getLines()) {
 				drawLineObject(canvas, g, data, eLine);
+			}
+		}
+		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_POLY_FILLED)) {
+			ElementCustomPolygonFilled ePoly = (ElementCustomPolygonFilled)e;
+			ePoly.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(ElementCustomQuadFilled eQuad : ePoly.getQuads()) {
+				drawQuadObject(canvas, g, data, eQuad);
 			}
 		}
 		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {

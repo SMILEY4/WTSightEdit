@@ -12,6 +12,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentra
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
@@ -148,6 +149,9 @@ public class ElementCreateService implements IViewService {
 				}
 				if(type == ElementType.CUSTOM_POLY_OUTLINE) {
 					createdElement = new ElementCustomPolygonOutline(name);
+				}
+				if(type == ElementType.CUSTOM_POLY_FILLED) {
+					createdElement = new ElementCustomPolygonFilled(name);
 				}
 				
 			}

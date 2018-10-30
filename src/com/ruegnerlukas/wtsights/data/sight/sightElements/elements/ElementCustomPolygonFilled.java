@@ -4,32 +4,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.ruegnerlukas.simplemath.geometry.shapes.polygon.IPolygon;
+import com.ruegnerlukas.simplemath.geometry.shapes.polygon.Polygonf;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutPolygonOutlineObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutPolygonFilledObject;
 import com.ruegnerlukas.wtutils.Conversion;
 
-public class ElementCustomPolygonOutline extends ElementCustomObject {
+public class ElementCustomPolygonFilled extends ElementCustomObject {
 
 	
 	private List<Vector2d> vertices = new ArrayList<Vector2d>();
-	private List<ElementCustomLine> lines = new ArrayList<ElementCustomLine>();
+	private List<ElementCustomQuadFilled> quads = new ArrayList<ElementCustomQuadFilled>();
 	
 	
 	
 	
-	public ElementCustomPolygonOutline() {
-		this(ElementType.CUSTOM_POLY_OUTLINE.defaultName);
+	public ElementCustomPolygonFilled() {
+		this(ElementType.CUSTOM_POLY_FILLED.defaultName);
 	}
 	
 	
-	public ElementCustomPolygonOutline(String name) {
-		super(name, ElementType.CUSTOM_POLY_OUTLINE);
+	public ElementCustomPolygonFilled(String name) {
+		super(name, ElementType.CUSTOM_POLY_FILLED);
 		addVertex(-0.1,  0.1);
 		addVertex( 0.1,  0.1);
+		addVertex( 0.1,  0.0);
 		addVertex( 0.0, -0.1);
-		setLayout(new LayoutPolygonOutlineObject());
+		setLayout(new LayoutPolygonFilledObject());
 	}
 	
 	
@@ -39,9 +42,9 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 	
 	public void setVertices(Vector2d... vertices) {
 		this.vertices.clear();
-		this.lines.clear();
+		this.quads.clear();
 		if(vertices != null) {
-			this.lines.clear();
+			this.quads.clear();
 			for(int i=0; i<vertices.length; i++) {
 				Vector2d vertex = vertices[i];
 				addVertex(vertex);
@@ -53,7 +56,7 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 	
 	public void setVertices(List<Vector2d> vertices) {
 		this.vertices.clear();
-		this.lines.clear();
+		this.quads.clear();
 		if(vertices != null) {
 			for(int i=0; i<vertices.size(); i++) {
 				Vector2d vertex = vertices.get(i);
@@ -71,8 +74,6 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 	
 	
 	public void addVertex(double x, double y) {
-		ElementCustomLine line = new ElementCustomLine(name+"_line" + lines.size());
-		this.lines.add(line);
 		this.vertices.add(new Vector2d(x, y));
 	}
 	
@@ -86,17 +87,17 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 	
 	
 	
-	public List<ElementCustomLine> getLines() {
-		return Collections.unmodifiableList(lines);
+	public List<ElementCustomQuadFilled> getQuads() {
+		return Collections.unmodifiableList(quads);
 	}
 	
 	
 	
 	
 	@Override
-	public LayoutPolygonOutlineObject layout(DataPackage data, double canvasWidth, double canvasHeight) {
+	public LayoutPolygonFilledObject layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
-		LayoutPolygonOutlineObject layout = (LayoutPolygonOutlineObject)getLayout();
+		LayoutPolygonFilledObject layout = (LayoutPolygonFilledObject)getLayout();
 
 		if(isDirty()) {
 			setDirty(false);
@@ -134,37 +135,43 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 			}
 			
 
-			lines.get(0).start.set(vertices.get(0));
-			for(int i=1; i<vertices.size(); i++) {
-				Vector2d vertex = vertices.get(i);
-				ElementCustomLine lineA = lines.get(i-1);
-				ElementCustomLine lineB = lines.get(i);
-				lineA.end.set(vertex);
-				lineB.start.set(vertex);
+			quads.clear();
+			Polygonf polygon = new Polygonf(vertices.size());
+			for(int i=0; i<vertices.size(); i++) {
+				polygon.setVertex(vertices.get(i), i);
 			}
-			lines.get(lines.size()-1).end.set(vertices.get(0));
+			List<IPolygon> triangles = polygon.triangulate();
+			for(int i=0; i<triangles.size(); i++) {
+				IPolygon triangle = triangles.get(i);
+				ElementCustomQuadFilled quad = new ElementCustomQuadFilled(name+"_quad"+(i+1));
+				quad.pos1.set(triangle.getVertex(0));
+				quad.pos2.set(triangle.getVertex(1));
+				quad.pos3.set(triangle.getVertex(2));
+				quad.pos4.set(triangle.getVertex(2));
+				quads.add(quad);
+			}
 			
-			
-			for(ElementCustomLine line : this.lines) {
-				line.useThousandth = useThousandth;
-				line.movement = movement;
-				line.angle = angle;
-				line.autoCenter = false;
+			for(ElementCustomQuadFilled quad : this.quads) {
+				quad.useThousandth = useThousandth;
+				quad.movement = movement;
+				quad.angle = angle;
+				quad.autoCenter = false;
 				if(autoCenter) {
-					line.center.set(0);
+					quad.center.set(0);
 					for(Vector2d vertex : vertices) {
-						line.center.add(vertex);
+						quad.center.add(vertex);
 					}
-					line.center.scale(1.0/(double)vertices.size());
+					quad.center.scale(1.0/(double)vertices.size());
 				} else {
-					line.center.set(center);
+					quad.center.set(center);
 				}
-				line.speed = speed;
-				line.radCenter = radCenter;
+				quad.radCenter = radCenter;
+				quad.speed = speed;
 				
-				line.setDirty(true);
-				line.layout(data, canvasWidth, canvasHeight);
+				quad.setDirty(true);
+				quad.layout(data, canvasWidth, canvasHeight);
 			}
+			
 		}
 		
 		return layout;

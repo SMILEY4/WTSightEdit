@@ -170,6 +170,7 @@ public class SightEditorController implements IViewController {
 		initModule(ElementType.CUSTOM_QUAD_FILLED, "/ui/sightEditor/layout_element_custom_quad_filled.fxml");
 		initModule(ElementType.CUSTOM_QUAD_OUTLINE, "/ui/sightEditor/layout_element_custom_quad_outline.fxml");
 		initModule(ElementType.CUSTOM_POLY_OUTLINE, "/ui/sightEditor/layout_element_custom_poly_outline.fxml");
+		initModule(ElementType.CUSTOM_POLY_FILLED, "/ui/sightEditor/layout_element_custom_poly_filled.fxml");
 		initModule(ElementType.CUSTOM_TEXT, "/ui/sightEditor/layout_element_custom_text.fxml");
 
 		// ELEMENTS LIST

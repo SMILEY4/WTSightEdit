@@ -250,6 +250,17 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcpo_vertices_title",		"Vertices:");
 		map.put("se_mcpo_add_vertex",			"Add Vertex");
 		map.put("se_mcpo_remove_vertex",		"X");
+		// custom polygon filled
+		map.put("se_mcpf_use_thousandth",		"Use Thousandth");
+		map.put("se_mcpf_movement",				"Movement:");
+		map.put("se_mcpf_angle",				"Angle:");
+		map.put("se_mcpf_center",				"Center:");
+		map.put("se_mcpf_auto_center",			"Use Auto-Center:");
+		map.put("se_mcpf_origin",				"Origin:");
+		map.put("se_mcpf_move_speed",			"Move Speed:");
+		map.put("se_mcpf_vertices_title",		"Vertices:");
+		map.put("se_mcpf_add_vertex",			"Add Vertex");
+		map.put("se_mcpf_remove_vertex",		"X");
 		// custom text
 		map.put("se_mct_use_thousandth",		"Use Thousandth");
 		map.put("se_mct_movement",				"Movement:");
