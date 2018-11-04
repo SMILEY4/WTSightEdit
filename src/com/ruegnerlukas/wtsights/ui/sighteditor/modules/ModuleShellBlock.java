@@ -7,7 +7,7 @@ import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -530,7 +530,7 @@ public class ModuleShellBlock implements Module {
 	
 	
 	@Override
-	public void setElement(Element e) {
+	public void setElement(BaseElement e) {
 		
 		if(e == null || e.type != ElementType.SHELL_BALLISTICS_BLOCK) {
 			this.element = null;

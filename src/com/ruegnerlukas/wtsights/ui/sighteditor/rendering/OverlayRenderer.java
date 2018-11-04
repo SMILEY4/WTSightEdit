@@ -6,7 +6,7 @@ import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
@@ -88,7 +88,7 @@ public class OverlayRenderer {
 	
 	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, DataPackage data) {
 
-		Element selectedElement = data.dataSight.selectedElement;
+		BaseElement selectedElement = data.dataSight.selectedElement;
 		
 		if(selectedElement == null) {
 			return;
@@ -254,6 +254,13 @@ public class OverlayRenderer {
 			element.layout(data, canvas.getWidth(), canvas.getHeight());
 			
 			ElementCustomPolygonOutline outline = new ElementCustomPolygonOutline("notanelement");
+			outline.useThousandth = element.useThousandth;
+			outline.movement = element.movement;
+			outline.angle = element.angle;
+			outline.autoCenter = element.autoCenter;
+			outline.center.set(element.center);
+			outline.radCenter.set(element.radCenter);
+			outline.speed = element.speed;
 			outline.setVertices(element.getVertices());
 			outline.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(int i=0; i<outline.getLines().size(); i++) {

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.ruegnerlukas.simplemath.geometry.shapes.polygon.IPolygon;
 import com.ruegnerlukas.simplemath.geometry.shapes.polygon.Polygonf;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
+import com.ruegnerlukas.simplemath.vectors.vec3.Vector3i;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutPolygonFilledObject;
@@ -17,6 +17,7 @@ public class ElementCustomPolygonFilled extends ElementCustomObject {
 	
 	private List<Vector2d> vertices = new ArrayList<Vector2d>();
 	private List<ElementCustomQuadFilled> quads = new ArrayList<ElementCustomQuadFilled>();
+	private List<Vector3i> triangleIndices = new ArrayList<Vector3i>();
 	
 	
 	
@@ -44,7 +45,6 @@ public class ElementCustomPolygonFilled extends ElementCustomObject {
 		this.vertices.clear();
 		this.quads.clear();
 		if(vertices != null) {
-			this.quads.clear();
 			for(int i=0; i<vertices.length; i++) {
 				Vector2d vertex = vertices[i];
 				addVertex(vertex);
@@ -94,6 +94,24 @@ public class ElementCustomPolygonFilled extends ElementCustomObject {
 	
 	
 	
+	public List<Vector3i> getTriangleIndices() {
+		return Collections.unmodifiableList(triangleIndices);
+	}
+	
+	
+	
+	
+	public Vector3i getTriangleIndices(ElementCustomQuadFilled quad) {
+		final int indexQuad = quads.indexOf(quad);
+		if(indexQuad != -1) {
+			return triangleIndices.get(indexQuad);
+		}
+		return null;
+	}
+	
+	
+	
+	
 	@Override
 	public LayoutPolygonFilledObject layout(DataPackage data, double canvasWidth, double canvasHeight) {
 		
@@ -102,33 +120,36 @@ public class ElementCustomPolygonFilled extends ElementCustomObject {
 		if(isDirty()) {
 			setDirty(false);
 			
+			// calculate center (if autocenter) and layout of this parent element
 			if(movement == Movement.MOVE_RADIAL) {
+				
 				if(autoCenter) {
-					layout.center.set(0);
+					center.set(0);
 					for(Vector2d vertex : vertices) {
-						layout.center.add(vertex);
+						center.add(vertex);
 					}
-					layout.center.scale(1.0/(double)vertices.size());
-				} else {
-					layout.center.set(center);
+					center.scale(1.0/(double)vertices.size());
 				}
+				
 				if(useThousandth) {
 					layout.center.set(
-							Conversion.get().mil2pixel(layout.center.x,canvasHeight, data.dataSight.envZoomedIn),
-							Conversion.get().mil2pixel(layout.center.y, canvasHeight, data.dataSight.envZoomedIn));
+							Conversion.get().mil2pixel(center.x,canvasHeight, data.dataSight.envZoomedIn),
+							Conversion.get().mil2pixel(center.y, canvasHeight, data.dataSight.envZoomedIn));
 					layout.radCenter.set(
 							Conversion.get().mil2pixel(radCenter.x,canvasHeight, data.dataSight.envZoomedIn),
 							Conversion.get().mil2pixel(radCenter.y, canvasHeight, data.dataSight.envZoomedIn));
 				} else {
 					layout.center.set(
-							Conversion.get().screenspace2pixel(layout.center.x,canvasHeight, data.dataSight.envZoomedIn),
-							Conversion.get().screenspace2pixel(layout.center.y, canvasHeight, data.dataSight.envZoomedIn));
+							Conversion.get().screenspace2pixel(center.x,canvasHeight, data.dataSight.envZoomedIn),
+							Conversion.get().screenspace2pixel(center.y, canvasHeight, data.dataSight.envZoomedIn));
 					layout.radCenter.set(
 							Conversion.get().screenspace2pixel(radCenter.x,canvasHeight, data.dataSight.envZoomedIn),
 							Conversion.get().screenspace2pixel(radCenter.y, canvasHeight, data.dataSight.envZoomedIn));
 				}
+				
 				layout.center.add(canvasWidth/2, canvasHeight/2);
 				layout.radCenter.add(canvasWidth/2, canvasHeight/2);
+				
 			} else {
 				layout.center.set(-10000, -10000);
 				layout.radCenter.set(-10000, -10000);
@@ -140,14 +161,17 @@ public class ElementCustomPolygonFilled extends ElementCustomObject {
 			for(int i=0; i<vertices.size(); i++) {
 				polygon.setVertex(vertices.get(i), i);
 			}
-			List<IPolygon> triangles = polygon.triangulate();
-			for(int i=0; i<triangles.size(); i++) {
-				IPolygon triangle = triangles.get(i);
+			
+			triangleIndices.clear();
+			
+			polygon.triangulateIndices(triangleIndices);
+				for(int i=0; i<triangleIndices.size(); i++) {
+				Vector3i triangle = triangleIndices.get(i);
 				ElementCustomQuadFilled quad = new ElementCustomQuadFilled(name+"_quad"+(i+1));
-				quad.pos1.set(triangle.getVertex(0));
-				quad.pos2.set(triangle.getVertex(1));
-				quad.pos3.set(triangle.getVertex(2));
-				quad.pos4.set(triangle.getVertex(2));
+				quad.pos1.set(vertices.get(triangle.x));
+				quad.pos2.set(vertices.get(triangle.y));
+				quad.pos3.set(vertices.get(triangle.z));
+				quad.pos4.set(vertices.get(triangle.z));
 				quads.add(quad);
 			}
 			

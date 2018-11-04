@@ -1,11 +1,11 @@
 package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCentralHorzLine;
 
-public class ElementCentralHorzLine extends Element {
+public class ElementCentralHorzLine extends BaseElement {
 
 	
 	public boolean drawCentralHorzLine = true; // display the horizontal sight line

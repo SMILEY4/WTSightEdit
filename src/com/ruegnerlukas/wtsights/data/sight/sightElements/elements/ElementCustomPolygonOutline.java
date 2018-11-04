@@ -101,33 +101,36 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 		if(isDirty()) {
 			setDirty(false);
 			
+			// calculate center (if autocenter) and layout of this parent element
 			if(movement == Movement.MOVE_RADIAL) {
+				
 				if(autoCenter) {
-					layout.center.set(0);
+					center.set(0);
 					for(Vector2d vertex : vertices) {
-						layout.center.add(vertex);
+						center.add(vertex);
 					}
-					layout.center.scale(1.0/(double)vertices.size());
-				} else {
-					layout.center.set(center);
+					center.scale(1.0/(double)vertices.size());
 				}
+				
 				if(useThousandth) {
 					layout.center.set(
-							Conversion.get().mil2pixel(layout.center.x,canvasHeight, data.dataSight.envZoomedIn),
-							Conversion.get().mil2pixel(layout.center.y, canvasHeight, data.dataSight.envZoomedIn));
+							Conversion.get().mil2pixel(center.x,canvasHeight, data.dataSight.envZoomedIn),
+							Conversion.get().mil2pixel(center.y, canvasHeight, data.dataSight.envZoomedIn));
 					layout.radCenter.set(
 							Conversion.get().mil2pixel(radCenter.x,canvasHeight, data.dataSight.envZoomedIn),
 							Conversion.get().mil2pixel(radCenter.y, canvasHeight, data.dataSight.envZoomedIn));
 				} else {
 					layout.center.set(
-							Conversion.get().screenspace2pixel(layout.center.x,canvasHeight, data.dataSight.envZoomedIn),
-							Conversion.get().screenspace2pixel(layout.center.y, canvasHeight, data.dataSight.envZoomedIn));
+							Conversion.get().screenspace2pixel(center.x,canvasHeight, data.dataSight.envZoomedIn),
+							Conversion.get().screenspace2pixel(center.y, canvasHeight, data.dataSight.envZoomedIn));
 					layout.radCenter.set(
 							Conversion.get().screenspace2pixel(radCenter.x,canvasHeight, data.dataSight.envZoomedIn),
 							Conversion.get().screenspace2pixel(radCenter.y, canvasHeight, data.dataSight.envZoomedIn));
 				}
+				
 				layout.center.add(canvasWidth/2, canvasHeight/2);
 				layout.radCenter.add(canvasWidth/2, canvasHeight/2);
+				
 			} else {
 				layout.center.set(-10000, -10000);
 				layout.radCenter.set(-10000, -10000);

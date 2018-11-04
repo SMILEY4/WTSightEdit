@@ -1,10 +1,10 @@
 package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 
-public abstract class ElementCustomObject extends Element {
+public abstract class ElementCustomObject extends BaseElement {
 	
 	public boolean 		useThousandth 	= false;
 	public Movement 	movement 		= Movement.STATIC;

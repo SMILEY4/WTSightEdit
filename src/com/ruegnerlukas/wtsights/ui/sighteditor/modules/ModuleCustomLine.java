@@ -1,7 +1,7 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
@@ -213,7 +213,7 @@ public class ModuleCustomLine implements Module {
 	
 	
 	
-	public void setElement(Element e) {
+	public void setElement(BaseElement e) {
 		if(e == null || e.type != ElementType.CUSTOM_LINE) {
 			this.element = null;
 		} else {

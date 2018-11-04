@@ -13,7 +13,7 @@ import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
@@ -114,7 +114,7 @@ public class SightRenderer {
 		
 		// shell block indicators
 		if(data.elementBallistic != null) {
-			for(Element e : data.dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
+			for(BaseElement e : data.dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 				ElementShellBlock shellBlock = (ElementShellBlock)e;
 				DataPackage dataBlock = new DataPackage();
 				dataBlock.dataBallistic = data.dataBallistic;
@@ -125,33 +125,33 @@ public class SightRenderer {
 		}
 		
 		// custom elements
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
 			drawCircleObject(canvas, g, data, (ElementCustomCircleOutline)e);
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_LINE)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_LINE)) {
 			drawLineObject(canvas, g, data, (ElementCustomLine)e);
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
 			drawQuadObject(canvas, g, data, (ElementCustomQuadFilled)e);
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_TEXT)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_TEXT)) {
 			drawTextObject(canvas, g, data, (ElementCustomText)e);
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_POLY_OUTLINE)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_POLY_OUTLINE)) {
 			ElementCustomPolygonOutline ePoly = (ElementCustomPolygonOutline)e;
 			ePoly.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(ElementCustomLine eLine : ePoly.getLines()) {
 				drawLineObject(canvas, g, data, eLine);
 			}
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_POLY_FILLED)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_POLY_FILLED)) {
 			ElementCustomPolygonFilled ePoly = (ElementCustomPolygonFilled)e;
 			ePoly.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(ElementCustomQuadFilled eQuad : ePoly.getQuads()) {
 				drawQuadObject(canvas, g, data, eQuad);
 			}
 		}
-		for(Element e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_QUAD_OUTLINE)) {
 			ElementCustomQuadOutline eQuad = (ElementCustomQuadOutline)e;
 			eQuad.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(ElementCustomLine eLine : eQuad.getLines()) {

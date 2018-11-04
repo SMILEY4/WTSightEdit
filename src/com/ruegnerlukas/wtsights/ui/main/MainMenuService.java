@@ -3,9 +3,11 @@ package com.ruegnerlukas.wtsights.ui.main;
 import java.io.File;
 
 import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.WTSights;
-import com.ruegnerlukas.wtsights.data.DataLoader;
+import com.ruegnerlukas.wtsights.data.FileVersion;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.loading.DataLoader;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
@@ -48,8 +50,12 @@ public class MainMenuService implements IViewService {
 
 		File fileCalib = fc.showOpenDialog(WTSights.getPrimaryStage());
 		if (fileCalib != null) {
-			BallisticData data = DataLoader.loadBallisticDataFile(fileCalib);
-			ViewManager.getLoader(View.CALIBRATION_EDITOR).openNew(null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA, data).get());
+			try {
+				BallisticData data = DataLoader.get(FileVersion.AUTO_DETECT).loadBallisticDataFile(fileCalib);
+				ViewManager.getLoader(View.CALIBRATION_EDITOR).openNew(null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA, data).get());
+			} catch (Exception e) {
+				Logger.get().error(e);
+			}
 		}
 	}
 

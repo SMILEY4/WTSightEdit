@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
@@ -499,7 +499,7 @@ public class ModuleBallisticRangeIndicators implements Module {
 	
 	
 	@Override
-	public void setElement(Element e) {
+	public void setElement(BaseElement e) {
 		
 		if(e == null || e.type != ElementType.BALLISTIC_RANGE_INDICATORS) {
 			this.element = null;

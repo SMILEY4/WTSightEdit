@@ -20,7 +20,6 @@ public class BLKSightParser {
 		String ppContent = BLKSightParser.prepare(rawContent);
 		List<String> strElements = BLKSightParser.split(ppContent);
 		Block root = BLKSightParser.parseElements(strElements);
-//		root.prettyPrint(0);
 		return root;
 	}
 	

@@ -138,6 +138,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_ce_alert_name_null", 		"Error: Name is null.");
 		map.put("se_ce_alert_name_empty", 		"The name of the element can not be empty.");
 		map.put("se_ce_alert_name_duplicate",	"The name of the element must be unique.");
+		map.put("se_ce_alert_name_forbidden",	"The name of the element contains a character that is not allowed.");
 		// environment
 		map.put("se_env_rangefinder_show", 		"Show Rangefinder");
 		map.put("se_env_rangefinder_progress",	"Rangefinder Progress:");

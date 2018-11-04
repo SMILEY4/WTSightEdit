@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
@@ -27,9 +27,9 @@ import com.ruegnerlukas.wtutils.FXUtils;
 public class ElementCreateService implements IViewService {
 
 	
-	private static Element createdElement = null;
+	private static BaseElement createdElement = null;
 	
-	public static Element getCreatedElement() {
+	public static BaseElement getCreatedElement() {
 		return createdElement;
 	}
 	
@@ -38,7 +38,7 @@ public class ElementCreateService implements IViewService {
 	
 	
 	
-	private List<Element> existingElements;
+	private List<BaseElement> existingElements;
 	private DataPackage data;
 	
 	
@@ -53,7 +53,7 @@ public class ElementCreateService implements IViewService {
 	
 	
 	
-	public void init(List<Element> existingElements, DataPackage data) {
+	public void init(List<BaseElement> existingElements, DataPackage data) {
 		this.existingElements = existingElements;
 		this.data = data;
 	}
@@ -85,7 +85,7 @@ public class ElementCreateService implements IViewService {
 			}
 			
 			int listCount = 0;
-			for(Element e : existingElements) {
+			for(BaseElement e : existingElements) {
 				ElementType typeList = e.type;
 				if(typeList == type) {
 					listCount++;
@@ -169,6 +169,7 @@ public class ElementCreateService implements IViewService {
 	 * 1 = name is null
 	 * 2 = name is empty
 	 * 3 = name is not unique
+	 * 4 = name contains forbidden characters
 	 * */
 	public int validateElementName(String name) {
 		if(name == null) {
@@ -177,10 +178,13 @@ public class ElementCreateService implements IViewService {
 		if(name.trim().length() == 0) {
 			return 2;
 		}
-		for(Element e : existingElements) {
+		for(BaseElement e : existingElements) {
 			if(e.name.trim().equalsIgnoreCase(name.trim())) {
 				return 3;
 			}
+		}
+		if(name.contains("[") || name.contains("]") || name.contains("/") || name.contains("-") || name.contains("\"") || name.contains("=")|| name.contains(",")) {
+			return 4;
 		}
 		return 0;
 	}

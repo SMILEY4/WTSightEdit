@@ -1,4 +1,4 @@
-package com.ruegnerlukas.wtsights.data;
+package com.ruegnerlukas.wtsights.data.loading;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
@@ -21,25 +23,27 @@ import org.xml.sax.SAXException;
 
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simplemath.vectors.vec2.Vector2i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.Database;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
 import com.ruegnerlukas.wtsights.data.ballisticdata.MarkerData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.DefaultBallisticFuntion;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationAmmoData;
-import com.ruegnerlukas.wtsights.data.calibration.CalibrationData;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
 import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
@@ -59,7 +63,6 @@ import com.ruegnerlukas.wtsights.data.sightfile.ParamVec4;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
-import com.ruegnerlukas.wtutils.Calib2BallConverter;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
@@ -71,13 +74,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 
 
-public class DataLoader {
+public class DataLoader_v2 implements IDataLoader {
 
 	
 	/**
 	 * loads the files with merged data (vehicles+ammoData)
 	 * */
-	public static List<Vehicle> loadVehicleDataFile(File file) throws Exception {
+	@Override
+	public List<Vehicle> loadVehicleDataFile(File file) throws Exception {
 		
 		Logger.get().info("Loading vehicleData-file: " + file.getAbsolutePath());
 
@@ -88,7 +92,7 @@ public class DataLoader {
 			alert.setHeaderText(null);
 			alert.setContentText("Error loading vehicles: Could not find " + file);
 			alert.showAndWait();
-			System.exit(0);
+			return new ArrayList<Vehicle>();
 		}
 		
 		
@@ -188,101 +192,9 @@ public class DataLoader {
 
 	
 	
-
-
-	public static CalibrationData loadCalibrationDataFile(File file) {
-		
-		Logger.get().info("Loading sight-metadata-file (ext)");
-		
-		if(file == null || !file.exists()) {
-			Logger.get().error("Error loading file: " + file);
-			return null;
-		}
-		
-		CalibrationData data = new CalibrationData();
-		String vehicleName = "-";
-		
-		try {
-		
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(file);
-			Element root = doc.getDocumentElement();
-			if(!root.getTagName().equals("calibrationdata")) {
-				Logger.get().error("Could not parse file: File is not a metadata file.");
-				return data;
-			}
-
-			if(XMLUtils.getChildren(root).size() == 0) {
-				return null;
-			}
-			
-			Element elementVehicle = XMLUtils.getChildren(root).get(0);
-			vehicleName = elementVehicle.getTagName();
-
-			// ammo
-			Element elementAmmoGroup = XMLUtils.getElementByTagName(elementVehicle, "ammo");
-			
-			for(Element elementAmmo : XMLUtils.getChildren(elementAmmoGroup)) {
-
-				// load from file
-				CalibrationAmmoData ammoData = new CalibrationAmmoData();
-				ammoData.imgName = elementAmmo.getAttribute("imageName");
-				ammoData.zoomedIn = elementAmmo.getAttribute("zoomedIn").equalsIgnoreCase("true");
-				
-				String[] strMarkerCenter = elementAmmo.getAttribute("markerCenter").split(",");
-				ammoData.markerCenter.set(Integer.parseInt(strMarkerCenter[0].trim()), Integer.parseInt(strMarkerCenter[1].trim()));
-				
-				Element elementRangeMarkers = XMLUtils.getElementByTagName(elementAmmo, "markerRanges");
-				
-				for(int i=0; i<elementRangeMarkers.getAttributes().getLength(); i++) {
-					String[] strMarker = elementRangeMarkers.getAttributes().item(i).getNodeValue().split(",");
-					ammoData.markerRanges.add(new Vector2i(Integer.parseInt(strMarker[0].trim()), Integer.parseInt(strMarker[1].trim())));
-				}
-
-				// load ammo from vehicle db
-				Vehicle vehicle = Database.getVehicleByName(vehicleName);
-				for(Weapon w : vehicle.weaponsList) {
-					for(Ammo a : w.ammo) {
-						if(a.name.equals(elementAmmo.getTagName())) {
-							ammoData.ammo = a;
-							break;
-						}
-					}
-				}
-				
-				data.ammoData.add(ammoData);
-				
-			}
-			
-			
-			// images
-			Element elementImageGroup = XMLUtils.getElementByTagName(elementVehicle, "images");
-			for(Element elementImage : XMLUtils.getChildren(elementImageGroup)) {
-				String imgName = elementImage.getTagName();
-				BufferedImage img = decodeImage(elementImage.getAttribute("encodedData"));
-				data.images.put(imgName, img);
-			}
-			
-			
-			// vehicle
-			data.vehicle = Database.getVehicleByName(vehicleName);
-				
-		} catch (ParserConfigurationException e) {
-			Logger.get().error(e);
-		} catch (SAXException e) {
-			Logger.get().error(e);
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
-		
-		return data;
-	}
 	
-	
-	
-	
-	public static BallisticData loadBallisticDataFile(File file) {
+	@Override
+	public BallisticData loadBallisticDataFile(File file) {
 		
 		Logger.get().info("Loading ballistic-file (ext)");
 		
@@ -300,18 +212,8 @@ public class DataLoader {
 			Document doc = builder.parse(file);
 			Element root = doc.getDocumentElement();
 			if(!root.getTagName().equals("ballisticdata")) {
-				if(root.getTagName().equals("calibrationdata")) {
-					CalibrationData dataCalib = loadCalibrationDataFile(file);
-					if(dataCalib != null) {
-						return Calib2BallConverter.convert(dataCalib);
-					} else {
-						Logger.get().error("Could not load file.");
-						return null;
-					}
-				} else {
-					Logger.get().error("Could not parse file: File is not a ballistic data file.");
-					return null;
-				}
+				Logger.get().error("Could not parse file: File is not a ballistic data file.");
+				return null;
 			}
 			
 			if(XMLUtils.getChildren(root).size() == 0) {
@@ -418,15 +320,16 @@ public class DataLoader {
 	
 	
 	
-	
-	private static BufferedImage decodeImage(String encodedImage) throws IOException {
+	private BufferedImage decodeImage(String encodedImage) throws IOException {
 		byte[] bytes = Base64.getDecoder().decode(encodedImage);
 		return ImageIO.read(new ByteArrayInputStream(bytes));
 	}
 	
 	
 	
-	public static SightData loadSight(File file, BallisticData dataBall) {
+	
+	@Override
+	public SightData loadSightDataFile(File file, BallisticData dataBall) {
 		
 		Logger.get().info("Loading sight-file");
 		if(file == null || !file.exists()) {
@@ -443,6 +346,9 @@ public class DataLoader {
 
 		horzRange.indicators.clear();
 		ballRange.indicators.clear();
+		
+		Map<BaseElement,Map<String,String>> attributeMap = new HashMap<BaseElement,Map<String,String>>();
+		Map<String,List<BaseElement>> elements = new HashMap<String,List<BaseElement>>();
 		
 		Block rootBlock = BLKSightParser.parse(file);
 		
@@ -663,12 +569,9 @@ public class DataLoader {
 						switch(eBullets.name) {
 							case "bullet" : {
 
-								String name = null;
-								if(eBullets.metadata != null) {
-									name = eBullets.metadata.substring(0, eBullets.metadata.lastIndexOf('('));
-								}
 								
-								ElementShellBlock shellBlock = new ElementShellBlock(name == null ? "block_"+(dataSight.getElements(ElementType.SHELL_BALLISTICS_BLOCK).size()+1) : name);
+								ElementShellBlock shellBlock = new ElementShellBlock();
+								attributeMap.put(shellBlock, parseAttributeString(eBullets.metadata));
 								shellBlock.indicators.clear();
 								
 								String bulletType = "";
@@ -829,7 +732,7 @@ public class DataLoader {
 									
 								}
 								
-								dataSight.addElement(shellBlock);
+								addElement(shellBlock, attributeMap.get(shellBlock).get("eid"), elements);
 								break;
 							}
 						}
@@ -845,10 +748,7 @@ public class DataLoader {
 							case "line": {
 								
 								ElementCustomLine objLine = new ElementCustomLine();
-								objLine.name = "line_" + (dataSight.getElements(ElementType.CUSTOM_LINE).size()+1);
-								if(eLines.metadata != null) {
-									objLine.name = eLines.metadata;
-								}
+								attributeMap.put(objLine, parseAttributeString(eLines.metadata));
 								
 								for(BlockElement eLine : ((Block)eLines).elements) {
 									switch(eLine.name) {
@@ -874,6 +774,7 @@ public class DataLoader {
 										}
 										case "center": {
 											objLine.center = new Vector2d(((ParamVec2)eLine).value);
+											objLine.autoCenter = false;
 											break;
 										}
 										case "radialMoveSpeed": {
@@ -887,7 +788,8 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.addElement(objLine);
+								
+								addElement(objLine, attributeMap.get(objLine).get("eid"), elements);
 								break;
 							}
 						}
@@ -905,10 +807,7 @@ public class DataLoader {
 							case "text": {
 								
 								ElementCustomText objText = new ElementCustomText();
-								objText.name = "text_" + (dataSight.getElements(ElementType.CUSTOM_TEXT).size()+1);
-								if(eTexts.metadata != null) {
-									objText.name = eTexts.metadata;
-								}
+								attributeMap.put(objText, parseAttributeString(eTexts.metadata));
 								
 								for(BlockElement eText : ((Block)eTexts).elements) {
 									switch(eText.name) {
@@ -934,6 +833,7 @@ public class DataLoader {
 										}
 										case "center": {
 											objText.center = new Vector2d(((ParamVec2)eText).value);
+											objText.autoCenter = false;
 											break;
 										}
 										case "radialMoveSpeed": {
@@ -966,7 +866,8 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.addElement(objText);
+								
+								addElement(objText, attributeMap.get(objText).get("eid"), elements);
 								break;
 							}
 						}
@@ -986,10 +887,7 @@ public class DataLoader {
 							case "circle": {
 							
 								ElementCustomCircleOutline objCircle = new ElementCustomCircleOutline();
-								objCircle.name = "circle_" + (dataSight.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE).size()+1);
-								if(eCircles.metadata != null) {
-									objCircle.name = eCircles.metadata;
-								}
+								attributeMap.put(objCircle, parseAttributeString(eCircles.metadata));
 								
 								for(BlockElement eCircle : ((Block)eCircles).elements) {
 									switch(eCircle.name) {
@@ -1015,6 +913,7 @@ public class DataLoader {
 										}
 										case "center": {
 											objCircle.center = new Vector2d(((ParamVec2)eCircle).value);
+											objCircle.autoCenter = false;
 											break;
 										}
 										case "radialMoveSpeed": {
@@ -1039,7 +938,8 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.addElement(objCircle);
+								
+								addElement(objCircle, attributeMap.get(objCircle).get("eid"), elements);
 								break;
 							}
 						}
@@ -1058,10 +958,8 @@ public class DataLoader {
 							case "quad": {
 								
 								ElementCustomQuadFilled objQuad = new ElementCustomQuadFilled();
-								objQuad.name = "quad_" + (dataSight.getElements(ElementType.CUSTOM_QUAD_FILLED).size()+1);
-								if(eQuads.metadata != null) {
-									objQuad.name = eQuads.metadata;
-								}
+								attributeMap.put(objQuad, parseAttributeString(eQuads.metadata));
+
 								
 								for(BlockElement eQuad : ((Block)eQuads).elements) {
 									switch(eQuad.name) {
@@ -1087,6 +985,7 @@ public class DataLoader {
 										}
 										case "center": {
 											objQuad.center = new Vector2d(((ParamVec2)eQuad).value);
+											objQuad.autoCenter = false;
 											break;
 										}
 										case "radialMoveSpeed": {
@@ -1111,7 +1010,8 @@ public class DataLoader {
 										}
 									}
 								}
-								dataSight.addElement(objQuad);
+								
+								addElement(objQuad, attributeMap.get(objQuad).get("eid"), elements);
 								break;
 							}
 						}
@@ -1124,33 +1024,160 @@ public class DataLoader {
 			}
 			
 		}
+
 		
+		
+		for(String eid : elements.keySet()) {
+			List<BaseElement> elems = elements.get(eid);
+			
+			// combine elements to one multielement if neccessary
+			BaseElement finalElement = null;
+			if(elems.size() == 0) {
+				continue;
+				
+			} else if(elems.size() == 1) {
+				finalElement = elems.get(0);
+				
+			} else {
+				ElementType type = ElementType.get(attributeMap.get(elems.get(0)).get("type"));
+				if(type == ElementType.CUSTOM_POLY_FILLED) {
+					// get num vertices
+					int numVertices = 0;
+					Map<String,String> attribsFirst = attributeMap.get(elems.get(0));
+					if(attribsFirst == null || !attribsFirst.containsKey("size")) {
+						continue;
+					}
+					numVertices = Integer.parseInt(attribsFirst.get("size"));
+					// reconstruct vertices
+					Vector2d[] vertices = new Vector2d[numVertices];
+					for(BaseElement e : elems) {
+						ElementCustomQuadFilled quad = (ElementCustomQuadFilled)e;
+						Map<String,String> attribsQuad = attributeMap.get(e);
+						if(attribsQuad.containsKey("indices")) {
+							String[] strIndices = attribsQuad.get("indices").split(" ");
+							if(strIndices.length == 3) {
+								int i0 = Integer.parseInt(strIndices[0]);
+								int i1 = Integer.parseInt(strIndices[1]);
+								int i2 = Integer.parseInt(strIndices[2]);
+								vertices[i0] = quad.pos1;
+								vertices[i1] = quad.pos2;
+								vertices[i2] = quad.pos3;
+							}
+						}
+					}
+					// set vertices / build polygon
+					ElementCustomPolygonFilled poly = new ElementCustomPolygonFilled();
+					poly.setVertices(new Vector2d[]{});
+					for(int i=0; i<vertices.length; i++) {
+						Vector2d vertex = vertices[i];
+						if(vertex != null) {
+							poly.addVertex(vertex);
+						} else {
+							poly.addVertex(0, 0);
+						}
+					}
+					// set attributes
+					ElementCustomQuadFilled quad = (ElementCustomQuadFilled)elems.get(0);
+					poly.useThousandth = quad.useThousandth;
+					poly.movement = quad.movement;
+					poly.angle = quad.angle;
+//					poly.autoCenter = false;
+//					poly.center.set(quad.center);
+					poly.radCenter.set(quad.radCenter);
+					poly.speed = quad.speed;
+					finalElement = poly;
+					
+				}
+				if(type == ElementType.CUSTOM_POLY_OUTLINE) {
+					ElementCustomPolygonOutline poly = new ElementCustomPolygonOutline();
+					List<Vector2d> vertices = new ArrayList<Vector2d>();
+					for(BaseElement subElement : elems) {
+						ElementCustomLine line = (ElementCustomLine)subElement;
+						vertices.add(line.start);
+					}
+					poly.setVertices(vertices);
+					// set attributes
+					ElementCustomLine line = (ElementCustomLine)elems.get(0);
+					poly.useThousandth = line.useThousandth;
+					poly.movement = line.movement;
+					poly.angle = line.angle;
+//					poly.autoCenter = false;
+//					poly.center.set(line.center);
+					poly.radCenter.set(line.radCenter);
+					poly.speed = line.speed;
+					finalElement = poly;
+				}
+				if(type == ElementType.CUSTOM_QUAD_OUTLINE) {
+					ElementCustomQuadOutline quad = new  ElementCustomQuadOutline();
+					quad.pos1.set(((ElementCustomLine)elems.get(0)).start);
+					quad.pos2.set(((ElementCustomLine)elems.get(1)).start);
+					quad.pos3.set(((ElementCustomLine)elems.get(2)).start);
+					quad.pos4.set(((ElementCustomLine)elems.get(3)).start);
+					// set attributes
+					ElementCustomLine line = (ElementCustomLine)elems.get(0);
+					quad.useThousandth = line.useThousandth;
+					quad.movement = line.movement;
+					quad.angle = line.angle;
+//					quad.autoCenter = false;
+//					quad.center.set(line.center);
+					quad.radCenter.set(line.radCenter);
+					quad.speed = line.speed;
+					finalElement = quad;
+				}
+			}
+			
+
+			// add attributes to final element
+			Map<String,String> attributes = attributeMap.get(elems.get(0));
+			if(attributes != null && finalElement != null) {
+				finalElement.name = attributes.get("name");
+			}
+			
+			
+			// add final element to sight data
+			dataSight.addElement(finalElement);
+			
+		}
 		
 		Logger.get().info("Sight file loaded");
 		return dataSight;
 	}
 	
 	
+	
+	
+	private void addElement(BaseElement element, String eid, Map<String,List<BaseElement>> elements) {
+		if(!elements.containsKey(eid)) {
+			elements.put(eid, new ArrayList<BaseElement>());
+		}
+		elements.get(eid).add(element);
+	}
+	
+	
+	
+	
+	private Map<String,String> parseAttributeString(String str) {
+		
+		Map<String,String> attributes = new HashMap<String,String>();
+		
+		String strAttributes = str.trim();
+		if(!strAttributes.startsWith("[") || !strAttributes.endsWith("]")) {
+			Logger.get().warn("Invalid Attribute String: " + strAttributes);
+			return attributes;
+		}
+		strAttributes = strAttributes.substring(1, strAttributes.length()-1);
+		
+		String[] pairs = strAttributes.split(",");
+		for(String pair : pairs) {
+			String key = pair.split("=")[0].trim();
+			String value = pair.split("=")[1].trim();
+			value = value.substring(1, value.length()-1);
+			attributes.put(key, value);
+		}
+		
+		return attributes;
+	}
+	
+	
+	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

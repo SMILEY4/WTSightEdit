@@ -1,4 +1,4 @@
-package com.ruegnerlukas.wtsights.data;
+package com.ruegnerlukas.wtsights.data.writing;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -48,10 +48,11 @@ import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 
-public class DataWriter {
+public class DataWriter_v1_default implements IDataWriter {
 
 	
-	public static boolean saveExternalBallisticFile(BallisticData data, File outputFile) throws Exception {
+	@Override
+	public boolean saveExternalBallisticFile(BallisticData data, File outputFile) throws Exception {
 
 		if(data == null) {
 			Logger.get().warn("Could not find ballistic data: " + data);
@@ -177,8 +178,8 @@ public class DataWriter {
 	
 	
 	
-	
-	public static boolean saveSight(SightData data, BallisticData dataBall, File outputFile) {
+	@Override
+	public boolean saveSight(SightData data, BallisticData dataBall, File outputFile) {
 		
 		if(data == null) {
 			Logger.get().warn("Could not find sight-data: " + data);
@@ -290,7 +291,7 @@ public class DataWriter {
 			lines.add("// shell ballistics blocks");
 			lines.add("ballistics {");
 			
-			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement element : data.getElements(ElementType.SHELL_BALLISTICS_BLOCK)) {
 
 				ElementShellBlock shellBlock = (ElementShellBlock)element;
 				
@@ -360,7 +361,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_LINE).isEmpty()) {
 			lines.add("// lines");
 			lines.add("drawLines {");
-			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_LINE)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement element : data.getElements(ElementType.CUSTOM_LINE)) {
 				ElementCustomLine lineObj = (ElementCustomLine)element;
 				lines.add("  //-- " + lineObj.name);
 				lines.add("  line {");
@@ -387,7 +388,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_TEXT).isEmpty()) {
 			lines.add("// text");
 			lines.add("drawTexts {");
-			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_TEXT)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement element : data.getElements(ElementType.CUSTOM_TEXT)) {
 				ElementCustomText textObj = (ElementCustomText)element;
 				lines.add("  //-- " +  textObj.name);
 				lines.add("  text {");
@@ -417,7 +418,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE).isEmpty()) {
 			lines.add("// circles");
 			lines.add("drawCircles {");
-			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement element : data.getElements(ElementType.CUSTOM_CIRCLE_OUTLINE)) {
 				ElementCustomCircleOutline circleObj = (ElementCustomCircleOutline)element;
 				lines.add("  //-- " + circleObj.name);
 				lines.add("  circle {");
@@ -448,7 +449,7 @@ public class DataWriter {
 		if(!data.getElements(ElementType.CUSTOM_QUAD_FILLED).isEmpty()) {
 			lines.add("// quads");
 			lines.add("drawQuads {");
-			for(com.ruegnerlukas.wtsights.data.sight.sightElements.Element element : data.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
+			for(com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement element : data.getElements(ElementType.CUSTOM_QUAD_FILLED)) {
 				ElementCustomQuadFilled quadObj = (ElementCustomQuadFilled)element;
 				lines.add("  //-- " + quadObj.name);
 				lines.add("  quad {");

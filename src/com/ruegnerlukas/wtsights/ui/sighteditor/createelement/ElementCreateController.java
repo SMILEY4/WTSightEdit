@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.view.IViewController;
@@ -40,7 +40,7 @@ public class ElementCreateController implements IViewController {
 	@Override
 	public void create(Map<ParamKey, Object> parameters) {
 		
-		@SuppressWarnings("unchecked") List<Element> existingElements = (List<Element>)parameters.get(ParamKey.LIST_SIGHT_ELEMENTS);
+		@SuppressWarnings("unchecked") List<BaseElement> existingElements = (List<BaseElement>)parameters.get(ParamKey.LIST_SIGHT_ELEMENTS);
 		DataPackage data = (DataPackage) parameters.get(ParamKey.DATA_PACKAGE);
 		service = (ElementCreateService) ViewManager.getService(View.ELEMENT_CREATE, true);
 		
@@ -145,6 +145,10 @@ public class ElementCreateController implements IViewController {
 			}
 			if(validationCode == 3) {
 				FXUtils.showAlert(ViewManager.getResources().getString("se_ce_alert_name_duplicate"), ViewManager.getStage(View.ELEMENT_CREATE));
+				return;
+			}
+			if(validationCode == 4) {
+				FXUtils.showAlert(ViewManager.getResources().getString("se_ce_alert_name_forbidden"), ViewManager.getStage(View.ELEMENT_CREATE));
 				return;
 			}
 			

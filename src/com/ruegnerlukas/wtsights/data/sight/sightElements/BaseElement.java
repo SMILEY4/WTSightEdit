@@ -2,7 +2,7 @@ package com.ruegnerlukas.wtsights.data.sight.sightElements;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
 
-public abstract class Element {
+public abstract class BaseElement {
 
 	public String name;
 	public ElementType type;
@@ -12,7 +12,7 @@ public abstract class Element {
 	
 	
 	
-	protected Element(String name, ElementType type) {
+	protected BaseElement(String name, ElementType type) {
 		this.name = name;
 		this.type = type;
 		setDirty(true);

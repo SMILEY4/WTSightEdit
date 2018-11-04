@@ -3,7 +3,7 @@ package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutRangefinder;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 
-public class ElementRangefinder extends Element {
+public class ElementRangefinder extends BaseElement {
 
 	public Vector2d		position		= new Vector2d(5, 15);	// the position relative to the center. x-pos in pixels, y-pos in mils or screenspace
 	public boolean 		useThousandth	= true;					// whether to use mils or screenspace for y-position unit

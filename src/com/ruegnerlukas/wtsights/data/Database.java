@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.loading.DataLoader;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
@@ -25,7 +27,7 @@ public class Database {
 	public static void loadVehicles(File file) {
 		try {
 			vehicleMap = new HashMap<String,Vehicle>();
-			vehicles = DataLoader.loadVehicleDataFile(file);
+			vehicles = DataLoader.get(FileVersion.AUTO_DETECT).loadVehicleDataFile(file);
 			for(int i=0, n=vehicles.size(); i<n; i++) {
 				Vehicle vehicle = vehicles.get(i);
 				vehicle.namePretty = toPrettyVehicleName(vehicle.name);

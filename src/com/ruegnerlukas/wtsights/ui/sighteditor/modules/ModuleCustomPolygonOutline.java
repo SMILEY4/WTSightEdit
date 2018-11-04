@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
@@ -286,7 +286,7 @@ public class ModuleCustomPolygonOutline implements Module {
 	
 	
 	
-	public void setElement(Element e) {
+	public void setElement(BaseElement e) {
 		if(e == null || e.type != ElementType.CUSTOM_POLY_OUTLINE) {
 			this.element = null;
 		} else {
