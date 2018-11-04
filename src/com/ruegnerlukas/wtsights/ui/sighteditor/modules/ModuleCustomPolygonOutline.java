@@ -43,6 +43,9 @@ public class ModuleCustomPolygonOutline implements Module {
 	@FXML private Spinner<Double> spinnerOriginY;
 	@FXML private Spinner<Double> spinnerSpeed;
 	
+	@FXML private Spinner<Double> spinnerPosOffsetX;
+	@FXML private Spinner<Double> spinnerPosOffsetY;
+	
 	@FXML private VBox boxVertices;
 	private List<Vertex> vertices = new ArrayList<Vertex>();
 	
@@ -69,6 +72,8 @@ public class ModuleCustomPolygonOutline implements Module {
 							FXUtils.initSpinner(vertex.spinnerX, Conversion.get().screenspace2mil(vertex.spinnerX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 							FXUtils.initSpinner(vertex.spinnerY, Conversion.get().screenspace2mil(vertex.spinnerY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 						}
+						FXUtils.initSpinner(spinnerPosOffsetX, Conversion.get().screenspace2mil(spinnerPosOffsetX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerPosOffsetY, Conversion.get().screenspace2mil(spinnerPosOffsetY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 					} else {
 						FXUtils.initSpinner(spinnerOriginX, Conversion.get().mil2screenspace(spinnerOriginX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 						FXUtils.initSpinner(spinnerOriginY, Conversion.get().mil2screenspace(spinnerOriginY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
@@ -76,6 +81,8 @@ public class ModuleCustomPolygonOutline implements Module {
 							FXUtils.initSpinner(vertex.spinnerY, Conversion.get().mil2screenspace(vertex.spinnerY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 							FXUtils.initSpinner(vertex.spinnerX, Conversion.get().mil2screenspace(vertex.spinnerX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 						}
+						FXUtils.initSpinner(spinnerPosOffsetX, Conversion.get().mil2screenspace(spinnerPosOffsetX.getValue(),data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerPosOffsetY, Conversion.get().mil2screenspace(spinnerPosOffsetY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 					}
 					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
@@ -169,6 +176,25 @@ public class ModuleCustomPolygonOutline implements Module {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.speed = newValue.doubleValue();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		
+		FXUtils.initSpinner(spinnerPosOffsetX, elementDefault.positionOffset.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				if(element != null) {
+					element.positionOffset.x = newValue.doubleValue();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		FXUtils.initSpinner(spinnerPosOffsetY, elementDefault.positionOffset.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				if(element != null) {
+					element.positionOffset.y = newValue.doubleValue();
 					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}
@@ -315,6 +341,8 @@ public class ModuleCustomPolygonOutline implements Module {
 			for(int i=0; i<element.getVertices().size(); i++) {
 				this.vertices.add(new Vertex(element.getVertices().get(i).x, element.getVertices().get(i).y));
 			}
+			spinnerPosOffsetX.getValueFactory().setValue(element.positionOffset.x);
+			spinnerPosOffsetY.getValueFactory().setValue(element.positionOffset.y);
 		}
 		updateVertexList();
 	}

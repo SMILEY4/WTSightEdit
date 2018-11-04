@@ -101,6 +101,11 @@ public class ElementCustomPolygonOutline extends ElementCustomObject {
 		if(isDirty()) {
 			setDirty(false);
 			
+			List<Vector2d> vertices = new ArrayList<Vector2d>();
+			for(Vector2d vertex : this.vertices) {
+				vertices.add(vertex.copy().add(this.positionOffset));
+			}
+			
 			// calculate center (if autocenter) and layout of this parent element
 			if(movement == Movement.MOVE_RADIAL) {
 				

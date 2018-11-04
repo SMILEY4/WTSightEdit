@@ -52,6 +52,11 @@ public class ElementCustomQuadOutline extends ElementCustomObject {
 		if(isDirty()) {
 			setDirty(false);
 			
+			Vector2d pos1 = this.pos1.copy().add(this.positionOffset);
+			Vector2d pos2 = this.pos2.copy().add(this.positionOffset);
+			Vector2d pos3 = this.pos3.copy().add(this.positionOffset);
+			Vector2d pos4 = this.pos4.copy().add(this.positionOffset);
+
 			polygon.useThousandth = useThousandth;
 			polygon.movement = movement;
 			polygon.angle = angle;

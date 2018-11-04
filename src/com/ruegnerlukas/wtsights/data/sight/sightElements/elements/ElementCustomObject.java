@@ -14,6 +14,10 @@ public abstract class ElementCustomObject extends BaseElement {
 	public Vector2d		radCenter		= new Vector2d(0,0);	// the origin of the rotation
 	public double		speed			= 1;
 	
+	public Vector2d 	positionOffset	= new Vector2d(0,0);
+	
+	
+	
 	
 	protected ElementCustomObject(String name, ElementType type) {
 		super(name, type);

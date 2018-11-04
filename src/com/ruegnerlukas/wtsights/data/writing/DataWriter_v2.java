@@ -138,19 +138,19 @@ public class DataWriter_v2 implements IDataWriter {
 		
 		for(Entry<BallisticElement,BufferedImage> entry : data.imagesBallistic.entrySet()) {
 			Element elementImg = doc.createElement("image_element_" + data.elements.indexOf(entry.getKey()));
-			String encodedImage = endodeImage(entry.getValue(), "jpg");
+			String encodedImage = encodeImage(entry.getValue(), "jpg");
 			elementImg.setAttribute("encodedData", encodedImage);
 			elementImages.appendChild(elementImg);
 		}
 		if(data.imagesZoom.containsKey(true)) {
 			Element elementImg = doc.createElement("image_element_zoomModIn");
-			String encodedImage = endodeImage(data.imagesZoom.get(true), "jpg");
+			String encodedImage = encodeImage(data.imagesZoom.get(true), "jpg");
 			elementImg.setAttribute("encodedData", encodedImage);
 			elementImages.appendChild(elementImg);
 		}
 		if(data.imagesZoom.containsKey(false)) {
 			Element elementImg = doc.createElement("image_element_zoomModOut");
-			String encodedImage = endodeImage(data.imagesZoom.get(true), "jpg");
+			String encodedImage = encodeImage(data.imagesZoom.get(true), "jpg");
 			elementImg.setAttribute("encodedData", encodedImage);
 			elementImages.appendChild(elementImg);
 		}
@@ -171,7 +171,7 @@ public class DataWriter_v2 implements IDataWriter {
 	
 	
 	
-	private static String endodeImage(BufferedImage img, String format) throws IOException {
+	private static String encodeImage(BufferedImage img, String format) throws IOException {
 	
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(img, format, baos);
@@ -380,7 +380,7 @@ public class DataWriter_v2 implements IDataWriter {
 						lines.add("    center:p2 = " + lineObj.center.x + "," + lineObj.center.y);
 					}
 				}
-				lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
+				lines.add("    line:p4 = " + (lineObj.start.x+lineObj.positionOffset.x) + "," + (lineObj.start.y+lineObj.positionOffset.y) + ", " + (lineObj.end.x+lineObj.positionOffset.x) + "," + (lineObj.end.y+lineObj.positionOffset.y));
 				lines.add("  }");
 			}
 			
@@ -517,10 +517,10 @@ public class DataWriter_v2 implements IDataWriter {
 						lines.add("    center:p2 = " + quadObj.center.x + "," + quadObj.center.y);
 					}
 				}
-				lines.add("    tl:p2 = " + quadObj.pos1.x + "," + quadObj.pos1.y);
-				lines.add("    tr:p2 = " + quadObj.pos2.x + "," + quadObj.pos2.y);
-				lines.add("    br:p2 = " + quadObj.pos3.x + "," + quadObj.pos3.y);
-				lines.add("    bl:p2 = " + quadObj.pos4.x + "," + quadObj.pos4.y);
+				lines.add("    tl:p2 = " + (quadObj.pos1.x+quadObj.positionOffset.x) + "," + (quadObj.pos1.y+quadObj.positionOffset.y));
+				lines.add("    tr:p2 = " + (quadObj.pos2.x+quadObj.positionOffset.x) + "," + (quadObj.pos2.y+quadObj.positionOffset.y));
+				lines.add("    br:p2 = " + (quadObj.pos3.x+quadObj.positionOffset.x) + "," + (quadObj.pos3.y+quadObj.positionOffset.y));
+				lines.add("    bl:p2 = " + (quadObj.pos4.x+quadObj.positionOffset.x) + "," + (quadObj.pos4.y+quadObj.positionOffset.y));
 				lines.add("  }");
 			}
 			

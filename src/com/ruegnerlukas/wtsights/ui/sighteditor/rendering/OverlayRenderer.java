@@ -262,6 +262,7 @@ public class OverlayRenderer {
 			outline.center.set(element.center);
 			outline.radCenter.set(element.radCenter);
 			outline.speed = element.speed;
+			outline.positionOffset.set(element.positionOffset);
 			outline.setVertices(element.getVertices());
 			outline.layout(data, canvas.getWidth(), canvas.getHeight());
 			for(int i=0; i<outline.getLines().size(); i++) {
@@ -286,12 +287,8 @@ public class OverlayRenderer {
 		} else if(selectedElement.type == ElementType.CUSTOM_CIRCLE_FILLED) {
 			ElementCustomCircleFilled element = (ElementCustomCircleFilled)selectedElement;
 			element.layout(data, canvas.getWidth(), canvas.getHeight());
-//			for(ElementCustomQuadFilled eQuad : element.getQuads()) {
-//				LayoutQuadFilledObject layout = eQuad.layout(data, canvas.getWidth(), canvas.getHeight());
-//				drawQuad(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.p0.x, layout.p0.y, layout.p1.x, layout.p1.y, layout.p2.x, layout.p2.y, layout.p3.x, layout.p3.y);
-//			}
-			
 			ElementCustomCircleOutline outline = new ElementCustomCircleOutline("notanelement");
+			outline.positionOffset.set(element.positionOffset);
 			outline.useThousandth = element.useThousandth;
 			outline.movement = element.movement;
 			outline.angle = element.angle;

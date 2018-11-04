@@ -66,6 +66,13 @@
                         <Label text="%se_mcpf_vertices_title" />
                         <VBox fx:id="boxVertices" minWidth="0.0" prefWidth="1000000.0" />
                         <Button minWidth="0.0" mnemonicParsing="false" onAction="#onAddVertex" prefWidth="1000000.0" text="%se_mcpf_add_vertex" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcpf_pos_offset" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerPosOffsetX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerPosOffsetY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>

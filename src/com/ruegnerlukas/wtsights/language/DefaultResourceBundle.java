@@ -228,6 +228,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcl_move_speed",			"Move Speed:");
 		map.put("se_mcl_pos_start",				"Position Start:");
 		map.put("se_mcl_pos_end",				"Position End:");
+		map.put("se_mcl_pos_offset",			"Position Offset:");
 		// custom quad filled
 		map.put("se_mcqf_use_thousandth",		"Use Thousandth");
 		map.put("se_mcqf_movement",				"Movement:");
@@ -240,6 +241,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcqf_position_2",			"Position 2:");
 		map.put("se_mcqf_position_3",			"Position 3:");
 		map.put("se_mcqf_position_4",			"Position 4:");
+		map.put("se_mcqf_pos_offset",			"Position Offset:");
 		// custom quad outline
 		map.put("se_mcqo_use_thousandth",		"Use Thousandth");
 		map.put("se_mcqo_movement",				"Movement:");
@@ -252,6 +254,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcqo_position_2",			"Position 2:");
 		map.put("se_mcqo_position_3",			"Position 3:");
 		map.put("se_mcqo_position_4",			"Position 4:");
+		map.put("se_mcqo_pos_offset",			"Position Offset:");
 		// custom polygon outline
 		map.put("se_mcpo_use_thousandth",		"Use Thousandth");
 		map.put("se_mcpo_movement",				"Movement:");
@@ -263,6 +266,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcpo_vertices_title",		"Vertices:");
 		map.put("se_mcpo_add_vertex",			"Add Vertex");
 		map.put("se_mcpo_remove_vertex",		"X");
+		map.put("se_mcpo_pos_offset",			"Position Offset:");
 		// custom polygon filled
 		map.put("se_mcpf_use_thousandth",		"Use Thousandth");
 		map.put("se_mcpf_movement",				"Movement:");
@@ -274,6 +278,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcpf_vertices_title",		"Vertices:");
 		map.put("se_mcpf_add_vertex",			"Add Vertex");
 		map.put("se_mcpf_remove_vertex",		"X");
+		map.put("se_mcpf_pos_offset",			"Position Offset:");
 		// custom text
 		map.put("se_mct_use_thousandth",		"Use Thousandth");
 		map.put("se_mct_movement",				"Movement:");
