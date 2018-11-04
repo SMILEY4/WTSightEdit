@@ -194,18 +194,30 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mchl_draw",					"Draw Central Horizontal Line");
 		// central vert line
 		map.put("se_mcvl_draw",					"Draw Central Vertical Line");
-		// custom circle
-		map.put("se_mcc_use_thousandth",		"Use Thousandth");
-		map.put("se_mcc_movement",				"Movement:");
-		map.put("se_mcc_angle",					"Angle:");
-		map.put("se_mcc_center",				"Center:");
-		map.put("se_mcc_auto_center",			"Use Auto-Center:");
-		map.put("se_mcc_origin",				"Origin:");
-		map.put("se_mcc_move_speed",			"Move Speed:");
-		map.put("se_mcc_position",				"Position:");
-		map.put("se_mcc_diameter",				"Diameter:");
-		map.put("se_mcc_segment",				"Segment:");
-		map.put("se_mcc_thickness",				"Outline Thickness:");
+		// custom circle outline
+		map.put("se_mcco_use_thousandth",		"Use Thousandth");
+		map.put("se_mcco_movement",				"Movement:");
+		map.put("se_mcco_angle",					"Angle:");
+		map.put("se_mcco_center",				"Center:");
+		map.put("se_mcco_auto_center",			"Use Auto-Center:");
+		map.put("se_mcco_origin",				"Origin:");
+		map.put("se_mcco_move_speed",			"Move Speed:");
+		map.put("se_mcco_position",				"Position:");
+		map.put("se_mcco_diameter",				"Diameter:");
+		map.put("se_mcco_segment",				"Segment:");
+		map.put("se_mcco_thickness",				"Outline Thickness:");
+		// custom circle filled
+		map.put("se_mccf_use_thousandth",		"Use Thousandth");
+		map.put("se_mccf_movement",				"Movement:");
+		map.put("se_mccf_angle",					"Angle:");
+		map.put("se_mccf_center",				"Center:");
+		map.put("se_mccf_auto_center",			"Use Auto-Center:");
+		map.put("se_mccf_origin",				"Origin:");
+		map.put("se_mccf_move_speed",			"Move Speed:");
+		map.put("se_mccf_position",				"Position:");
+		map.put("se_mccf_diameter",				"Diameter:");
+		map.put("se_mccf_segment",				"Segment:");
+		map.put("se_mccf_quality", 				"Quality:");
 		// custom line
 		map.put("se_mcl_use_thousandth",		"Use Thousandth");
 		map.put("se_mcl_movement",				"Movement:");

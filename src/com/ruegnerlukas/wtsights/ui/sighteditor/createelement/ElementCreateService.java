@@ -10,6 +10,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
@@ -125,6 +126,9 @@ public class ElementCreateService implements IViewService {
 				}
 				if(type == ElementType.CUSTOM_CIRCLE_OUTLINE) {
 					createdElement = new ElementCustomCircleOutline(name);
+				}
+				if(type == ElementType.CUSTOM_CIRCLE_FILLED) {
+					createdElement = new ElementCustomCircleFilled(name);
 				}
 				if(type == ElementType.CUSTOM_LINE) {
 					createdElement = new ElementCustomLine(name);

@@ -39,6 +39,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
@@ -495,7 +496,7 @@ public class DataWriter_v2 implements IDataWriter {
 		
 		
 		// quads
-		if(!data.getElements(ElementType.CUSTOM_QUAD_FILLED).isEmpty() || !data.getElements(ElementType.CUSTOM_POLY_FILLED).isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_QUAD_FILLED).isEmpty() || !data.getElements(ElementType.CUSTOM_POLY_FILLED).isEmpty() || !data.getElements(ElementType.CUSTOM_CIRCLE_FILLED).isEmpty()) {
 			lines.add("// quads");
 			lines.add("drawQuads {");
 			
@@ -547,6 +548,29 @@ public class DataWriter_v2 implements IDataWriter {
 				}
 			}
 			
+			for(BaseElement element : data.getElements(ElementType.CUSTOM_CIRCLE_FILLED)) {
+				ElementCustomCircleFilled circleObj = (ElementCustomCircleFilled)element;
+				for(ElementCustomQuadFilled quadObj : circleObj.getQuads()) {
+					lines.add("  //-- " + buildElementAttributeString(circleObj, quadObj));
+					lines.add("  quad {");
+					lines.add("    thousandth:b = " + (circleObj.useThousandth ? "yes" : "no") );
+					if(circleObj.movement == Movement.MOVE) {
+						lines.add("    move:b = " + (circleObj.movement == Movement.STATIC ? "no" : "yes") );
+					}
+					if(circleObj.movement == Movement.MOVE_RADIAL) {
+						lines.add("    moveRadial:b = " + (circleObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
+						lines.add("    radialAngle:r = " + circleObj.angle);
+						lines.add("    radialCenter:p2 = " + circleObj.radCenter.x + "," + circleObj.radCenter.y);
+						lines.add("    radialMoveSpeed:r = " + circleObj.speed);
+						lines.add("    center:p2 = " + circleObj.center.x + "," + circleObj.center.y);
+					}
+					lines.add("    tl:p2 = " + quadObj.pos1.x + "," + quadObj.pos1.y);
+					lines.add("    tr:p2 = " + quadObj.pos2.x + "," + quadObj.pos2.y);
+					lines.add("    br:p2 = " + quadObj.pos3.x + "," + quadObj.pos3.y);
+					lines.add("    bl:p2 = " + quadObj.pos4.x + "," + quadObj.pos4.y);
+					lines.add("  }");
+				}
+			}
 			
 			lines.add("}");
 			lines.add("");
@@ -648,6 +672,15 @@ public class DataWriter_v2 implements IDataWriter {
 			}
 		}
 		
+		if(element.type == ElementType.CUSTOM_CIRCLE_FILLED) {
+			ElementCustomCircleFilled circle = (ElementCustomCircleFilled)element;
+			attributes.add(new String[]{"name", circle.name});
+			attributes.add(new String[]{"eid", getElementIdentifier(element)});
+			attributes.add(new String[]{"type", element.type.toString()});
+			attributes.add(new String[]{"segment", circle.segment.x+" "+circle.segment.y});
+			attributes.add(new String[]{"quality", ""+circle.quality});
+		}
+		
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
@@ -673,17 +706,5 @@ public class DataWriter_v2 implements IDataWriter {
 	}	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 

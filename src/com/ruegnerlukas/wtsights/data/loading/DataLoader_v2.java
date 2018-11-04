@@ -38,6 +38,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
@@ -1086,7 +1087,48 @@ public class DataLoader_v2 implements IDataLoader {
 					poly.radCenter.set(quad.radCenter);
 					poly.speed = quad.speed;
 					finalElement = poly;
-					
+				}
+				if(type == ElementType.CUSTOM_CIRCLE_FILLED) {
+					// get data from attribs
+					Map<String,String> attribsFirst = attributeMap.get(elems.get(0));
+					if(attribsFirst == null || !attribsFirst.containsKey("size")) {
+						continue;
+					}
+					double quality = Double.parseDouble(attribsFirst.get("quality"));
+					double segmentStart = Double.parseDouble(attribsFirst.get("segment").split(" ")[0]);
+					double segmentEnd = Double.parseDouble(attribsFirst.get("segment").split(" ")[1]);
+					// reconstruct center
+					Vector2d avgCenter = new Vector2d();
+					for(BaseElement e : elems) {
+						ElementCustomQuadFilled quad = (ElementCustomQuadFilled)e;
+						avgCenter.add(quad.pos1).add(quad.pos2).add(quad.pos3);
+					}
+					avgCenter.scale(1.0/(elems.size()*3));
+					// reconstruct diameter
+					double maxRadius = 0;
+					for(BaseElement e : elems) {
+						ElementCustomQuadFilled quad = (ElementCustomQuadFilled)e;
+						final double dist0 = avgCenter.dist(quad.pos1);
+						final double dist1 = avgCenter.dist(quad.pos1);
+						final double dist2 = avgCenter.dist(quad.pos1);
+						maxRadius = Math.max(maxRadius, dist0);
+						maxRadius = Math.max(maxRadius, dist1);
+						maxRadius = Math.max(maxRadius, dist2);
+					}
+					// set vertices / build circle
+					ElementCustomCircleFilled circle = new ElementCustomCircleFilled();
+					circle.position.set(avgCenter);
+					circle.diameter = maxRadius*2;
+					circle.segment.set(segmentStart, segmentEnd);
+					circle.quality = quality;
+					// set attributes
+					ElementCustomQuadFilled quad = (ElementCustomQuadFilled)elems.get(0);
+					circle.useThousandth = quad.useThousandth;
+					circle.movement = quad.movement;
+					circle.angle = quad.angle;
+					circle.radCenter.set(quad.radCenter);
+					circle.speed = quad.speed;
+					finalElement = circle;
 				}
 				if(type == ElementType.CUSTOM_POLY_OUTLINE) {
 					ElementCustomPolygonOutline poly = new ElementCustomPolygonOutline();
@@ -1101,8 +1143,6 @@ public class DataLoader_v2 implements IDataLoader {
 					poly.useThousandth = line.useThousandth;
 					poly.movement = line.movement;
 					poly.angle = line.angle;
-//					poly.autoCenter = false;
-//					poly.center.set(line.center);
 					poly.radCenter.set(line.radCenter);
 					poly.speed = line.speed;
 					finalElement = poly;
@@ -1118,8 +1158,6 @@ public class DataLoader_v2 implements IDataLoader {
 					quad.useThousandth = line.useThousandth;
 					quad.movement = line.movement;
 					quad.angle = line.angle;
-//					quad.autoCenter = false;
-//					quad.center.set(line.center);
 					quad.radCenter.set(line.radCenter);
 					quad.speed = line.speed;
 					finalElement = quad;

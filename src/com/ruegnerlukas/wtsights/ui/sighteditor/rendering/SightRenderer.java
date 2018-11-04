@@ -18,6 +18,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
@@ -158,7 +159,14 @@ public class SightRenderer {
 				drawLineObject(canvas, g, data, eLine);
 			}
 		}
-
+		for(BaseElement e : data.dataSight.getElements(ElementType.CUSTOM_CIRCLE_FILLED)) {
+			ElementCustomCircleFilled eCircle = (ElementCustomCircleFilled)e;
+			eCircle.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(ElementCustomQuadFilled eQuad : eCircle.getQuads()) {
+				drawQuadObject(canvas, g, data, eQuad);
+			}
+		}
+		
 	}
 
 	
