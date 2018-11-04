@@ -18,6 +18,7 @@ public enum ElementType {
 	CUSTOM_POLY_OUTLINE			(ViewManager.getResources().getString("et_custom_poly_outline"),		11, 0, 9999),
 	CUSTOM_POLY_FILLED			(ViewManager.getResources().getString("et_custom_poly_filled"),			12, 0, 9999),
 	CUSTOM_TEXT					(ViewManager.getResources().getString("et_custom_text"),				13, 0, 9999),
+	FUNNEL						(ViewManager.getResources().getString("et_funnel"),						4, 0, 9999),
 	;
 
 	

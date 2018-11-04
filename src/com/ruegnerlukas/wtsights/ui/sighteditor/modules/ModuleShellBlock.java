@@ -541,7 +541,6 @@ public class ModuleShellBlock implements Module {
 		if(element != null) {
 			if(element.elementBallistic == null) {
 				element.elementBallistic = comboAmmo.getValue();
-				
 			} else {
 				comboAmmo.getSelectionModel().select(element.elementBallistic);
 			}

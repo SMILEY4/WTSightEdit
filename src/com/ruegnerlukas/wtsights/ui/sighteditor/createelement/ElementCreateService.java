@@ -18,6 +18,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustom
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -156,6 +157,9 @@ public class ElementCreateService implements IViewService {
 				}
 				if(type == ElementType.CUSTOM_POLY_FILLED) {
 					createdElement = new ElementCustomPolygonFilled(name);
+				}
+				if(type == ElementType.FUNNEL) {
+					createdElement = new ElementFunnel(name);
 				}
 				
 			}

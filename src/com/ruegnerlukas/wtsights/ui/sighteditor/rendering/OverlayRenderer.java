@@ -19,6 +19,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustom
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -379,8 +380,20 @@ public class OverlayRenderer {
 				
 			}
 			
+		} else if(selectedElement.type == ElementType.FUNNEL) {
+			ElementFunnel element = (ElementFunnel)selectedElement;
+			element.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(int i=0; i<element.getLines().size(); i++) {
+				ElementCustomLine lineObject = element.getLines().get(i);
+				LayoutLineObject layout = lineObject.layout(data, canvas.getWidth(), canvas.getHeight());
+				if(layout != null) {
+					drawLine(COLOR_SELECTION_1, COLOR_SELECTION_2, canvas, g, layout.start.x, layout.start.y, layout.end.x, layout.end.y, layout.lineSize);
+				}
+			}
+			
 		}
 
+		
 	
 	}
 	

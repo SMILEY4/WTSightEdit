@@ -46,6 +46,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustom
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -1161,6 +1162,30 @@ public class DataLoader_v2 implements IDataLoader {
 					quad.radCenter.set(line.radCenter);
 					quad.speed = line.speed;
 					finalElement = quad;
+				}
+				if(type == ElementType.FUNNEL) {
+					Map<String,String> attribsFirst = attributeMap.get(elems.get(0));
+					if(attribsFirst == null) {
+						continue;
+					}
+					ElementFunnel funnel = new  ElementFunnel();
+					funnel.movement = ((ElementCustomLine)elems.get(0)).movement;
+					funnel.sizeTargetCM = Integer.parseInt(attribsFirst.get("tsize"));
+					funnel.rangeStart = Integer.parseInt(attribsFirst.get("range").split(" ")[0]);
+					funnel.rangeEnd = Integer.parseInt(attribsFirst.get("range").split(" ")[1]);
+					funnel.rangeStep = Integer.parseInt(attribsFirst.get("range").split(" ")[2]);
+					if(attribsFirst.containsKey("shell")) {
+						String partialAmmoName = attribsFirst.get("shell");
+						search: for(BallisticElement ballElement : dataBall.elements) {
+							for(Ammo ammo : ballElement.ammunition) {
+								if(ammo.name.equalsIgnoreCase(partialAmmoName)) {
+									funnel.elementBallistic = ballElement;
+									break search;
+								}
+							}
+						}
+					}
+					finalElement = funnel;
 				}
 			}
 			

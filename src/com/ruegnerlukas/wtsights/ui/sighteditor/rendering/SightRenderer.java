@@ -26,6 +26,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustom
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -166,6 +167,14 @@ public class SightRenderer {
 				drawQuadObject(canvas, g, data, eQuad);
 			}
 		}
+		for(BaseElement e : data.dataSight.getElements(ElementType.FUNNEL)) {
+			ElementFunnel eFunnel = (ElementFunnel)e;
+			eFunnel.layout(data, canvas.getWidth(), canvas.getHeight());
+			for(ElementCustomLine eLine : eFunnel.getLines()) {
+				drawLineObject(canvas, g, data, eLine);
+			}
+		}
+
 		
 	}
 

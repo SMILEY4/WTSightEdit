@@ -338,6 +338,13 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_msb_cell_major",				"MAJOR");
 		map.put("se_msb_cell_minor",				"minor");
 		map.put("se_msb_cell_remove",				"X");
+		// funnel
+		map.put("se_mf_target_size",				"Target Size (in cm)");
+		map.put("se_mf_range_start",				"Range Start");
+		map.put("se_mf_range_end",					"Range End");
+		map.put("se_mf_range_step",					"Range Step");
+		map.put("se_mf_move",						"Move");
+
 		
 		// ELEMENT TYPES
 		map.put("et_central_horzline",				"Central Horizontal Line");
@@ -356,6 +363,8 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("et_custom_rect_outline",			"Custom Rectangle (Outline)");
 		map.put("et_custom_poly_filled",			"Custom Polygon (Filled)");
 		map.put("et_custom_poly_outline",			"Custom Polygon (Outline)");
+		map.put("et_funnel",						"Funnel");
+
 
 		// LAUNCHER
 //		map.put("lc_title",				"WT Sight Editor");

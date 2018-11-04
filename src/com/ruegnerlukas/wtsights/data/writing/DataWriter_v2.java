@@ -47,6 +47,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustom
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -358,7 +359,10 @@ public class DataWriter_v2 implements IDataWriter {
 		// custom elements
 		
 		// lines / polygon outlines / quad outlines
-		if(!data.getElements(ElementType.CUSTOM_LINE).isEmpty() || !data.getElements(ElementType.CUSTOM_POLY_OUTLINE).isEmpty() || !data.getElements(ElementType.CUSTOM_QUAD_OUTLINE).isEmpty()) {
+		if(!data.getElements(ElementType.CUSTOM_LINE).isEmpty()
+				|| !data.getElements(ElementType.CUSTOM_POLY_OUTLINE).isEmpty()
+				|| !data.getElements(ElementType.CUSTOM_QUAD_OUTLINE).isEmpty()
+				|| !data.getElements(ElementType.FUNNEL).isEmpty()) {
 			lines.add("// lines");
 			lines.add("drawLines {");
 			
@@ -422,6 +426,21 @@ public class DataWriter_v2 implements IDataWriter {
 						lines.add("    radialCenter:p2 = " + quadObj.radCenter.x + "," + quadObj.radCenter.y);
 						lines.add("    radialMoveSpeed:r = " + quadObj.speed);
 						lines.add("    center:p2 = " + quadObj.center.x + "," + quadObj.center.y);
+					}
+					lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
+					lines.add("  }");
+				}
+			}
+			
+			// funnel
+			for(BaseElement element : data.getElements(ElementType.FUNNEL)) {
+				ElementFunnel funnel = (ElementFunnel)element;
+				for(ElementCustomLine lineObj : funnel.getLines()) {
+					lines.add("  //-- " + buildElementAttributeString(funnel, lineObj));
+					lines.add("  line {");
+					lines.add("    thousandth:b = " + "yes" );
+					if(funnel.movement == Movement.MOVE) {
+						lines.add("    move:b = " + (funnel.movement == Movement.STATIC ? "no" : "yes") );
 					}
 					lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
 					lines.add("  }");
@@ -681,6 +700,19 @@ public class DataWriter_v2 implements IDataWriter {
 			attributes.add(new String[]{"quality", ""+circle.quality});
 		}
 		
+		if(element.type == ElementType.FUNNEL) {
+			ElementFunnel funnel = (ElementFunnel)element;
+			attributes.add(new String[]{"name", funnel.name});
+			attributes.add(new String[]{"eid", getElementIdentifier(element)});
+			attributes.add(new String[]{"type", element.type.toString()});
+			attributes.add(new String[]{"range", funnel.rangeStart+" "+funnel.rangeEnd+" "+funnel.rangeStep});
+			attributes.add(new String[]{"tsize", ""+funnel.sizeTargetCM});
+			if(!funnel.elementBallistic.ammunition.isEmpty()) {
+				attributes.add(new String[]{"shell", ""+funnel.elementBallistic.ammunition.get(0).name});
+			}
+
+
+		}
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');

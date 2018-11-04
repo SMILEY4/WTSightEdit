@@ -174,6 +174,7 @@ public class SightEditorController implements IViewController {
 		initModule(ElementType.CUSTOM_POLY_OUTLINE, "/ui/sightEditor/layout_element_custom_poly_outline.fxml");
 		initModule(ElementType.CUSTOM_POLY_FILLED, "/ui/sightEditor/layout_element_custom_poly_filled.fxml");
 		initModule(ElementType.CUSTOM_TEXT, "/ui/sightEditor/layout_element_custom_text.fxml");
+		initModule(ElementType.FUNNEL, "/ui/sightEditor/layout_element_funnel.fxml");
 
 		// ELEMENTS LIST
 		listViewElements.setCellFactory(new Callback<ListView<BaseElement>, ListCell<BaseElement>>() {
