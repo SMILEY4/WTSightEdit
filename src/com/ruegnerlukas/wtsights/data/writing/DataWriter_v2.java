@@ -53,6 +53,7 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangef
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 
@@ -214,8 +215,8 @@ public class DataWriter_v2 implements IDataWriter {
 		// general
 		lines.add("// general");
 		lines.add("thousandth:t = \"" + data.gnrThousandth.tag + "\"");
-		lines.add("fontSizeMult:r = " + data.gnrFontScale);
-		lines.add("lineSizeMult:r = " + data.gnrLineSize);
+		lines.add("fontSizeMult:r = " + asString(data.gnrFontScale, StepSizes.DECPLACES_SCALE));
+		lines.add("lineSizeMult:r = " + asString(data.gnrLineSize, StepSizes.DECPLACES_SCALE));
 		lines.add("applyCorrectionToGun:b = " + (data.gnrApplyCorrectionToGun ? "yes" : "no") );
 		lines.add("drawCentralLineVert:b = " + (((ElementCentralVertLine)data.getElements(ElementType.CENTRAL_VERT_LINE).get(0)).drawCentralVertLine ? "yes" : "no") );
 		lines.add("drawCentralLineHorz:b = " + (((ElementCentralHorzLine)data.getElements(ElementType.CENTRAL_HORZ_LINE).get(0)).drawCentralHorzLine ? "yes" : "no") );
@@ -224,18 +225,18 @@ public class DataWriter_v2 implements IDataWriter {
 		// rangefinder
 		ElementRangefinder rangefinder = (ElementRangefinder)data.getElements(ElementType.RANGEFINDER).get(0);
 		lines.add("// rangefinder");
-		lines.add("rangefinderHorizontalOffset:r = " + rangefinder.position.x);
-		lines.add("rangefinderVerticalOffset:r = " + rangefinder.position.y);
+		lines.add("rangefinderHorizontalOffset:r = " + asString(rangefinder.position.x, StepSizes.DECPLACES_PIXEL));
+		lines.add("rangefinderVerticalOffset:r = " + asString(rangefinder.position.y, rangefinder.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 		lines.add("rangefinderProgressBarColor1:c = " + (int)(rangefinder.color1.getRed()*255) + "," + (int)(rangefinder.color1.getGreen()*255) + "," + (int)(rangefinder.color1.getBlue()*255) + "," + (int)(rangefinder.color1.getOpacity()*255));
 		lines.add("rangefinderProgressBarColor2:c = " + (int)(rangefinder.color2.getRed()*255) + "," + (int)(rangefinder.color2.getGreen()*255) + "," + (int)(rangefinder.color2.getBlue()*255) + "," + (int)(rangefinder.color2.getOpacity()*255));
-		lines.add("rangefinderTextScale:r = " + rangefinder.textScale);
+		lines.add("rangefinderTextScale:r = " + asString(rangefinder.textScale, StepSizes.DECPLACES_SCALE));
 		lines.add("rangefinderUseThousandth:b = " + (rangefinder.useThousandth ? "yes" : "no") );
 		lines.add("");
 		
 		// horz range indicators
 		ElementHorzRangeIndicators horzRange = (ElementHorzRangeIndicators)data.getElements(ElementType.HORZ_RANGE_INDICATORS).get(0);
 		lines.add("// horizontal range indicators");
-		lines.add("crosshairHorVertSize:p2 = " + horzRange.sizeMajor + "," + horzRange.sizeMinor);
+		lines.add("crosshairHorVertSize:p2 = " + asString(horzRange.sizeMajor, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(horzRange.sizeMinor, StepSizes.DECPLACES_SCREENSPACE));
 		lines.add("crosshair_hor_ranges {");
 		for(int i=0; i<horzRange.indicators.size(); i++) {
 			HIndicator indicator = horzRange.indicators.get(i);
@@ -252,7 +253,7 @@ public class DataWriter_v2 implements IDataWriter {
 			ElementBallRangeIndicator ballRange = (ElementBallRangeIndicator)data.getElements(ElementType.BALLISTIC_RANGE_INDICATORS).get(0);
 			lines.add("// ballistic range indicators");
 			lines.add("drawUpward:b = " + (ballRange.drawUpward ? "yes" : "no") );
-			lines.add("distancePos:p2 = " + ballRange.position.x + "," + ballRange.position.y);
+			lines.add("distancePos:p2 = " + asString(ballRange.position.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.position.y, StepSizes.DECPLACES_SCREENSPACE));
 			if(ballRange.move) {
 				lines.add("move:b = " + (ballRange.move ? "yes" : "no") );
 			}
@@ -262,20 +263,20 @@ public class DataWriter_v2 implements IDataWriter {
 			if(ballRange.circleMode) {
 				lines.add("circleMode:b = " + (ballRange.circleMode ? "yes" : "no"));
 			}
-			lines.add("crosshairDistHorSizeMain:p2 = " + ballRange.size.x + "," + ballRange.size.y);
-			lines.add("textPos:p2 = " + ballRange.textPos.x + "," + ballRange.textPos.y);
+			lines.add("crosshairDistHorSizeMain:p2 = " + asString(ballRange.size.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.size.y, StepSizes.DECPLACES_SCREENSPACE));
+			lines.add("textPos:p2 = " + asString(ballRange.textPos.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.textPos.x, StepSizes.DECPLACES_SCREENSPACE));
 			lines.add("textAlign:i = " + ballRange.textAlign.id);
-			lines.add("textShift:r = " + ballRange.textShift);
+			lines.add("textShift:r = " + asString(ballRange.textShift, 1));
 			lines.add("drawAdditionalLines:b = " + (ballRange.drawAddLines ? "yes" : "no") );
-			lines.add("crosshairDistHorSizeAdditional:p2 = " + ballRange.sizeAddLine.x + "," + ballRange.sizeAddLine.y);
+			lines.add("crosshairDistHorSizeAdditional:p2 = " + asString(ballRange.sizeAddLine.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.sizeAddLine.y, StepSizes.DECPLACES_SCREENSPACE));
 			if(ballRange.scaleMode == ScaleMode.RADIAL) {
-				lines.add("radialStretch:r = " + ballRange.radialStretch);
-				lines.add("radialAngle:r = " + ballRange.radialAngle);
-				lines.add("radialRadius:p2 = " + ballRange.radialRadius + "," + (ballRange.radiusUseMils ? "1" : "0") );
+				lines.add("radialStretch:r = " + asString(ballRange.radialStretch, 2));
+				lines.add("radialAngle:r = " + asString(ballRange.radialAngle, StepSizes.DECPLACES_ANGLE));
+				lines.add("radialRadius:p2 = " + asString(ballRange.radialRadius, ballRange.radiusUseMils ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + (ballRange.radiusUseMils ? "1" : "0") );
 			}
 			lines.add("drawDistanceCorrection:b = " + (ballRange.drawCorrLabel ? "yes" : "no") );
 			if(ballRange.drawCorrLabel) {
-				lines.add("distanceCorrectionPos:p2 = " + ballRange.posCorrLabel.x + "," + ballRange.posCorrLabel.y);
+				lines.add("distanceCorrectionPos:p2 = " + asString(ballRange.posCorrLabel.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.posCorrLabel.y, StepSizes.DECPLACES_SCREENSPACE));
 			}
 			lines.add("");
 			
@@ -285,9 +286,9 @@ public class DataWriter_v2 implements IDataWriter {
 				int dist = indicator.getDistance();
 				boolean major = indicator.isMajor();
 				int label = major ? Math.abs(dist/100) : 0;
-				double extend = indicator.getExtend();
+				String extend = asString(indicator.getExtend(), StepSizes.DECPLACES_SCREENSPACE);
 				Vector2d textOff = new Vector2d(indicator.getTextX(), indicator.getTextY());
-				lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+				lines.add("    distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + asString(textOff.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textOff.y, StepSizes.DECPLACES_SCREENSPACE) + "; }");
 			}
 			lines.add("}");
 			lines.add("");
@@ -314,7 +315,7 @@ public class DataWriter_v2 implements IDataWriter {
 				lines.add("    triggerGroup:t = \"" + shellBlock.triggerGroup + "\"");
 				lines.add("    thousandth:b = " + "no");
 				lines.add("    drawUpward:b = " + (shellBlock.drawUpward ? "yes" : "no") );
-				lines.add("    distancePos:p2 = " + shellBlock.position.x + "," + shellBlock.position.y);
+				lines.add("    distancePos:p2 = " + asString(shellBlock.position.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(shellBlock.position.y, StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("    move:b = " + (shellBlock.move ? "yes" : "no") );
 				if(shellBlock.scaleMode == ScaleMode.RADIAL) {
 					lines.add("    radial:b = " + (shellBlock.scaleMode == ScaleMode.RADIAL ? "yes" : "no") );
@@ -322,30 +323,29 @@ public class DataWriter_v2 implements IDataWriter {
 				if(shellBlock.circleMode) {
 					lines.add("    circleMode:b = " + (shellBlock.circleMode ? "yes" : "no") );
 				}
-				lines.add("    crosshairDistHorSizeMain:p2 = " + shellBlock.size.x + "," + shellBlock.size.y);
-				lines.add("    textPos:p2 = " + shellBlock.textPos.x + "," + shellBlock.textPos.y);
+				lines.add("    crosshairDistHorSizeMain:p2 = " + asString(shellBlock.size.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(shellBlock.size.y, StepSizes.DECPLACES_SCREENSPACE));
+				lines.add("    textPos:p2 = " + asString(shellBlock.textPos.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(shellBlock.textPos.y, StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("    textAlign:i = " + shellBlock.textAlign.id);
-				lines.add("    textShift:r = " + shellBlock.textShift);
+				lines.add("    textShift:r = " + asString(shellBlock.textShift, StepSizes.DECPLACES_SCREENSPACE));
 				
 				lines.add("    drawAdditionalLines:b = " + (shellBlock.drawAddLines ? "yes" : "no") );
-				lines.add("    crosshairDistHorSizeAdditional:p2 = " + shellBlock.sizeAddLine.x + "," + shellBlock.sizeAddLine.y);
+				lines.add("    crosshairDistHorSizeAdditional:p2 = " + asString(shellBlock.sizeAddLine.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(shellBlock.sizeAddLine.y, StepSizes.DECPLACES_SCREENSPACE));
 				
 				if(shellBlock.scaleMode == ScaleMode.RADIAL) {
-					lines.add("    radialStretch:r = " + shellBlock.radialStretch);
-					lines.add("    radialAngle:r = " + shellBlock.radialAngle);
-					lines.add("    radialRadius:p2 = " + shellBlock.radialRadius + "," + (shellBlock.radiusUseMils ? "1" : "0" ));
+					lines.add("radialStretch:r = " + asString(shellBlock.radialStretch, 2));
+					lines.add("radialAngle:r = " + asString(shellBlock.radialAngle, StepSizes.DECPLACES_ANGLE));
+					lines.add("radialRadius:p2 = " + asString(shellBlock.radialRadius, shellBlock.radiusUseMils ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + (shellBlock.radiusUseMils ? "1" : "0") );
 				}
 				lines.add("    crosshair_distances {");
 				
 				for(int i=0; i<shellBlock.indicators.size(); i++) {
 					BIndicator indicator = shellBlock.indicators.get(i);
-					
 					int dist = indicator.getDistance();
 					boolean major = indicator.isMajor();
 					int label = major ? Math.abs(dist/100) : 0;
-					double extend = indicator.getExtend();
+					String extend = asString(indicator.getExtend(), StepSizes.DECPLACES_SCREENSPACE);
 					Vector2d textOff = new Vector2d(indicator.getTextX(), indicator.getTextY());
-					lines.add("        distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + textOff.x + "," + textOff.y + "; }");
+					lines.add("        distance { distance:p3="+dist + "," + label + "," + extend + "; textPos:p2=" + asString(textOff.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textOff.y, StepSizes.DECPLACES_SCREENSPACE) + "; }");
 				}
 				lines.add("    }");
 				lines.add("  }");
@@ -377,14 +377,18 @@ public class DataWriter_v2 implements IDataWriter {
 				}
 				if(lineObj.movement == Movement.MOVE_RADIAL) {
 					lines.add("    moveRadial:b = " + (lineObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + lineObj.angle);
-					lines.add("    radialCenter:p2 = " + lineObj.radCenter.x + "," + lineObj.radCenter.y);
-					lines.add("    radialMoveSpeed:r = " + lineObj.speed);
+					lines.add("    radialAngle:r = " + asString(lineObj.angle, StepSizes.DECPLACES_ANGLE));
+					lines.add("    radialCenter:p2 = " + asString(lineObj.radCenter.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(lineObj.radCenter.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    radialMoveSpeed:r = " + asString(lineObj.speed, StepSizes.DECPLACES_SPEED));
 					if(!lineObj.autoCenter) {
-						lines.add("    center:p2 = " + lineObj.center.x + "," + lineObj.center.y);
+						lines.add("    center:p2 = " + asString(lineObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(lineObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
 				}
-				lines.add("    line:p4 = " + (lineObj.start.x+lineObj.positionOffset.x) + "," + (lineObj.start.y+lineObj.positionOffset.y) + ", " + (lineObj.end.x+lineObj.positionOffset.x) + "," + (lineObj.end.y+lineObj.positionOffset.y));
+				lines.add("    line:p4 = " 
+									+ asString(lineObj.start.x+lineObj.positionOffset.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+									+ asString(lineObj.start.y+lineObj.positionOffset.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ", "
+									+ asString(lineObj.end.x+lineObj.positionOffset.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+									+ asString(lineObj.end.y+lineObj.positionOffset.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("  }");
 			}
 			
@@ -400,12 +404,16 @@ public class DataWriter_v2 implements IDataWriter {
 					}
 					if(polyObj.movement == Movement.MOVE_RADIAL) {
 						lines.add("    moveRadial:b = " + (polyObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-						lines.add("    radialAngle:r = " + polyObj.angle);
-						lines.add("    radialCenter:p2 = " + polyObj.radCenter.x + "," + polyObj.radCenter.y);
-						lines.add("    radialMoveSpeed:r = " + polyObj.speed);
-						lines.add("    center:p2 = " + polyObj.center.x + "," + polyObj.center.y);
+						lines.add("    radialAngle:r = " + asString(polyObj.angle, StepSizes.DECPLACES_ANGLE));
+						lines.add("    radialCenter:p2 = " + asString(polyObj.radCenter.x, polyObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(polyObj.radCenter.y, polyObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+						lines.add("    radialMoveSpeed:r = " + asString(polyObj.speed, StepSizes.DECPLACES_SPEED));
+						lines.add("    center:p2 = " + asString(polyObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(polyObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
-					lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
+					lines.add("    line:p4 = " 
+							+ asString(lineObj.start.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+							+ asString(lineObj.start.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ", "
+							+ asString(lineObj.end.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+							+ asString(lineObj.end.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));					
 					lines.add("  }");
 				}
 			}
@@ -422,12 +430,16 @@ public class DataWriter_v2 implements IDataWriter {
 					}
 					if(quadObj.movement == Movement.MOVE_RADIAL) {
 						lines.add("    moveRadial:b = " + (quadObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-						lines.add("    radialAngle:r = " + quadObj.angle);
-						lines.add("    radialCenter:p2 = " + quadObj.radCenter.x + "," + quadObj.radCenter.y);
-						lines.add("    radialMoveSpeed:r = " + quadObj.speed);
-						lines.add("    center:p2 = " + quadObj.center.x + "," + quadObj.center.y);
+						lines.add("    radialAngle:r = " + asString(quadObj.angle, StepSizes.DECPLACES_ANGLE));
+						lines.add("    radialCenter:p2 = " + asString(quadObj.radCenter.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.radCenter.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+						lines.add("    radialMoveSpeed:r = " + asString(quadObj.speed, StepSizes.DECPLACES_SPEED));
+						lines.add("    center:p2 = " + asString(quadObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
-					lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
+					lines.add("    line:p4 = " 
+							+ asString(lineObj.start.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+							+ asString(lineObj.start.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ", "
+							+ asString(lineObj.end.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+							+ asString(lineObj.end.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));				
 					lines.add("  }");
 				}
 			}
@@ -442,7 +454,11 @@ public class DataWriter_v2 implements IDataWriter {
 					if(funnel.movement == Movement.MOVE) {
 						lines.add("    move:b = " + (funnel.movement == Movement.STATIC ? "no" : "yes") );
 					}
-					lines.add("    line:p4 = " + lineObj.start.x + "," + lineObj.start.y + ", " + lineObj.end.x + "," + lineObj.end.y);
+					lines.add("    line:p4 = " 
+							+ asString(lineObj.start.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+							+ asString(lineObj.start.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ", "
+							+ asString(lineObj.end.x, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + ","
+							+ asString(lineObj.end.y, lineObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));				
 					lines.add("  }");
 				}
 			}
@@ -465,17 +481,16 @@ public class DataWriter_v2 implements IDataWriter {
 					lines.add("    move:b = " + (textObj.movement == Movement.STATIC ? "no" : "yes") );
 				}
 				if(textObj.movement == Movement.MOVE_RADIAL) {
-					lines.add("    moveRadial:b = " + (textObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + textObj.angle);
-					lines.add("    radialCenter:p2 = " + textObj.radCenter.x + "," + textObj.radCenter.y);
-					lines.add("    radialMoveSpeed:r = " + textObj.speed);
+					lines.add("    radialAngle:r = " + asString(textObj.angle, StepSizes.DECPLACES_ANGLE));
+					lines.add("    radialCenter:p2 = " + asString(textObj.radCenter.x, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textObj.radCenter.y, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    radialMoveSpeed:r = " + asString(textObj.speed, StepSizes.DECPLACES_SPEED));
 					if(!textObj.autoCenter) {
-						lines.add("    center:p2 = " + textObj.center.x + "," + textObj.center.y);
+						lines.add("    center:p2 = " + asString(textObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
 				}
-				lines.add("    pos:p2 = " + textObj.position.x + "," + textObj.position.y);
+				lines.add("    pos:p2 = " + asString(textObj.position.x, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textObj.position.y, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("    align:i = " + textObj.align.id);
-				lines.add("    size:r = " + textObj.size);
+				lines.add("    size:r = " + asString(textObj.size, StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("  }");
 			}
 			lines.add("}");
@@ -496,17 +511,17 @@ public class DataWriter_v2 implements IDataWriter {
 				}
 				if(circleObj.movement == Movement.MOVE_RADIAL) {
 					lines.add("    moveRadial:b = " + (circleObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + circleObj.angle);
-					lines.add("    radialCenter:p2 = " + circleObj.radCenter.x + "," + circleObj.radCenter.y);
-					lines.add("    radialMoveSpeed:r = " + circleObj.speed);
+					lines.add("    radialAngle:r = " + asString(circleObj.angle, StepSizes.DECPLACES_ANGLE));
+					lines.add("    radialCenter:p2 = " + asString(circleObj.radCenter.x, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(circleObj.radCenter.y, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    radialMoveSpeed:r = " + asString(circleObj.speed, StepSizes.DECPLACES_SPEED));
 					if(!circleObj.autoCenter) {
-						lines.add("    center:p2 = " + circleObj.center.x + "," + circleObj.center.y);
+						lines.add("    center:p2 = " + asString(circleObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(circleObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
 				}
-				lines.add("    segment:p2 = " + circleObj.segment.x + "," + circleObj.segment.y);
-				lines.add("    pos:p2 = " + circleObj.position.x + "," + circleObj.position.y);
-				lines.add("    diameter:r = " + circleObj.diameter);
-				lines.add("    size:r = " + circleObj.size);
+				lines.add("    segment:p2 = " + asString(circleObj.segment.x, StepSizes.DECPLACES_ANGLE) + "," + asString(circleObj.segment.y, StepSizes.DECPLACES_ANGLE));
+				lines.add("    pos:p2 = " + asString(circleObj.position.x, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(circleObj.position.y, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+				lines.add("    diameter:r = " + asString(circleObj.diameter, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+				lines.add("    size:r = " + asString(circleObj.size, StepSizes.DECPLACES_THICKNESS));
 				lines.add("  }");
 			}
 			lines.add("}");
@@ -529,17 +544,17 @@ public class DataWriter_v2 implements IDataWriter {
 				}
 				if(quadObj.movement == Movement.MOVE_RADIAL) {
 					lines.add("    moveRadial:b = " + (quadObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-					lines.add("    radialAngle:r = " + quadObj.angle);
-					lines.add("    radialCenter:p2 = " + quadObj.radCenter.x + "," + quadObj.radCenter.y);
-					lines.add("    radialMoveSpeed:r = " + quadObj.speed);
+					lines.add("    radialAngle:r = " + asString(quadObj.angle, StepSizes.DECPLACES_ANGLE));
+					lines.add("    radialCenter:p2 = " + asString(quadObj.radCenter.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.radCenter.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    radialMoveSpeed:r = " + asString(quadObj.speed, StepSizes.DECPLACES_SPEED));
 					if(!quadObj.autoCenter) {
-						lines.add("    center:p2 = " + quadObj.center.x + "," + quadObj.center.y);
+						lines.add("    center:p2 = " + asString(quadObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
 				}
-				lines.add("    tl:p2 = " + (quadObj.pos1.x+quadObj.positionOffset.x) + "," + (quadObj.pos1.y+quadObj.positionOffset.y));
-				lines.add("    tr:p2 = " + (quadObj.pos2.x+quadObj.positionOffset.x) + "," + (quadObj.pos2.y+quadObj.positionOffset.y));
-				lines.add("    br:p2 = " + (quadObj.pos3.x+quadObj.positionOffset.x) + "," + (quadObj.pos3.y+quadObj.positionOffset.y));
-				lines.add("    bl:p2 = " + (quadObj.pos4.x+quadObj.positionOffset.x) + "," + (quadObj.pos4.y+quadObj.positionOffset.y));
+				lines.add("    tl:p2 = " + asString(quadObj.pos1.x+quadObj.positionOffset.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos1.y+quadObj.positionOffset.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+				lines.add("    tr:p2 = " + asString(quadObj.pos2.x+quadObj.positionOffset.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos2.y+quadObj.positionOffset.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+				lines.add("    br:p2 = " + asString(quadObj.pos3.x+quadObj.positionOffset.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos3.y+quadObj.positionOffset.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+				lines.add("    bl:p2 = " + asString(quadObj.pos4.x+quadObj.positionOffset.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos4.y+quadObj.positionOffset.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("  }");
 			}
 			
@@ -554,15 +569,15 @@ public class DataWriter_v2 implements IDataWriter {
 					}
 					if(polyObj.movement == Movement.MOVE_RADIAL) {
 						lines.add("    moveRadial:b = " + (polyObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-						lines.add("    radialAngle:r = " + polyObj.angle);
-						lines.add("    radialCenter:p2 = " + polyObj.radCenter.x + "," + polyObj.radCenter.y);
-						lines.add("    radialMoveSpeed:r = " + polyObj.speed);
-						lines.add("    center:p2 = " + polyObj.center.x + "," + polyObj.center.y);
+						lines.add("    radialAngle:r = " + asString(polyObj.angle, StepSizes.DECPLACES_ANGLE));
+						lines.add("    radialCenter:p2 = " + asString(polyObj.radCenter.x, polyObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(polyObj.radCenter.y, polyObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+						lines.add("    radialMoveSpeed:r = " + asString(polyObj.speed, StepSizes.DECPLACES_SPEED));
+						lines.add("    center:p2 = " + asString(polyObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(polyObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
-					lines.add("    tl:p2 = " + quadObj.pos1.x + "," + quadObj.pos1.y);
-					lines.add("    tr:p2 = " + quadObj.pos2.x + "," + quadObj.pos2.y);
-					lines.add("    br:p2 = " + quadObj.pos3.x + "," + quadObj.pos3.y);
-					lines.add("    bl:p2 = " + quadObj.pos4.x + "," + quadObj.pos4.y);
+					lines.add("    tl:p2 = " + asString(quadObj.pos1.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos1.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    tr:p2 = " + asString(quadObj.pos2.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos2.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    br:p2 = " + asString(quadObj.pos3.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos3.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    bl:p2 = " + asString(quadObj.pos4.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos4.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 					lines.add("  }");
 				}
 			}
@@ -578,15 +593,15 @@ public class DataWriter_v2 implements IDataWriter {
 					}
 					if(circleObj.movement == Movement.MOVE_RADIAL) {
 						lines.add("    moveRadial:b = " + (circleObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
-						lines.add("    radialAngle:r = " + circleObj.angle);
-						lines.add("    radialCenter:p2 = " + circleObj.radCenter.x + "," + circleObj.radCenter.y);
-						lines.add("    radialMoveSpeed:r = " + circleObj.speed);
-						lines.add("    center:p2 = " + circleObj.center.x + "," + circleObj.center.y);
+						lines.add("    radialAngle:r = " + asString(circleObj.angle, StepSizes.DECPLACES_ANGLE));
+						lines.add("    radialCenter:p2 = " + asString(circleObj.radCenter.x, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(circleObj.radCenter.y, circleObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+						lines.add("    radialMoveSpeed:r = " + asString(circleObj.speed, StepSizes.DECPLACES_SPEED));
+						lines.add("    center:p2 = " + asString(circleObj.center.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(circleObj.center.y, StepSizes.DECPLACES_SCREENSPACE));
 					}
-					lines.add("    tl:p2 = " + quadObj.pos1.x + "," + quadObj.pos1.y);
-					lines.add("    tr:p2 = " + quadObj.pos2.x + "," + quadObj.pos2.y);
-					lines.add("    br:p2 = " + quadObj.pos3.x + "," + quadObj.pos3.y);
-					lines.add("    bl:p2 = " + quadObj.pos4.x + "," + quadObj.pos4.y);
+					lines.add("    tl:p2 = " + asString(quadObj.pos1.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos1.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    tr:p2 = " + asString(quadObj.pos2.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos2.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    br:p2 = " + asString(quadObj.pos3.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos3.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
+					lines.add("    bl:p2 = " + asString(quadObj.pos4.x, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(quadObj.pos4.y, quadObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 					lines.add("  }");
 				}
 			}
@@ -735,7 +750,16 @@ public class DataWriter_v2 implements IDataWriter {
 	private String getElementIdentifier(Object object) {
 		String strID = "element_" + object.hashCode();
 		return Integer.toHexString(strID.hashCode());
-	}	
+	}
+	
+	
+	
+	
+	private static String asString(double value, int decPlaces) {
+		String s = String.format("%." + decPlaces + "f", value).replaceAll(",", ".");
+		s = s.indexOf(".") < 0 ? s : s.replaceAll("0*$", "").replaceAll("\\.$", "");
+		return s;
+	}
 	
 }
 
