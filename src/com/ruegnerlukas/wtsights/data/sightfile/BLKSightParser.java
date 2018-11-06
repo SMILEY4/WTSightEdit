@@ -56,10 +56,21 @@ public class BLKSightParser {
 	
 	
 	public static String prepare(String rawFileContent) {
-		final String regexWS = "\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)"; // find all whitespace outside of quotes
+//		final String regexWS = "\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)"; // find all whitespace outside of quotes
 //		final String regexBC = "(\\/\\*([^*]|[\\r\\n]|(\\*+([^*\\/]|[\\r\\n])))*\\*+\\/)|(\\/\\/.*)"; // find all (block-)comments
 		final String regexBC = "(\\/\\*([^*]|[\\r\\n]|(\\*+([^*\\/]|[\\r\\n])))*\\*+\\/)|(\\/\\/(?!--).*)"; // find all (block-)comments, exept starting with "//--"
 		final String regexTB = "\\t"; // find all tabs
+		
+		// remove whitespaces
+		String[] parts = rawFileContent.split("\"", -1);
+		for(int i=0; i<parts.length; i++) {
+			if(i%2 == 0) {
+				parts[i] = parts[i].replaceAll(" ", "");
+			} else {
+				parts[i] = parts[i].trim();
+			}
+		}
+		rawFileContent = String.join("\"", parts);
 		
 		rawFileContent = rawFileContent
 				.replaceAll(regexTB, "")
@@ -68,7 +79,9 @@ public class BLKSightParser {
 				.replaceAll("\n", ";")
 				.replaceAll("\r\n", ";")
 				.replaceAll("\r", ";")
-				.replaceAll(regexWS, "");
+//				.replaceAll(regexWS, "") // stackoverflow with large strings
+				;
+		
 		
 		return rawFileContent;
 	}

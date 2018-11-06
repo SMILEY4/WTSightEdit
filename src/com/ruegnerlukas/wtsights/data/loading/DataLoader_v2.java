@@ -1170,6 +1170,7 @@ public class DataLoader_v2 implements IDataLoader {
 					}
 					ElementFunnel funnel = new  ElementFunnel();
 					funnel.movement = ((ElementCustomLine)elems.get(0)).movement;
+					funnel.useThousandth = ((ElementCustomLine)elems.get(0)).useThousandth;
 					funnel.sizeTargetCM = Integer.parseInt(attribsFirst.get("tsize"));
 					funnel.rangeStart = Integer.parseInt(attribsFirst.get("range").split(" ")[0]);
 					funnel.rangeEnd = Integer.parseInt(attribsFirst.get("range").split(" ")[1]);
@@ -1185,6 +1186,13 @@ public class DataLoader_v2 implements IDataLoader {
 							}
 						}
 					}
+					String funnelid[] = attribsFirst.get("funnelid").split("_");
+					funnel.showLeft = funnelid[0].contains("l");
+					funnel.showRight = funnelid[0].contains("r");
+					funnel.baseLine = funnelid[0].contains("b");
+					funnel.horz = funnelid[0].contains("h");
+					funnel.flip = funnelid[0].contains("f");
+					funnel.offset.set(Float.parseFloat(funnelid[1].replaceAll("n", "-")), Float.parseFloat(funnelid[2].replaceAll("n", "-")));
 					finalElement = funnel;
 				}
 			}

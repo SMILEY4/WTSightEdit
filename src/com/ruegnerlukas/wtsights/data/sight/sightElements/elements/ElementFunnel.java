@@ -17,12 +17,23 @@ import com.ruegnerlukas.wtutils.Conversion;
 public class ElementFunnel extends BaseElement {
 
 
+	public BallisticElement elementBallistic = null;
+	
+	public Movement movement = Movement.STATIC;
+	
+	public boolean showRight = true;
+	public boolean showLeft = true;
+	public boolean baseLine = false;
+	public boolean flip = false;
+	public boolean horz = false; // todo
+	
+	public boolean useThousandth = true;
+	public Vector2d offset = new Vector2d(0,0);
+	
+	public int sizeTargetCM = 600;
 	public int rangeStart = 100;
 	public int rangeEnd = 3200;
 	public int rangeStep = 50;
-	public int sizeTargetCM = 600;
-	public BallisticElement elementBallistic = null;
-	public Movement movement = Movement.STATIC;
 	
 	
 	private List<ElementCustomLine> lines = new ArrayList<ElementCustomLine>();
@@ -72,6 +83,15 @@ public class ElementFunnel extends BaseElement {
 			}
 			points.add(new Vector2d(rangeEnd, s / Math.max(rangeEnd, 1)));
 
+			if(flip) {
+				List<Vector2d> flippedPoints = new ArrayList<Vector2d>(points.size());
+				for(int i=0; i<points.size(); i++) {
+					Vector2d pointA = points.get(i);
+					Vector2d pointB = points.get(points.size()-i-1);
+					flippedPoints.add(new Vector2d(pointA.x, pointB.y));
+				}
+				points = flippedPoints;
+			}
 			
 			lines.clear();
 			if(rangeStart < rangeEnd) {
@@ -80,29 +100,80 @@ public class ElementFunnel extends BaseElement {
 					Vector2d p0 = points.get(i);
 					Vector2d p1 = points.get(i+1);
 					
-					double py0 = Conversion.get().pixel2mil(elementBallistic.function.eval(p0.x), canvasHeight, false);
-					double py1 = Conversion.get().pixel2mil(elementBallistic.function.eval(p1.x), canvasHeight, false);
+					double px0 = 0;
+					double px1 = 0;
+					if(useThousandth) {
+						px0 = p0.y;
+						px1 = p1.y;
+					} else {
+						px0 = Conversion.get().mil2screenspace(p0.y, false);
+						px1 = Conversion.get().mil2screenspace(p1.y, false);
+					}
 					
-					ElementCustomLine lineRight = new ElementCustomLine();
-					lineRight.useThousandth = true;
-					lineRight.movement = movement;
-					lineRight.start.set(p0.y/2, py0);
-					lineRight.end.set(p1.y/2, py1);
-					lineRight.setDirty(true);
-					lineRight.layout(data, canvasWidth, canvasHeight);
+					double py0 = 0;
+					double py1 = 0;
+					if(useThousandth) {
+						py0 = Conversion.get().pixel2mil(elementBallistic.function.eval(p0.x), canvasHeight, false);
+						py1 = Conversion.get().pixel2mil(elementBallistic.function.eval(p1.x), canvasHeight, false);
+					} else {
+						py0 = Conversion.get().pixel2screenspace(elementBallistic.function.eval(p0.x), canvasHeight, false);
+						py1 = Conversion.get().pixel2screenspace(elementBallistic.function.eval(p1.x), canvasHeight, false);
+					}
 					
-					ElementCustomLine lineLeft = new ElementCustomLine();
-					lineLeft.useThousandth = true;
-					lineLeft.movement = movement;
-					lineLeft.start.set(-p0.y/2, py0);
-					lineLeft.end.set(-p1.y/2, py1);
-					lineLeft.setDirty(true);
-					lineLeft.layout(data, canvasWidth, canvasHeight);
+					if(showRight) {
+						ElementCustomLine lineRight = new ElementCustomLine();
+						lineRight.useThousandth = true;
+						lineRight.movement = movement;
+						lineRight.useThousandth = this.useThousandth;
+						if(horz) {
+							lineRight.start.set( py0 + offset.x, (showLeft ? px0/2 : px0) + offset.y);
+							lineRight.end.set( py1 + offset.x, (showLeft ? px1/2 : px1) + offset.y);
+						} else {
+							lineRight.start.set((showLeft ? px0/2 : px0) + offset.x, py0 + offset.y);
+							lineRight.end.set((showLeft ? px1/2 : px1) + offset.x, py1 + offset.y);
+						}
+						lineRight.setDirty(true);
+						lineRight.layout(data, canvasWidth, canvasHeight);
+						lines.add(lineRight);
+					}
 					
-					lines.add(lineRight);
-					lines.add(lineLeft);
+					if(showLeft) {
+						ElementCustomLine lineLeft = new ElementCustomLine();
+						lineLeft.useThousandth = true;
+						lineLeft.movement = movement;
+						lineLeft.useThousandth = this.useThousandth;
+						if(horz) {
+							lineLeft.start.set( py0 + offset.x, (showRight ? -px0/2 : -px0) + offset.y);
+							lineLeft.end.set( py1 + offset.x, (showRight ? -px1/2 : -px1) + offset.y);
+						} else {
+							lineLeft.start.set((showRight ? -px0/2 : -px0) + offset.x, py0 + offset.y);
+							lineLeft.end.set((showRight ? -px1/2 : -px1) + offset.x, py1 + offset.y);
+						}
+						lineLeft.setDirty(true);
+						lineLeft.layout(data, canvasWidth, canvasHeight);
+						lines.add(lineLeft);
+					}
 					
 				}
+				
+				if((showRight ^ showLeft) && baseLine) {
+					double py0 = Conversion.get().pixel2mil(elementBallistic.function.eval(rangeStart), canvasHeight, false);
+					double py1 = Conversion.get().pixel2mil(elementBallistic.function.eval(rangeEnd), canvasHeight, false);
+					ElementCustomLine baseLine = new ElementCustomLine();
+					baseLine.useThousandth = this.useThousandth;
+					baseLine.movement = movement;
+					if(horz) {
+						baseLine.start.set(py0 + offset.x, 0 + offset.y);
+						baseLine.end.set(py1 + offset.x, 0 + offset.y);
+					} else {
+						baseLine.start.set(0 + offset.x, py0 + offset.y);
+						baseLine.end.set(0 + offset.x, py1 + offset.y);
+					}
+					baseLine.setDirty(true);
+					baseLine.layout(data, canvasWidth, canvasHeight);
+					lines.add(baseLine);
+				}
+				
 			}
 			
 			

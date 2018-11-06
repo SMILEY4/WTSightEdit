@@ -344,7 +344,15 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mf_range_end",					"Range End");
 		map.put("se_mf_range_step",					"Range Step");
 		map.put("se_mf_move",						"Move");
+		map.put("se_mf_show_right",					"Show Right Side");
+		map.put("se_mf_show_left",					"Show Left Side");
+		map.put("se_mf_horizontal",					"Horizontal");
+		map.put("se_mf_base_line",					"Draw Base Line");
+		map.put("se_mf_use_thousandth",				"Use Thousandth");
+		map.put("se_mf_offset",						"Offset");
+		map.put("se_mf_flip",						"Flip Funnel");
 
+		
 		
 		// ELEMENT TYPES
 		map.put("et_central_horzline",				"Central Horizontal Line");

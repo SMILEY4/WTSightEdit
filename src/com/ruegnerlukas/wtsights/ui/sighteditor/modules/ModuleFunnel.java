@@ -9,8 +9,10 @@ import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
 import com.ruegnerlukas.wtsights.ui.sighteditor.SightEditorController;
+import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
+import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.FXUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -27,11 +29,23 @@ public class ModuleFunnel implements Module {
 	private ElementFunnel element;
 
 	@FXML private ComboBox<BallisticElement> comboAmmo;
+	
 	@FXML private CheckBox cbMove;
+	@FXML private CheckBox cbShowRight;
+	@FXML private CheckBox cbShowLeft;
+	@FXML private CheckBox cbHorz;
+	@FXML private CheckBox cbBaseLine;
+	@FXML private CheckBox cbFlip;
+	
+	@FXML private CheckBox cbUseThousandth;
+	@FXML private Spinner<Double> spinnerOffX;
+	@FXML private Spinner<Double> spinnerOffY;
+
 	@FXML private Spinner<Integer> spinnerTargetSize;
 	@FXML private Spinner<Integer> spinnerRangeStart;
 	@FXML private Spinner<Integer> spinnerRangeEnd;
 	
+
 	
 	
 	
@@ -69,6 +83,107 @@ public class ModuleFunnel implements Module {
 			@Override public void handle(ActionEvent event) {
 				if(element != null) {
 					element.movement = cbMove.isSelected() ? Movement.MOVE : Movement.STATIC;
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		
+		// show sides
+		cbShowRight.setSelected(elementDefault.showRight);
+		cbShowRight.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.showRight = cbShowRight.isSelected();
+					element.setDirty(true);
+					cbBaseLine.setDisable(element.showLeft && element.showRight);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		cbShowLeft.setSelected(elementDefault.showLeft);
+		cbShowLeft.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.showLeft = cbShowLeft.isSelected();
+					element.setDirty(true);
+					cbBaseLine.setDisable(element.showLeft && element.showRight);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		
+		// horizontal
+		cbHorz.setSelected(elementDefault.horz);
+		cbHorz.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.horz = cbHorz.isSelected();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		
+		// baseline
+		cbBaseLine.setSelected(elementDefault.baseLine);
+		cbBaseLine.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.baseLine = cbBaseLine.isSelected();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		cbBaseLine.setDisable(elementDefault.showLeft && elementDefault.showRight);
+		
+		// flip
+		cbFlip.setSelected(elementDefault.flip);
+		cbFlip.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.flip = cbFlip.isSelected();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		
+		// thousandth
+		cbUseThousandth.setSelected(elementDefault.useThousandth);
+		cbUseThousandth.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.useThousandth = cbUseThousandth.isSelected();
+					if(element.useThousandth) {
+						FXUtils.initSpinner(spinnerOffX, Conversion.get().screenspace2mil(spinnerOffX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerOffY, Conversion.get().screenspace2mil(spinnerOffY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+					} else {
+						FXUtils.initSpinner(spinnerOffX, Conversion.get().mil2screenspace(spinnerOffX.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerOffY, Conversion.get().mil2screenspace(spinnerOffY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+
+					}
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		
+		// offset
+		FXUtils.initSpinner(spinnerOffX, elementDefault.offset.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				if(element != null) {
+					element.offset.x = newValue.doubleValue();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		FXUtils.initSpinner(spinnerOffY, elementDefault.offset.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				if(element != null) {
+					element.offset.y = newValue.doubleValue();
 					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 				}

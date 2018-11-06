@@ -89,7 +89,7 @@ public class OverlayRenderer {
 	
 	
 	public static void drawElementSelection(WTCanvas canvas, GraphicsContext g, DataPackage data) {
-
+		
 		BaseElement selectedElement = data.dataSight.selectedElement;
 		
 		if(selectedElement == null) {
@@ -103,7 +103,6 @@ public class OverlayRenderer {
 				data.dataBallistic.vehicle.fovOut*data.dataBallistic.zoomModOut,
 				data.dataBallistic.vehicle.fovIn*data.dataBallistic.zoomModIn,
 				data.dataSight.gnrThousandth);
-		
 		
 		if(selectedElement.type == ElementType.CENTRAL_VERT_LINE) {
 			ElementCentralVertLine element = (ElementCentralVertLine)selectedElement;
@@ -482,7 +481,7 @@ public class OverlayRenderer {
 	
 	
 	
-	
+	static Vector2d dist = new Vector2d();
 	static Vector2d dir = new Vector2d();
 	static Vector2d cap = new Vector2d();
 	static Vector2d perp = new Vector2d();
@@ -492,13 +491,12 @@ public class OverlayRenderer {
 	static Vector2d b = new Vector2d();
 	static Vector2d c = new Vector2d();
 	static Vector2d d = new Vector2d();
-	
+
 
 	private static void drawLine(Color color1, Color color2, WTCanvas canvas, GraphicsContext g, double x0, double y0, double x1, double y1, double lineSize) {
 		
-
 		
-		if( (MathUtils.isNearlyEqual(x0, x1) && MathUtils.isNearlyEqual(y0, y1)) ) {
+		if( dist.set(x0,y0).dist(x1,y1) <= 1) {
 			return;
 		}
 		
@@ -513,6 +511,9 @@ public class OverlayRenderer {
 
 		
 		Vector2d.setVectorAB(px0, py0, px1, py1, dir);
+		if(MathUtils.isNearlyEqual(dir.length(), 0, 0.0001)) {
+			return;
+		}
 		cap.set(dir).setLength(lineSize*canvas.canvas.getScaleX()/2);
 		perp.set(dir).normalize().rotateDeg(90).setLength(lineSize*canvas.canvas.getScaleX()/2);
 		
@@ -541,7 +542,6 @@ public class OverlayRenderer {
 		g.setLineDashOffset(offset+5);
 		g.strokeLine(c.x, c.y, d.x, d.y);
 		g.strokeLine(b.x, b.y, d.x, d.y);
-		
 		
 	}
 

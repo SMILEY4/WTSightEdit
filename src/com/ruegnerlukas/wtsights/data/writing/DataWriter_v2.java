@@ -450,7 +450,7 @@ public class DataWriter_v2 implements IDataWriter {
 				for(ElementCustomLine lineObj : funnel.getLines()) {
 					lines.add("  //-- " + buildElementAttributeString(funnel, lineObj));
 					lines.add("  line {");
-					lines.add("    thousandth:b = " + "yes" );
+					lines.add("    thousandth:b = " + funnel.useThousandth );
 					if(funnel.movement == Movement.MOVE) {
 						lines.add("    move:b = " + (funnel.movement == Movement.STATIC ? "no" : "yes") );
 					}
@@ -725,6 +725,15 @@ public class DataWriter_v2 implements IDataWriter {
 			if(!funnel.elementBallistic.ammunition.isEmpty()) {
 				attributes.add(new String[]{"shell", ""+funnel.elementBallistic.ammunition.get(0).name});
 			}
+			attributes.add(new String[]{"funnelid", ""
+					+ (funnel.showLeft ? "l" : "")
+					+ (funnel.showRight ? "r" : "")
+					+ (funnel.baseLine ? "b" : "")
+					+ (funnel.horz ? "h" : "")
+					+ (funnel.flip ? "f" : "")
+					+ "_" + (funnel.useThousandth ? asString(funnel.offset.x, StepSizes.DECPLACES_MIL).replaceAll("-", "n") : asString(funnel.offset.x, StepSizes.DECPLACES_SCREENSPACE).replaceAll("-", "n"))
+					+ "_" + (funnel.useThousandth ? asString(funnel.offset.y, StepSizes.DECPLACES_MIL).replaceAll("-", "n") : asString(funnel.offset.y, StepSizes.DECPLACES_SCREENSPACE).replaceAll("-", "n"))
+			});
 
 
 		}
