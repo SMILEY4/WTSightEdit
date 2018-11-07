@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.Map;
 
 import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
-import com.ruegnerlukas.wtsights.data.DataLoader;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.FileVersion;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.loading.DataLoader;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
@@ -75,10 +77,14 @@ public class CalibrationSelectService implements IViewService {
 				ViewManager.getLoader(View.VEHICLE_SELECT).openNew(null, new MapBuilder<ParamKey,Object>().get());
 		
 			} else {
-				BallisticData dataBall = DataLoader.loadBallisticDataFile(fileCalibration);
-				FXUtils.closeFXScene(View.CALIBRATION_SELECT);
-				ViewManager.getLoader(View.SIGHT_EDITOR).openNew(
-						null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA,dataBall).add(ParamKey.SIGHT_DATA,null).get());
+				try {
+					BallisticData dataBall = DataLoader.get(FileVersion.AUTO_DETECT).loadBallisticDataFile(fileCalibration);
+					FXUtils.closeFXScene(View.CALIBRATION_SELECT);
+					ViewManager.getLoader(View.SIGHT_EDITOR).openNew(
+							null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA,dataBall).add(ParamKey.SIGHT_DATA,null).get());
+				} catch (Exception e) {
+					Logger.get().error(e);
+				}
 
 			}
 			
@@ -92,11 +98,15 @@ public class CalibrationSelectService implements IViewService {
 				ViewManager.getLoader(View.VEHICLE_SELECT).openNew(null, new MapBuilder<ParamKey,Object>().add(ParamKey.FILE_SIGHT, fileSight).get());
 			
 			} else {
-				BallisticData dataBall = DataLoader.loadBallisticDataFile(fileCalibration);
-				SightData dataSight = DataLoader.loadSight(fileSight, dataBall);
-				FXUtils.closeFXScene(View.CALIBRATION_SELECT);
-				ViewManager.getLoader(View.SIGHT_EDITOR).openNew(
-						null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA,dataBall).add(ParamKey.SIGHT_DATA,dataSight).get());
+				try {
+					BallisticData dataBall = DataLoader.get(FileVersion.AUTO_DETECT).loadBallisticDataFile(fileCalibration);
+					SightData dataSight = DataLoader.get(FileVersion.AUTO_DETECT).loadSightDataFile(fileSight, dataBall);
+					FXUtils.closeFXScene(View.CALIBRATION_SELECT);
+					ViewManager.getLoader(View.SIGHT_EDITOR).openNew(
+							null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA,dataBall).add(ParamKey.SIGHT_DATA,dataSight).get());
+				} catch (Exception e) {
+					Logger.get().error(e);
+				}
 			}
 		}
 		

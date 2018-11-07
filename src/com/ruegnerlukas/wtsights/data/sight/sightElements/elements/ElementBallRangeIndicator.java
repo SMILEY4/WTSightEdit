@@ -10,7 +10,7 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec4.Vector4d;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementSingle;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutBallRangeIndicators;
 import com.ruegnerlukas.wtsights.ui.sighteditor.rendering.SightRenderer;
@@ -23,7 +23,7 @@ import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class ElementBallRangeIndicator extends ElementSingle {
+public class ElementBallRangeIndicator extends BaseElement {
 
 	
 	public boolean 		drawUpward 		= false;						// flip the scale and movement direction.

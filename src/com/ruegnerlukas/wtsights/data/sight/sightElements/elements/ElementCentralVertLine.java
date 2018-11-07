@@ -1,11 +1,11 @@
 package com.ruegnerlukas.wtsights.data.sight.sightElements.elements;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementSingle;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCentralVertLine;
 
-public class ElementCentralVertLine extends ElementSingle {
+public class ElementCentralVertLine extends BaseElement {
 
 	
 	public boolean drawCentralVertLine = true; // display the vertical sight line

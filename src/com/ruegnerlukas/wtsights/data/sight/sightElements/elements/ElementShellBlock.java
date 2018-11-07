@@ -7,8 +7,8 @@ import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 
 public class ElementShellBlock extends ElementBallRangeIndicator {
 	
-	public TriggerGroup	triggerGroup 	= TriggerGroup.PRIMARY;	// the armament you want calculate ballistics for
-	public BallisticElement elementBallistic= null;				// the ammunition data
+	public TriggerGroup	triggerGroup 		 = TriggerGroup.PRIMARY;	// the armament you want to calculate ballistics for
+	public BallisticElement elementBallistic = null;					// the ammunition data
 	
 	
 	

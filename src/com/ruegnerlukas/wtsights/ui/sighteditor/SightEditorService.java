@@ -6,10 +6,10 @@ import java.util.List;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.DataWriter;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
+import com.ruegnerlukas.wtsights.data.writing.DataWriter;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
@@ -55,21 +55,21 @@ public class SightEditorService implements IViewService {
 	
 	
 	
-	public List<Element> getElements() {
+	public List<BaseElement> getElements() {
 		return data.dataSight.collectElements();
 	}
 	
 	
 	
 	
-	public void selectElement(Element element) {
+	public void selectElement(BaseElement element) {
 		data.dataSight.selectedElement = element;
 	}
 	
 	
 	
 	
-	public void addElement(Element element) {
+	public void addElement(BaseElement element) {
 		data.dataSight.addElement(element);
 	}
 	
@@ -82,14 +82,14 @@ public class SightEditorService implements IViewService {
 	 * 2 = name is empty
 	 * 3 = name is not unique
 	 * */
-	public int validateElementName(Element element, String name) {
+	public int validateElementName(BaseElement element, String name) {
 		if(name == null) {
 			return 1;
 		}
 		if(name.trim().length() == 0) {
 			return 2;
 		}
-		for(Element e : getElements()) {
+		for(BaseElement e : getElements()) {
 			if(e != element) {
 				if(e.name.trim().equalsIgnoreCase(name.trim())) {
 					return 3;
@@ -102,7 +102,7 @@ public class SightEditorService implements IViewService {
 	
 	
 	
-	public void renameElement(Element element, String name) {
+	public void renameElement(BaseElement element, String name) {
 		if(validateElementName(element, name) == 0) {
 			element.name = name.trim();
 		}
@@ -111,7 +111,7 @@ public class SightEditorService implements IViewService {
 	
 	
 	
-	public void deleteElement(Element element) {
+	public void deleteElement(BaseElement element) {
 		if(element != null) {
 			data.dataSight.removeElement(element);
 		}
@@ -179,7 +179,7 @@ public class SightEditorService implements IViewService {
 		File file = new File(fileSelected.getAbsolutePath() + (fileSelected.getAbsolutePath().endsWith(".blk") ? "" : ".blk") );
 
 		try {
-			if(!DataWriter.saveSight(data.dataSight, data.dataBallistic, file)) {
+			if(!DataWriter.get().saveSight(data.dataSight, data.dataBallistic, file)) {
 				FXUtils.showAlert(ViewManager.getResources().getString("se_alert_export_failed"), ViewManager.getStage(View.SIGHT_EDITOR));
 			} else {
 				Logger.get().info("Saved sight to " + file);

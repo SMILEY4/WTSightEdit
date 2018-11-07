@@ -16,8 +16,7 @@ import com.ruegnerlukas.simplemath.vectors.vec2.Vector2f;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3d;
 import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.data.DataLoader;
-import com.ruegnerlukas.wtsights.data.DataWriter;
+import com.ruegnerlukas.wtsights.data.FileVersion;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
@@ -25,8 +24,10 @@ import com.ruegnerlukas.wtsights.data.ballisticdata.MarkerData;
 import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.DefaultBallisticFuntion;
 import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.IBallisticFunction;
 import com.ruegnerlukas.wtsights.data.ballisticdata.ballfunctions.NullBallisticFunction;
+import com.ruegnerlukas.wtsights.data.loading.DataLoader;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
+import com.ruegnerlukas.wtsights.data.writing.DataWriter;
 import com.ruegnerlukas.wtsights.ui.view.IViewService;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
@@ -469,7 +470,7 @@ public class CalibrationEditorService implements IViewService {
 		File file = new File(fileSelected.getAbsolutePath() + (fileSelected.getAbsolutePath().endsWith(".xml") ? "" : ".xml") );
 		
 		try {
-			if(!DataWriter.saveExternalBallisticFile(dataBallistic, file)) {
+			if(!DataWriter.get().saveExternalBallisticFile(dataBallistic, file)) {
 				FXUtils.showAlert(ViewManager.getResources().getString("ce_alert_export_failed"), ViewManager.getStage(View.CALIBRATION_EDITOR));
 			} else {
 				Logger.get().info("Saved Ballistic Data to " + file);
@@ -498,9 +499,13 @@ public class CalibrationEditorService implements IViewService {
 
 		} else {
 			Workflow.steps.add(Step.EDIT_CALIBRATION);
-			SightData dataSight = DataLoader.loadSight(fileSight, dataBallistic);
-			ViewManager.getLoader(View.SIGHT_EDITOR).openNew(
-					null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA, dataBallistic).add(ParamKey.SIGHT_DATA, dataSight).get());
+			try {
+				SightData dataSight = DataLoader.get(FileVersion.AUTO_DETECT).loadSightDataFile(fileSight, dataBallistic);
+				ViewManager.getLoader(View.SIGHT_EDITOR).openNew(
+						null, new MapBuilder<ParamKey,Object>().add(ParamKey.BALLISTIC_DATA, dataBallistic).add(ParamKey.SIGHT_DATA, dataSight).get());
+			} catch (Exception e) {
+				Logger.get().error(e);
+			}
 		}
 		
 	}

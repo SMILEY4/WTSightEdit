@@ -22,37 +22,37 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mcc_use_thousandth" />
+                        <CheckBox fx:id="cbUseThousandth" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mcco_use_thousandth" />
                         <Separator prefWidth="200.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_movement" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_movement" />
                         <ChoiceBox fx:id="choiceMovement" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator prefWidth="200.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_angle" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_angle" />
                         <Spinner fx:id="spinnerAngle" editable="true" minWidth="0.0" prefWidth="1000000.0" />
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_center" />
-                        <CheckBox fx:id="cbUseAutoCenter" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mcc_auto_center" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_center" />
+                        <CheckBox fx:id="cbUseAutoCenter" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mcco_auto_center" />
                         <HBox>
                            <children>
                               <Spinner fx:id="spinnerCenterX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                               <Spinner fx:id="spinnerCenterY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_origin" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_origin" />
                         <HBox>
                            <children>
                               <Spinner fx:id="spinnerOriginX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                               <Spinner fx:id="spinnerOriginY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_move_speed" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_move_speed" />
                         <Spinner fx:id="spinnerSpeed" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Separator prefWidth="200.0">
                            <VBox.margin>
@@ -62,23 +62,23 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </Separator>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_position" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_position" />
                         <HBox>
                            <children>
                               <Spinner fx:id="spinnerPosX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                               <Spinner fx:id="spinnerPosY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_diameter" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_diameter" />
                         <Spinner fx:id="spinnerDiameter" editable="true" minWidth="0.0" prefWidth="1000000.0" />
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_segment" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_segment" />
                         <HBox>
                            <children>
                               <Spinner fx:id="spinnerSegment1" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                               <Spinner fx:id="spinnerSegment2" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
-                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcc_thickness" />
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcco_thickness" />
                         <Spinner fx:id="spinnerThickness" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                      </children>
                   </VBox>

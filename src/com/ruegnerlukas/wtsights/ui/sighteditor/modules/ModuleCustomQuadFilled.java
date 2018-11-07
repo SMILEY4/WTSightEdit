@@ -1,7 +1,7 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.modules;
 
 import com.ruegnerlukas.wtsights.data.DataPackage;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
@@ -44,6 +44,9 @@ public class ModuleCustomQuadFilled implements Module {
 	@FXML private Spinner<Double> spinnerPos4X;
 	@FXML private Spinner<Double> spinnerPos4Y;
 	
+	@FXML private Spinner<Double> spinnerPosOffsetX;
+	@FXML private Spinner<Double> spinnerPosOffsetY;
+
 	
 	
 	
@@ -71,6 +74,8 @@ public class ModuleCustomQuadFilled implements Module {
 						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().screenspace2mil(spinnerPos4Y.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 						FXUtils.initSpinner(spinnerOriginX, Conversion.get().screenspace2mil(spinnerOriginX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 						FXUtils.initSpinner(spinnerOriginY, Conversion.get().screenspace2mil(spinnerOriginY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerPosOffsetX, Conversion.get().screenspace2mil(spinnerPosOffsetX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
+						FXUtils.initSpinner(spinnerPosOffsetY, Conversion.get().screenspace2mil(spinnerPosOffsetY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, null);
 					} else {
 						FXUtils.initSpinner(spinnerOriginX, Conversion.get().mil2screenspace(spinnerOriginX.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 						FXUtils.initSpinner(spinnerOriginY, Conversion.get().mil2screenspace(spinnerOriginY.getValue(), data.dataSight.envZoomedIn), -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
@@ -82,7 +87,8 @@ public class ModuleCustomQuadFilled implements Module {
 						FXUtils.initSpinner(spinnerPos3Y, Conversion.get().mil2screenspace(spinnerPos3Y.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 						FXUtils.initSpinner(spinnerPos4X, Conversion.get().mil2screenspace(spinnerPos4X.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 						FXUtils.initSpinner(spinnerPos4Y, Conversion.get().mil2screenspace(spinnerPos4Y.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
-
+						FXUtils.initSpinner(spinnerPosOffsetX, Conversion.get().mil2screenspace(spinnerPosOffsetX.getValue(),data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
+						FXUtils.initSpinner(spinnerPosOffsetY, Conversion.get().mil2screenspace(spinnerPosOffsetY.getValue(), data.dataSight.envZoomedIn), Integer.MIN_VALUE, Integer.MAX_VALUE, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, null);
 					}
 					element.setDirty(true);
 					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
@@ -263,6 +269,24 @@ public class ModuleCustomQuadFilled implements Module {
 			}
 		});
 		
+		FXUtils.initSpinner(spinnerPosOffsetX, elementDefault.positionOffset.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				if(element != null) {
+					element.positionOffset.x = newValue.doubleValue();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
+		FXUtils.initSpinner(spinnerPosOffsetY, elementDefault.positionOffset.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+				if(element != null) {
+					element.positionOffset.y = newValue.doubleValue();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
 		
 		
 		setElement(null);
@@ -271,7 +295,7 @@ public class ModuleCustomQuadFilled implements Module {
 	
 	
 	
-	public void setElement(Element e) {
+	public void setElement(BaseElement e) {
 		if(e == null || e.type != ElementType.CUSTOM_QUAD_FILLED) {
 			this.element = null;
 		} else {
@@ -304,6 +328,8 @@ public class ModuleCustomQuadFilled implements Module {
 			spinnerPos3Y.getValueFactory().setValue(element.pos3.y);
 			spinnerPos4X.getValueFactory().setValue(element.pos4.x);
 			spinnerPos4Y.getValueFactory().setValue(element.pos4.y);
+			spinnerPosOffsetX.getValueFactory().setValue(element.positionOffset.x);
+			spinnerPosOffsetY.getValueFactory().setValue(element.positionOffset.y);
 		}
 	}
 	

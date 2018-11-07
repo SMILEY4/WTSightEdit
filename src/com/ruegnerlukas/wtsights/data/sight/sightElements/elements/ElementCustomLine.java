@@ -34,10 +34,13 @@ public class ElementCustomLine extends ElementCustomObject {
 		
 		LayoutLineObject layout = (LayoutLineObject)getLayout();
 		
+
 		if(isDirty()) {
 			setDirty(false);
 			
-			
+			Vector2d start = this.start.copy().add(this.positionOffset);
+			Vector2d end = this.end.copy().add(this.positionOffset);
+
 			if(movement == Movement.MOVE_RADIAL) {
 				if(autoCenter) {
 					layout.center.set(0).add(start).add(end).scale(0.5f);

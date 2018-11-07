@@ -138,6 +138,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_ce_alert_name_null", 		"Error: Name is null.");
 		map.put("se_ce_alert_name_empty", 		"The name of the element can not be empty.");
 		map.put("se_ce_alert_name_duplicate",	"The name of the element must be unique.");
+		map.put("se_ce_alert_name_forbidden",	"The name of the element contains a character that is not allowed.");
 		// environment
 		map.put("se_env_rangefinder_show", 		"Show Rangefinder");
 		map.put("se_env_rangefinder_progress",	"Rangefinder Progress:");
@@ -193,18 +194,30 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mchl_draw",					"Draw Central Horizontal Line");
 		// central vert line
 		map.put("se_mcvl_draw",					"Draw Central Vertical Line");
-		// custom circle
-		map.put("se_mcc_use_thousandth",		"Use Thousandth");
-		map.put("se_mcc_movement",				"Movement:");
-		map.put("se_mcc_angle",					"Angle:");
-		map.put("se_mcc_center",				"Center:");
-		map.put("se_mcc_auto_center",			"Use Auto-Center:");
-		map.put("se_mcc_origin",				"Origin:");
-		map.put("se_mcc_move_speed",			"Move Speed:");
-		map.put("se_mcc_position",				"Position:");
-		map.put("se_mcc_diameter",				"Diameter:");
-		map.put("se_mcc_segment",				"Segment:");
-		map.put("se_mcc_thickness",				"Outline Thickness:");
+		// custom circle outline
+		map.put("se_mcco_use_thousandth",		"Use Thousandth");
+		map.put("se_mcco_movement",				"Movement:");
+		map.put("se_mcco_angle",					"Angle:");
+		map.put("se_mcco_center",				"Center:");
+		map.put("se_mcco_auto_center",			"Use Auto-Center:");
+		map.put("se_mcco_origin",				"Origin:");
+		map.put("se_mcco_move_speed",			"Move Speed:");
+		map.put("se_mcco_position",				"Position:");
+		map.put("se_mcco_diameter",				"Diameter:");
+		map.put("se_mcco_segment",				"Segment:");
+		map.put("se_mcco_thickness",				"Outline Thickness:");
+		// custom circle filled
+		map.put("se_mccf_use_thousandth",		"Use Thousandth");
+		map.put("se_mccf_movement",				"Movement:");
+		map.put("se_mccf_angle",					"Angle:");
+		map.put("se_mccf_center",				"Center:");
+		map.put("se_mccf_auto_center",			"Use Auto-Center:");
+		map.put("se_mccf_origin",				"Origin:");
+		map.put("se_mccf_move_speed",			"Move Speed:");
+		map.put("se_mccf_position",				"Position:");
+		map.put("se_mccf_diameter",				"Diameter:");
+		map.put("se_mccf_segment",				"Segment:");
+		map.put("se_mccf_quality", 				"Quality:");
 		// custom line
 		map.put("se_mcl_use_thousandth",		"Use Thousandth");
 		map.put("se_mcl_movement",				"Movement:");
@@ -215,6 +228,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcl_move_speed",			"Move Speed:");
 		map.put("se_mcl_pos_start",				"Position Start:");
 		map.put("se_mcl_pos_end",				"Position End:");
+		map.put("se_mcl_pos_offset",			"Position Offset:");
 		// custom quad filled
 		map.put("se_mcqf_use_thousandth",		"Use Thousandth");
 		map.put("se_mcqf_movement",				"Movement:");
@@ -227,6 +241,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcqf_position_2",			"Position 2:");
 		map.put("se_mcqf_position_3",			"Position 3:");
 		map.put("se_mcqf_position_4",			"Position 4:");
+		map.put("se_mcqf_pos_offset",			"Position Offset:");
 		// custom quad outline
 		map.put("se_mcqo_use_thousandth",		"Use Thousandth");
 		map.put("se_mcqo_movement",				"Movement:");
@@ -239,6 +254,31 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mcqo_position_2",			"Position 2:");
 		map.put("se_mcqo_position_3",			"Position 3:");
 		map.put("se_mcqo_position_4",			"Position 4:");
+		map.put("se_mcqo_pos_offset",			"Position Offset:");
+		// custom polygon outline
+		map.put("se_mcpo_use_thousandth",		"Use Thousandth");
+		map.put("se_mcpo_movement",				"Movement:");
+		map.put("se_mcpo_angle",				"Angle:");
+		map.put("se_mcpo_center",				"Center:");
+		map.put("se_mcpo_auto_center",			"Use Auto-Center:");
+		map.put("se_mcpo_origin",				"Origin:");
+		map.put("se_mcpo_move_speed",			"Move Speed:");
+		map.put("se_mcpo_vertices_title",		"Vertices:");
+		map.put("se_mcpo_add_vertex",			"Add Vertex");
+		map.put("se_mcpo_remove_vertex",		"X");
+		map.put("se_mcpo_pos_offset",			"Position Offset:");
+		// custom polygon filled
+		map.put("se_mcpf_use_thousandth",		"Use Thousandth");
+		map.put("se_mcpf_movement",				"Movement:");
+		map.put("se_mcpf_angle",				"Angle:");
+		map.put("se_mcpf_center",				"Center:");
+		map.put("se_mcpf_auto_center",			"Use Auto-Center:");
+		map.put("se_mcpf_origin",				"Origin:");
+		map.put("se_mcpf_move_speed",			"Move Speed:");
+		map.put("se_mcpf_vertices_title",		"Vertices:");
+		map.put("se_mcpf_add_vertex",			"Add Vertex");
+		map.put("se_mcpf_remove_vertex",		"X");
+		map.put("se_mcpf_pos_offset",			"Position Offset:");
 		// custom text
 		map.put("se_mct_use_thousandth",		"Use Thousandth");
 		map.put("se_mct_movement",				"Movement:");
@@ -298,6 +338,20 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_msb_cell_major",				"MAJOR");
 		map.put("se_msb_cell_minor",				"minor");
 		map.put("se_msb_cell_remove",				"X");
+		// funnel
+		map.put("se_mf_target_size",				"Target Size (in cm)");
+		map.put("se_mf_range_start",				"Range Start");
+		map.put("se_mf_range_end",					"Range End");
+		map.put("se_mf_range_step",					"Range Step");
+		map.put("se_mf_move",						"Move");
+		map.put("se_mf_show_right",					"Show Right Side");
+		map.put("se_mf_show_left",					"Show Left Side");
+		map.put("se_mf_horizontal",					"Horizontal");
+		map.put("se_mf_base_line",					"Draw Base Line");
+		map.put("se_mf_use_thousandth",				"Use Thousandth");
+		map.put("se_mf_offset",						"Offset");
+		map.put("se_mf_flip",						"Flip Funnel");
+		
 		
 		// ELEMENT TYPES
 		map.put("et_central_horzline",				"Central Horizontal Line");
@@ -316,6 +370,8 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("et_custom_rect_outline",			"Custom Rectangle (Outline)");
 		map.put("et_custom_poly_filled",			"Custom Polygon (Filled)");
 		map.put("et_custom_poly_outline",			"Custom Polygon (Outline)");
+		map.put("et_funnel",						"Funnel");
+
 
 		// LAUNCHER
 //		map.put("lc_title",				"WT Sight Editor");

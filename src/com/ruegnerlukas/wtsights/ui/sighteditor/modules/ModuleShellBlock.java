@@ -7,7 +7,7 @@ import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
 import com.ruegnerlukas.wtsights.data.ballisticdata.NullElement;
 import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
@@ -329,7 +329,7 @@ public class ModuleShellBlock implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.radiusUseMils ? StepSizes.DECPLACES_RANGEMIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
+		FXUtils.initSpinner(rRadius, elementDefault.radialRadius, 0, 1000, (elementDefault.radiusUseMils ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.radiusUseMils ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.radialRadius = newValue.doubleValue();
@@ -530,7 +530,7 @@ public class ModuleShellBlock implements Module {
 	
 	
 	@Override
-	public void setElement(Element e) {
+	public void setElement(BaseElement e) {
 		
 		if(e == null || e.type != ElementType.SHELL_BALLISTICS_BLOCK) {
 			this.element = null;
@@ -541,7 +541,6 @@ public class ModuleShellBlock implements Module {
 		if(element != null) {
 			if(element.elementBallistic == null) {
 				element.elementBallistic = comboAmmo.getValue();
-				
 			} else {
 				comboAmmo.getSelectionModel().select(element.elementBallistic);
 			}

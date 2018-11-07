@@ -34,6 +34,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.FileVersion;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
@@ -126,6 +127,7 @@ public class WTMiner {
 
 			Document docMerged = builder.newDocument();
 			Element rootMerged = docMerged.createElement("data");
+			rootMerged.setAttribute("fileversion", FileVersion.V_2.fileversion);
 			docMerged.appendChild(rootMerged);
 			Element elementVehicles = docMerged.createElement("vehicles");
 			rootMerged.appendChild(elementVehicles);

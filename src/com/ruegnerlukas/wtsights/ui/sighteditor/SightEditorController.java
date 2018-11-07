@@ -14,7 +14,7 @@ import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.Element;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
 import com.ruegnerlukas.wtsights.ui.ElementIcons;
 import com.ruegnerlukas.wtsights.ui.sighteditor.createelement.ElementCreateService;
@@ -72,7 +72,7 @@ public class SightEditorController implements IViewController {
 	@FXML private AnchorPane paneGeneral;
 	@FXML private AnchorPane paneEnvironment;
 	
-	@FXML private ListView<Element> listViewElements;
+	@FXML private ListView<BaseElement> listViewElements;
 	
 	@FXML private Button btnAddElement;
 	@FXML private Button btnRenameElement;
@@ -96,6 +96,7 @@ public class SightEditorController implements IViewController {
 		service = (SightEditorService) ViewManager.getService(View.SIGHT_EDITOR, true);
 		service.initDataPackage((BallisticData)parameters.get(ParamKey.BALLISTIC_DATA), (SightData)parameters.get(ParamKey.SIGHT_DATA));
 	
+		
 		// debug conversion meters->mil
 		spinnerConvMMil.setVisible(false);
 		FXUtils.initSpinner(spinnerConvMMil, convMMil, 0, 99, 0.0005, 5, true, new ChangeListener<Double>() {
@@ -167,15 +168,19 @@ public class SightEditorController implements IViewController {
 		}
 		initModule(ElementType.CUSTOM_LINE, "/ui/sightEditor/layout_element_custom_line.fxml");
 		initModule(ElementType.CUSTOM_CIRCLE_OUTLINE, "/ui/sightEditor/layout_element_custom_circle.fxml");
+		initModule(ElementType.CUSTOM_CIRCLE_FILLED, "/ui/sightEditor/layout_element_custom_circle_filled.fxml");
 		initModule(ElementType.CUSTOM_QUAD_FILLED, "/ui/sightEditor/layout_element_custom_quad_filled.fxml");
 		initModule(ElementType.CUSTOM_QUAD_OUTLINE, "/ui/sightEditor/layout_element_custom_quad_outline.fxml");
+		initModule(ElementType.CUSTOM_POLY_OUTLINE, "/ui/sightEditor/layout_element_custom_poly_outline.fxml");
+		initModule(ElementType.CUSTOM_POLY_FILLED, "/ui/sightEditor/layout_element_custom_poly_filled.fxml");
 		initModule(ElementType.CUSTOM_TEXT, "/ui/sightEditor/layout_element_custom_text.fxml");
+		initModule(ElementType.FUNNEL, "/ui/sightEditor/layout_element_funnel.fxml");
 
 		// ELEMENTS LIST
-		listViewElements.setCellFactory(new Callback<ListView<Element>, ListCell<Element>>() {
-			@Override public ListCell<Element> call(ListView<Element> param) {
-				return new ListCell<Element>() {
-					@Override public void updateItem(Element item, boolean empty) {
+		listViewElements.setCellFactory(new Callback<ListView<BaseElement>, ListCell<BaseElement>>() {
+			@Override public ListCell<BaseElement> call(ListView<BaseElement> param) {
+				return new ListCell<BaseElement>() {
+					@Override public void updateItem(BaseElement item, boolean empty) {
 						super.updateItem(item, empty);
 						if(empty) {
 							setGraphic(null);
@@ -193,8 +198,8 @@ public class SightEditorController implements IViewController {
 			}
 		});
 		
-		listViewElements.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Element>() {
-			@Override public void changed(ObservableValue<? extends Element> observable, Element oldValue, Element newValue) {
+		listViewElements.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BaseElement>() {
+			@Override public void changed(ObservableValue<? extends BaseElement> observable, BaseElement oldValue, BaseElement newValue) {
 				if(newValue != null) {
 					onSelectElement(newValue);
 				}
@@ -235,8 +240,8 @@ public class SightEditorController implements IViewController {
 	
 	
 	void sortElementList() {
-		listViewElements.getItems().sort(new Comparator<Element>() {
-			@Override public int compare(Element o1, Element o2) {
+		listViewElements.getItems().sort(new Comparator<BaseElement>() {
+			@Override public int compare(BaseElement o1, BaseElement o2) {
 				int resType = o1.type.compareTo(o2.type);
 				if(resType == 0) {
 					return o1.type.compareTo(o2.type);
@@ -250,7 +255,7 @@ public class SightEditorController implements IViewController {
 	
 	
 	
-	void onSelectElement(Element element) {
+	void onSelectElement(BaseElement element) {
 		Logger.get().debug("SELECT " + (element == null ? "null" : element.name));
 		
 		service.selectElement(element);
@@ -265,7 +270,7 @@ public class SightEditorController implements IViewController {
 			// disable delete-btn, if element count of that type would fall below threshold 
 			btnRemoveElement.setDisable(false);
 			int typeCount = 0;
-			for(Element e : service.getElements()) {
+			for(BaseElement e : service.getElements()) {
 				if(e.type == element.type) {
 					typeCount++;
 				}
@@ -305,7 +310,7 @@ public class SightEditorController implements IViewController {
 				.add(ParamKey.DATA_PACKAGE, service.getDataPackage())
 				.get());
 		
-		Element element = ElementCreateService.getCreatedElement();
+		BaseElement element = ElementCreateService.getCreatedElement();
 		
 		if(element != null) {
 			Logger.get().info("Created element: " + element.type + "; " + element.name);
@@ -324,7 +329,7 @@ public class SightEditorController implements IViewController {
 	
 	@FXML
 	void onRenameElement(ActionEvent event) {
-		Element element = listViewElements.getSelectionModel().getSelectedItem();
+		BaseElement element = listViewElements.getSelectionModel().getSelectedItem();
 		if(element == null) {
 			return;
 		}
@@ -370,7 +375,7 @@ public class SightEditorController implements IViewController {
 	@FXML
 	void onRemoveElement(ActionEvent event) {
 		
-		Element element = listViewElements.getSelectionModel().getSelectedItem();
+		BaseElement element = listViewElements.getSelectionModel().getSelectedItem();
 		if(element == null) {
 			return;
 		}
@@ -398,7 +403,7 @@ public class SightEditorController implements IViewController {
 	
 	
 	
-	void onDeleteElement(Element element) {
+	void onDeleteElement(BaseElement element) {
 		if(element != null) {
 			service.deleteElement(element);
 			listViewElements.getItems().remove(element);

@@ -53,7 +53,6 @@ public class WTSights extends Application {
 		}
 		
 		
-		
 		Logger.get().redirectStdOutput(LogLevel.DEBUG, LogLevel.ERROR);
 		((DefaultMessageBuilder)Logger.get().getMessageBuilder()).setSourceNameSizeMin(23);
 	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

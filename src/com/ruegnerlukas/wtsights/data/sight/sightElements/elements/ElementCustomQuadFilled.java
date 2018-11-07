@@ -37,8 +37,14 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 
 		LayoutQuadFilledObject layout = (LayoutQuadFilledObject)getLayout();
 		
+		
 		if(isDirty()) {
 			setDirty(false);
+			
+			Vector2d pos1 = this.pos1.copy().add(this.positionOffset);
+			Vector2d pos2 = this.pos2.copy().add(this.positionOffset);
+			Vector2d pos3 = this.pos3.copy().add(this.positionOffset);
+			Vector2d pos4 = this.pos4.copy().add(this.positionOffset);
 			
 			if(movement == Movement.MOVE_RADIAL) {
 				
@@ -168,6 +174,7 @@ public class ElementCustomQuadFilled extends ElementCustomObject {
 				}
 				
 				if(MathUtils.isNearlyEqual(radius, 0)) {
+					System.out.println(name + " radius is zero");
 					return null;
 				}
 				

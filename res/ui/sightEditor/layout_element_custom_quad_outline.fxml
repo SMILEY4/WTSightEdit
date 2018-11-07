@@ -90,6 +90,13 @@
                               <Spinner fx:id="spinnerPos4Y" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                            </children>
                         </HBox>
+                        <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mcqo_pos_offset" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerPosOffsetX" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerPosOffsetY" editable="true" minWidth="0.0" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
