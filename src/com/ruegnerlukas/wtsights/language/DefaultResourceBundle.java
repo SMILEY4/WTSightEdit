@@ -351,7 +351,6 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mf_use_thousandth",				"Use Thousandth");
 		map.put("se_mf_offset",						"Offset");
 		map.put("se_mf_flip",						"Flip Funnel");
-
 		
 		
 		// ELEMENT TYPES
