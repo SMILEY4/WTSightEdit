@@ -7,7 +7,8 @@ import com.ruegnerlukas.wtsights.data.sight.SightData;
 
 public class DataWriter implements IDataWriter {
 
-	private static IDataWriter dataWriter = new DataWriter_v2();
+//	private static IDataWriter dataWriter = new DataWriter_v2();
+	private static IDataWriter dataWriter = new DataWriter_v3();
 	
 	
 	public static IDataWriter get() {

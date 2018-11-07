@@ -8,7 +8,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 public class Block extends BlockElement {
 
 	public List<BlockElement> elements = new ArrayList<BlockElement>();
-	
+	public List<String> floatingMetadata = new ArrayList<String>();
 	
 	
 	

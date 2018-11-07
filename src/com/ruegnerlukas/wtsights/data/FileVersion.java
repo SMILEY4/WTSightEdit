@@ -7,7 +7,8 @@ public enum FileVersion {
 	AUTO_DETECT("autodetect"),
 	DUMMY("dummy"),
 	V_1_DEFAULT("1"),
-	V_2("2");
+	V_2("2"),
+	V_3("3");
 
 	
 	public final String fileversion;

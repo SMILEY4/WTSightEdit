@@ -47,6 +47,7 @@ public class DataLoader implements IDataLoader {
 			});
 			loaders.put(FileVersion.V_1_DEFAULT, new DataLoader_v1_default());
 			loaders.put(FileVersion.V_2, new DataLoader_v2());
+			loaders.put(FileVersion.V_3, new DataLoader_v3());
 			initialized = true;
 		}
 		return loaders.get(fileVersion);

@@ -79,9 +79,9 @@ public class BLKSightParser {
 				.replaceAll("\n", ";")
 				.replaceAll("\r\n", ";")
 				.replaceAll("\r", ";")
+				.replaceAll(";+", ";");
 //				.replaceAll(regexWS, "") // stackoverflow with large strings
 				;
-		
 		
 		return rawFileContent;
 	}
@@ -162,7 +162,10 @@ public class BLKSightParser {
 			String current = listElements.get(i);
 			
 			if(current.startsWith("//--")) {
-				lastMetaData = current.substring(4, current.length());
+				if(lastMetaData != null) {
+					root.floatingMetadata.add(lastMetaData);
+				}
+				lastMetaData = current.substring(4, current.length()).trim();
 				continue;
 			}
 			
@@ -184,6 +187,10 @@ public class BLKSightParser {
 			
 			lastMetaData = null;
 
+		}
+		
+		if(lastMetaData != null) {
+			root.floatingMetadata.add(lastMetaData);
 		}
 		
 		return root;
