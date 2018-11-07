@@ -171,7 +171,7 @@ public class ModuleFunnel implements Module {
 		});
 		
 		// offset
-		FXUtils.initSpinner(spinnerOffX, elementDefault.offset.x, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerOffX, elementDefault.offset.x, -9999, 9999, (elementDefault.useThousandth ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.offset.x = newValue.doubleValue();
@@ -180,7 +180,7 @@ public class ModuleFunnel implements Module {
 				}
 			}
 		});
-		FXUtils.initSpinner(spinnerOffY, elementDefault.offset.y, -9999, 9999, StepSizes.STEP_SCREENSPACE, StepSizes.DECPLACES_SCREENSPACE, new ChangeListener<Double>() {
+		FXUtils.initSpinner(spinnerOffY, elementDefault.offset.y, -9999, 9999, (elementDefault.useThousandth ? StepSizes.STEP_MIL : StepSizes.STEP_SCREENSPACE), (elementDefault.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE), new ChangeListener<Double>() {
 			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				if(element != null) {
 					element.offset.y = newValue.doubleValue();
