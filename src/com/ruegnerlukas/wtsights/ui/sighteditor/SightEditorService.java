@@ -177,7 +177,10 @@ public class SightEditorService implements IViewService {
 		}
 		
 		File file = new File(fileSelected.getAbsolutePath() + (fileSelected.getAbsolutePath().endsWith(".blk") ? "" : ".blk") );
-
+		if(file.getName().contains(" ")) {
+			file = new File(file.getAbsolutePath().replace(file.getName(), file.getName().replaceAll(" ", "_")));
+		}
+		
 		try {
 			if(!DataWriter.get().saveSight(data.dataSight, data.dataBallistic, file)) {
 				FXUtils.showAlert(ViewManager.getResources().getString("se_alert_export_failed"), ViewManager.getStage(View.SIGHT_EDITOR));
