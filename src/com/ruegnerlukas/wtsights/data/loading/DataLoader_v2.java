@@ -85,7 +85,7 @@ public class DataLoader_v2 implements IDataLoader {
 	@Override
 	public List<Vehicle> loadVehicleDataFile(File file) throws Exception {
 		
-		Logger.get().info("Loading vehicleData-file: " + file.getAbsolutePath());
+		Logger.get().info("Loading vehicleData-file (v2): " + file.getAbsolutePath());
 
 		if(file == null || !file.exists()) {
 			Logger.get().fatal("Error loading vehicles: Could not find " + file);
@@ -151,7 +151,6 @@ public class DataLoader_v2 implements IDataLoader {
 				}
 				Element elementWeapon = (Element)listWeapons.item(j);
 			
-				
 				Weapon weapon = new Weapon();
 				weapon.name = elementWeapon.getTagName();
 				weapon.triggerGroup = TriggerGroup.get(elementWeapon.getAttribute("triggerGroup"));
@@ -178,10 +177,21 @@ public class DataLoader_v2 implements IDataLoader {
 					
 					Ammo ammo = new Ammo();
 					ammo.parentWeapon = weapon;
-					weapon.ammo.add(ammo);
 					ammo.type = elementAmmo.getAttribute("type");
 					ammo.speed = Integer.parseInt(elementAmmo.getAttribute("speed"));
 					ammo.name = elementAmmo.getTagName();
+				
+					boolean ammoExists = false;
+					for(Ammo a : weapon.ammo) {
+						if( (a.type.equalsIgnoreCase(ammo.type)) && (a.speed == ammo.speed) && (a.name.equalsIgnoreCase(ammo.name)) ) {
+							ammoExists = true;
+							break;
+						}
+					}
+					
+					if(!ammoExists) {
+						weapon.ammo.add(ammo);
+					}
 					
 				}
 				

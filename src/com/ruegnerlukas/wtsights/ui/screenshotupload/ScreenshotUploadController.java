@@ -111,7 +111,7 @@ public class ScreenshotUploadController implements IViewController {
 			}
 		} else if(element.ammunition.size() == 1) {
 			labelName.setText(element.ammunition.get(0).namePretty);
-			labelName.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_shelltype_tt") + element.ammunition.get(0).type));
+			labelName.setTooltip(new Tooltip(ViewManager.getResources().getString("ssu_shelltype_tt") + element.ammunition.get(0).type + ",  " + ViewManager.getResources().getString("ssu_shellspeed_tt") + element.ammunition.get(0).speed));
 			ImageView imgView = new ImageView(SwingFXUtils.toFXImage(AmmoIcons.getIcon(element.ammunition.get(0).type), null));
 			imgView.setSmooth(true);
 			imgView.setPreserveRatio(true);

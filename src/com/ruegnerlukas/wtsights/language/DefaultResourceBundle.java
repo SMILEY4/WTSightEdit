@@ -94,6 +94,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("ssu_reset", 			"X");
 		map.put("ssu_file_type_img", 	"Image");
 		map.put("ssu_triggergroup_tt", 	"TriggerGroup = ");
+		map.put("ssu_shellspeed_tt", 	"Speed = ");
 		map.put("ssu_shelltype_tt", 	"Type = ");
 		map.put("ssu_next", 			"Next");
 		map.put("ssu_cancel", 			"Cancel");
