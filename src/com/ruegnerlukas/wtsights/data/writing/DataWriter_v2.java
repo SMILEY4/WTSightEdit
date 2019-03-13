@@ -1,29 +1,5 @@
 package com.ruegnerlukas.wtsights.data.writing;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simplemath.vectors.vec3.Vector3i;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -36,26 +12,33 @@ import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.*;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.ui.sighteditor.StepSizes;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class DataWriter_v2 implements IDataWriter {
 
@@ -264,7 +247,7 @@ public class DataWriter_v2 implements IDataWriter {
 				lines.add("circleMode:b = " + (ballRange.circleMode ? "yes" : "no"));
 			}
 			lines.add("crosshairDistHorSizeMain:p2 = " + asString(ballRange.size.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.size.y, StepSizes.DECPLACES_SCREENSPACE));
-			lines.add("textPos:p2 = " + asString(ballRange.textPos.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.textPos.x, StepSizes.DECPLACES_SCREENSPACE));
+			lines.add("textPos:p2 = " + asString(ballRange.textPos.x, StepSizes.DECPLACES_SCREENSPACE) + "," + asString(ballRange.textPos.y, StepSizes.DECPLACES_SCREENSPACE));
 			lines.add("textAlign:i = " + ballRange.textAlign.id);
 			lines.add("textShift:r = " + asString(ballRange.textShift, 1));
 			lines.add("drawAdditionalLines:b = " + (ballRange.drawAddLines ? "yes" : "no") );

@@ -9,3 +9,5 @@ toDo.txt
 *.zip
 /libs
 /docs
+/.idea
+/out
