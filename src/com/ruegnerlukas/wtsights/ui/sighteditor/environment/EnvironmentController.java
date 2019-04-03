@@ -186,6 +186,10 @@ public class EnvironmentController implements IViewController {
 			}
 		});
 
+		spinnerBackgroundOffX.setDisable(service.getBackground() == null);
+		spinnerBackgroundOffY.setDisable(service.getBackground() == null);
+		spinnerBackgroundScale.setDisable(service.getBackground() == null);
+		spinnerBackgroundRotation.setDisable(service.getBackground() == null);
 
 		// RESOLUTION
 		choiceResolution.getItems().add("1024 x 768");
@@ -278,6 +282,8 @@ public class EnvironmentController implements IViewController {
 		}
 		spinnerBackgroundOffX.setDisable(service.getBackground() == null);
 		spinnerBackgroundOffY.setDisable(service.getBackground() == null);
+		spinnerBackgroundScale.setDisable(service.getBackground() == null);
+		spinnerBackgroundRotation.setDisable(service.getBackground() == null);
 	}
 
 
@@ -293,6 +299,8 @@ public class EnvironmentController implements IViewController {
 		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
 		spinnerBackgroundOffX.setDisable(service.getBackground() == null);
 		spinnerBackgroundOffY.setDisable(service.getBackground() == null);
+		spinnerBackgroundScale.setDisable(service.getBackground() == null);
+		spinnerBackgroundRotation.setDisable(service.getBackground() == null);
 	}
 
 
