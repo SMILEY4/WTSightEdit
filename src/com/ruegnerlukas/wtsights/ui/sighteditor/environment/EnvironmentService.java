@@ -180,6 +180,34 @@ public class EnvironmentService implements IViewService {
 
 
 
+	public void setBackgroundScale(double scale) {
+		data.dataSight.envBackgroundScale = scale;
+	}
+
+
+
+
+	public double getBackgroundScale() {
+		return data.dataSight.envBackgroundScale;
+	}
+
+
+
+
+	public void setBackgroundRotation(double rotation) {
+		data.dataSight.envBackgroundRotation = rotation;
+	}
+
+
+
+
+	public double getBackgroundRotation() {
+		return data.dataSight.envBackgroundRotation;
+	}
+
+
+
+
 	public void setResolution(int width, int height) {
 		data.dataSight.setElementsDirty();
 	}

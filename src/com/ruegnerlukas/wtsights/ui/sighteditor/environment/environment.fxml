@@ -93,6 +93,13 @@
                               <Spinner fx:id="spinnerBackgroundOffY" editable="true" prefWidth="1000000.0" />
                            </children>
                         </HBox>
+                        <Label prefWidth="1000000.0" text="%se_env_background_scale_rotation" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerBackgroundScale" editable="true" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerBackgroundRotation" editable="true" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
                         <Separator prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />

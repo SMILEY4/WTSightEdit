@@ -44,6 +44,8 @@ public class EnvironmentController implements IViewController {
 	@FXML private TextField pathBackground;
 	@FXML private Spinner<Integer> spinnerBackgroundOffX;
 	@FXML private Spinner<Integer> spinnerBackgroundOffY;
+	@FXML private Spinner<Double> spinnerBackgroundScale;
+	@FXML private Spinner<Double> spinnerBackgroundRotation;
 
 	@FXML private ChoiceBox<String> choiceResolution;
 
@@ -158,17 +160,29 @@ public class EnvironmentController implements IViewController {
 		colorGrid.setValue(service.getGridColor());
 
 
-		// BACKGROUND OFFSET
-		FXUtils.initSpinner(spinnerBackgroundOffX, 0, -999999, +999999, 1, 0, true, new ChangeListener() {
+		// BACKGROUND OFFSET, SCALE, ROTATION
+		FXUtils.initSpinner(spinnerBackgroundOffX, service.getBackgroundOffX(), -999999, +999999, 1, 0, true, new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				onSetBackgroundOffsetX(spinnerBackgroundOffX.getValue());
+				onSetBackgroundOffset(spinnerBackgroundOffX.getValue(), service.getBackgroundOffY());
 			}
 		});
-		FXUtils.initSpinner(spinnerBackgroundOffY, 0, -999999, +999999, 1, 0, true, new ChangeListener() {
+		FXUtils.initSpinner(spinnerBackgroundOffY, service.getBackgroundOffY(), -999999, +999999, 1, 0, true, new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				onSetBackgroundOffsetY(spinnerBackgroundOffY.getValue());
+				onSetBackgroundOffset(service.getBackgroundOffX(), spinnerBackgroundOffY.getValue());
+			}
+		});
+		FXUtils.initSpinner(spinnerBackgroundScale, service.getBackgroundScale(), 0, +2, 0.01, 3, true, new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				onBackgroundScale(spinnerBackgroundScale.getValue());
+			}
+		});
+		FXUtils.initSpinner(spinnerBackgroundRotation, service.getBackgroundRotation(), -360, +360, 0.5, 2, true, new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				onBackgroundRotation(spinnerBackgroundRotation.getValue());
 			}
 		});
 
@@ -284,16 +298,25 @@ public class EnvironmentController implements IViewController {
 
 
 
-	void onSetBackgroundOffsetX(int x) {
+	void onSetBackgroundOffset(int x, int y) {
 		service.setBackgroundOffX(x);
+		service.setBackgroundOffY(y);
 		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
 
 
 
 
-	void onSetBackgroundOffsetY(int y) {
-		service.setBackgroundOffY(y);
+	void onBackgroundScale(double scale) {
+		service.setBackgroundScale(scale);
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+	}
+
+
+
+
+	void onBackgroundRotation(double rotation) {
+		service.setBackgroundRotation(rotation);
 		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
 

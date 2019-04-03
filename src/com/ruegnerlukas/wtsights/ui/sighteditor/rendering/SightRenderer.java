@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,11 +162,32 @@ public class SightRenderer {
 	
 	
 	private static void drawBackground(Canvas canvas, GraphicsContext g, SightData dataSight) {
+
+		g.setFill(Color.GRAY);
+		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
 		if(dataSight.envBackground != null) {
-			g.drawImage(dataSight.envBackground, dataSight.envBackgroundOffX, dataSight.envBackgroundOffY, canvas.getWidth(), canvas.getHeight());
-		} else {
-			g.setFill(Color.GRAY);
-			g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+//			Affine transform = g.getTransform();
+//			g.scale(dataSight.envBackgroundScale, dataSight.envBackgroundScale);
+//			g.rotate(dataSight.envBackgroundRotation);
+//			g.drawImage(dataSight.envBackground, dataSight.envBackgroundOffX, dataSight.envBackgroundOffY, canvas.getWidth(), canvas.getHeight());
+//			g.setTransform(transform);
+
+			double x = dataSight.envBackgroundOffX;
+			double y = dataSight.envBackgroundOffY;
+			double w = canvas.getWidth() * dataSight.envBackgroundScale;
+			double h = canvas.getHeight() * dataSight.envBackgroundScale;
+
+			g.save();
+
+			Rotate r = new Rotate(dataSight.envBackgroundRotation, canvas.getWidth()/2, canvas.getHeight()/2);
+			g.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+
+			g.drawImage(dataSight.envBackground, x, y, w, h);
+
+			g.restore();
+
 		}
 	}
 	

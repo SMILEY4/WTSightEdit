@@ -151,6 +151,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_env_background_reset",		"X");
 		map.put("se_env_background_file_type",	"Image");
 		map.put("se_env_background_offset",		"Background Offset:");
+		map.put("se_env_background_scale_rotation","Background Scale & Rotation:");
 		map.put("se_env_resolution_header",		"Resolution:");
 		map.put("se_env_zoomed_in",				"Show Zoomed In");
 		map.put("se_env_zoomed_out",			"Show Zoomed Out");

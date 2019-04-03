@@ -454,6 +454,7 @@ public class CalibrationEditorController implements IViewController {
 	@FXML
 	void onEditSight(ActionEvent event) {
 		service.editSight();
+		ViewManager.getStage(View.CALIBRATION_EDITOR).close();
 	}
 
 

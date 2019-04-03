@@ -34,6 +34,8 @@ public class SightData {
 	public Image	envBackground 		= null;
 	public int		envBackgroundOffX	= 0;
 	public int		envBackgroundOffY	= 0;
+	public double	envBackgroundScale	= 1.0;
+	public double	envBackgroundRotation = 0.0;
 	public boolean	envDisplayGrid		= false;
 	public double	envGridWidth 		= 20;
 	public double	envGridHeight 		= 20;
