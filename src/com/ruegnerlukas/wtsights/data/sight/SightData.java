@@ -1,28 +1,21 @@
 package com.ruegnerlukas.wtsights.data.sight;
 
+import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.*;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
+import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
-import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
-
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-
 public class SightData {
 	
-	
-	// temp
 	
 	// general
 	public Thousandth 	gnrThousandth 			= Thousandth.USSR;
@@ -39,6 +32,10 @@ public class SightData {
 	public int		envRangeCorrection 	= 0;
 	public Color 	envSightColor 		= Color.BLACK;
 	public Image	envBackground 		= null;
+	public int		envBackgroundOffX	= 0;
+	public int		envBackgroundOffY	= 0;
+	public double	envBackgroundScale	= 1.0;
+	public double	envBackgroundRotation = 0.0;
 	public boolean	envDisplayGrid		= false;
 	public double	envGridWidth 		= 20;
 	public double	envGridHeight 		= 20;

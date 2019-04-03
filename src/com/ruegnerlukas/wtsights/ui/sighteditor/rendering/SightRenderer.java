@@ -1,8 +1,5 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.rendering;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.geometry.shapes.circle.Circlef;
 import com.ruegnerlukas.simplemath.geometry.shapes.rectangle.Rectanglef;
@@ -15,33 +12,12 @@ import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutBallRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutCircleOutlineObject;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutLineObject;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutQuadFilledObject;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.LayoutTextObject;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.*;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.layouts.*;
 import com.ruegnerlukas.wtutils.Conversion;
 import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
-
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -49,6 +25,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Rotate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -182,11 +162,32 @@ public class SightRenderer {
 	
 	
 	private static void drawBackground(Canvas canvas, GraphicsContext g, SightData dataSight) {
+
+		g.setFill(Color.GRAY);
+		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
 		if(dataSight.envBackground != null) {
-			g.drawImage(dataSight.envBackground, 0, 0, canvas.getWidth(), canvas.getHeight());
-		} else {
-			g.setFill(Color.GRAY);
-			g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+//			Affine transform = g.getTransform();
+//			g.scale(dataSight.envBackgroundScale, dataSight.envBackgroundScale);
+//			g.rotate(dataSight.envBackgroundRotation);
+//			g.drawImage(dataSight.envBackground, dataSight.envBackgroundOffX, dataSight.envBackgroundOffY, canvas.getWidth(), canvas.getHeight());
+//			g.setTransform(transform);
+
+			double x = dataSight.envBackgroundOffX;
+			double y = dataSight.envBackgroundOffY;
+			double w = canvas.getWidth() * dataSight.envBackgroundScale;
+			double h = canvas.getHeight() * dataSight.envBackgroundScale;
+
+			g.save();
+
+			Rotate r = new Rotate(dataSight.envBackgroundRotation, canvas.getWidth()/2, canvas.getHeight()/2);
+			g.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+
+			g.drawImage(dataSight.envBackground, x, y, w, h);
+
+			g.restore();
+
 		}
 	}
 	
