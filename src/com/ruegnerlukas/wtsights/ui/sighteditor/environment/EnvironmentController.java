@@ -1,8 +1,5 @@
 package com.ruegnerlukas.wtsights.ui.sighteditor.environment;
 
-import java.io.File;
-import java.util.Map;
-
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.wtsights.data.DataPackage;
 import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
@@ -13,57 +10,55 @@ import com.ruegnerlukas.wtsights.ui.view.ViewManager;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.FXUtils;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.util.Map;
 
 public class EnvironmentController implements IViewController {
 
+
 	@FXML private ComboBox<BallisticElement> comboAmmo;
 	@FXML private ChoiceBox<String> choiceZoomMode;
-	
+
 	@FXML private CheckBox cbShowRangefinder;
 	@FXML private Label labelValueRFProgress;
 
 	@FXML private Slider sliderRangefinderProgress;
 	@FXML private Slider sliderRangeCorrection;
 	@FXML private Spinner<Integer> spinnerRange;
-	
+
 	@FXML private CheckBox cbCrosshairLighting;
-	
+
 	@FXML private CheckBox cbDisplayGrid;
 	@FXML private Spinner<Double> spinnerGridWidth;
 	@FXML private Spinner<Double> spinnerGridHeight;
 	@FXML private ColorPicker colorGrid;
 
 	@FXML private TextField pathBackground;
+	@FXML private Spinner<Integer> spinnerBackgroundOffX;
+	@FXML private Spinner<Integer> spinnerBackgroundOffY;
+
 	@FXML private ChoiceBox<String> choiceResolution;
 
 	private EnvironmentService service;
-	
-	
-	
+
+
+
 
 	@Override
 	public void create(Map<ParamKey, Object> parameters) {
-		
+
 		service = (EnvironmentService) ViewManager.getService(View.SEM_ENVIRONMENT, true);
-		service.setDataPackage((DataPackage)parameters.get(ParamKey.DATA_PACKAGE));
-		
-		
+		service.setDataPackage((DataPackage) parameters.get(ParamKey.DATA_PACKAGE));
+
+
 		// AMMO
 		FXUtils.initComboboxBallistic(comboAmmo);
 		comboAmmo.getItems().addAll(service.getBallisticElements());
@@ -72,29 +67,29 @@ public class EnvironmentController implements IViewController {
 			@Override
 			public void changed(ObservableValue<? extends BallisticElement> observable, BallisticElement oldValue, BallisticElement newValue) {
 				service.selectBallisticElement(newValue);
-				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
 		service.selectBallisticElement(comboAmmo.getSelectionModel().getSelectedItem());
-		
-		
+
+
 		// ZOOM MODE
 		choiceZoomMode.getItems().add(ViewManager.getResources().getString("se_env_zoomed_out"));
 		choiceZoomMode.getItems().add(ViewManager.getResources().getString("se_env_zoomed_in"));
 		choiceZoomMode.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if(newValue.equalsIgnoreCase(ViewManager.getResources().getString("se_env_zoomed_out"))) {
+				if (newValue.equalsIgnoreCase(ViewManager.getResources().getString("se_env_zoomed_out"))) {
 					service.setZoomMode(false);
 				} else {
 					service.setZoomMode(true);
 				}
-				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
 		choiceZoomMode.getSelectionModel().select(0);
-		
-		
+
+
 		// RANGEFINDER
 		cbShowRangefinder.setSelected(service.isRangefinderShown());
 		sliderRangefinderProgress.valueProperty().addListener(new ChangeListener<Number>() {
@@ -105,11 +100,12 @@ public class EnvironmentController implements IViewController {
 		});
 		sliderRangefinderProgress.setValue(service.getRangefinderProgress());
 		onRangefinderProgress(service.getRangefinderProgress());
-		
-		
+
+
 		// RANGE CORRECTION
 		FXUtils.initSpinner(spinnerRange, 0, 0, 4000, StepSizes.STEP_RANGEMETER10, StepSizes.DECPLACES_RANGEMETER, true, new ChangeListener<Integer>() {
-			@Override public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+			@Override
+			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				onRangeCorrection(newValue.intValue());
 			}
 		});
@@ -121,43 +117,62 @@ public class EnvironmentController implements IViewController {
 		});
 		sliderRangeCorrection.setValue(service.getRangeCorrection());
 		onRangeCorrection(service.getRangeCorrection());
-		
-		
+
+
 		// CROSSHAIR LIGHTING
 		cbCrosshairLighting.setSelected(false);
-		
-		
+
+
 		// GRID OVERLAY
 		cbDisplayGrid.setSelected(service.isGridShown());
 		cbDisplayGrid.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 				service.showGrid(cbDisplayGrid.isSelected());
-				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
 
 		FXUtils.initSpinner(spinnerGridWidth, service.getGridWidth(), 2, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, true, new ChangeListener<Double>() {
-			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+			@Override
+			public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				service.setGridWidth(newValue.doubleValue());
-				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
 		FXUtils.initSpinner(spinnerGridHeight, service.getGridHeight(), 2, 9999, StepSizes.STEP_MIL, StepSizes.DECPLACES_MIL, true, new ChangeListener<Double>() {
-			@Override public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+			@Override
+			public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
 				service.setGridHeight(newValue.doubleValue());
-				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
-		}); 
-		
+		});
+
 		colorGrid.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 				service.setGridColor(colorGrid.getValue());
-				((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 			}
 		});
 		colorGrid.setValue(service.getGridColor());
-		
-		
+
+
+		// BACKGROUND OFFSET
+		FXUtils.initSpinner(spinnerBackgroundOffX, 0, -999999, +999999, 1, 0, true, new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				onSetBackgroundOffsetX(spinnerBackgroundOffX.getValue());
+			}
+		});
+		FXUtils.initSpinner(spinnerBackgroundOffY, 0, -999999, +999999, 1, 0, true, new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				onSetBackgroundOffsetY(spinnerBackgroundOffY.getValue());
+			}
+		});
+
+
 		// RESOLUTION
 		choiceResolution.getItems().add("1024 x 768");
 		choiceResolution.getItems().add("1152 x 864");
@@ -183,47 +198,47 @@ public class EnvironmentController implements IViewController {
 			}
 		});
 	}
-	
-	
-	
-	
+
+
+
+
 	@FXML
 	void onShowRangefinder(ActionEvent event) {
 		service.showRangefinder(cbShowRangefinder.isSelected());
-		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
-	
-	
-	
-	
+
+
+
+
 	void onRangefinderProgress(double progress) {
 		service.setRangefinderProgress(progress);
-		labelValueRFProgress.setText(progress+"%");
-		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+		labelValueRFProgress.setText(progress + "%");
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
-	
-	
-	
-	
+
+
+
+
 	void onRangeCorrection(int range) {
 		service.setRangeCorrection(range);
 		spinnerRange.getValueFactory().setValue(service.getRangeCorrection());
 		sliderRangeCorrection.setValue(service.getRangeCorrection());
-		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
-	
-	
-	
-	
+
+
+
+
 	@FXML
 	void onCrosshairLighting(ActionEvent event) {
 		service.setCrosshairLighting(cbCrosshairLighting.isSelected());
-		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
 	}
-	
-	
-	
-	
+
+
+
+
 	@FXML
 	void onBrowseBackground(ActionEvent event) {
 		FileChooser fc = new FileChooser();
@@ -231,22 +246,24 @@ public class EnvironmentController implements IViewController {
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("se_env_background_file_type") + " (*.jpg, *.png)", "*.jpg", "*.png"));
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("se_env_background_file_type") + " (*.png)", "*.png"));
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter(ViewManager.getResources().getString("se_env_background_file_type") + " (*.jpg)", "*.jpg"));
-		File file = fc.showOpenDialog(((Button)event.getSource()).getScene().getWindow());
+		File file = fc.showOpenDialog(((Button) event.getSource()).getScene().getWindow());
 		if (file != null) {
 			service.setBackground(file);
 			pathBackground.setText(file.getAbsolutePath());
-			int width = (int)service.getBackground().getWidth();
-			int height = (int)service.getBackground().getHeight();
-			for(String res : choiceResolution.getItems()) {
+			int width = (int) service.getBackground().getWidth();
+			int height = (int) service.getBackground().getHeight();
+			for (String res : choiceResolution.getItems()) {
 				int w = Integer.parseInt(res.split(" x ")[0]);
 				int h = Integer.parseInt(res.split(" x ")[1]);
-				if(w == width && h == height) {
+				if (w == width && h == height) {
 					choiceResolution.getSelectionModel().select(res);
 					break;
 				}
 			}
-			((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
+			((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
 		}
+		spinnerBackgroundOffX.setDisable(service.getBackground() == null);
+		spinnerBackgroundOffY.setDisable(service.getBackground() == null);
 	}
 
 
@@ -259,16 +276,34 @@ public class EnvironmentController implements IViewController {
 		choiceResolution.setDisable(false);
 		int width = Integer.parseInt(choiceResolution.getValue().split(" x ")[0]);
 		int height = Integer.parseInt(choiceResolution.getValue().split(" x ")[1]);
-		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
+		spinnerBackgroundOffX.setDisable(service.getBackground() == null);
+		spinnerBackgroundOffY.setDisable(service.getBackground() == null);
 	}
 
-	
-	
+
+
+
+	void onSetBackgroundOffsetX(int x) {
+		service.setBackgroundOffX(x);
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+	}
+
+
+
+
+	void onSetBackgroundOffsetY(int y) {
+		service.setBackgroundOffY(y);
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+	}
+
+
+
 
 	void onSelectResolution(int width, int height) {
 		service.setResolution(width, height);
-		Logger.get().info("Resolution selected: " + width  + "x" + height);
-		((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
+		Logger.get().info("Resolution selected: " + width + "x" + height);
+		((SightEditorController) ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.rebuildCanvas(width, height);
 	}
-	
+
 }

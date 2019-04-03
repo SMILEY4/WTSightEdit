@@ -86,6 +86,13 @@
                            </children>
                         </HBox>
                         <TextField fx:id="pathBackground" editable="false" prefWidth="1000000.0" />
+                        <Label prefWidth="1000000.0" text="%se_env_background_offset" />
+                        <HBox>
+                           <children>
+                              <Spinner fx:id="spinnerBackgroundOffX" editable="true" prefWidth="1000000.0" />
+                              <Spinner fx:id="spinnerBackgroundOffY" editable="true" prefWidth="1000000.0" />
+                           </children>
+                        </HBox>
                         <Separator prefWidth="1000000.0">
                            <padding>
                               <Insets bottom="10.0" top="10.0" />
