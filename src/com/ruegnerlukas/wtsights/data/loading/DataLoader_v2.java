@@ -876,6 +876,10 @@ public class DataLoader_v2 implements IDataLoader {
 											objText.size = ((ParamFloat)eText).value;
 											break;
 										}
+										case "highlight": {
+											objText.enableHighlight = ((ParamBool)eText).value;
+											break;
+										}
 									}
 								}
 								

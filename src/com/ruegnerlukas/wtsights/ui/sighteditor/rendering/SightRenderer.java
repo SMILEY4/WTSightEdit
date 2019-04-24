@@ -552,7 +552,11 @@ public class SightRenderer {
 		Font font = getFont(layout.fontSize );
 		
 		// draw text
-		g.setFill(data.dataSight.envSightColor);
+		if(objText.enableHighlight) {
+			g.setFill(data.dataSight.envSightColor);
+		} else {
+			g.setFill(Color.BLACK);
+		}
 		g.setTextAlign( (objText.align==TextAlign.LEFT ? TextAlignment.LEFT : (objText.align==TextAlign.CENTER ? TextAlignment.CENTER : TextAlignment.RIGHT)) );
 		g.setTextBaseline(VPos.CENTER);
 		g.setFont(font);

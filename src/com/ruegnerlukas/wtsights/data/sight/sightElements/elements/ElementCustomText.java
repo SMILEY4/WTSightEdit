@@ -12,11 +12,11 @@ import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 public class ElementCustomText extends ElementCustomObject {
 
 	
-	public String 		text 		= "text";
-	public Vector2d 	position 	= new Vector2d(0.1,0);
-	public double 		size 		= 1;
-	public TextAlign 	align 		= TextAlign.LEFT;
-	
+	public String 		text 			= "text";
+	public Vector2d 	position 		= new Vector2d(0.1,0);
+	public double 		size 			= 1;
+	public TextAlign 	align 			= TextAlign.LEFT;
+	public boolean 		enableHighlight	= false;
 	
 	
 	public ElementCustomText() {

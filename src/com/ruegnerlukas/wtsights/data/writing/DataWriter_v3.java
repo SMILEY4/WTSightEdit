@@ -474,6 +474,9 @@ public class DataWriter_v3 implements IDataWriter {
 				lines.add("    pos:p2 = " + asString(textObj.position.x, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textObj.position.y, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("    align:i = " + textObj.align.id);
 				lines.add("    size:r = " + asString(textObj.size, StepSizes.DECPLACES_SCREENSPACE));
+				if(textObj.enableHighlight) {
+					lines.add("    highlight:b = yes");
+				}
 				lines.add("  }");
 			}
 			lines.add("}");
