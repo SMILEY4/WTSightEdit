@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="718.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.modules.ModuleCustomText">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="765.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.wtsights.ui.sighteditor.modules.ModuleCustomText">
    <children>
       <ScrollPane fitToWidth="true" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
@@ -76,6 +76,12 @@
                         <Spinner fx:id="spinnerSize" editable="true" minWidth="0.0" prefWidth="1000000.0" />
                         <Label minWidth="0.0" prefWidth="1000000.0" text="%se_mct_alignment" />
                         <ChoiceBox fx:id="choiceAlignment" minWidth="0.0" prefWidth="1000000.0" />
+                        <Separator prefWidth="200.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </Separator>
+                        <CheckBox fx:id="cbEnableHighlight" minWidth="0.0" mnemonicParsing="false" prefWidth="1000000.0" text="%se_mct_enable_highlight" />
                      </children>
                   </VBox>
                </children>

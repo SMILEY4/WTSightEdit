@@ -464,6 +464,7 @@ public class DataWriter_v3 implements IDataWriter {
 					lines.add("    move:b = " + (textObj.movement == Movement.STATIC ? "no" : "yes") );
 				}
 				if(textObj.movement == Movement.MOVE_RADIAL) {
+					lines.add("    moveRadial:b = " + (textObj.movement == Movement.MOVE_RADIAL ? "yes" : "no") );
 					lines.add("    radialAngle:r = " + asString(textObj.angle, StepSizes.DECPLACES_ANGLE));
 					lines.add("    radialCenter:p2 = " + asString(textObj.radCenter.x, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textObj.radCenter.y, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 					lines.add("    radialMoveSpeed:r = " + asString(textObj.speed, StepSizes.DECPLACES_SPEED));
@@ -474,6 +475,9 @@ public class DataWriter_v3 implements IDataWriter {
 				lines.add("    pos:p2 = " + asString(textObj.position.x, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE) + "," + asString(textObj.position.y, textObj.useThousandth ? StepSizes.DECPLACES_MIL : StepSizes.DECPLACES_SCREENSPACE));
 				lines.add("    align:i = " + textObj.align.id);
 				lines.add("    size:r = " + asString(textObj.size, StepSizes.DECPLACES_SCREENSPACE));
+				if(textObj.enableHighlight) {
+					lines.add("    highlight:b = yes");
+				}
 				lines.add("  }");
 			}
 			lines.add("}");

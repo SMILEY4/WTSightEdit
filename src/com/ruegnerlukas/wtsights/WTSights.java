@@ -1,8 +1,5 @@
 package com.ruegnerlukas.wtsights;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.ruegnerlukas.simpleutils.JarLocation;
 import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.collectionbuilders.MapBuilder;
@@ -19,11 +16,11 @@ import com.ruegnerlukas.wtsights.ui.view.ViewManager.ParamKey;
 import com.ruegnerlukas.wtsights.ui.view.ViewManager.View;
 import com.ruegnerlukas.wtutils.Config;
 import com.ruegnerlukas.wtutils.FXUtils;
-
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+
+import java.io.File;
+import java.io.IOException;
 
 public class WTSights extends Application {
 
@@ -118,12 +115,7 @@ public class WTSights extends Application {
 		
 		Database.loadVehicles(new File(JarLocation.getJarLocation(WTSights.class) + (wasStartedInsideData ? "" : "/data") + "/vehicle_data.xml"));
 		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent event) {
-				System.exit(0);
-			} 
-		});
+		primaryStage.setOnCloseRequest(event -> System.exit(0));
 		
 		ViewManager.getLoader(View.MAIN_MENU).openNew(primaryStage, new MapBuilder<ParamKey,Object>().get());
 	}

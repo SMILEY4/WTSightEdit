@@ -294,6 +294,7 @@ public class DefaultResourceBundle extends ResourceBundle {
 		map.put("se_mct_position",				"Position:");
 		map.put("se_mct_size",					"Size:");
 		map.put("se_mct_alignment",				"Alignment:");
+		map.put("se_mct_enable_highlight",		"Enable Lighting");
 		// horz range indicators
 		map.put("se_mhri_size_major",			"Size Major:");
 		map.put("se_mhri_size_minor",			"Size Minor:");

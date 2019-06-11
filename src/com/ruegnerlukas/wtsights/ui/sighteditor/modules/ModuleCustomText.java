@@ -42,12 +42,13 @@ public class ModuleCustomText implements Module {
 	@FXML private Spinner<Double> spinnerSize;
 	@FXML private TextField textField;
 	@FXML private ChoiceBox<String> choiceAlignment;
-	
-	
-	
-	
-	
-	
+
+	@FXML private CheckBox cbEnableHighlight;
+
+
+
+
+
 	@Override
 	public void create(DataPackage data) {
 		
@@ -220,6 +221,17 @@ public class ModuleCustomText implements Module {
 				}
 			}
 		});
+
+		cbEnableHighlight.setSelected(elementDefault.enableHighlight);
+		cbEnableHighlight.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent event) {
+				if(element != null) {
+					element.enableHighlight = cbEnableHighlight.isSelected();
+					element.setDirty(true);
+					((SightEditorController)ViewManager.getController(View.SIGHT_EDITOR)).wtCanvas.repaint();
+				}
+			}
+		});
 		
 		
 		setElement(null);
@@ -258,6 +270,7 @@ public class ModuleCustomText implements Module {
 			spinnerSize.getValueFactory().setValue(element.size);
 			textField.setText(element.text);
 			choiceAlignment.getSelectionModel().select(element.align.toString());
+			cbEnableHighlight.setSelected(element.enableHighlight);
 		}
 	}
 	

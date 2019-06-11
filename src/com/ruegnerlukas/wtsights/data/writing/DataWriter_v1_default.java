@@ -1,5 +1,29 @@
 package com.ruegnerlukas.wtsights.data.writing;
 
+import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
+import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
+import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
+import com.ruegnerlukas.wtsights.data.sight.BIndicator;
+import com.ruegnerlukas.wtsights.data.sight.HIndicator;
+import com.ruegnerlukas.wtsights.data.sight.SightData;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.*;
+import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
+import com.ruegnerlukas.wtutils.Config;
+import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,42 +35,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map.Entry;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticData;
-import com.ruegnerlukas.wtsights.data.ballisticdata.BallisticElement;
-import com.ruegnerlukas.wtsights.data.ballisticdata.Marker;
-import com.ruegnerlukas.wtsights.data.sight.BIndicator;
-import com.ruegnerlukas.wtsights.data.sight.HIndicator;
-import com.ruegnerlukas.wtsights.data.sight.SightData;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
-import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
-import com.ruegnerlukas.wtutils.Config;
-import com.ruegnerlukas.wtutils.SightUtils.ScaleMode;
 
 public class DataWriter_v1_default implements IDataWriter {
 
@@ -409,6 +397,9 @@ public class DataWriter_v1_default implements IDataWriter {
 				lines.add("    pos:p2 = " + textObj.position.x + "," + textObj.position.y);
 				lines.add("    align:i = " + textObj.align.id);
 				lines.add("    size:r = " + textObj.size);
+				if(textObj.enableHighlight) {
+					lines.add("    highlight:b = yes");
+				}
 				lines.add("  }");
 			}
 			lines.add("}");

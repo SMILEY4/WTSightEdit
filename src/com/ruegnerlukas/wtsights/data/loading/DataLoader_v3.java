@@ -1,26 +1,5 @@
 package com.ruegnerlukas.wtsights.data.loading;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simplemath.vectors.vec2.Vector2d;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -35,33 +14,8 @@ import com.ruegnerlukas.wtsights.data.sight.HIndicator;
 import com.ruegnerlukas.wtsights.data.sight.SightData;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.BaseElement;
 import com.ruegnerlukas.wtsights.data.sight.sightElements.ElementType;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementBallRangeIndicator;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralHorzLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCentralVertLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomCircleOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomLine;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomPolygonOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadFilled;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomQuadOutline;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementCustomText;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementFunnel;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementHorzRangeIndicators;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementRangefinder;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.ElementShellBlock;
-import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.Movement;
-import com.ruegnerlukas.wtsights.data.sightfile.BLKSightParser;
-import com.ruegnerlukas.wtsights.data.sightfile.Block;
-import com.ruegnerlukas.wtsights.data.sightfile.BlockElement;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamBool;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamColor;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamFloat;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamInteger;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamText;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamVec2;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamVec3;
-import com.ruegnerlukas.wtsights.data.sightfile.ParamVec4;
+import com.ruegnerlukas.wtsights.data.sight.sightElements.elements.*;
+import com.ruegnerlukas.wtsights.data.sightfile.*;
 import com.ruegnerlukas.wtsights.data.vehicle.Ammo;
 import com.ruegnerlukas.wtsights.data.vehicle.Vehicle;
 import com.ruegnerlukas.wtsights.data.vehicle.Weapon;
@@ -70,10 +24,24 @@ import com.ruegnerlukas.wtutils.SightUtils.TextAlign;
 import com.ruegnerlukas.wtutils.SightUtils.Thousandth;
 import com.ruegnerlukas.wtutils.SightUtils.TriggerGroup;
 import com.ruegnerlukas.wtutils.XMLUtils;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 
 public class DataLoader_v3 implements IDataLoader {
@@ -879,6 +847,10 @@ public class DataLoader_v3 implements IDataLoader {
 										}
 										case "size": {
 											objText.size = ((ParamFloat)eText).value;
+											break;
+										}
+										case "highlight": {
+											objText.enableHighlight = ((ParamBool)eText).value;
 											break;
 										}
 									}
