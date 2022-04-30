@@ -17,10 +17,10 @@ This application was written with Java 8 and requires JavaFX. JavaFX is no longe
 2. Run the command (This should work with any Java version)
 
    ```
-   java --module-path pathToJavaFx/lib --add-modules javafx.controls,javafx.fxml -jar pathToWTSightEdit/data/wtedit_application.jar
+   java --module-path pathToJavaFx/lib -jar pathToWTSightEdit/data/wtedit_application.jar --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web,javafx.swt
    ```
    
-   Replace "pathToJavaFx" with the path to the downloaded and extracted directory and "pathToWTSightEdit" with the path to the directory with of the "./WTSightEdit.jar".
+   Replace "pathToJavaFx" with the path to the downloaded and extracted javafx-directory and "pathToWTSightEdit" with the path to the directory with of the "./WTSightEdit.jar".
    
 
 
