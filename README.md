@@ -3,7 +3,7 @@
 
 A WYSIWYG-Editor for custom sights for the game "War Thunder" 
 
-*Note: This project is no longer actively developed.*
+⚠️ *Note: This project is no longer actively developed.*
 
 
 ## How to run
